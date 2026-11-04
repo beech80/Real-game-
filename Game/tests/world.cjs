@@ -72,6 +72,9 @@ let step = 0, p;
   const tap = async () => { await p.click('#btn-interact', { timeout: 15000 }); await sleep(700); };
   const label = () => p.textContent('#btn-interact').catch(() => '');
   const S = (f) => ev(f);
+  const counter = async (key) => { await near(key); await tap(); await p.waitForFunction(() => window.REAL.state.location === 'interior' && window.REAL.roomPoints().length > 0, null, { timeout: 90000 }); await sleep(600);
+    await ev(() => { const c = window.REAL.roomPoints().find((q) => q.act === 'counter'); window.REAL.teleportXY(c.x, c.y - 0.4); }); await sleep(900); await tap(); };
+  const out = async () => { if (await S(() => window.REAL.state.location === 'interior')) { await ev(() => window.REAL.leave()); await p.waitForFunction(() => window.REAL.state.location !== 'interior', null, { timeout: 60000 }); await sleep(500); } };
 
   await p.goto(`http://localhost:${srv.address().port}/index.html`);
   await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
@@ -93,27 +96,27 @@ let step = 0, p;
   // ---- MIDTOWN
   await ev(() => window.REAL.travel('midtown')); await sleep(2500); await shot('midtown_arrival');
   await ev(() => window.REAL.cam(Math.PI, 0.25, 9)); await sleep(1200); await shot('midtown_avenue');
-  await near('express'); console.log('label:', await label()); await tap(); await shot('midtown_express_sheet');
+  await near('express'); console.log('label:', await label()); await counter('express'); await shot('midtown_express_sheet');
   await drive({ pick: 'Apply' });
   console.log('jobs', await S(() => JSON.stringify(window.REAL.state.jobs)));
-  await near('express'); await tap(); await drive({ pick: 'Work' });
-  console.log('after courier shift money', await S(() => window.REAL.state.money), 'shifts', await S(() => window.REAL.state.stats.shifts));
-  await near('motors'); await tap(); await drive({ pick: 'Vehicles' }, 3); await shot('dealer');
-  await drive({ pick: 'Look' }, 30); console.log('vehicle', await S(() => JSON.stringify(window.REAL.state.vehicle)));
-  await near('shelter'); await tap(); await drive({ pick: 'Adopt' }, 40); console.log('pet', await S(() => JSON.stringify(window.REAL.state.pet)));
+  await out(); await counter('express'); await drive({ pick: 'Work' });
+  console.log('after courier shift money', await S(() => window.REAL.state.money), 'shifts', await S(() => window.REAL.state.stats.shifts)); await out();
+  await counter('motors'); await drive({ pick: 'Vehicles' }, 3); await shot('dealer');
+  await drive({ pick: 'Look' }, 30); console.log('vehicle', await S(() => JSON.stringify(window.REAL.state.vehicle))); await out();
+  await counter('shelter'); await drive({ pick: 'Adopt' }, 40); console.log('pet', await S(() => JSON.stringify(window.REAL.state.pet))); await out();
   await sleep(1500); await shot('pet_follow');
-  await near('library'); await tap(); await drive({ pick: 'Learning Lab' }, 3); await shot('challenge_zones'); await drive({ pick: 'Enter' }, 40);
-  console.log('zones', await S(() => JSON.stringify(window.REAL.state.zones)));
+  await counter('library'); await drive({ pick: 'Learning Lab' }, 3); await shot('challenge_zones'); await drive({ pick: 'Enter' }, 40);
+  console.log('zones', await S(() => JSON.stringify(window.REAL.state.zones))); await out();
   // ---- OPPORTUNITY
   await ev(() => window.REAL.travel('opportunity')); await sleep(2500); await ev(() => window.REAL.cam(Math.PI, 0.2, 10)); await sleep(1000); await shot('opportunity');
-  await near('sbc'); await tap(); await drive({ pick: 'Small Business' }, 60); console.log('biz', await S(() => window.REAL.state.biz && window.REAL.state.biz.name));
-  await near('bootcamp'); await tap(); await drive({ pick: 'Classes' }, 2); await drive({ pick: 'Enroll' }, 40); console.log('courses', await S(() => JSON.stringify(window.REAL.state.courses)));
+  await counter('sbc'); await drive({ pick: 'Small Business' }, 60); console.log('biz', await S(() => window.REAL.state.biz && window.REAL.state.biz.name)); await out();
+  await counter('bootcamp'); await drive({ pick: 'Classes' }, 2); await drive({ pick: 'Enroll' }, 40); console.log('courses', await S(() => JSON.stringify(window.REAL.state.courses))); await out();
   // ---- HEIGHTS
   await ev(() => window.REAL.travel('heights')); await sleep(2500); await ev(() => window.REAL.cam(Math.PI, 0.22, 10)); await sleep(1000); await shot('heights');
   await near('overlook'); await tap(); await sleep(7000); await shot('overlook');
   await ev(() => window.REAL.setTime(21)); await sleep(1500); await ev(() => window.REAL.cam(Math.PI, 0.2, 10)); await sleep(1200); await shot('heights_night');
   await ev(() => window.REAL.setTime(12));
-  await near('residences'); await tap(); await drive({ pick: 'Lease a residence' }, 40); console.log('home', await S(() => window.REAL.state.home), 'loc', await S(() => window.REAL.state.location));
+  await counter('residences'); await drive({ pick: 'Lease a residence' }, 40); console.log('home', await S(() => window.REAL.state.home), 'loc', await S(() => window.REAL.state.location));
   await sleep(1500); await shot('home_after_move');
   // ---- back to the Starting District: business cart, phone apps
   await ev(() => window.REAL.setTime(11)); await ev(() => window.REAL.travel('district')); await sleep(2000);
