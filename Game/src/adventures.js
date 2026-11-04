@@ -9,6 +9,7 @@ import { CAREERS, careerStatus } from './life.js';
 import { PARTS, COLORS, TRACKS, carStats, buildCost } from './race.js';
 import { ROBOT_PARTS, ROBOT_LEVELS, CUES } from './arenas.js';
 import { BUSINESSES } from './expansion.js';
+import { askNPC } from './voice.js';
 
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const gen = (id) => (GEN[id] ? pick(GEN[id]) : T[id]);
@@ -57,11 +58,12 @@ export function installAdventures(Game) {
     const eps = EPISODES[id], ep = eps[Math.min(A.stage, eps.length - 1)], allDone = A.stage >= eps.length;
     if (!A.met) { A.met = true; await UI.say(who, ep.hook || INTRO[id]); }
     const career = D.career && CAREERS.find((c) => c.id === D.career), held = career && s.jobs.includes(career.id);
-    const opts = [[allDone ? `${ep.repeat || 'Do it again'}` : `${ep.title}`, 'go'], held ? ['Work a shift', 'work'] : null, career && !held && careerStatus(career, s, this.edu, this.life().level).ready ? [`Ask about becoming a ${career.title.toLowerCase()}`, 'job'] : null, ['Not right now', 'no']].filter(Boolean);
+    const opts = [[allDone ? `${ep.repeat || 'Do it again'}` : `${ep.title}`, 'go'], held ? ['Work a shift', 'work'] : null, career && !held && careerStatus(career, s, this.edu, this.life().level).ready ? [`Ask about becoming a ${career.title.toLowerCase()}`, 'job'] : null, ['💬 Ask a question', 'ask'], ['Not right now', 'no']].filter(Boolean);
     const c = await UI.say(who, allDone ? 'Back for more? There’s always a new challenge.' : ep.offer, opts.map((o) => o[0]));
     const pickd = opts[c][1];
     if (pickd === 'no') { await UI.say(who, pick(['No problem. Come back any time.', 'Go explore. The offer stands.', 'Maybe another day!'])); return; }
     if (pickd === 'work') return workShift(this, career);
+    if (pickd === 'ask') return askNPC(this, { name: D.npc.name });
     if (pickd === 'job') { await UI.say(who, `You’ve shown real talent. The ${career.employer} job is yours if you want it: ${money(career.rate)} an hour.`); s.jobs.push(career.id); this.sfx('level'); this.achieve('hired'); this.save(); return; }
     this.interest(id, A.runs ? 1.5 : 1);   // choosing to (re)play is the strongest interest signal
     A.runs++; s.stats.adventures = (s.stats.adventures || 0) + 1;

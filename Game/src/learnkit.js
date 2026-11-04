@@ -4,6 +4,7 @@
 // are pointed back to a prerequisite. Read-aloud uses the device's own speech voice.
 import { h, UI } from './ui.js';
 import { SKILLS, SUBJECTS } from './edu.js';
+import { Voice, Brain } from './voice.js';
 
 const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
 const fmt = (Q, v) => `${Q.prefix || ''}${Q.decimals ? Number(v).toFixed(2) : v}${Q.suffix ? ' ' + Q.suffix : ''}`;
@@ -55,7 +56,17 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       h('div', { class: 'qrow' }, h('p', { class: 'lead' }, Q.q), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak((Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
     let body;
     if (Q.type === 'choice') {
-      body = h('div', { class: 'opts' }, shuffle([...new Set(Q.o)]).map((o) => h('button', { class: 'opt', onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; } else e.currentTarget.classList.add('right'); } }, o)));
+      const optsShown = shuffle([...new Set(Q.o)]);
+      body = h('div', { class: 'opts' }, optsShown.map((o) => h('button', { class: 'opt', onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; } else e.currentTarget.classList.add('right'); } }, o)));
+      if (Voice.canListen()) {
+        const mic = h('button', { class: 'mic sm', 'aria-label': 'Answer out loud', onclick: async () => {
+          if (!done.hidden) return; mic.classList.add('on'); const said = await Voice.listen(); mic.classList.remove('on');
+          if (!said) { UI.toast('I didn’t catch that. Try again or tap an answer.', 'info'); return; }
+          const i = await Brain.pick(Q.q, optsShown, said); if (i == null) { UI.toast(`Heard “${said}”. Which answer did you mean? Tap it.`, 'info', 3200); return; }
+          const btn = body.querySelectorAll('.opt')[i]; if (btn && !btn.disabled) btn.click();
+        } }, '🎤');
+        body = h('div', {}, h('div', { class: 'microw' }, mic, h('small', { class: 'tip' }, 'Tap 🎤 and say your answer, or tap one.')), body);
+      }
     } else if (Q.type === 'number') {
       let val = '';
       const disp = h('div', { class: 'keypad-disp' }, fmt(Q, 0));
@@ -120,7 +131,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       body = h('div', {}, pad, typeAlt);
       Q.why = Q.why || 'Cursive letters join with smooth upward swings. Neat comes before fast.';
     }
-    if (settings.readAloud) setTimeout(() => speak((Q.say ? Q.say + '. ' : '') + Q.q), 250);
+    if (settings.readAloud || Voice.enabled() && Q.say) setTimeout(() => speak((Q.say ? Q.say + '. ' : '') + Q.q), 250);
     return h('div', { class: 'act activity' }, ...head.filter(Boolean), hp.box, body, hint2, why, h('div', { class: 'row' }, hp.btn), done);
   }, { icon, noClose: true });
 }

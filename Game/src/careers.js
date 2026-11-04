@@ -3,6 +3,7 @@
 import { h, UI, money, wait } from './ui.js';
 import { paystub, PRACTICE, teach } from './activities.js';
 import { runActivity } from './learnkit.js';
+import { speakTask, SPEAK_TASKS } from './voice.js';
 import { GEN } from './curriculum.js';
 
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
@@ -162,6 +163,7 @@ export async function workShift(G, career) {
   for (const k of tasks) await teach(G, T[k]().skill, W.boss[0]);
   let first = 0;
   for (let i = 0; i < tasks.length; i++) { const r = await runTask(G, T[tasks[i]], career.id, `${W.verb} · ${i + 1} of ${tasks.length}`, '🧰'); if (r && r.ok) first++; }
+  { const pool = SPEAK_TASKS[career.id] || SPEAK_TASKS._any; await speakTask(G, pool[Math.floor(Math.random() * pool.length)], `${W.boss[0]} · ${W.boss[1]}`); }
   G.advance(hours);
   s.flags[`w_${career.id}_${s.day}`] = true; s.flags[`worked${s.day}`] = true;
   s.stats.shifts++; s.workLog = s.workLog || {}; s.workLog[career.id] = (s.workLog[career.id] || 0) + 1;
@@ -185,6 +187,7 @@ export async function apply(G, career) {
   await UI.say(boss, `Thanks for coming in. Let’s see your application for ${career.title}.`);
   const r1 = G.state.flags.resume ? (UI.toast('Your résumé from the Community Center made the application easy.', 'good', 2600), { ok: true }) : await runTask(G, { skill: 'write.professional', q: 'Your application ends with one sentence about you. Which is best?', a: `I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, o: [`I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, 'i need money lol', 'Hire me or else.'] }, 'application', 'Application', '📝');
   const r2 = await runTask(G, T[W.tasks[0]], 'interview', 'Interview question', '🤝');
+  await speakTask(G, { prompt: `${W.boss[0]} asks: “Why do you want to work at ${career.employer}?” Answer out loud.`, goals: ['say why the job interests you', 'mention a skill or quality you bring', 'sound positive and polite'], keywords: [['Say why it interests you', /\b(because|interest|love|enjoy|want|like|learn)\b/i], ['Mention a skill you bring', /\b(good at|skill|reliable|careful|friendly|hard[- ]?work|learn|team|honest|on time)\b/i], ['Sound positive', /\b(excited|happy|glad|thank|great|proud)\b/i]] }, `${W.boss[0]} · ${W.boss[1]}`);
   await UI.say(boss, r1.ok && r2.ok ? 'That’s exactly what I was hoping to hear. You’re hired.' : 'You worked through that carefully. That matters more than getting it instantly. You’re hired. We’ll train you.');
   G.state.jobs.push(career.id); G.sfx('level'); G.achieve('hired');
   if (career.tier >= 2) G.achieve('career');

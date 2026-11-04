@@ -15,6 +15,7 @@ import { WORK, COURSES } from './careers.js';
 import { CAREERS } from './life.js';
 import { makePet, PetFollower, makeCompanion, updateCompanion } from './pets.js';
 import { Neighbors } from './multiplayer.js';
+import { Voice, Brain, askNPC } from './voice.js';
 import { buildInterior, BUILDING_ROOMS, ROOM } from './interiors.js';
 import { MapView } from './mapview.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
@@ -33,8 +34,8 @@ function fatal(msg) {
   el.hidden = false;
   const b = document.getElementById('crash-reload'); if (b) b.onclick = () => location.reload();
 }
-addEventListener('error', (e) => { if (mode === 'loading') fatal('REAL hit a problem while loading: ' + (e.message || 'unknown error')); });
-addEventListener('unhandledrejection', (e) => { if (mode === 'loading') fatal('REAL hit a problem while loading: ' + ((e.reason && e.reason.message) || e.reason)); });
+addEventListener('error', (e) => { if (mode === 'loading' || mode === 'intro') fatal('REAL hit a problem while starting: ' + (e.message || 'unknown error') + '. Your character is saved. Tap Reload and choose Continue.'); });
+addEventListener('unhandledrejection', (e) => { const m = (e.reason && e.reason.message) || e.reason; if (mode === 'loading' || mode === 'intro') fatal('REAL hit a problem while starting: ' + m + '. Your character is saved. Tap Reload and choose Continue.'); else console.warn('async error', m); });
 document.addEventListener('gesturestart', (e) => e.preventDefault());
 document.addEventListener('dblclick', (e) => e.preventDefault());
 
@@ -45,6 +46,7 @@ engine.onContextLost = () => { try { game && game.save(); } catch (e) {} fatal('
 const audio = new Audio();
 setSfx((n) => audio.play(n));
 UI.init();
+UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.listen(); return said ? Brain.pick(q, choices, said) : null; } };
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
 
@@ -170,15 +172,35 @@ async function creator() {
     const st = newState({ name, species: SPECIES[creatorState.i].id, outfit: { jacket: JACKETS[creatorState.jacket].color, hoodie: HOODIES[creatorState.hoodie].color, fur: FUR_SHIFT[creatorState.fur].mul } });
     st.wardrobe = [...new Set(['black', 'navy', JACKETS[creatorState.jacket].id])];
     if (preview) { scene.remove(preview.root); preview = null; }
+    try { localStorage.setItem('real.save.v2', JSON.stringify(st)); } catch (e) {}
     startGame(st, true);
   };
   show();
 }
 
 // ------------------------------------------------------------------------------------------ game start
-function applyA11y(st) { document.body.classList.toggle('a11y-large', !!st.large); document.body.classList.toggle('a11y-contrast', !!st.contrast); document.body.classList.toggle('a11y-calm', !!st.calm); }
+function applyA11y(st) { window.__voiceOff = st.voices === false; window.__smartOff = st.smart === false; if (window.__voiceOff) Voice.stop(); document.body.classList.toggle('a11y-large', !!st.large); document.body.classList.toggle('a11y-contrast', !!st.contrast); document.body.classList.toggle('a11y-calm', !!st.calm); }
+function startLoader(on, p, label) {
+  const L = $('#loading'); if (!L) return;
+  L.hidden = !on; if (on) progress(p, label);
+}
+let startWatch = null;
 async function startGame(state, isNew) {
   mode = 'intro';
+  startLoader(true, 0.1, 'Getting your REAL ready…');
+  clearTimeout(startWatch);
+  startWatch = setTimeout(() => {
+    if (mode === 'intro') {
+      const el = $('#load-label'); if (!el) return;
+      el.replaceChildren(document.createTextNode('Still loading. A slow connection can take a minute. '));
+      const b = document.createElement('button'); b.className = 'primary sm'; b.textContent = 'Reload'; b.onclick = () => location.reload(); el.appendChild(b);
+    }
+  }, 30000);
+  try { await startGameInner(state, isNew); }
+  catch (e) { console.error(e); fatal('REAL could not start: ' + (e && e.message || e) + '. Your character is saved. Tap Reload and choose Continue.'); }
+  finally { clearTimeout(startWatch); startLoader(false); }
+}
+async function startGameInner(state, isNew) {
   const ch = new Character(await loadSpecies(state.species), { outfit: state.outfit });
   scene.add(ch.root);
   player = new Player(ch);
@@ -203,8 +225,10 @@ async function startGame(state, isNew) {
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
   $('#btn-sprint').onclick = (e) => { input.sprintLatch = !input.sprintLatch; e.currentTarget.classList.toggle('on', input.sprintLatch); };
+  startLoader(true, 0.35, 'Meeting the residents…');
   await spawnStoryNPCs();
-  if (state.chapter === 'prologue') { await prologue(); return; }
+  if (state.chapter === 'prologue') { startLoader(true, 0.7, 'Opening The Club…'); await prologue(); return; }
+  spawnAdventureNPCs();
   refreshWorld();
   if (state.location === 'apartment') await enterApartment(true);
   else if (state.location === 'interior' && state.room) { const r = state.room; state.room = null; if (DISTRICTS[r.loc]) await travelTo(r.loc, true); else { state.location = 'district'; setCitySpace(true); } player.pos = { ...r.door }; player.apply(); }
@@ -230,10 +254,16 @@ async function spawnStoryNPCs() {
   const jax = await make('Jax', 'NPC_Jax_Hangout', 'Jax'); if (jax) jax.hidden = true;
   await make('Elephant', 'Door_CareerCenter', 'Counselor', { jacket: 0x13214a });
   await make('Dog', 'Door_CoffeeShop', 'Dee', { jacket: 0x0f5c5c, hoodie: 0xe6dccb });
+  for (const k of ['Counselor', 'Dee']) { const n = npcs[k]; if (n) { n.pos.x += 1.6; n.collider.x = n.pos.x; n.ch.root.position.copy(P2W(n.pos.x, n.pos.y, 0.13)); } }
+}
+let advSpawned = false;
+async function spawnAdventureNPCs() {
+  if (advSpawned) return; advSpawned = true;
+  try {
   for (const [id, A] of Object.entries(ADVENTURES)) if (A.npc.loc === 'district') {
     try { const ch = new Character(await loadSpecies(A.npc.species), { outfit: A.npc.outfit }); scene.add(ch.root); const n = new StoryNPC(ch, { x: A.npc.x, y: A.npc.y, r: 0, z: 0.13 }, A.npc.name, A.npc.role); n.advId = id; coll.dynamic.push(n.collider); npcs['adv:' + id] = n; n.mark = advMarker(); ch.root.add(n.mark); } catch (e) {}
   }
-  for (const k of ['Counselor', 'Dee']) { const n = npcs[k]; if (n) { n.pos.x += 1.6; n.collider.x = n.pos.x; n.ch.root.position.copy(P2W(n.pos.x, n.pos.y, 0.13)); } }
+  } catch (e) { console.warn('adventure NPCs', e); }
 }
 function placeJax(x, y, facing) {
   const J = npcs.Jax; if (!J) return;
@@ -262,7 +292,7 @@ function leaveClubSpace() {
 }
 async function spawnMembers(withRep = true) {
   const looks = [['Lion', 0x14204a, 0xe9a93a, 6, 12], ['Horse', 0x0b0b0e, 0xe6dccb, -6, 14], ['Bird', 0x14204a, 0xe6dccb, -11, 22], ['Cat', 0x5a1020, 0xe9a93a, 11, 26], ['Elephant', 0x0b0b0e, 0xe9a93a, -12, 36], ['Dolphin', 0x14204a, 0xf0b3c0, 12, 40], ['Cow', 0x0b0b0e, 0xe6dccb, 6, 46]];
-  for (const [sp, j, hd, x, y] of looks) {
+  for (const [sp, j, hd, x, y] of (isMobile ? looks.slice(0, 4) : looks)) {
     const c = new Character(await loadSpecies(sp), { outfit: { jacket: j, hoodie: hd } });
     c.root.position.copy(P2W(CLUB.ox + x, CLUB.oy + y, 0)); c.root.rotation.y = Math.random() * 6; c.play(Math.random() < 0.6 ? 'Talk' : 'Idle', 0);
     scene.add(c.root); members.push(c);
@@ -335,6 +365,7 @@ async function councilScene() {
 
 // ------------------------------------------------------------------------------------------ CHAPTER 1 — Nowhere
 async function startWilderness() {
+  setTimeout(() => spawnAdventureNPCs(), 4000);
   const s = game.state;
   leaveClubSpace();
   $('#hud').classList.remove('prologue');
@@ -692,7 +723,7 @@ function findInteraction() {
     else if (s.flags.jax3due && !s.flags.jax3) best = { label: 'Talk to Jax', run: () => game.jax3(), npc: jax };
   }
   if (near(npcs.Counselor && npcs.Counselor.pos, 2.4)) best = s.flags.housed ? { label: 'Talk to Mr. Okafor', run: () => game.counselor(), npc: npcs.Counselor } : { label: 'Ask for help', run: () => game.housing(), npc: npcs.Counselor };
-  if (near(npcs.Dee && npcs.Dee.pos, 2)) best = best || { label: 'Talk to Dee', run: () => UI.say('Dee · Daily Grind', 'Best coffee on Main St. Come in any time.') };
+  if (near(npcs.Dee && npcs.Dee.pos, 2)) best = best || { label: 'Talk to Dee', run: () => askNPC(game, { name: 'Dee' }), npc: npcs.Dee };
   for (const n of Object.values(npcs)) if (n.advId && !n.hidden && near(n.pos, 2.4)) best = { label: `Talk to ${n.name}`, run: () => game.advTalk(n.advId), npc: n };
   if (s.mission && s.mission.loc === 'district' && near(s.mission, 2.6)) best = { label: s.mission.label, run: () => game.missionArrive() };
   if (!best && pet && near(pet.pos, 1.8)) best = { label: `Play with ${s.pet.name}`, run: () => game.petCare('play') };
@@ -807,7 +838,7 @@ function loop(now) {
   }
   if (!player) { engine.render(); return; }
   if (mode === 'mini' && mini) { const f = mini.update(dt); engine.setTime(12.5, f || new THREE.Vector3()); engine.scene.fog.near = 120; engine.scene.fog.far = 700; engine.render(); return; }
-  if ((markT -= dt) < 0) { markT = 0.5; for (const n of [...Object.values(npcs), ...Object.values(W.d).flatMap((D) => D.friends)]) if (n.mark) n.mark.visible = game.state.flags.housed && game.advOffer(n.advId); }
+  if ((markT -= dt) < 0) try { markT = 0.5; for (const n of [...Object.values(npcs), ...Object.values(W.d).flatMap((D) => D.friends)]) if (n.mark) n.mark.visible = game.state.flags.housed && game.advOffer(n.advId); } catch (e) { markT = 1e9; console.warn('markers off', e); }
   const adapted = engine.adapt(dt);
   if (adapted) UI.toast(`Graphics set to ${adapted} for smoother play (change in 📱 Settings)`, 'info', 3500);
   const s = game.state;
@@ -834,7 +865,7 @@ function loop(now) {
   audio.wind && audio.wind(wild ? 1 : 0);
   if (pet) { pet.m.visible = !club && !(s.location === 'interior' && !IR); if (!club) pet.update(dt, player.pos, apt ? () => 0 : gfn, apt ? -500 : 0); }
   if (companion && !s.companion.hidden) updateCompanion(companion, dt, player.ch.root, player.heading);
-  if (neighbors && !(s.settings && s.settings.noNeighbors)) neighbors.update(dt, { pos: player.pos, heading: player.heading, species: s.species, jacket: s.outfit.jacket, hoodie: s.outfit.hoodie, moving: input && (Math.abs(input.move?.x || 0) + Math.abs(input.move?.y || 0)) > 0.1 }, IR ? 'in:' + s.room.key : s.location);
+  if (neighbors && !(s.settings && s.settings.noNeighbors)) try { neighbors.update(dt, { pos: player.pos, heading: player.heading, species: s.species, jacket: s.outfit.jacket, hoodie: s.outfit.hoodie, moving: input && (Math.abs(input.move?.x || 0) + Math.abs(input.move?.y || 0)) > 0.1 }, IR ? 'in:' + s.room.key : s.location); } catch (e) { console.warn('neighbors off', e); neighbors = null; }
   if (companion && mode === 'play' && !busy() && (tipT -= dt) < 0) { tipT = 90; const tip = game.companionTip(); if (tip) UI.toast(tip, 'info', 3800); }
   if (DD) {
     for (const p of DD.peds) p.update(dt, player.pos, camera.position, isMobile ? 48 : 75);
@@ -906,7 +937,7 @@ window.REAL = {
     Object.assign(s.flags, { housed: true, phone: true, readFirstSign: true, path: 'road' });
     s.bills = [{ id: 'phone1', name: 'Phone plan', amount: 25, due: s.day + 4, paid: false }, { id: 'rent1', name: 'Rent — The Starter Apartments (week 2)', amount: 120, due: s.day + 6, paid: false }];
     if (stage === 'hired') { s.flags.hired = true; s.jobs = ['cashier']; s.job = { id: 'cashier', title: 'Cashier', employer: 'Fresh Mart', rate: 15, hours: 4 }; s.quest = 'clockin'; }
-    fcam.mode = 'follow'; mode = 'play'; UI.showHUD(true);
+    fcam.mode = 'follow'; mode = 'play'; UI.showHUD(true); await spawnAdventureNPCs();
     const d = sock('Spawn_StoreEntry'); player.pos = { x: d.x, y: d.y + 2 }; player.apply();
   },
   sheets: () => [...document.querySelectorAll('#modal .sh-title')].map((e) => e.textContent),
@@ -915,7 +946,7 @@ window.REAL = {
   life: () => game.life(),
   practice: (sk) => runActivity(game, () => ({ skill: sk, ...PRACTICE[sk]() }), 'learn', 'Practice', '📚'),
   travel: (loc) => travelTo(loc, true), districtPoints: () => (W.d[game.state.location] || { points: [] }).points.map((p) => ({ ...p })),
-  refresh: () => refreshWorld(), camPos: () => camera.position.toArray().map((v) => Math.round(v)), mini: () => mode === 'mini', raceState: () => race && race.player && { x: race.player.x, y: race.player.y, v: race.player.v, lap: race.player.lap, idx: race.player.idx, t: race.t }, petCue: () => petCourse && petCourse.cue(), openMap: () => openMap(), mapOpen: () => !!(mapView && mapView.open), roomPoints: () => { const R = curRoom(); return R ? R.points.map((p) => ({ ...p })) : []; }, leave: () => leaveBuilding(),
+  refresh: () => refreshWorld(), askNPC: (n) => askNPC(game, { name: n }), speakPractice: async (k = 'cashier', i = 0) => { const V = await import('./voice.js'); return V.speakTask(game, V.SPEAK_TASKS[k][i], 'Rosa · Manager'); }, camPos: () => camera.position.toArray().map((v) => Math.round(v)), mini: () => mode === 'mini', raceState: () => race && race.player && { x: race.player.x, y: race.player.y, v: race.player.v, lap: race.player.lap, idx: race.player.idx, t: race.t }, petCue: () => petCourse && petCourse.cue(), openMap: () => openMap(), mapOpen: () => !!(mapView && mapView.open), roomPoints: () => { const R = curRoom(); return R ? R.points.map((p) => ({ ...p })) : []; }, leave: () => leaveBuilding(),
   info: () => ({ draws: engine.renderer.info.render.calls, tris: engine.renderer.info.render.triangles, peds: peds.length, quality: engine.quality }),
 };
 

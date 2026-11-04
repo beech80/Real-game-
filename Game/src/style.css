@@ -374,3 +374,14 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .rc.tf, .rc.tst { background: #d8dde4; } .rc.tr { background: #b8a58a; color: #5a4a38; } .rc.ts { background: #f0ece4; color: #8a8478; } .rc.tw { background: #3a4258; } .rc.tg { background: #2f8f5a; } .rc.to { background: #d8dde4; }
 .cmds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; } .prog { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; } .prog .cmd { background: #232b45; padding: 4px 8px; border-radius: 8px; font-size: 13px; }
 .trainface { font-size: 64px; margin: 10px 0; min-height: 80px; }
+
+/* ---------- voice */
+.d-mic { margin-top: 8px; width: 100%; border: 0; border-radius: 12px; padding: 10px; background: #2a5bd2; color: #fff; font: 700 16px "Barlow Condensed", sans-serif; letter-spacing: .04em; }
+.d-mic.on, .mic.on { background: #d23b2a; animation: micpulse 1s infinite; }
+@keyframes micpulse { 50% { transform: scale(1.05); } }
+.mic { flex: none; width: 52px; height: 52px; border-radius: 50%; border: 0; background: #2a5bd2; color: #fff; font-size: 24px; }
+.mic.sm { width: 42px; height: 42px; font-size: 20px; }
+.microw { display: flex; gap: 8px; align-items: center; margin: 6px 0; } .microw .writebox { flex: 1; margin: 0; }
+.chatlog { max-height: 46vh; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.bubble { padding: 8px 12px; border-radius: 14px; max-width: 86%; line-height: 1.35; } .bubble.npc { background: #232b45; align-self: flex-start; } .bubble.me { background: #2f8f5a; align-self: flex-end; }
+.stars { font-size: 28px; color: #e8b23a; letter-spacing: 2px; }

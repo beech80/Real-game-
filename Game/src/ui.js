@@ -79,7 +79,14 @@ export const UI = {
       const letters = ['A', 'B', 'C', 'D'];
       const list = choices ? h('div', { class: 'd-choices' }, choices.map((c, i) => h('button', { class: 'd-choice', onclick: () => { click(); D.hidden = true; res(i); } }, h('span', { class: 'd-key' }, letters[i]), c))) : null;
       const next = !choices ? h('button', { class: 'd-next', onclick: () => { click(); D.hidden = true; res(); } }, 'Continue ›') : null;
-      fill(D, h('div', { class: 'd-name' }, opts.crown !== false ? h('span', { class: 'crown' }, '♛') : null, speaker), body, list, next);
+      const voice = this.voiceHooks;
+      const mic = choices && voice && voice.canListen() ? h('button', { class: 'd-mic', 'aria-label': 'Answer out loud', onclick: async (e) => {
+        e.stopPropagation(); mic.classList.add('on'); mic.textContent = '🎤 Listening…';
+        const idx = await voice.listenPick(text, choices); mic.classList.remove('on'); mic.textContent = '🎤 Say it';
+        if (idx != null && !D.hidden) { click(); D.hidden = true; voice.stop(); res(idx); } else this.toast('I didn’t catch that. Try again or tap an answer.', 'info');
+      } }, '🎤 Say it') : null;
+      fill(D, h('div', { class: 'd-name' }, opts.crown !== false ? h('span', { class: 'crown' }, '♛') : null, speaker), body, list, mic, next);
+      if (voice && !opts.silent) voice.speak(text, speaker);
       // typewriter
       let i = 0; const full = text;
       const tick = () => { i += 2; body.textContent = full.slice(0, i); if (i < full.length) this._tw = requestAnimationFrame(tick); };

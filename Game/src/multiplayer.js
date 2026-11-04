@@ -21,10 +21,10 @@ export class Neighbors {
   async connect() {
     try {
       if (!window.claude || typeof window.claude.use !== 'function') return false;
-      const room = await window.claude.use('room');
+      const room = await Promise.race([window.claude.use('room'), new Promise((r) => setTimeout(() => r(null), 8000))]);
       if (!room) return false;
       this.room = room; this.count = 0;
-      room.onPeers((ch) => this.sync(ch.peers), () => { this.room = null; this.count = null; });
+      room.onPeers((ch) => { try { this.sync(ch.peers); } catch (e) { console.warn('peers', e); } }, () => { this.room = null; this.count = null; });
       return true;
     } catch (e) { return false; }
   }
@@ -35,7 +35,7 @@ export class Neighbors {
     this.sendT += dt;
     if (this.sendT > 0.2) {
       this.sendT = 0;
-      this.room.presence({ v: 1, loc, x: Math.round(me.pos.x * 10) / 10, y: Math.round(me.pos.y * 10) / 10, h: Math.round(me.heading * 100) / 100, sp: me.species, j: me.jacket | 0, hd: me.hoodie | 0, mv: me.moving ? 1 : 0, em: this.myEmote.i, et: this.myEmote.t }).catch(() => {});
+      try { const pr = this.room.presence({ v: 1, loc, x: Math.round(me.pos.x * 10) / 10, y: Math.round(me.pos.y * 10) / 10, h: Math.round(me.heading * 100) / 100, sp: me.species, j: me.jacket | 0, hd: me.hoodie | 0, mv: me.moving ? 1 : 0, em: this.myEmote.i, et: this.myEmote.t }); if (pr && pr.catch) pr.catch(() => {}); } catch (e) { this.room = null; }
     }
     for (const p of this.peers.values()) {
       if (!p.ch) continue;

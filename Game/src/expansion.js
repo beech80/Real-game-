@@ -6,6 +6,7 @@ import { CAREERS, careerStatus } from './life.js';
 import { WORK, T, runTask, workShift, apply, school, COURSES } from './careers.js';
 import { DISTRICTS } from './districts.js';
 import { readCode } from './plush.js';
+import { askNPC } from './voice.js';
 import { runActivity } from './learnkit.js';
 import { GEN } from './curriculum.js';
 import { SKILLS } from './edu.js';
@@ -352,7 +353,9 @@ export function installExpansion(Game) {
   P.talkFriend = async function (id, role) {
     const s = this.state, F = FRIENDS[id], lvl = s.friends[id] || 0;
     const who = `${id} · ${role}`;
-    const c = await UI.say(who, lvl < 1 ? `Hey, I don’t think we’ve met. I’m ${id}.` : pick(F.lines), lvl >= 1 && s.flags[`favor_${id}_${s.day}`] !== true ? ['Chat', F.ask.replace(/\?$/, '') + '? (help out)', 'See you later'] : ['Chat', 'See you later']);
+    const c = await UI.say(who, lvl < 1 ? `Hey, I don’t think we’ve met. I’m ${id}.` : pick(F.lines), lvl >= 1 && s.flags[`favor_${id}_${s.day}`] !== true ? ['Chat', F.ask.replace(/\?$/, '') + '? (help out)', '💬 Ask a question', 'See you later'] : ['Chat', '💬 Ask a question', 'See you later']);
+    const asked = (lvl >= 1 && s.flags[`favor_${id}_${s.day}`] !== true) ? c === 2 : c === 1;
+    if (asked) { await askNPC(this, { name: id }); return; }
     if (c === 0) { await UI.say(who, pick(F.lines)); this.befriend(id, lvl < 1 ? 1 : 0.2); }
     else if (c === 1 && lvl >= 1) { await UI.say(who, F.ask); await runTask(this, T[F.favor], 'friend', `Helping ${id}`, '🤝'); s.flags[`favor_${id}_${s.day}`] = true; this.befriend(id, 1); await UI.say(who, 'Thank you. Really.'); }
     const friends = Object.keys(FRIENDS).filter((k) => (s.friends[k] || 0) >= 3).length;
@@ -458,10 +461,12 @@ export function installExpansion(Game) {
       h('p', { class: 'lead' }, 'How can we help today?'),
       h('div', { class: 'opts' },
         h('button', { class: 'opt', onclick: () => close('board') }, '💼 Career board'),
+        h('button', { class: 'opt', onclick: () => close('ask') }, '💬 Ask Mr. Okafor a question'),
         h('button', { class: 'opt', onclick: () => close('resume') }, s.flags.resume ? '📝 Update my résumé' : '📝 Help me write a résumé'),
         struggling ? h('button', { class: 'opt', onclick: () => close('help') }, '🤝 I’m struggling with money') : h('button', { class: 'opt', onclick: () => close('help') }, '🤝 Money help & advice'),
         ll >= 8 || s.ending ? h('button', { class: 'opt', onclick: () => close('mentor') }, '🌱 Mentor a newcomer') : null)), { icon: '🤝' });
     if (c === 'board') return this.careerBoard();
+    if (c === 'ask') return askNPC(this, { name: 'Mr. Okafor' });
     if (c === 'resume') {
       await UI.say(O, 'A résumé shows employers what you can do. Start each line with an action word, and use numbers when you can.');
       const r = await runActivity(G, gen('write.resume'), 'resume', 'Your résumé', '📝');
