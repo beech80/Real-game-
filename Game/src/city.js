@@ -51,7 +51,7 @@ export class Pedestrian {
 // ------------------------------------------------------------------------------------------ vehicles
 const CAR_COLORS = [0xd23b2a, 0x2a5bd2, 0xf1f1f1, 0x1b1b1f, 0xe8b23a, 0x2f8f5a, 0x8a8d96, 0x7b3fb0];
 
-function carMesh(color, bus = false) {
+export function carMesh(color, bus = false) {
   const g = new THREE.Group();
   const paint = new THREE.MeshStandardMaterial({ color, metalness: 0.55, roughness: 0.32 });
   const glass = new THREE.MeshStandardMaterial({ color: 0x1a2433, metalness: 0.4, roughness: 0.08 });

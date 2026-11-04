@@ -110,6 +110,10 @@ export class Game {
         if (unpaid) return T(`Pay your bill: ${unpaid.name} (${money(unpaid.amount)}) — Bills app`, null);
         if (s.flags.baristaTip && !(s.jobs || []).includes('barista')) return T('Ask Dee about the barista job at Daily Grind', 'Door_CoffeeShop');
         const ll = this.life();
+        const next = [['midtown', 3, 'Midtown'], ['opportunity', 5, 'the Opportunity District'], ['heights', 8, 'The Heights']].find(([k, lv]) => ll.level >= lv && !(s.visited || {})[k]);
+        if (next) return T(`New district open: take the bus to ${next[2]}`, s.location === 'district' ? 'Interact_BusStop' : 'D:bus');
+        if (s.biz && s.biz.last !== s.day && !s.biz.staff.length && s.time < 18) return T(`Open your ${s.biz.name} for the day (Brighter Park)`, s.location === 'district' ? 'CART' : null);
+        if (s.pet && s.pet.fed !== s.day && s.time > 17) return T(`Go home and feed ${s.pet.name}`, null);
         return T(`Grow your Life Level (${ll.level} → ${ll.level + 1}) · 📱 Stats`, null);
       }
     }
@@ -130,9 +134,9 @@ export class Game {
       Interact_InventoryCount: () => q === 'shift' && s.shift.register >= s.shift.need.register && s.shift.stock >= s.shift.need.stock && s.shift.inv < s.shift.need.inv ? { label: 'Count inventory', run: () => this.inventoryTask() } : null,
       Interact_BasketPickup: () => ({ label: 'Shop for groceries', run: () => A.shop(G).then((ok) => ok && UI.toast('Groceries are in your fridge at home.', 'good')) }),
       Interact_ProduceRestock: () => ({ label: 'Shop for groceries', run: () => A.shop(G) }),
-      Door_ApartmentLobby: () => ({ label: 'Enter The Starter Apartments', run: () => this.hooks.enterApartment() }),
+      Door_ApartmentLobby: () => (s.home && s.home !== 'starter' ? { label: 'The Starter Apartments', run: () => UI.toast('You moved out. Your home is now ' + this.hooks.HOMES[s.home].name + '.', 'info', 3200) } : { label: 'Enter The Starter Apartments', run: () => this.hooks.enterApartment() }),
       Interact_ExitDoor: () => ({ label: 'Go outside', run: () => this.hooks.exitApartment() }),
-      Interact_Fridge: () => ({ label: 'Eat', run: () => A.eat(G).then((ok) => { if (ok) { s.flags.ate = true; this.hooks.playerAnim('Pickup'); } }) }),
+      Interact_Fridge: () => s.pet && s.pet.fed !== s.day ? { label: `Feed ${s.pet.name}`, run: () => this.petCare('feed') } : ({ label: 'Eat', run: () => A.eat(G).then((ok) => { if (ok) { s.flags.ate = true; this.hooks.playerAnim('Pickup'); } }) }),
       Interact_Cook: () => ({ label: 'Cook', run: () => A.eat(G).then((ok) => { if (ok) s.flags.ate = true; }) }),
       Interact_Eat: () => ({ label: 'Sit at the table', run: () => { this.hooks.playerAnim('Sit', 3); this.advance(0.25); } }),
       Interact_Bills: () => ({ label: 'Pay bills', run: () => { s.flags.billsSeen = true; return A.bills(G); } }),
@@ -197,7 +201,7 @@ export class Game {
       ...TIER_NAMES.map((tn, t) => h('div', { class: 'tier' }, h('div', { class: 'tier-h' }, `Tier ${t} · ${tn}`),
         CAREERS.filter((c) => c.tier === t).map((c) => { const st = careerStatus(c, s, this.edu, ll);
           return h('div', { class: 'bill' + (st.held ? ' paid' : '') }, h('div', {}, h('b', {}, `${c.title} · ${c.employer}`), h('small', {}, c.desc),
-            h('small', { class: st.ready ? 'pos' : '' }, st.held ? 'Your job ✓' : st.ready ? (st.playable ? 'Ready: apply in person' : `Ready: opens when ${c.where} opens`) : 'Needs: ' + st.missing.join(' · '))),
+            h('small', { class: st.ready ? 'pos' : '' }, st.held ? 'Your job ✓' : st.ready ? (c.where === 'here' ? 'Ready: apply in person' : c.tier === 4 ? 'Ready: Small Business Center, Opportunity District' : `Ready: apply in person in ${c.where}`) : 'Needs: ' + st.missing.join(' · '))),
             c.rate ? h('span', { class: 'amt' }, `$${c.rate}/h`) : null); })))), { icon: '💼', cls: 'wide' });
   }
 
@@ -383,18 +387,6 @@ export class Game {
       h('div', { class: 'swatches' }, J.filter((j) => s.wardrobe.includes(j.id)).map((j) => h('button', { class: 'swatch', style: { background: '#' + j.color.toString(16).padStart(6, '0') }, onclick: () => close(j.id) }, h('span', {}, j.name))))), { icon: '👕' });
     if (pickId) { s.outfit.jacket = J.find((j) => j.id === pickId).color; this.hooks.setOutfit(s.outfit); this.save(); }
   }
-  async bus() {
-    const s = this.state, ll = this.life().level;
-    const dest = [['Midtown', 3, 'Opens in a future update'], ['Opportunity District', 5, 'Opens in a future update'], ['The Heights', 8, 'Opens in a future update']];
-    const go = await UI.sheet('Bus schedule', (close) => h('div', { class: 'act' },
-      h('p', { class: 'lead' }, 'Route 1: Starting District ⇄ Midtown ⇄ Opportunity District ⇄ The Heights ⇄ The Club'),
-      h('div', { class: 'bill-list' }, dest.map(([n, lv, note]) => h('div', { class: 'bill' }, h('div', {}, h('b', {}, n), h('small', {}, ll >= lv ? `You’re ready for ${n}. ${note}.` : `Grow to Life Level ${lv} to find opportunities here · ${note}`)), h('span', { class: 'amt' }, '$2.75'))),
-        h('div', { class: 'bill' }, h('div', {}, h('b', {}, '♛ The Club'), h('small', {}, s.flags.invited && !s.ending ? 'You have been invited.' : s.ending ? 'Visit any time.' : 'Members and invited guests only.')),
-          s.flags.invited && !s.ending ? h('button', { class: 'primary sm', onclick: () => close('club') }, 'Ride') : h('span', { class: 'amt' }, '$2.75'))),
-      h('p', { class: 'tip' }, 'Buses run every 20 minutes from 6:00 AM to 11:40 PM. Reading a schedule is a real skill.')), { icon: '🚌' });
-    this.edu.record('read.signs', true, { ctx: 'bus' });
-    if (go === 'club') { if (s.money >= 2.75) this.spend(2.75, 'Bus fare'); await this.hooks.goToClub(); }
-  }
   async training() {
     await A.teach(this, 'read.instructions', 'Training board');
     await UI.sheet('Training board', (close) => h('div', { class: 'act' },
@@ -417,10 +409,15 @@ export class Game {
     const late = s.bills.filter((b) => !b.paid && b.due < s.day && !b.lateFee);
     for (const b of late) { b.lateFee = true; b.amount += 15; s.mood -= 10; s.stats.lateFees = (s.stats.lateFees || 0) + 1; }
     // recurring weekly bills
-    for (const b of s.bills.filter((x) => x.paid && !x.renewed && /^(rent|util|phone)/.test(x.id) && x.due <= s.day)) {
+    for (const b of s.bills.filter((x) => x.paid && !x.renewed && (x.recur || /^(rent|util|phone)/.test(x.id)) && x.due <= s.day)) {
       b.renewed = true; const kind = b.id.replace(/\d+$/, ''), n = parseInt(b.id.replace(/\D/g, ''), 10) + 1;
-      s.bills.push({ id: kind + n, name: b.name.replace(/\(week \d+\)/, `(week ${n + 1})`), amount: kind === 'rent' ? 120 : kind === 'util' ? 20 : 25, due: b.due + (kind === 'phone' ? 30 : 7), paid: false });
+      if (kind === 'bizloan' && s.biz) s.biz.loan = Math.max(0, Math.round((s.biz.loan - b.amount) * 100) / 100);
+      if (b.left === 0) continue;
+      const amount = kind === 'rent' ? (s.rent || b.recur || 120) : b.recur || (kind === 'util' ? 20 : 25);
+      s.bills.push({ ...b, id: kind + n, name: b.name.replace(/\(week \d+\)/, `(week ${n + 1})`), amount, due: b.due + (b.period || (kind === 'phone' ? 30 : 7)), paid: false, renewed: false, lateFee: false, left: b.left === undefined ? undefined : b.left - 1 });
+      if (kind === 'rent') s.stats.rentPaidSelf = (s.stats.rentPaidSelf || 0) + 0;
     }
+    const nightNotes = this.nightly ? this.nightly() : [];
     s.bills = s.bills.filter((b) => !b.paid || s.day - b.due < 7);
     this.edu.dailyReview(s.day);
     if (s.quest === 'home') s.quest = 'free';
@@ -429,6 +426,7 @@ export class Game {
     await UI.fade(0, 500);
     await UI.sheet(`Day ${s.day - 1} complete`, (close) => h('div', { class: 'act' },
       h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'EARNED'), h('b', { class: 'pos' }, money(earned))), h('div', {}, h('small', {}, 'SPENT'), h('b', { class: 'neg' }, money(spent))), h('div', {}, h('small', {}, 'BALANCE'), h('b', {}, money(s.money)))),
+      ...nightNotes.map((n) => h('p', { class: 'tip' }, n)),
       late.length ? h('p', { class: 'warnline' }, `Late fee: ${late.map((b) => b.name).join(', ')} +$15. Pay bills before their due date. You can catch up.`) : null,
       h('div', { class: 'lifering' }, h('b', {}, `Life Level ${ll.level}`), h('div', { class: 'bar' }, h('i', { style: { width: Math.round(100 * (ll.total % 6) / 6) + '%' } }))),
       h('p', { class: 'tip' }, pick(['Small steps lead to big things.', 'Rest today. Stronger tomorrow.', 'Understand the why.', 'From zero to REAL.', 'Mistakes don’t define you.'])),
@@ -467,7 +465,7 @@ export function openPhone(G) {
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Club', '♛', '#e8a33a'], ['Settings', '⚙️', '#55607e']];
+      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Settings', '⚙️', '#55607e']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -483,19 +481,39 @@ export function openPhone(G) {
           h('div', { class: 'tx' }, s.bank.slice(0, 30).map((t) => h('div', { class: 'rline' }, h('span', {}, `Day ${t.day} · ${t.desc}`), h('span', { class: t.amt < 0 ? 'neg' : 'pos' }, money(t.amt)))))),
         Jobs: () => h('div', { class: 'act' }, ...TIER_NAMES.map((tn, t) => h('div', { class: 'tier' }, h('div', { class: 'tier-h' }, `Tier ${t} · ${tn}`),
           CAREERS.filter((c) => c.tier === t).map((c) => { const st = careerStatus(c, s, G.edu, ll.level); return h('div', { class: 'bill' + (st.held ? ' paid' : '') }, h('div', {}, h('b', {}, c.title), h('small', {}, st.held ? 'Your job ✓' : st.ready ? (st.playable ? 'Available now' : `Ready · ${c.where}`) : st.missing.slice(0, 2).join(' · '))), c.rate ? h('span', { class: 'amt' }, `$${c.rate}`) : null); })))),
-        Map: () => h('div', { class: 'act' }, h('ul', { class: 'list' }, h('li', {}, '🏠 The Starter Apartments: Main St, northwest'), h('li', {}, '🛒 Fresh Mart: Main St & Fresh Ave, northeast'), h('li', {}, '🤝 Community Center & career board: Main St, far west'), h('li', {}, '☕ Daily Grind: under the apartments'), h('li', {}, '🍔 Main St Diner · 🧥 Thread & Co · 🏋️ Grow Gym: south side of Main St'), h('li', {}, '🌳 Brighter Park and the 🚌 bus stop: southeast'), h('li', {}, '🛣️ The old road south: where you started'), h('li', {}, '♛ The Club: on the hill, north up Fresh Ave'))),
+        Map: () => h('div', { class: 'act' }, h('div', { class: 'tier-h' }, 'Starting District'), h('ul', { class: 'list' }, h('li', {}, '🏠 The Starter Apartments · 🛒 Fresh Mart · 🤝 Community Center'), h('li', {}, '☕ Daily Grind · 🍔 Diner · 🧥 Thread & Co · 🏋️ Grow Gym'), h('li', {}, '🌳 Brighter Park and the 🚌 bus stop: southeast'), h('li', {}, '🛣️ The old road south · ♛ The Club on the hill')),
+          ...Object.entries(G.hooks.DISTRICTS).map(([id, d]) => h('div', {}, h('div', { class: 'tier-h' }, `${d.name} ${ll.level >= d.life ? '' : '· Life Level ' + d.life}`), h('ul', { class: 'list' }, h('li', {}, d.buildings.map((x) => x.sign ? x.sign[0].replace(/\b(\w)(\w*)/g, (m, p, q) => p + q.toLowerCase()) : 'Overlook Park').join(' · '))))),
+          h('p', { class: 'tip' }, 'Ride the bus from any bus stop. Districts open as your Life Level grows, never by wealth.')),
         Messages: () => { s.messages.forEach((m) => (m.read = true)); return h('div', { class: 'msgs' }, s.messages.map((m) => h('div', { class: 'msg' }, h('b', {}, m.from), h('small', {}, `Day ${m.day}`), h('p', {}, m.text)))); },
         Calendar: () => h('div', { class: 'bill-list' }, [...Array(7)].map((_, i) => { const d = s.day + i; const ev = [];
           if (s.flags.hired) ev.push('Fresh Mart shift available (7 AM–5 PM)');
           if (s.jobs.includes('barista') && [6, 0].includes(d % 7)) ev.push('Daily Grind weekend shift');
+          for (const j of s.jobs.filter((j) => G.hooks.WORK[j])) ev.push(`${G.hooks.CAREERS.find((c) => c.id === j).employer} shift`);
+          for (const [cid, c] of Object.entries(s.courses || {})) if (!c.done) ev.push(`Class: ${G.hooks.COURSES[cid].name}`);
+          if (s.vehicle && s.vehicle.type !== 'bike' && s.vehicle.service + 10 === d) ev.push('Vehicle service due');
           for (const b of s.bills.filter((b) => !b.paid && b.due === d)) ev.push(`Due: ${b.name} ${money(b.amount)}`);
           if (s.flags.jaxChallenge && !s.flags.jaxChallengeDone && s.flags.jaxChallenge.by === d) ev.push('Jax’s $300 challenge deadline');
           return h('div', { class: 'bill' }, h('div', {}, h('b', {}, i === 0 ? `Today · Day ${d}` : `Day ${d}`), h('small', {}, ev.join(' · ') || 'Free day'))); })),
-        Business: () => h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Tier 4 · Entrepreneurship. Build something that’s yours.'),
-          h('div', { class: 'bill' }, h('div', {}, h('b', {}, 'Write a business plan: coffee cart'), h('small', {}, s.achievements.plan ? 'Plan written ✓ — owning a business opens with Midtown in a future update' : 'Research customers, calculate startup costs and profit.'))),
-          h('button', { class: 'primary', onclick: () => { close(); A.businessPlan(G); } }, s.achievements.plan ? 'Revise the plan' : 'Start the plan')),
+        Business: () => s.biz ? h('div', { class: 'act' }, h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'DAYS'), h('b', {}, s.biz.days)), h('div', {}, h('small', {}, 'PROFIT'), h('b', { class: s.biz.profit >= 0 ? 'pos' : 'neg' }, money(s.biz.profit))), h('div', {}, h('small', {}, 'TEAM'), h('b', {}, s.biz.staff.length))),
+            h('b', {}, s.biz.name + (s.biz.store ? ' · Midtown storefront' : ' · Brighter Park')), s.biz.loan > 0 ? h('p', { class: 'warnline' }, `Loan balance ${money(s.biz.loan)}`) : null,
+            h('div', { class: 'tx' }, s.biz.log.map((l) => h('div', { class: 'rline' }, h('span', {}, `Day ${l.day}${l.team ? ' (team)' : ''} · sold ${l.sold}/${l.demand}`), h('span', { class: l.profit < 0 ? 'neg' : 'pos' }, money(l.profit))))),
+            h('button', { class: 'primary', onclick: () => { close(); G.runBusiness(); } }, 'Run today'), h('p', { class: 'tip' }, 'Hire staff and open a storefront at the Small Business Center (Opportunity District).'))
+          : h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Tier 4 · Entrepreneurship. Build something that’s yours.'),
+            h('div', { class: 'bill' }, h('div', {}, h('b', {}, '1. Write a business plan'), h('small', {}, s.achievements.plan ? 'Plan written ✓' : 'Research customers, calculate startup costs and profit.'))),
+            h('div', { class: 'bill' }, h('div', {}, h('b', {}, '2. Register it'), h('small', {}, 'At the Small Business Center in the Opportunity District (Life Level 5).'))),
+            h('button', { class: 'primary', onclick: () => { close(); A.businessPlan(G); } }, s.achievements.plan ? 'Revise the plan' : 'Start the plan')),
+        Home: () => { const H = G.hooks.HOMES[s.home || 'starter'], v = s.vehicle && G.hooks.VEHICLES[s.vehicle.type]; return h('div', { class: 'act' },
+          h('div', { class: 'bill' }, h('div', {}, h('b', {}, '🏠 ' + H.name), h('small', {}, s.home === 'owned' ? `Mortgage ${money(s.rent)}/week` : `Rent ${money(s.rent || 120)}/week`))),
+          h('div', { class: 'bill' }, h('div', {}, h('b', {}, v ? `${v.icon} ${v.name}` : '🚌 Bus rider'), h('small', {}, v ? (s.vehicle.type === 'bike' ? 'No running costs.' : `Last service: Day ${s.vehicle.service}${s.day - s.vehicle.service >= 10 ? ' · SERVICE DUE at Midtown Motors' : ''}`) : 'Vehicles are sold at Midtown Motors.'))),
+          s.pet ? h('div', { class: 'bill' }, h('div', {}, h('b', {}, `${G.hooks.PET_TYPES[s.pet.type].icon} ${s.pet.name}`), h('small', {}, `Bond ${'♥'.repeat(Math.max(1, Math.round(s.pet.bond / 2)))} · ${s.pet.fed === s.day ? 'Fed today' : 'Hungry: feed at home'}`)), h('button', { class: 'primary sm', onclick: () => { G.petCare('play'); open('Home'); } }, 'Play')) : h('div', { class: 'bill' }, h('div', {}, h('b', {}, '🐾 No pet yet'), h('small', {}, 'Paws & Friends shelter in Midtown.'))),
+          s.savings ? h('div', { class: 'bill' }, h('div', {}, h('b', {}, '🏦 Savings'), h('small', {}, `${money(s.savings)} earning 1% a week`))) : null); },
+        Pal: () => { setTimeout(() => { close(); G.companion(); }, 0); return h('div'); },
+        Neighbors: () => { const n = G.hooks.peers ? G.hooks.peers() : null; return h('div', { class: 'act' },
+          h('p', { class: 'lead' }, n === null ? 'Neighbors appear when you play REAL in its shared link. Right now you’re playing solo.' : n ? `${n} other REAL${n === 1 ? '' : 's'} in the city right now.` : 'No other REALs are online right now.'),
+          h('p', {}, 'Other players appear as REALs walking in the same district. Everyone stays anonymous: no names, no chat, no trading, only friendly gestures.'),
+          h('div', { class: 'opts' }, ['👋 Wave', '🎉 Cheer', '👍 Thumbs up', '💡 Idea!'].map((e, i) => h('button', { class: 'opt', onclick: () => { G.hooks.emote && G.hooks.emote(i); close(); } }, e)))); },
         Goals: () => h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Now: ' + (G.objective().text || '—')),
-          h('div', { class: 'bill-list' }, [['Find your way to the city', !!s.achievements.found_way], ['Find a place to live', !!s.flags.housed], ['Get your first job', !!s.flags.hired], ['Earn your first paycheck', s.stats.shifts >= 1], ['Pay rent on time', !!s.achievements.rent_on_time], ['Hold two jobs', s.jobs.length >= 2], ['Save $300', s.money >= 300], ['Earn a promotion', !!s.achievements.promoted], [`Reach Life Level ${INVITE_LEVEL}`, ll.level >= INVITE_LEVEL], ['Make the REAL decision', !!s.ending]].map(([t, d]) =>
+          h('div', { class: 'bill-list' }, [['Find your way to the city', !!s.achievements.found_way], ['Find a place to live', !!s.flags.housed], ['Get your first job', !!s.flags.hired], ['Earn your first paycheck', s.stats.shifts >= 1], ['Pay rent on time', !!s.achievements.rent_on_time], ['Hold two jobs', s.jobs.length >= 2], ['Save $300', s.money >= 300], ['Earn a promotion', !!s.achievements.promoted], [`Reach Life Level ${INVITE_LEVEL}`, ll.level >= INVITE_LEVEL], ['Make the REAL decision', !!s.ending], ['Visit Midtown, Opportunity and The Heights', !!s.achievements.explorer], ['Get a Tier 2 career', !!s.achievements.career], ['Complete a course', !!s.achievements.graduate], ['Open your own business', !!s.biz], ['Hire an employee', !!s.achievements.boss], ['Buy a vehicle', !!s.vehicle], ['Move to a better home', !!s.achievements.moved_up || !!s.achievements.homeowner], ['Adopt a pet', !!s.pet], ['Make three friends', !!s.achievements.friend3], ['Clear a challenge zone', !!s.achievements.challenge], ['Become a Tier 3 professional', !!s.achievements.professional], ['Buy a home', !!s.achievements.homeowner]].map(([t, d]) =>
             h('div', { class: 'bill' + (d ? ' paid' : '') }, h('div', {}, h('b', {}, t)), h('span', { class: 'ok' }, d ? '✓' : '○'))))),
         Stats: () => h('div', { class: 'act' }, h('div', { class: 'lifering' }, h('b', {}, `Life Level ${ll.level}`), h('small', {}, 'Growth across your whole life. Never a measure of your worth.')),
           h('div', { class: 'skills' }, LIFE_CATS.map(([k, n, ic]) => h('div', { class: 'skill' }, h('span', {}, `${ic} ${n}`), h('div', { class: 'bar' }, h('i', { style: { width: ll.scores[k] * 10 + '%' } })), h('b', {}, ll.scores[k].toFixed(0))))),

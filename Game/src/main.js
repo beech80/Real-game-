@@ -9,6 +9,14 @@ import { UI, Minimap, h, $, wait, setSfx, money } from './ui.js';
 import { Audio } from './audio.js';
 import { Game, newState, loadSave, openPhone } from './game.js';
 import { buildWilderness, wildHeight, WILD, buildClub, CLUB, setGate } from './scenes.js';
+import { DISTRICTS, buildDistrict, clampToWalk, districtHeight } from './districts.js';
+import { installExpansion, HOMES, VEHICLES, PET_TYPES, FRIENDS } from './expansion.js';
+import { WORK, COURSES } from './careers.js';
+import { CAREERS } from './life.js';
+import { makePet, PetFollower, makeCompanion, updateCompanion } from './pets.js';
+import { Neighbors } from './multiplayer.js';
+import { carMesh, Pedestrian } from './city.js';
+installExpansion(Game);
 
 // ---------------------------------------------------------------- crash/diagnostic panel (never a silent black screen)
 function fatal(msg) {
@@ -33,7 +41,8 @@ UI.init();
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
 
-const W = { district: null, apartment: null, wild: null, club: null, data: null, lamps: [] };
+const W = { district: null, apartment: null, wild: null, club: null, data: null, lamps: [], d: {} };
+let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60;
 let player = null, game = null, input = null, fcam = null, traffic = null, peds = [], npcs = {}, coll = null, aptColl = null, clubColl = null, members = [];
 var mode = 'loading';
 let beacon = null, minimap = null;
@@ -173,13 +182,19 @@ async function startGame(state, isNew) {
     goToClub: () => invitation(),
     JACKETS, quality: () => engine.quality, setQuality: (q) => engine.setQuality(q),
     toggleSound: () => audio.toggle(), soundOn: () => audio.on,
+    travel: (loc) => travelTo(loc), refreshWorld: () => refreshWorld(), petTrick: () => { if (pet) pet.trick = 1; },
+    DISTRICTS, HOMES, VEHICLES, PET_TYPES, WORK, CAREERS, COURSES,
+    peers: () => (neighbors && neighbors.room ? neighbors.count : null), emote: (i) => { if (neighbors) neighbors.emote(i); player.ch.oneShot && player.ch.oneShot('Wave'); UI.toast(['👋', '🎉', '👍', '💡'][i], 'info', 1200); },
   });
+  neighbors = new Neighbors(scene); neighbors.connect();
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
   $('#btn-sprint').onclick = (e) => { input.sprintLatch = !input.sprintLatch; e.currentTarget.classList.toggle('on', input.sprintLatch); };
   await spawnStoryNPCs();
   if (state.chapter === 'prologue') { await prologue(); return; }
+  refreshWorld();
   if (state.location === 'apartment') await enterApartment(true);
+  else if (DISTRICTS[state.location]) { const pos = state.pos; await travelTo(state.location, true); if (pos) { player.pos = { ...pos }; player.heading = state.heading || 0; } }
   else if (state.pos) { player.pos = { ...state.pos }; player.heading = state.heading || 0; }
   else { player.pos = { ...WILD.start }; player.heading = 0; }
   player.apply();
@@ -210,6 +225,8 @@ function placeJax(x, y, facing) {
 
 // ------------------------------------------------------------------------------------------ spaces
 function setCitySpace(on) {
+  for (const D of Object.values(W.d)) showDistrict(D, false);
+  if (cart) cart.visible = on;
   W.district.visible = on; W.wild.group.visible = on; if (W.pools) W.pools.visible = on; W.ccSign.visible = on;
   for (const c of traffic.cars) c.m.visible = on;
   for (const p of peds) p.ch.root.visible = on && p.ch.root.visible;
@@ -367,6 +384,79 @@ async function invitation() {
 }
 
 // ------------------------------------------------------------------------------------------ apartment
+// ------------------------------------------------------------------------------------------ Chapter 7: the bigger world
+function showDistrict(D, on) {
+  D.group.visible = on;
+  for (const p of D.peds) p.ch.root.visible = on && p.ch.root.visible;
+  for (const f of D.friends) f.ch.root.visible = on;
+}
+async function ensureDistrict(id) {
+  if (W.d[id]) return W.d[id];
+  UI.toast(`Arriving in ${DISTRICTS[id].name}…`, 'info', 1500);
+  await wait(30);
+  const D = buildDistrict(id, textures);
+  D.coll = new Collision(D.colliders); D.peds = []; D.friends = [];
+  D.pools = makeLightPools(D.lamps); D.group.add(D.pools);
+  scene.add(D.group); W.d[id] = D;
+  const pk = (a) => a[Math.floor(Math.random() * a.length)];
+  for (let i = 0; i < (isMobile ? 6 : 10); i++) {
+    const sp = SPECIES[(i * 3 + id.length) % SPECIES.length].id;
+    try { const ch = new Character(await loadSpecies(sp), { outfit: { jacket: pk(JACKETS).color, hoodie: pk(HOODIES).color } }); scene.add(ch.root); const p = new Pedestrian(ch, D.routes[i % D.routes.length]); D.coll.dynamic.push(p.collider); D.peds.push(p); } catch (e) {}
+  }
+  for (const f of DISTRICTS[id].friends) {
+    try { const ch = new Character(await loadSpecies(f.species), { outfit: f.outfit }); scene.add(ch.root); const n = new StoryNPC(ch, { x: DISTRICTS[id].ox + f.x, y: f.y, r: f.x > 0 ? Math.PI / 2 : -Math.PI / 2, z: 0.13 }, f.id, f.role); D.coll.dynamic.push(n.collider); D.friends.push(n); } catch (e) {}
+  }
+  return D;
+}
+async function travelTo(loc, silent) {
+  if (!silent) { audio.play('door'); await UI.fade(1, 400); }
+  if (W.apartment) W.apartment.visible = false;
+  const s = game.state;
+  if (loc === 'district') {
+    setCitySpace(true); s.location = 'district';
+    const b = sock('Interact_BusStop'); player.pos = { x: b.x - 1.2, y: b.y + 1.6 }; player.heading = 0;
+  } else {
+    const D = await ensureDistrict(loc);
+    setCitySpace(false); showDistrict(D, true); s.location = loc;
+    player.pos = { ...D.spawn }; player.heading = 0;
+  }
+  player.h = 0.13; player.apply(); fcam.yaw = 0;
+  placeCar(); if (pet) pet.place(player.pos);
+  if (!silent) await UI.fade(0, 400);
+  game.save();
+}
+function placeCar() {
+  const s = game.state;
+  if (myCar) { scene.remove(myCar); myCar = null; }
+  if (!s.vehicle || s.vehicle.type === 'bike' || s.location === 'apartment' || s.location === 'club') return;
+  myCar = carMesh(s.vehicle.type === 'car' ? 0x2f8f5a : 0xe8a33a, false);
+  if (s.vehicle.type === 'scooter') myCar.scale.set(0.45, 0.9, 0.5);
+  const D = W.d[s.location];
+  const at = D ? { x: D.spawn.x - 3.4, y: D.spawn.y + 5 } : { x: sock('Interact_BusStop').x - 9, y: -3.2 };
+  myCar.position.copy(P2W(at.x, at.y, 0)); myCar.rotation.y = D ? 0 : Math.PI / 2; scene.add(myCar);
+}
+function refreshWorld() {
+  const s = game.state;
+  if (s.biz && !cart) {
+    cart = new THREE.Group();
+    const wood = new THREE.MeshStandardMaterial({ color: 0x7a5230, roughness: 0.7 }), cloth = new THREE.MeshStandardMaterial({ color: 0x2f8f5a, roughness: 0.8 }), metal = new THREE.MeshStandardMaterial({ color: 0xcfd3d8, metalness: 0.8, roughness: 0.3 });
+    const b = new THREE.Mesh(new THREE.BoxGeometry(1.8, 1.0, 0.9), wood); b.position.y = 0.75; cart.add(b);
+    const top = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.08, 1.4), cloth); top.position.y = 2.3; top.rotation.z = 0.08; cart.add(top);
+    for (const x of [-0.9, 0.9]) { const pl = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.1, 8), metal); pl.position.set(x, 1.8, 0.4); cart.add(pl); const wh = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.08, 16), metal); wh.rotation.x = Math.PI / 2; wh.position.set(x * 0.7, 0.25, 0.48); cart.add(wh); }
+    const tex = new THREE.CanvasTexture((() => { const c = document.createElement('canvas'); c.width = 512; c.height = 128; const g = c.getContext('2d'); g.fillStyle = '#1f6b35'; g.fillRect(0, 0, 512, 128); g.fillStyle = '#fff'; g.font = 'bold 54px Arial'; g.textAlign = 'center'; g.fillText(s.biz.name.toUpperCase().slice(0, 22), 256, 82); return c; })());
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 0.42), new THREE.MeshStandardMaterial({ map: tex })); sign.position.set(0, 0.8, 0.46); cart.add(sign);
+    cart.traverse((o) => { if (o.isMesh) o.castShadow = true; });
+    W.cartPos = { x: 38, y: -25 }; cart.position.copy(P2W(38, -25, 0.13)); scene.add(cart);
+    coll.items.push({ t: 'box', x: 38, y: -25, hx: 1, hy: 0.6, r: 0, cos: 1, sin: 0, n: 'cart' });
+    cart.visible = s.location === 'district';
+  }
+  if (s.pet && !pet) { const m = makePet(s.pet.type, PET_TYPES[s.pet.type].color); scene.add(m); pet = new PetFollower(m); pet.place(player.pos); }
+  if (companion && (!s.companion || s.companion.kind !== companion.userData.kind)) { scene.remove(companion); companion = null; }
+  if (s.companion && !companion) { companion = makeCompanion(s.companion.kind); companion.userData.kind = s.companion.kind; scene.add(companion); }
+  if (companion) companion.visible = !s.companion.hidden;
+  placeCar();
+}
+
 async function enterApartment(silent) {
   if (!silent) { audio.play('door'); await UI.fade(1, 350); }
   if (!W.apartment) {
@@ -379,13 +469,32 @@ async function enterApartment(silent) {
     aptColl = new Collision(W.data.apartment.colliders);
   }
   W.apartment.visible = true; setCitySpace(false);
-  game.state.location = 'apartment';
+  game.state.location = 'apartment'; placeCar();
+  if (W.homeDecor) W.homeDecor.visible = true; homeDecor();
   const sp = sock('Spawn_PlayerHome', 'apartment');
   player.pos = { x: sp.x, y: sp.y + 0.6 }; player.heading = 0; player.h = 0; player.apply();
   if (!silent) await UI.fade(0, 350);
   game.save();
 }
+function homeDecor() {
+  const s = game.state, lvl = { loft: 1, heights: 2, owned: 3 }[s.home] || 0;
+  if (W.homeDecor && W.homeDecor.userData.lvl === lvl) return;
+  if (W.homeDecor) W.apartment.remove(W.homeDecor);
+  const g = new THREE.Group(); g.userData.lvl = lvl;
+  const pot = new THREE.MeshStandardMaterial({ color: 0xc46a3a, roughness: 0.8 }), leaf = new THREE.MeshStandardMaterial({ color: 0x3d7a34, roughness: 0.9 }), gold = new THREE.MeshStandardMaterial({ color: 0xe0a83a, metalness: 1, roughness: 0.3 });
+  const spots = [[-3.2, 0.9], [3.3, 4.4], [-3.3, 5.4], [2.9, 0.6]];
+  for (let i = 0; i < Math.min(4, lvl * 2); i++) { const [x, y] = spots[i]; const p = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.14, 0.35, 12), pot); p.position.copy(P2W(x, y, 0.17)); g.add(p); const l = new THREE.Mesh(new THREE.IcosahedronGeometry(0.32, 1), leaf); l.position.copy(P2W(x, y, 0.62)); g.add(l); }
+  if (lvl >= 1) { const rug = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.02, 1.4), new THREE.MeshStandardMaterial({ color: lvl >= 2 ? 0x5a1020 : 0x2a5bd2, roughness: 1 })); rug.position.copy(P2W(0.4, 3.0, 0.01)); g.add(rug); }
+  if (lvl >= 2) for (const y of [2.2, 4.4]) { const art = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.6, 0.8), gold); art.position.copy(P2W(-3.9, y, 1.7)); g.add(art); }
+  W.homeDecor = g; W.apartment.add(g);
+}
 async function exitApartment() {
+  const H = HOMES[game.state.home || 'starter'];
+  if (H.district !== 'district') {
+    await travelTo(H.district);
+    const pt = W.d[H.district].points.find((p) => p.key === H.door); if (pt) { player.pos = { x: pt.x, y: pt.y - 1.5 }; player.apply(); if (pet) pet.place(player.pos); }
+    return;
+  }
   audio.play('door'); await UI.fade(1, 350);
   W.apartment.visible = false; setCitySpace(true);
   game.state.location = 'district';
@@ -402,6 +511,13 @@ function findInteraction() {
   const s = game.state, where = s.location, P = player.pos;
   if (where === 'club') return null;
   let best = null, bd = 1e9;
+  const D = W.d[where];
+  if (D) {
+    for (const pt of D.points) { const d = Math.hypot(pt.x - P.x, pt.y - P.y); if (d < 2.6 && d < bd) { const it = game.districtInteraction(where, pt); if (it) { best = it; bd = d; } } }
+    for (const f of D.friends) if (near(f.pos, 2.4)) best = { label: `Talk to ${f.name}`, run: () => game.talkFriend(f.name, f.role), npc: f };
+    if (!best && pet && near(pet.pos, 2)) best = { label: `Play with ${s.pet.name}`, run: () => game.petCare('play') };
+    return best;
+  }
   for (const so of W.data[where].sockets) {
     if (!/^SOCKET_(Interact|Door)_/.test(so.n)) continue;
     const d = Math.hypot(so.x - P.x, so.y - P.y);
@@ -410,7 +526,8 @@ function findInteraction() {
     const it = game.interaction({ ...so, key: so.n.replace('SOCKET_', '') });
     if (it) { best = it; bd = d; }
   }
-  if (where !== 'district') return best;
+  if (where !== 'district') return best || (pet && near(pet.pos, 1.8) ? { label: `Play with ${s.pet.name}`, run: () => game.petCare('play') } : null);
+  if (cart && W.cartPos && near(W.cartPos, 2.4)) best = { label: `Run ${s.biz.name}`, run: () => game.runBusiness() };
   for (const sg of W.wild.signs) if (sg.q && near(sg, 3.2)) best = { label: 'Read the sign', run: () => game.readSign(sg) };
   if (s.quest === 'shift' && s.shift && s.shift.register >= s.shift.need.register && s.shift.stock < s.shift.need.stock) {
     for (let a = 1; a <= 5; a++) { const so = sock(`Interact_StockShelf_A${a}`); if (so && Math.abs(P.x - so.x) < 1.8 && P.y > 30 && P.y < 42) { const it = game.interaction({ key: `Interact_StockShelf_A${a}` }); if (it) best = it; } }
@@ -424,6 +541,7 @@ function findInteraction() {
   }
   if (near(npcs.Counselor && npcs.Counselor.pos, 2.4)) best = s.flags.housed ? { label: 'Talk to Mr. Okafor', run: () => UI.say('Mr. Okafor · Community Center', pick(['Every career starts with one application.', 'The career board inside shows what each job needs. Every one of them is open to you.', 'You’re doing better than you think.'])) } : { label: 'Ask for help', run: () => game.housing(), npc: npcs.Counselor };
   if (near(npcs.Dee && npcs.Dee.pos, 2)) best = best || { label: 'Talk to Dee', run: () => UI.say('Dee · Daily Grind', 'Best coffee on Main St. Come in any time.') };
+  if (!best && pet && near(pet.pos, 1.8)) best = { label: `Play with ${s.pet.name}`, run: () => game.petCare('play') };
   return best;
 }
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -458,6 +576,13 @@ function clampCamera(want, target) {
   const s = game && game.state;
   if (s && s.location === 'apartment') { want.x = THREE.MathUtils.clamp(want.x, -3.75, 3.75); want.z = THREE.MathUtils.clamp(want.z, -5.8, -0.3); want.y = THREE.MathUtils.clamp(want.y, -499.6, -497.4); return; }
   if (s && s.location === 'club') { const b = W.club.bounds; want.x = THREE.MathUtils.clamp(want.x, b[0] + 0.5, b[2] - 0.5); want.z = THREE.MathUtils.clamp(want.z, -(b[3] - 0.5), -(CLUB.oy + 0.6)); want.y = THREE.MathUtils.clamp(want.y, 0.5, 10.5); return; }
+  const DD = s && W.d[s.location];
+  if (DD) {
+    want.y = Math.max(want.y, 0.6);
+    const dir = want.clone().sub(target);
+    for (let k = 0.15; k <= 1.0001; k += 0.08) { const p = target.clone().addScaledVector(dir, k), x = p.x, y = -p.z; for (const b of DD.buildings) if (Math.abs(x - b.x) < b.hx + 0.3 && Math.abs(y - b.y) < b.hy + 0.3) { want.copy(target).addScaledVector(dir, Math.max(0.1, k - 0.1)); return; } }
+    return;
+  }
   if (inWild(player.pos)) { want.y = Math.max(want.y, groundAt(-0, -0) + wildHeight(want.x, -want.z) + 0.6); return; }
   want.y = Math.max(want.y, 0.6);
   if (inFreshMart(player.pos)) { const fm = W.data.district.freshmart; want.x = THREE.MathUtils.clamp(want.x, fm.x - 13.4, fm.x + 13.4); want.z = THREE.MathUtils.clamp(want.z, -(fm.y + 17.6), -(fm.y + 0.7)); want.y = Math.min(want.y, 4.6); return; }
@@ -520,9 +645,10 @@ function loop(now) {
   const s = game.state;
   const playing = mode === 'play' && !busy();
   if (playing) game.tick(dt / 360 * (s.timeScale || 1));   // 1 real minute ≈ 10 game minutes
-  const apt = s.location === 'apartment', club = s.location === 'club';
+  const apt = s.location === 'apartment', club = s.location === 'club', DD = W.d[s.location];
+  const gfn = DD ? (x, y) => districtHeight(x, y, DD.def) : apt || club ? () => 0 : groundAt;
   if (mode === 'play' && fcam.mode === 'follow') {
-    if (!busy()) player.update(dt, input, fcam, apt ? aptColl : club ? clubColl : coll, apt || club ? () => 0 : groundAt, apt ? W.data.apartment.bounds : club ? W.club.bounds : boundsFn);
+    if (!busy()) player.update(dt, input, fcam, apt ? aptColl : club ? clubColl : DD ? DD.coll : coll, gfn, apt ? W.data.apartment.bounds : club ? W.club.bounds : DD ? (p) => clampToWalk(p, DD.walk) : boundsFn);
     else player.ch.locomote(0, dt);
     if (apt) player.ch.root.position.y = -500 + player.h;
   }
@@ -536,7 +662,14 @@ function loop(now) {
   const wild = !apt && !club && inWild(player.pos);
   engine.scene.fog.near = wild ? 160 : club ? 60 : 90; engine.scene.fog.far = wild ? 1150 : club ? 400 : 520;
   audio.wind && audio.wind(wild ? 1 : 0);
-  if (!apt && !club) {
+  if (pet) { pet.m.visible = !club; if (!club) pet.update(dt, player.pos, apt ? () => 0 : gfn, apt ? -500 : 0); }
+  if (companion && !s.companion.hidden) updateCompanion(companion, dt, player.ch.root, player.heading);
+  if (neighbors) neighbors.update(dt, { pos: player.pos, heading: player.heading, species: s.species, jacket: s.outfit.jacket, hoodie: s.outfit.hoodie, moving: input && (Math.abs(input.move?.x || 0) + Math.abs(input.move?.y || 0)) > 0.1 }, s.location);
+  if (companion && mode === 'play' && !busy() && (tipT -= dt) < 0) { tipT = 90; const tip = game.companionTip(); if (tip) UI.toast(tip, 'info', 3800); }
+  if (DD) {
+    for (const p of DD.peds) p.update(dt, player.pos, camera.position, isMobile ? 48 : 75);
+    for (const n of DD.friends) n.update(dt, player.pos, camera.position);
+  } else if (!apt && !club) {
     if (traffic.busHold) { const b = traffic.busHold; b.vmax = b.hold(dt); }
     traffic.update(dt, player.pos); traffic.setNight(engine.lampLevel);
     for (const c of traffic.cars) c.m.visible = Math.abs(c.s) < 74;
@@ -550,6 +683,9 @@ function loop(now) {
     const obj = game.objective();
     let target = null;
     if (obj.target === 'CLUB_COUNCIL') target = CLUB.councilDoor;
+    else if (obj.target === 'D:bus') target = DD ? DD.points.find((p) => p.key === 'bus') : null;
+    else if (obj.target === 'CART') target = W.cartPos || null;
+    else if (DD) target = null;
     else if (obj.target === 'WILD_SIGN') target = W.wild.signs[0];
     else if (obj.target === 'NPC_Jax') target = npcs.Jax && !npcs.Jax.hidden ? npcs.Jax.pos : null;
     else if (obj.target === 'NPC_Counselor') target = apt ? sock('Interact_ExitDoor', 'apartment') : npcs.Counselor.pos;
@@ -565,7 +701,8 @@ function loop(now) {
     UI.taskPanel(s.quest === 'shift' ? 'JOB PROGRESS' : null, s.quest === 'shift' ? game.taskRows() : null, s.quest === 'shift' ? (s.job ? s.job.rate * s.job.hours : 60) : undefined);
     nearest = busy() ? null : findInteraction();
     UI.interact(nearest ? nearest.label : null);
-    minimap.draw(player.pos, player.heading, target, apt ? 'HOME' : club ? 'THE CLUB' : null, peds.map((p) => p.pos), wild);
+    if (DD) minimap.drawPlan(DD, player.pos, player.heading, target, DD.peds.map((p) => p.pos));
+    else minimap.draw(player.pos, player.heading, target, apt ? 'HOME' : club ? 'THE CLUB' : null, peds.map((p) => p.pos), wild);
     saveT += dt;
     if (saveT > 20 && !busy() && !club) { saveT = 0; s.pos = { ...player.pos }; s.heading = player.heading; game.save(); }
   }
@@ -574,6 +711,7 @@ function loop(now) {
 function lampsUpdate() {
   const L = engine.lampLevel ?? 0;
   if (W.pools) W.pools.userData.mat.opacity = Math.max(0, L - 0.15) * 0.75;
+  for (const D of Object.values(W.d)) { if (D.pools) D.pools.userData.mat.opacity = Math.max(0, L - 0.15) * 0.75; for (const m of D.lampMats) { if (m.userData.lamp === undefined) m.userData.lamp = m.emissiveIntensity; const base = m.userData.lamp, isWindow = /GlassLit/.test(m.name), isStreet = /LampEmit/.test(m.name); m.emissiveIntensity = base * (isStreet ? 0.06 + 0.5 * L : isWindow ? 0.35 + 0.75 * L : 0.45 + 0.6 * L); } }
   for (const m of W.lamps) { const base = m.userData.lamp, isWindow = /GlassLit/.test(m.name), isStreet = /LampEmit/.test(m.name); m.emissiveIntensity = base * (isStreet ? 0.06 + 0.5 * L : isWindow ? 0.35 + 0.75 * L : 0.45 + 0.6 * L); }
 }
 
@@ -602,6 +740,8 @@ window.REAL = {
   game: () => game, setTime: (h) => { game.state.time = h; },
   quality: (q) => engine.setQuality(q),
   life: () => game.life(),
+  travel: (loc) => travelTo(loc, true), districtPoints: () => (W.d[game.state.location] || { points: [] }).points.map((p) => ({ ...p })),
+  refresh: () => refreshWorld(),
   info: () => ({ draws: engine.renderer.info.render.calls, tris: engine.renderer.info.render.triangles, peds: peds.length, quality: engine.quality }),
 };
 

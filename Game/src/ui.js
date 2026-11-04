@@ -124,6 +124,24 @@ export class Minimap {
     this.c = canvas; this.g = canvas.getContext('2d'); this.w = world;
     this.scale = 1.05;   // px per metre
   }
+  drawPlan(D, player, heading, target, npcs) {
+    const g = this.g, c = this.c, s = this.scale * (c.width / 120), ox = D.def.ox;
+    g.save(); g.clearRect(0, 0, c.width, c.height);
+    g.beginPath(); g.arc(c.width / 2, c.height / 2, c.width / 2 - 2, 0, Math.PI * 2); g.clip();
+    g.fillStyle = '#2a3350'; g.fillRect(0, 0, c.width, c.height);
+    g.translate(c.width / 2, c.height / 2);
+    const tx = (x) => (x - player.x) * s, ty = (y) => -(y - player.y) * s;
+    g.fillStyle = '#0d111d'; g.fillRect(tx(ox - 5), ty(140), 10 * s, 160 * s); g.fillRect(tx(ox - 50), ty(65), 100 * s, 10 * s);
+    for (const [x0, y0, x1, y1] of D.walk) if (x1 - x0 > 20 && y1 - y0 > 20 && x1 - x0 < 60) { g.fillStyle = '#2f5a35'; g.fillRect(tx(x0), ty(y1), (x1 - x0) * s, (y1 - y0) * s); }
+    for (const b of D.buildings) { g.fillStyle = '#55607e'; g.fillRect(tx(b.x - b.hx), ty(b.y + b.hy), b.hx * 2 * s, b.hy * 2 * s); }
+    g.fillStyle = '#e9a93a'; for (const p of D.points) if (p.key !== 'bench') g.fillRect(tx(p.x) - 2, ty(p.y) - 2, 4, 4);
+    if (npcs) { g.fillStyle = '#b8c2dc'; for (const p of npcs) g.fillRect(tx(p.x) - 1.5, ty(p.y) - 1.5, 3, 3); }
+    if (target) { let x = tx(target.x), y = ty(target.y); const R = c.width / 2 - 10, d = Math.hypot(x, y); if (d > R) { x *= R / d; y *= R / d; } g.fillStyle = '#e9a93a'; g.strokeStyle = '#1b2236'; g.lineWidth = 2; g.beginPath(); g.arc(x, y, 6, 0, Math.PI * 2); g.fill(); g.stroke(); }
+    g.rotate(heading); g.fillStyle = '#fff'; g.beginPath(); g.moveTo(0, -8); g.lineTo(6, 6); g.lineTo(0, 3); g.lineTo(-6, 6); g.closePath(); g.fill();
+    g.restore();
+    g.strokeStyle = 'rgba(233,169,58,.85)'; g.lineWidth = 3; g.beginPath(); g.arc(c.width / 2, c.height / 2, c.width / 2 - 2, 0, Math.PI * 2); g.stroke();
+    g.fillStyle = 'rgba(255,255,255,.8)'; g.font = `bold ${c.width * 0.09}px system-ui`; g.textAlign = 'center'; g.fillText('N', c.width / 2, c.width * 0.13);
+  }
   draw(player, heading, target, label, npcs, wild) {
     const indoor = !!label;
     const g = this.g, c = this.c, s = this.scale * (c.width / 120);

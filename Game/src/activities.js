@@ -22,7 +22,7 @@ export async function teach(G, id, who = 'Tip') {
     h('button', { class: 'primary', onclick: () => close() }, 'Got it')), { icon: '💡' });
 }
 /** Inline helper shown during Practice (and after mistakes, the alternate explanation). */
-function helpBox(G, id) {
+export function helpBox(G, id) {
   const sup = G.edu.support(id);
   const box = h('div', { class: 'helpbox', hidden: sup === 'independent' }, h('b', {}, '💡 '), G.edu.explain(id));
   const btn = h('button', { class: 'ghost sm', onclick: () => { box.hidden = false; btn.hidden = true; btn.dataset.used = '1'; } }, 'Show a hint');
@@ -458,7 +458,7 @@ export function bills(G) {
 }
 
 // ------------------------------------------------------------------------------------ Learn app: private mastery + contextual practice
-const PRACTICE = {
+export const PRACTICE = {
   'math.add': () => { const a = [ri(2, 9), ri(2, 9), ri(2, 9)]; return { q: `At the farmers market: tomatoes $${a[0]}, bread $${a[1]}, honey $${a[2]}. Total?`, a: '$' + (a[0] + a[1] + a[2]), o: [a[0] + a[1] + a[2], a[0] + a[1] + a[2] + 1, a[0] + a[1], a[0] + a[1] + a[2] - 2].map((v) => '$' + v) }; },
   'math.sub': () => { const a = ri(20, 60), b = ri(3, 19); return { q: `You have $${a}. A bus pass costs $${b}. What's left?`, a: '$' + (a - b), o: [a - b, a + b, a - b + 1, b].map((v) => '$' + v) }; },
   'math.decimals': () => { const a = ri(120, 899) / 100, b = ri(120, 899) / 100; return { q: `Coffee ${money(a)} and a bagel ${money(b)}. Total?`, a: money(a + b), o: [a + b, a + b + 1, a + b - 0.1, Math.floor(a + b)].map(money) }; },
