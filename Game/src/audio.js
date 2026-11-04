@@ -19,6 +19,21 @@ export class Audio {
     g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol, t0 + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
     o.connect(g); g.connect(bus || this.master); o.start(t0); o.stop(t0 + dur + 0.05);
   }
+  /** Wind across the empty fields (Chapter 1). level 0..1, smoothed. */
+  wind(level) {
+    if (!this.ctx) return;
+    if (!this.windNode) {
+      const c = this.ctx, len = c.sampleRate * 2, buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+      let b = 0; for (let i = 0; i < len; i++) { b = 0.985 * b + 0.015 * (Math.random() * 2 - 1); d[i] = b * 3; }
+      const src = c.createBufferSource(); src.buffer = buf; src.loop = true;
+      const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 500; bp.Q.value = 0.6;
+      const lfo = c.createOscillator(); lfo.frequency.value = 0.13; const lg = c.createGain(); lg.gain.value = 220; lfo.connect(lg); lg.connect(bp.frequency); lfo.start();
+      this.windGain = c.createGain(); this.windGain.gain.value = 0;
+      src.connect(bp); bp.connect(this.windGain); this.windGain.connect(this.master); src.start(); this.windNode = src;
+    }
+    const g = this.windGain.gain; g.value += ((level ? 0.5 : 0) - g.value) * 0.02;
+    if (this.musicBus) this.musicBus.gain.value += ((level ? 0.06 : 0.22) - this.musicBus.gain.value) * 0.02;
+  }
   play(name) {
     if (!this.ctx || !this.on) return;
     const t = this.ctx.currentTime;

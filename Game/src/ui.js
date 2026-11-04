@@ -89,18 +89,21 @@ export const UI = {
   },
   /** Modal sheet. build(close) returns content element. Resolves with close(value). */
   sheet(title, build, opts = {}) {
+    // each sheet is its own stacked layer, so a "New skill" card can open on top of an activity without destroying it
     return new Promise((res) => {
-      const M = this.els.modal;
-      M.hidden = false;
-      const close = (v) => { M.hidden = true; M.replaceChildren(); res(v); };
+      const host = this.els.modal;
+      const layer = h('div', { class: 'modal' });
+      host.append(layer);
+      const close = (v) => { layer.remove(); res(v); };
       const head = h('div', { class: 'sh-head' }, h('div', { class: 'sh-title' }, opts.icon ? h('span', { class: 'sh-icon' }, opts.icon) : null, title),
         opts.noClose ? null : h('button', { class: 'sh-x', 'aria-label': 'Close', onclick: () => { click(); close(undefined); } }, '✕'));
       const body = h('div', { class: 'sh-body' });
       const card = h('div', { class: 'sheet ' + (opts.cls || '') }, head, body);
-      M.replaceChildren(card);
+      layer.append(card);
       body.append(build(close, body));
     });
   },
+  anySheet() { return !!this.els.modal.querySelector('.modal'); },
   async caption(lines, hold = 2600) {
     const C = this.els.caption;
     C.hidden = false;
@@ -121,7 +124,8 @@ export class Minimap {
     this.c = canvas; this.g = canvas.getContext('2d'); this.w = world;
     this.scale = 1.05;   // px per metre
   }
-  draw(player, heading, target, indoor, npcs) {
+  draw(player, heading, target, label, npcs, wild) {
+    const indoor = !!label;
     const g = this.g, c = this.c, s = this.scale * (c.width / 120);
     g.save();
     g.clearRect(0, 0, c.width, c.height);
@@ -129,10 +133,16 @@ export class Minimap {
     g.fillStyle = '#1b2236'; g.fillRect(0, 0, c.width, c.height);
     g.translate(c.width / 2, c.height / 2);
     if (indoor) {
-      g.fillStyle = '#e8b23a'; g.font = `${c.width * 0.11}px system-ui`; g.textAlign = 'center'; g.fillText('HOME', 0, 4);
+      g.fillStyle = '#e8b23a'; g.font = `bold ${c.width * 0.1}px system-ui`; g.textAlign = 'center'; g.fillText(label, 0, 4);
       g.restore(); return;
     }
     const tx = (x) => (x - player.x) * s, ty = (y) => -(y - player.y) * s;
+    if (wild) {   // the old road: fields, Route 1 and the field trail
+      g.fillStyle = '#2f4a2a'; g.fillRect(-c.width, -c.height, c.width * 2, c.height * 2);
+      const path = (pts, w, col) => { g.strokeStyle = col; g.lineWidth = w * s; g.lineJoin = 'round'; g.beginPath(); pts.forEach(([x, y], i) => (i ? g.lineTo(tx(x), ty(y)) : g.moveTo(tx(x), ty(y)))); g.stroke(); };
+      path(this.wildRoad || [], 6.5, '#0d111d'); path(this.wildTrail || [], 2.2, '#8a6a45');
+      g.fillStyle = '#2a3350'; g.fillRect(tx(-72), ty(72), 144 * s, 144 * s);
+    }
     // lots
     g.fillStyle = '#2a3350'; g.fillRect(tx(-72), ty(72), 144 * s, 144 * s);
     g.fillStyle = '#2f5a35'; g.fillRect(tx(8), ty(-8), 64 * s, 64 * s);

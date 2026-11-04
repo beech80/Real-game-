@@ -122,7 +122,8 @@ export class Player {
     this.vel.lerp(want, 1 - Math.exp(-dt * 9));
     const p = { x: this.pos.x + this.vel.x * dt, y: this.pos.y + this.vel.y * dt };
     collision.resolve(p, this.radius);
-    if (bounds) { p.x = THREE.MathUtils.clamp(p.x, bounds[0], bounds[2]); p.y = THREE.MathUtils.clamp(p.y, bounds[1], bounds[3]); }
+    if (typeof bounds === 'function') bounds(p);
+    else if (bounds) { p.x = THREE.MathUtils.clamp(p.x, bounds[0], bounds[2]); p.y = THREE.MathUtils.clamp(p.y, bounds[1], bounds[3]); }
     const moved = Math.hypot(p.x - this.pos.x, p.y - this.pos.y) / Math.max(dt, 1e-4);
     this.pos = p;
     const gh = groundFn ? groundFn(p.x, p.y) : 0;
