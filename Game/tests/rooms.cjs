@@ -55,6 +55,7 @@ let step = 0, p;
       }
       const tops = await p.$$('#modal .modal'); const top = tops[tops.length - 1];
       if (!top) { idle++; continue; }
+      if (await top.$('.speakact')) { idle = 0; await sleep(500); continue; }
       const lead = (await top.$eval('.lead', (e) => e.textContent).catch(() => '')) || '';
       const pad = await top.$('.keypad');
       const isAct = !!(await top.$('.activity'));

@@ -140,6 +140,7 @@ let step = 0, p;
   await keypadType(String(ans));
   await interact(() => { const n = window.REAL.npcPos('Rosa'); window.REAL.teleportXY(n.x + 1.2, n.y - 0.8); });
   await dialog(); await settle();
+  for (let i = 0; i < 60 && !(await p.$('.sheet .key')); i++) { await sleep(500); await settle(); }   // speaking practice runs first
   await p.waitForSelector('.sheet .key', { timeout: 20000 }); await shot('earnings_question'); await keypadType('60');
   await p.waitForSelector('.stub', { timeout: 20000 }); await shot('paystub');
   await p.click('button.primary:has-text("Deposit")'); await sleep(1000);

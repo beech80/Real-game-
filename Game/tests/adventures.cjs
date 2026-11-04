@@ -58,6 +58,7 @@ let step = 0, p;
       }
       const tops = await p.$$('#modal .modal'); const top = tops[tops.length - 1];
       if (!top) { idle++; continue; }
+      if (await top.$('.speakact')) { idle = 0; await sleep(500); continue; }
       idle = 0;
       if (await top.$('.activity')) {
         const cont = await top.$('button.primary:text-is("Continue")');

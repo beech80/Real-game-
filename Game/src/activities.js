@@ -259,7 +259,7 @@ export async function register(G) {
     const changeStep = async () => {
       await teach(G, 'math.change', 'Rosa');
       const notes = [5, 10, 20, 50].filter((v) => v > total);
-      const paid = whole ? 20 : pick(notes.slice(0, 2));
+      const paid = notes.length ? (whole ? notes[0] : pick(notes.slice(0, 2))) : Math.ceil(total / 10) * 10 + 10;   // always more than the total
       const change = Math.round((paid - total) * 100) / 100;
       const hp = helpBox(G, 'math.change');
       const tray = whole ? [10, 5, 1] : [20, 10, 5, 1, 0.25, 0.1, 0.05, 0.01];
