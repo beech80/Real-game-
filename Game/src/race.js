@@ -81,14 +81,14 @@ export class Race {
   }
   /** Start a race. build = player's car build. Resolves with results. */
   start(id, build, input, camera, hud, laps) {
-    const tr = this._buildTrack(id); tr.g.visible = true; this.laps = laps || tr.T.laps;
+    const tr = this._buildTrack(id); tr.g.visible = true; this.laps = window.__testLaps || laps || tr.T.laps;
     this.tr = tr; this.input = input; this.camera = camera; this.hud = hud; this.build = build;
     const st = carStats(build), S = tr.S, w = tr.T.width;
     const p0 = S.s[S.N - 6], nx = -p0.ty, ny = p0.tx, L = Math.hypot(nx, ny);
     const mk = (color, lane, back, stats, ai) => { const m = carMesh(color); this.scene.add(m); const i0 = (S.N - 6 - back * 3 + S.N) % S.N, p = S.s[i0]; return { m, x: p.x + nx / L * lane, y: p.y + ny / L * lane, h: Math.atan2(p.tx, p.ty), v: 0, st, ai, lane, idx: i0, dist: -(S.len - p.d), lap: 0, half: false, stats, done: false, time: 0 }; };
-    this.player = mk(build.color, -w / 4, 0, st, null);
+    this.player = mk(build.color, -w / 4, 3, st, null);   // start at the back of the grid: overtaking is the fun
     const names = ['Rita', 'Dash', 'Sky'], cols = [0x2f8f5a, 0x7b3fb0, 0xe8823a];
-    this.cars = [this.player, ...tr.T.ai.map((sk, k) => { const c = mk(cols[k], k % 2 ? -w / 4 : w / 4, k + 1, null, { skill: sk, name: names[k], top: 30 + sk * 10, grip: 0.7 + sk * 0.25 }); c.v = 0; return c; })];
+    this.cars = [this.player, ...tr.T.ai.map((sk, k) => { const c = mk(cols[k], k % 2 ? -w / 4 : w / 4, k, null, { skill: sk, name: names[k], top: 30 + sk * 10, grip: 0.7 + sk * 0.25 }); c.v = 0; return c; })];
     this.t = -3.2; this.active = true; this._snap = true; this.tele = { off: 0, slide: 0, wall: 0, top: 0, dirtSlow: 0 };
     this.finishOrder = []; this.gas = 0; this.brake = 0;
     return new Promise((res) => (this._resolve = res));

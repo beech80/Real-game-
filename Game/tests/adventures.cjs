@@ -96,7 +96,7 @@ let step = 0, p;
   await p.fill('#cr-name', 'Nova'); await p.click('#cr-go');
   await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 90000 });
   await ev(() => window.REAL.devJump('hired')); await sleep(1500);
-  await ev(() => { const s = window.REAL.state; s.quest = 'free'; s.money = 800; s.time = 10; window.__autoDrive = true; Object.assign(s.stats, { shifts: 14, promotions: 1, perfectShifts: 5, wiseChoices: 5, workouts: 6, mealsCooked: 6, goodNights: 8, budgetsPlanned: 3, billsOnTime: 4, daysIndependent: 8 }); });
+  await ev(() => { const s = window.REAL.state; s.quest = 'free'; s.money = 800; s.time = 10; window.__autoDrive = true; window.__testLaps = 1; Object.assign(s.stats, { shifts: 14, promotions: 1, perfectShifts: 5, wiseChoices: 5, workouts: 6, mealsCooked: 6, goodNights: 8, budgetsPlanned: 3, billsOnTime: 4, daysIndependent: 8 }); });
   // the mechanic is visible in the world with a "!" marker
   await ev(() => { const n = window.REAL.npcPos('Rita'); window.REAL.teleportXY(13, -14.2); window.REAL.cam(Math.PI, 0.25, 5); }); await sleep(1500);
   console.log('label near Rita:', await p.textContent('#btn-interact').catch(() => ''));
