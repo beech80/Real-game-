@@ -4,7 +4,7 @@ const { chromium, devices } = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
 const DIST = process.env.DIST || path.join(__dirname, '..', 'dist'), OUT = path.join(__dirname, 'shots');
 fs.mkdirSync(OUT, { recursive: true });
-const types = { '.html': 'text/html', '.js': 'text/javascript', '.glb': 'model/gltf-binary', '.json': 'application/json', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.txt': 'text/plain' };
+const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.glb': 'model/gltf-binary', '.json': 'application/json', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.txt': 'text/plain' };
 const srv = http.createServer((q, r) => {
   let f = path.join(DIST, decodeURIComponent(q.url.split('?')[0]));
   if (f.endsWith('/')) f += 'index.html';

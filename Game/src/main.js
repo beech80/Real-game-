@@ -176,7 +176,7 @@ async function startGame(state, intro) {
   await spawnStoryNPCs();
   if (state.location === 'apartment') { await enterApartment(true); }
   else if (state.pos) { player.pos = { ...state.pos }; player.heading = state.heading || 0; }
-  else { const sp = sock('Spawn_DistrictArrival'); player.pos = { x: sp.x, y: sp.y }; player.heading = 0; }
+  else { const sp = sock('Spawn_DistrictArrival'); player.pos = { x: sp.x + 4.5, y: sp.y }; player.heading = 0; }   // step off the bus, clear of the shelter
   player.apply();
   if (intro) await introCinematic();
   mode = 'play';
@@ -214,7 +214,7 @@ async function introCinematic() {
   const path = [
     { p: new THREE.Vector3(0, 9, 30), t: club, d: 6.5 },
     { p: new THREE.Vector3(0, 22, -40), t: club, d: 6.5 },
-    { p: new THREE.Vector3(30, 6, 14), t: P2W(22, -4, 1.2), d: 6 },
+    { p: new THREE.Vector3(34, 6, 14), t: P2W(26.5, -4, 1.2), d: 6 },
   ];
   const lines = [['THE CLUB.', 'Status. Comfort. Everything handed to you.'], ['Until the day it wasn’t.', 'Membership revoked. Account frozen.'], ['$100 and a bus ticket.', 'Start with almost nothing. Build something that’s yours.']];
   player.ch.root.visible = false;
