@@ -5,6 +5,7 @@ import * as A from './activities.js';
 import { CAREERS, careerStatus } from './life.js';
 import { WORK, T, runTask, workShift, apply, school, COURSES } from './careers.js';
 import { DISTRICTS } from './districts.js';
+import { readCode } from './plush.js';
 
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
@@ -73,8 +74,26 @@ export function installExpansion(Game) {
       clinic: [['🩺 Free health check-up', () => this.checkup()]],
       medical: [['🩺 Health check-up', () => this.checkup()]],
     }[pt.key] || [];
-    const sign = pt.sign;
-    return { label: sign.replace(/\b(\w)(\w*)/g, (m, a, b) => a + b.toLowerCase()), run: () => this.place(sign, careers, extras.filter(Boolean)) };
+    const sign = pt.sign, nice = sign.replace(/\b(\w)(\w*)/g, (m, a, b) => a + b.toLowerCase());
+    if (pt.menu) return { label: nice, run: () => this.place(sign, careers, extras.filter(Boolean)) };
+    return { label: `Enter ${nice}`, run: () => this.hooks.enterBuilding(loc, pt) };
+  };
+  /** Inside a building: the counter opens the jobs & services menu; stations are shortcuts. */
+  P.buildingCounter = function (loc, pt) { const it = this.districtInteraction(loc, { ...pt, menu: true }); return it.run(); };
+  P.station = async function (act, loc, key) {
+    const s = this.state, G = this;
+    const careers = CAREERS.filter((c) => WORK[c.id] && WORK[c.id].place[0] === loc && WORK[c.id].place[1] === key);
+    const held = careers.filter((c) => s.jobs.includes(c.id));
+    const acts = {
+      work: async () => { if (!held.length) { UI.toast(careers.length ? 'You don’t work here yet. Apply at the counter.' : 'Staff only.', 'info', 3000); return; } const c = held.find((x) => !s.flags[`w_${x.id}_${s.day}`]) || held[0]; await workShift(G, c); },
+      eat: () => A.menuBuy(G, 'Corner Kitchen', '🍳', [{ name: 'Veggie omelette', price: 9.5, icon: '🍳', note: '+50 food, +mood', apply: () => { this.feed(50); s.mood += 6; s.stats.mealsEaten = (s.stats.mealsEaten || 0) + 1; this.advance(0.5); } }, { name: 'Soup & bread', price: 6, icon: '🥣', note: '+35 food', apply: () => { this.feed(35); this.advance(0.4); } }]),
+      cars: () => this.dealer(), checkup: () => this.checkup(), rack: () => this.clothing(), pets: () => this.shelter(),
+      home: () => this.homeOffer(key === 'lofts' ? 'loft' : 'heights'), study: () => A.learn(G), zones: () => this.challengeZones(key), savings: () => this.savings(),
+      sit: () => { this.hooks.playerAnim('Sit', 4); s.mood = Math.min(100, s.mood + 8); this.advance(0.4); },
+      door: () => { const it = this.interaction({ key }); return it && it.run(); },
+      class: () => school(G, key), mail: () => UI.toast(s.messages.length ? `Mail: ${s.messages[0].from} — “${s.messages[0].text.slice(0, 60)}…”` : 'No mail today.', 'info', 3600),
+    };
+    if (acts[act]) await acts[act]();
   };
   P.place = async function (title, careers, extras) {
     const s = this.state, ll = this.life().level, G = this;
@@ -392,13 +411,13 @@ export function installExpansion(Game) {
     if (act === 'toggle') { s.companion.hidden = !s.companion.hidden; }
     if (act === 'starter') { const n = await UI.sheet('Choose a companion', (close) => h('div', { class: 'opts' }, [['Pip', 'fox'], ['Clover', 'bunny'], ['Mo', 'bear']].map(([n, k]) => h('button', { class: 'opt', onclick: () => close([n, k]) }, `${n} the plush ${k}`))), { icon: '🧸', noClose: true }); s.companion = { name: n[0], kind: n[1] }; this.achieve('companion'); }
     if (act === 'code') {
-      const code = await UI.sheet('Enter tag code', (close) => { let v = ''; const disp = h('div', { class: 'keypad-disp' }, 'REAL-____');
+      const code = await UI.sheet('Enter tag code', (close) => { let v = ''; const disp = h('div', { class: 'keypad-disp' }, 'REAL-______');
         const keys = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'.split('');
-        return h('div', { class: 'act' }, disp, h('div', { class: 'keys-alpha' }, keys.map((k) => h('button', { class: 'key sm', onclick: () => { if (v.length < 4) v += k; disp.textContent = 'REAL-' + v.padEnd(4, '_'); } }, k)), h('button', { class: 'key sm', onclick: () => { v = v.slice(0, -1); disp.textContent = 'REAL-' + v.padEnd(4, '_'); } }, '⌫')),
+        return h('div', { class: 'act' }, disp, h('div', { class: 'keys-alpha' }, keys.map((k) => h('button', { class: 'key sm', onclick: () => { if (v.length < 6) v += k; disp.textContent = 'REAL-' + v.padEnd(6, '_'); } }, k)), h('button', { class: 'key sm', onclick: () => { v = v.slice(0, -1); disp.textContent = 'REAL-' + v.padEnd(6, '_'); } }, '⌫')),
           h('button', { class: 'primary', onclick: () => close(v) }, 'Link')); }, { icon: '🏷️' });
       if (!code) return;
-      const sum = [...code].reduce((a, ch) => a + ch.charCodeAt(0), 0);
-      if (code.length === 4 && sum % 7 === 0) { const kinds = ['fox', 'cat', 'dog', 'horse', 'bird', 'elephant', 'lion']; s.companion = { name: 'REAL ' + code, kind: kinds[sum % kinds.length], linked: code }; this.achieve('companion'); UI.toast('Plush linked! Your companion joins you.', 'good'); }
+      const got = readCode(code), NAMES = { fox: 'Pip', cat: 'Miso', dog: 'Buddy', horse: 'Dash', bird: 'Sky', elephant: 'Peanut', lion: 'Sunny', cow: 'Clover', dolphin: 'Splash' };
+      if (got) { s.companion = { name: NAMES[got.kind], kind: got.kind, linked: got.code }; this.achieve('companion'); UI.toast(`Plush linked! ${NAMES[got.kind]} the ${got.kind} joins you.`, 'good', 3600); }
       else UI.toast('That code didn’t match. Check the tag and try again.', 'warn');
     }
     this.hooks.refreshWorld && this.hooks.refreshWorld(); this.save();

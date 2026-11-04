@@ -82,7 +82,7 @@ export class FollowCamera {
       input.look.set(0, 0);
       if (input.zoom) { this.dist = THREE.MathUtils.clamp(this.dist + input.zoom * 0.5, this.minDist, this.maxDist); input.zoom = 0; }
     }
-    const d = indoor ? Math.min(this.dist, 3.6) : this.dist;
+    const d = indoor ? Math.min(this.dist, typeof indoor === 'number' ? indoor : 3.6) : this.dist;
     this.target.copy(focus).add(new THREE.Vector3(0, 1.15, 0));
     const off = new THREE.Vector3(Math.sin(this.yaw) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(this.yaw) * Math.cos(this.pitch)).multiplyScalar(d);
     const want = this.target.clone().add(off);

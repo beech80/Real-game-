@@ -56,7 +56,7 @@ export class PetFollower {
 
 export function makeCompanion(kind) {
   const g = new THREE.Group();
-  const colors = { fox: 0xe8823a, bunny: 0xf1ece4, bear: 0xa0704a, cat: 0x8a8d96, dog: 0xc98a4a, horse: 0x7a5230, bird: 0x2a9fd6, elephant: 0x9aa0ab, lion: 0xe0a83a };
+  const colors = { fox: 0xe8823a, bunny: 0xf1ece4, bear: 0xa0704a, cat: 0x8a8d96, dog: 0xc98a4a, horse: 0x7a5230, bird: 0x2a9fd6, elephant: 0x9aa0ab, lion: 0xe0a83a, cow: 0xf1f1f1, dolphin: 0x6fa8dc };
   const fur = new THREE.MeshStandardMaterial({ color: colors[kind] || 0xe8823a, roughness: 1, emissive: colors[kind] || 0xe8823a, emissiveIntensity: 0.15 });
   const cream = new THREE.MeshStandardMaterial({ color: 0xfff4e0, roughness: 1 }), eye = new THREE.MeshStandardMaterial({ color: 0x1b1b1f, roughness: 0.3 });
   const add = (geo, mat, x, y, z) => { const o = new THREE.Mesh(geo, mat); o.position.set(x, y, z); g.add(o); return o; };

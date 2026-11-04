@@ -15,6 +15,7 @@ import { WORK, COURSES } from './careers.js';
 import { CAREERS } from './life.js';
 import { makePet, PetFollower, makeCompanion, updateCompanion } from './pets.js';
 import { Neighbors } from './multiplayer.js';
+import { buildInterior, BUILDING_ROOMS, ROOM } from './interiors.js';
 import { carMesh, Pedestrian } from './city.js';
 installExpansion(Game);
 
@@ -41,7 +42,7 @@ UI.init();
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
 
-const W = { district: null, apartment: null, wild: null, club: null, data: null, lamps: [], d: {} };
+const W = { district: null, apartment: null, wild: null, club: null, data: null, lamps: [], d: {}, rooms: {} };
 let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60;
 let player = null, game = null, input = null, fcam = null, traffic = null, peds = [], npcs = {}, coll = null, aptColl = null, clubColl = null, members = [];
 var mode = 'loading';
@@ -182,7 +183,7 @@ async function startGame(state, isNew) {
     goToClub: () => invitation(),
     JACKETS, quality: () => engine.quality, setQuality: (q) => engine.setQuality(q),
     toggleSound: () => audio.toggle(), soundOn: () => audio.on,
-    travel: (loc) => travelTo(loc), refreshWorld: () => refreshWorld(), petTrick: () => { if (pet) pet.trick = 1; },
+    travel: (loc) => travelTo(loc), enterBuilding: (loc, pt) => enterBuilding(loc, pt), refreshWorld: () => refreshWorld(), petTrick: () => { if (pet) pet.trick = 1; },
     DISTRICTS, HOMES, VEHICLES, PET_TYPES, WORK, CAREERS, COURSES,
     peers: () => (neighbors && neighbors.room ? neighbors.count : null), emote: (i) => { if (neighbors) neighbors.emote(i); player.ch.oneShot && player.ch.oneShot('Wave'); UI.toast(['👋', '🎉', '👍', '💡'][i], 'info', 1200); },
   });
@@ -194,6 +195,7 @@ async function startGame(state, isNew) {
   if (state.chapter === 'prologue') { await prologue(); return; }
   refreshWorld();
   if (state.location === 'apartment') await enterApartment(true);
+  else if (state.location === 'interior' && state.room) { const r = state.room; state.room = null; if (DISTRICTS[r.loc]) await travelTo(r.loc, true); else { state.location = 'district'; setCitySpace(true); } player.pos = { ...r.door }; player.apply(); }
   else if (DISTRICTS[state.location]) { const pos = state.pos; await travelTo(state.location, true); if (pos) { player.pos = { ...pos }; player.heading = state.heading || 0; } }
   else if (state.pos) { player.pos = { ...state.pos }; player.heading = state.heading || 0; }
   else { player.pos = { ...WILD.start }; player.heading = 0; }
@@ -408,10 +410,51 @@ async function ensureDistrict(id) {
   }
   return D;
 }
+// ------------------------------------------------------------------------------------------ walk-in interiors
+const ROOM_KEYS = Object.keys(BUILDING_ROOMS);
+async function ensureRoom(key, name) {
+  if (W.rooms[key]) return W.rooms[key];
+  const R = buildInterior(key, name, 20000 + ROOM_KEYS.indexOf(key) * 40, textures);
+  R.coll = new Collision(R.colliders); scene.add(R.group); R.group.visible = false;
+  try { const ch = new Character(await loadSpecies(R.staff), { outfit: { jacket: BUILDING_ROOMS[key][4], hoodie: 0xe6dccb } }); scene.add(ch.root); R.npc = new StoryNPC(ch, { x: R.staffPos.x, y: R.staffPos.y, r: 0, z: 0 }, 'Staff'); R.npc.h = 0; ch.root.position.y = 0; R.coll.dynamic.push(R.npc.collider); } catch (e) {}
+  W.rooms[key] = R; return R;
+}
+function hideRooms() { for (const R of Object.values(W.rooms)) { R.group.visible = false; if (R.npc) R.npc.ch.root.visible = false; } }
+async function enterBuilding(loc, pt) {
+  const s = game.state, name = (pt.sign || pt.label || '').replace(/\b(\w)(\w*)/g, (m, a, b) => a + b.toUpperCase() === m ? a + b.toLowerCase() : m);
+  audio.play('door'); await UI.fade(1, 300);
+  const key = pt.room || pt.key;
+  let R;
+  try { R = await ensureRoom(key, (pt.sign || pt.label || key).toUpperCase()); }
+  catch (e) { console.error('room', key, e); await UI.fade(0, 300); UI.toast('This building is closed right now.', 'warn'); return; }
+  s.room = { loc, key, door: { x: player.pos.x, y: player.pos.y }, sign: pt.sign || pt.label, doorKey: pt.doorKey || null, heading: player.heading };
+  if (loc === 'district') setCitySpace(false); else if (W.d[loc]) showDistrict(W.d[loc], false);
+  if (myCar) myCar.visible = false;
+  hideRooms(); R.group.visible = true; if (R.npc) R.npc.ch.root.visible = true;
+  s.location = 'interior';
+  player.pos = { ...R.spawn }; player.heading = 0; player.h = 0; player.apply(); fcam.yaw = 0; fcam.pitch = 0.28;
+  if (pet) pet.place(player.pos);
+  await UI.fade(0, 300);
+  s.stats.placesVisited = (s.stats.placesVisited || 0) + (s.flags['in_' + key] ? 0 : 1); s.flags['in_' + key] = true;
+}
+async function leaveBuilding() {
+  const s = game.state, r = s.room; if (!r) return;
+  audio.play('door'); await UI.fade(1, 300);
+  hideRooms();
+  if (r.loc === 'district') setCitySpace(true); else { const D = await ensureDistrict(r.loc); setCitySpace(false); showDistrict(D, true); }
+  s.location = r.loc;
+  player.pos = { x: r.door.x, y: r.door.y }; player.heading = (r.heading || 0) + Math.PI; player.h = 0.13; player.apply(); fcam.yaw = -player.heading;
+  if (pet) pet.place(player.pos);
+  s.room = null; placeCar();
+  await UI.fade(0, 300); game.save();
+}
+const curRoom = () => game.state.location === 'interior' && game.state.room ? W.rooms[game.state.room.key] : null;
+
 async function travelTo(loc, silent) {
   if (!silent) { audio.play('door'); await UI.fade(1, 400); }
   if (W.apartment) W.apartment.visible = false;
-  const s = game.state;
+  hideRooms();
+  const s = game.state; s.room = null;
   if (loc === 'district') {
     setCitySpace(true); s.location = 'district';
     const b = sock('Interact_BusStop'); player.pos = { x: b.x - 1.2, y: b.y + 1.6 }; player.heading = 0;
@@ -468,7 +511,7 @@ async function enterApartment(silent) {
     W.apartment.add(lights); scene.add(W.apartment);
     aptColl = new Collision(W.data.apartment.colliders);
   }
-  W.apartment.visible = true; setCitySpace(false);
+  W.apartment.visible = true; setCitySpace(false); hideRooms(); game.state.room = null;
   game.state.location = 'apartment'; placeCar();
   if (W.homeDecor) W.homeDecor.visible = true; homeDecor();
   const sp = sock('Spawn_PlayerHome', 'apartment');
@@ -511,6 +554,17 @@ function findInteraction() {
   const s = game.state, where = s.location, P = player.pos;
   if (where === 'club') return null;
   let best = null, bd = 1e9;
+  const IR = curRoom();
+  if (IR) {
+    for (const pt of IR.points) { const d = Math.hypot(pt.x - P.x, pt.y - P.y); if (d < (pt.act === 'counter' ? 2.0 : 1.9) && d < bd) { bd = d;
+      const r = s.room;
+      if (pt.act === 'exit') best = { label: 'Go outside', run: () => leaveBuilding() };
+      else if (pt.act === 'counter') best = r.doorKey ? (() => { const it = game.interaction({ key: r.doorKey }); return it ? { label: it.label, run: it.run, npc: IR.npc } : null; })() : { label: `Talk to the staff`, run: () => game.buildingCounter(r.loc, { key: r.key, sign: r.sign }), npc: IR.npc };
+      else best = { label: pt.label, run: () => game.station(pt.act, r.loc, r.doorKey || r.key) };
+    } }
+    if (!best && pet && near(pet.pos, 1.6)) best = { label: `Play with ${s.pet.name}`, run: () => game.petCare('play') };
+    return best;
+  }
   const D = W.d[where];
   if (D) {
     for (const pt of D.points) { const d = Math.hypot(pt.x - P.x, pt.y - P.y); if (d < 2.6 && d < bd) { const it = game.districtInteraction(where, pt); if (it) { best = it; bd = d; } } }
@@ -523,7 +577,9 @@ function findInteraction() {
     const d = Math.hypot(so.x - P.x, so.y - P.y);
     const reach = /Door_/.test(so.n) ? 2.6 : /StockShelf/.test(so.n) ? 2.4 : 1.9;
     if (d > reach || d > bd) continue;
-    const it = game.interaction({ ...so, key: so.n.replace('SOCKET_', '') });
+    const k = so.n.replace('SOCKET_', '');
+    let it = game.interaction({ ...so, key: k });
+    if (it && BUILDING_ROOMS[k] && s.flags.housed && !(k === 'Door_Clothing' && s.flags.bannedClothing && s.day < s.flags.bannedClothing)) { const lbl = it.label; it = { label: 'Enter ' + lbl, run: () => enterBuilding('district', { room: k, doorKey: k, sign: lbl.toUpperCase(), label: lbl }) }; }
     if (it) { best = it; bd = d; }
   }
   if (where !== 'district') return best || (pet && near(pet.pos, 1.8) ? { label: `Play with ${s.pet.name}`, run: () => game.petCare('play') } : null);
@@ -576,6 +632,8 @@ function clampCamera(want, target) {
   const s = game && game.state;
   if (s && s.location === 'apartment') { want.x = THREE.MathUtils.clamp(want.x, -3.75, 3.75); want.z = THREE.MathUtils.clamp(want.z, -5.8, -0.3); want.y = THREE.MathUtils.clamp(want.y, -499.6, -497.4); return; }
   if (s && s.location === 'club' && W.club) { const b = W.club.bounds; want.x = THREE.MathUtils.clamp(want.x, b[0] + 0.5, b[2] - 0.5); want.z = THREE.MathUtils.clamp(want.z, -(b[3] - 0.5), -(CLUB.oy + 0.6)); want.y = THREE.MathUtils.clamp(want.y, 0.5, 10.5); return; }
+  const IRc = s && curRoom();
+  if (IRc) { const b = IRc.bounds; want.x = THREE.MathUtils.clamp(want.x, b[0] + 0.1, b[2] - 0.1); want.z = THREE.MathUtils.clamp(want.z, -(b[3] - 0.1), -(b[1] + 0.1)); want.y = THREE.MathUtils.clamp(want.y, 0.6, ROOM.h - 0.35); return; }
   const DD = s && W.d[s.location];
   if (DD) {
     want.y = Math.max(want.y, 0.6);
@@ -645,10 +703,10 @@ function loop(now) {
   const s = game.state;
   const playing = mode === 'play' && !busy();
   if (playing) game.tick(dt / 360 * (s.timeScale || 1));   // 1 real minute ≈ 10 game minutes
-  const apt = s.location === 'apartment', club = s.location === 'club' && !!W.club, DD = W.d[s.location];
-  const gfn = DD ? (x, y) => districtHeight(x, y, DD.def) : apt || club ? () => 0 : groundAt;
+  const apt = s.location === 'apartment', club = s.location === 'club' && !!W.club, DD = W.d[s.location], IR = curRoom();
+  const gfn = DD ? (x, y) => districtHeight(x, y, DD.def) : apt || club || IR ? () => 0 : groundAt;
   if (mode === 'play' && fcam.mode === 'follow') {
-    if (!busy()) player.update(dt, input, fcam, apt ? aptColl : club ? clubColl : DD ? DD.coll : coll, gfn, apt ? W.data.apartment.bounds : club ? W.club.bounds : DD ? (p) => clampToWalk(p, DD.walk) : boundsFn);
+    if (!busy()) player.update(dt, input, fcam, IR ? IR.coll : apt ? aptColl : club ? clubColl : DD ? DD.coll : coll, gfn, IR ? IR.bounds : apt ? W.data.apartment.bounds : club ? W.club.bounds : DD ? (p) => clampToWalk(p, DD.walk) : boundsFn);
     else player.ch.locomote(0, dt);
     if (apt) player.ch.root.position.y = -500 + player.h;
   }
@@ -656,20 +714,22 @@ function loop(now) {
   for (const m of members) m.update(dt);
   const focus = player.ch.root.position.clone();
   fcam.clamp = clampCamera;
-  fcam.update(dt, focus, playing ? input : null, apt || club || inFreshMart(player.pos));
-  engine.setTime(apt ? Math.min(Math.max(s.time, 6), 23.9) : s.time % 24, apt ? new THREE.Vector3(0, -500, 0) : focus);
+  fcam.update(dt, focus, playing ? input : null, IR ? 5.6 : apt || club || inFreshMart(player.pos));
+  engine.setTime(IR ? 12.5 : apt ? Math.min(Math.max(s.time, 6), 23.9) : s.time % 24, apt ? new THREE.Vector3(0, -500, 0) : focus);
+  if (IR) { engine.sun.intensity *= 0.4; engine.renderer.toneMappingExposure *= 0.9; }
+  if (IR && IR.npc) IR.npc.update(dt, player.pos, camera.position);
   // wide horizon in the wilderness so the faint skyline shows
-  const wild = !apt && !club && inWild(player.pos);
-  engine.scene.fog.near = wild ? 160 : club ? 60 : 90; engine.scene.fog.far = wild ? 1150 : club ? 400 : 520;
+  const wild = !apt && !club && !IR && inWild(player.pos);
+  engine.scene.fog.near = wild ? 160 : club || IR ? 60 : 90; engine.scene.fog.far = wild ? 1150 : club ? 400 : 520;
   audio.wind && audio.wind(wild ? 1 : 0);
-  if (pet) { pet.m.visible = !club; if (!club) pet.update(dt, player.pos, apt ? () => 0 : gfn, apt ? -500 : 0); }
+  if (pet) { pet.m.visible = !club && !(s.location === 'interior' && !IR); if (!club) pet.update(dt, player.pos, apt ? () => 0 : gfn, apt ? -500 : 0); }
   if (companion && !s.companion.hidden) updateCompanion(companion, dt, player.ch.root, player.heading);
-  if (neighbors) neighbors.update(dt, { pos: player.pos, heading: player.heading, species: s.species, jacket: s.outfit.jacket, hoodie: s.outfit.hoodie, moving: input && (Math.abs(input.move?.x || 0) + Math.abs(input.move?.y || 0)) > 0.1 }, s.location);
+  if (neighbors) neighbors.update(dt, { pos: player.pos, heading: player.heading, species: s.species, jacket: s.outfit.jacket, hoodie: s.outfit.hoodie, moving: input && (Math.abs(input.move?.x || 0) + Math.abs(input.move?.y || 0)) > 0.1 }, IR ? 'in:' + s.room.key : s.location);
   if (companion && mode === 'play' && !busy() && (tipT -= dt) < 0) { tipT = 90; const tip = game.companionTip(); if (tip) UI.toast(tip, 'info', 3800); }
   if (DD) {
     for (const p of DD.peds) p.update(dt, player.pos, camera.position, isMobile ? 48 : 75);
     for (const n of DD.friends) n.update(dt, player.pos, camera.position);
-  } else if (!apt && !club) {
+  } else if (!apt && !club && !IR) {
     if (traffic.busHold) { const b = traffic.busHold; b.vmax = b.hold(dt); }
     traffic.update(dt, player.pos); traffic.setNight(engine.lampLevel);
     for (const c of traffic.cars) c.m.visible = Math.abs(c.s) < 74;
@@ -685,7 +745,7 @@ function loop(now) {
     if (obj.target === 'CLUB_COUNCIL') target = CLUB.councilDoor;
     else if (obj.target === 'D:bus') target = DD ? DD.points.find((p) => p.key === 'bus') : null;
     else if (obj.target === 'CART') target = W.cartPos || null;
-    else if (DD) target = null;
+    else if (DD || IR) target = null;
     else if (obj.target === 'WILD_SIGN') target = W.wild.signs[0];
     else if (obj.target === 'NPC_Jax') target = npcs.Jax && !npcs.Jax.hidden ? npcs.Jax.pos : null;
     else if (obj.target === 'NPC_Counselor') target = apt ? sock('Interact_ExitDoor', 'apartment') : npcs.Counselor.pos;
@@ -702,9 +762,9 @@ function loop(now) {
     nearest = busy() ? null : findInteraction();
     UI.interact(nearest ? nearest.label : null);
     if (DD) minimap.drawPlan(DD, player.pos, player.heading, target, DD.peds.map((p) => p.pos));
-    else minimap.draw(player.pos, player.heading, target, apt ? 'HOME' : club ? 'THE CLUB' : null, peds.map((p) => p.pos), wild);
+    else minimap.draw(player.pos, player.heading, target, IR ? 'INSIDE' : apt ? 'HOME' : club ? 'THE CLUB' : null, peds.map((p) => p.pos), wild);
     saveT += dt;
-    if (saveT > 20 && !busy() && !club) { saveT = 0; s.pos = { ...player.pos }; s.heading = player.heading; game.save(); }
+    if (saveT > 20 && !busy() && !club && !IR) { saveT = 0; s.pos = { ...player.pos }; s.heading = player.heading; game.save(); }
   }
   engine.render();
 }
@@ -741,7 +801,7 @@ window.REAL = {
   quality: (q) => engine.setQuality(q),
   life: () => game.life(),
   travel: (loc) => travelTo(loc, true), districtPoints: () => (W.d[game.state.location] || { points: [] }).points.map((p) => ({ ...p })),
-  refresh: () => refreshWorld(),
+  refresh: () => refreshWorld(), roomPoints: () => { const R = curRoom(); return R ? R.points.map((p) => ({ ...p })) : []; }, leave: () => leaveBuilding(),
   info: () => ({ draws: engine.renderer.info.render.calls, tris: engine.renderer.info.render.triangles, peds: peds.length, quality: engine.quality }),
 };
 

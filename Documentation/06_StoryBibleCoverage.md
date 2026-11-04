@@ -32,7 +32,7 @@ Status key: ✅ playable now · 🟡 partly done · 🔜 planned (needs new dist
 | 4 — The price of choice | ✅ | Jax remembers you; $40 at Thread & Co; shoplifting scene |
 | 5 — Learning to live | ✅ | Routines, Calendar app, needs, bills, cooking. **1 real minute ≈ 10 game minutes** (Fast option in Settings) |
 | 6 — Finding your path | ✅ | **Every Tier 0–3 career is playable** (`careers.js` `WORK`): apply in person (application + interview), 3 real tasks per shift, pay stub, a raise every 5 shifts. Tier 2–3 need courses at City Tech Institute / Heights College (tuition, financial aid) |
-| 7 — A bigger world | ✅ | `districts.js`: **Midtown** (LL3), **Opportunity District** (LL5), **The Heights** (LL8) as 3D districts with storefronts, signs, pedestrians, friends, bus stops; travel by bus or your own vehicle |
+| 7 — A bigger world | ✅ | Every building is a walk-in room (`interiors.js`: 20 room types with staff, counters, work stations, decor). `districts.js`: **Midtown** (LL3), **Opportunity District** (LL5), **The Heights** (LL8) as 3D districts with storefronts, signs, pedestrians, friends, bus stops; travel by bus or your own vehicle |
 | 8 — Responsibilities of success | ✅ | Life Level (10 categories). Midtown Motors: bike / scooter / used car with financing, weekly fuel + insurance, service every 10 days (skipping it causes a $250 repair). Homes: Midtown Lofts, Heights Residences (income check + lease reading), buying a home (10% down + mortgage). Heights Bank savings with weekly interest |
 | 9 — Build something that’s yours | ✅ | Plan → register at the Small Business Center (coffee cart, bake stall, bike repair) → fund with savings or a 10% loan → daily operation (buy supplies, set price, weather & reputation demand, work out profit) → hire up to 3 staff (payroll; they run overnight) → Midtown storefront |
 | 10 — Jax’s challenge | ✅ | $300-by-day-N challenge; his tone shifts as you grow |
@@ -57,12 +57,11 @@ Status key: ✅ playable now · 🟡 partly done · 🔜 planned (needs new dist
 | Challenge zones | ✅ | Learning Lab (Midtown Library) and The Think Tank: 5 zones × 5 rooms, hints free, no timer, progress saved |
 | Pets | ✅ | Paws & Friends: puppy / kitten / bunny that follows you, daily feeding, play, weekly care bill |
 | Multiplayer (child-safe) | ✅ | `multiplayer.js`: other players appear as anonymous REALs in the same district (shared link only). Presence only: species, jacket, position, 4 preset gestures. No names, chat or trading |
-| Plush companions | 🟡 | Free starter companion that floats beside you and gives tips; a tag-code linking flow (REAL-XXXX, checked on-device). No physical plush product exists yet |
+| Plush companions | ✅ | Free starter companion, or link a plush with its tag code (REAL-XXXXXX: species + serial + check digit, `plush.js`). Tag codes are generated with `node Tools/plush_codes.mjs <species> <count>` (see `07_PlushCodes.md`) |
 | Relationships | ✅ | Six district friends (Marcus, Ms. Lindqvist, Priya, Coach Bo, Dr. Amara, Theo) with friendship levels and daily favors |
 
 ## Honest gaps
 
-1. Buildings in the three new districts are entered through menus (no walk-in interiors except Fresh Mart and your home).
-2. Plush companion linking needs a real product and code list; the code check is a placeholder checksum.
-3. Multiplayer shows other players live only inside the shared claude.ai link; the PWA build plays solo.
-4. Real-device performance across many phones is unverified (tested in phone emulation).
+1. Live neighbors (multiplayer) work in the shared claude.ai link. The installable PWA build has no game server, so it plays solo.
+2. Physical plush toys don't exist yet. The tag-code system and code generator are ready for when they do.
+3. Tested in phone emulation (iPhone 13). Performance on a wide range of real phones is unverified; the game lowers graphics quality automatically if frames drop.
