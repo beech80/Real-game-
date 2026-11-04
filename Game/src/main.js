@@ -9,7 +9,23 @@ import { UI, Minimap, h, $, wait, setSfx, money } from './ui.js';
 import { Audio } from './audio.js';
 import { Game, newState, loadSave, openPhone } from './game.js';
 
-const engine = new Engine($('#view'));
+// ---------------------------------------------------------------- crash/diagnostic panel (never a silent black screen)
+function fatal(msg) {
+  const el = document.getElementById('crash');
+  if (!el) return;
+  el.querySelector('p').textContent = msg;
+  el.hidden = false;
+  const b = document.getElementById('crash-reload'); if (b) b.onclick = () => location.reload();
+}
+addEventListener('error', (e) => { if (mode === 'loading') fatal('REAL hit a problem while loading: ' + (e.message || 'unknown error')); });
+addEventListener('unhandledrejection', (e) => { if (mode === 'loading') fatal('REAL hit a problem while loading: ' + ((e.reason && e.reason.message) || e.reason)); });
+document.addEventListener('gesturestart', (e) => e.preventDefault());   // iOS pinch-zoom
+document.addEventListener('dblclick', (e) => e.preventDefault());
+
+let engine;
+try { engine = new Engine($('#view')); }
+catch (e) { fatal(e.message); throw e; }
+engine.onContextLost = () => { try { game && game.save(); } catch (e) {} fatal('Your phone paused the 3D graphics (this can happen when memory runs low). Your progress is saved — tap Reload to continue.'); };
 const audio = new Audio();
 setSfx((n) => audio.play(n));
 UI.init();
@@ -18,7 +34,7 @@ const scene = engine.scene, camera = engine.camera;
 
 const W = { district: null, apartment: null, data: null, lamps: [] };
 let player = null, game = null, input = null, fcam = null, traffic = null, peds = [], npcs = {}, coll = null, aptColl = null;
-let mode = 'loading';    // loading | title | creator | intro | play
+var mode = 'loading';    // loading | title | creator | intro | play
 let beacon = null, minimap = null;
 
 // ------------------------------------------------------------------------------------------ loading
@@ -47,7 +63,7 @@ async function boot() {
   $('#loading').hidden = true;
   title();
   // background: residents
-  populate(scene, coll, isMobile ? 10 : 16).then((p) => { peds = p; });
+  populate(scene, coll, isMobile ? 8 : 16).then((p) => { peds = p; });
 }
 
 function makeLightPools(lights) {
@@ -387,6 +403,8 @@ function loop(now) {
     return;
   }
   if (!player) { engine.render(); return; }
+  const adapted = engine.adapt(dt);
+  if (adapted) UI.toast(`Graphics set to ${adapted} for smoother play (change in 📱 Settings)`, 'info', 3500);
   const s = game.state;
   const playing = mode === 'play' && !busy();
   if (playing) game.tick(dt / 60);     // 1 real second = 1 game minute
@@ -405,7 +423,7 @@ function loop(now) {
     // traffic + residents + story NPCs
     if (traffic.busHold) { const b = traffic.busHold; b.vmax = b.hold(dt); }
     traffic.update(dt, player.pos); traffic.setNight(engine.lampLevel);
-    for (const p of peds) p.update(dt, player.pos, camera.position, isMobile ? 55 : 75);
+    for (const p of peds) p.update(dt, player.pos, camera.position, isMobile ? 48 : 75);
     for (const n of Object.values(npcs)) n.update(dt, player.pos, camera.position);
     if (s.quest === 'jax' && npcs.Jax && !npcs.Jax.hidden && Math.hypot(npcs.Jax.pos.x - player.pos.x, npcs.Jax.pos.y - player.pos.y) < 3.2 && !busy() && !s.flags.jaxStarted) {
       s.flags.jaxStarted = true; nearest = { run: () => game.jax1() }; doInteract();
@@ -469,6 +487,7 @@ window.REAL = {
   skip() { skipIntro = true; },
   teleport(key, where = 'district') { const so = sock(key, where); if (so) { player.pos = { x: so.x, y: so.y }; player.apply(); } return !!so; },
   cam(yaw, pitch, dist) { fcam.yaw = yaw; fcam.pitch = pitch; fcam.dist = dist; fcam.cur.set(0, 1e4, 0); },
+  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, lookState: () => ({ cam: input.cam, joy: input.joy.id, look: [input.look.x, input.look.y], enabled: input.enabled, busy: busy(), mode }),
   teleportXY(x, y) { player.pos = { x, y }; player.apply(); },
   npcPos: (n) => npcs[n] && { ...npcs[n].pos },
   game: () => game, setTime: (h) => { game.state.time = h; },
@@ -478,4 +497,4 @@ window.REAL = {
 };
 
 requestAnimationFrame(loop);
-boot().catch((e) => { console.error(e); $('#load-label').textContent = 'Could not load REAL: ' + e.message; });
+boot().catch((e) => { console.error(e); fatal('Could not load REAL: ' + e.message + '. Check your connection and tap Reload.'); });

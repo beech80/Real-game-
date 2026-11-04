@@ -1,12 +1,11 @@
 // REAL — world loading: GLB levels -> chunked merged static meshes, colliders, ground, sockets.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+import { gunzipSync } from 'fflate';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { enhanceMaterial } from './engine.js';
 
 export const loader = new GLTFLoader();
-loader.setMeshoptDecoder(MeshoptDecoder);
 
 /** Load a GLB. Assets ship gzip-compressed (.glb.gz) and are inflated with the browser's native
  *  DecompressionStream — no WebAssembly decoder needed. If the server already inflated it, the gzip
@@ -18,19 +17,38 @@ export async function loadGLB(url, onProgress) {
   const resp = await fetch(url);
   if (!resp.ok) throw new Error(`${url}: HTTP ${resp.status}`);
   const total = +resp.headers.get('content-length') || 0;
-  const reader = resp.body.getReader(), chunks = [];
-  let got = 0;
-  for (;;) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); got += value.length; if (onProgress && total) onProgress(Math.min(1, got / total)); }
-  let buf = new Uint8Array(got); let o = 0; for (const c of chunks) { buf.set(c, o); o += c.length; }
+  let buf;
+  if (resp.body && resp.body.getReader) {
+    const reader = resp.body.getReader(), chunks = [];
+    let got = 0;
+    for (;;) {
+      const { done, value } = await reader.read(); if (done) break;
+      chunks.push(value); got += value.length;
+      // servers that compress on the fly omit content-length: show an estimate instead of a frozen bar
+      if (onProgress) onProgress(total ? Math.min(1, got / total) : Math.min(0.95, got / 3.5e6));
+    }
+    buf = new Uint8Array(got); let o = 0; for (const c of chunks) { buf.set(c, o); o += c.length; }
+  } else {
+    buf = new Uint8Array(await resp.arrayBuffer());
+  }
   if (b64) {
-    const txt = new TextDecoder().decode(buf), bin = atob(txt.trim());
+    const txt = new TextDecoder().decode(buf).trim(), bin = atob(txt);
     buf = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
   }
-  if (buf[0] === 0x1f && buf[1] === 0x8b) {
-    const ds = new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'));
-    buf = new Uint8Array(await new Response(ds).arrayBuffer());
+  if (buf[0] === 0x1f && buf[1] === 0x8b) buf = await gunzip(buf);
+  const ab = buf.byteOffset === 0 && buf.byteLength === buf.buffer.byteLength ? buf.buffer : buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+  return new Promise((res, rej) => loader.parse(ab, '', res, rej));
+}
+
+async function gunzip(buf) {
+  // Native inflate where available (Safari 16.4+, Chrome 80+); pure-JS fallback for older phones.
+  if (typeof DecompressionStream !== 'undefined') {
+    try {
+      const ds = new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'));
+      return new Uint8Array(await new Response(ds).arrayBuffer());
+    } catch (e) { /* fall through */ }
   }
-  return new Promise((res, rej) => loader.parse(buf.buffer, '', res, rej));
+  return gunzipSync(buf);
 }
 
 // plan (Blender XY) <-> three
@@ -50,7 +68,7 @@ export function mergeStatic(root, textures, cell = 40) {
     for (const k of Object.keys(g.attributes)) if (!['position', 'normal', 'uv'].includes(k)) g.deleteAttribute(k);
     if (!g.attributes.uv) g.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(g.attributes.position.count * 2), 2));
     if (!g.index) g.setIndex([...Array(g.attributes.position.count).keys()]);
-    // quantized (meshopt) attributes -> float for merging
+    // quantized (KHR_mesh_quantization) attributes -> float for merging
     for (const k of ['position', 'normal', 'uv']) {
       const a = g.attributes[k];
       if (a.isInterleavedBufferAttribute || a.normalized || !(a.array instanceof Float32Array)) {

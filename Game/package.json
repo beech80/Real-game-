@@ -9,8 +9,11 @@
     "test": "node tests/playtest.cjs"
   },
   "devDependencies": {
-    "three": "0.160.0",
+    "@gltf-transform/cli": "4.1.1",
     "esbuild": "0.24.0",
-    "@gltf-transform/cli": "4.1.1"
+    "three": "0.160.0"
+  },
+  "dependencies": {
+    "fflate": "^0.8.2"
   }
 }

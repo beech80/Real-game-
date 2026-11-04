@@ -43,12 +43,15 @@
         <button id="cr-next" class="round" aria-label="Next species">›</button>
       </div>
       <div id="cr-loading" class="cr-loading" hidden>Loading…</div>
-      <label class="cr-label">Fur tone</label><div id="cr-fur" class="chips"></div>
-      <label class="cr-label">Jacket</label><div id="cr-jacket" class="chips"></div>
-      <label class="cr-label">Hoodie</label><div id="cr-hoodie" class="chips"></div>
-      <label class="cr-label" for="cr-name">Name</label>
-      <input id="cr-name" maxlength="14" placeholder="Your name" autocomplete="off">
-      <button id="cr-go" class="primary xl">Start my story</button>
+      <div class="cr-scroll">
+        <div class="cr-opt"><label class="cr-label">Fur</label><div id="cr-fur" class="chips"></div></div>
+        <div class="cr-opt"><label class="cr-label">Jacket</label><div id="cr-jacket" class="chips"></div></div>
+        <div class="cr-opt"><label class="cr-label">Hoodie</label><div id="cr-hoodie" class="chips"></div></div>
+      </div>
+      <div class="cr-foot">
+        <input id="cr-name" maxlength="14" placeholder="Name your REAL" autocomplete="off" aria-label="Name">
+        <button id="cr-go" class="primary">Start my story</button>
+      </div>
       <p class="fine">Every species can pursue every career. That’s REAL.</p>
     </div>
   </section>
@@ -80,5 +83,6 @@
   <div id="caption" class="caption" hidden></div>
   <button id="skip" class="skip" hidden>Skip ›</button>
   <div id="fade" class="fade"></div>
+  <section id="crash" class="crash" hidden><div class="crash-card"><b>Something went wrong</b><p></p><button id="crash-reload" class="primary">Reload</button></div></section>
 </div>
 <script type="module" src="game.js"></script>

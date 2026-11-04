@@ -4,6 +4,7 @@ import { P2W } from './world.js';
 
 export class Input {
   constructor(el) {
+    this.el = el;
     this.move = new THREE.Vector2();   // x right, y forward
     this.look = new THREE.Vector2();   // accumulated drag delta
     this.keys = new Set();
@@ -25,10 +26,11 @@ export class Input {
   }
   _down(e) {
     if (!this.enabled) return;
-    const left = e.clientX < innerWidth * 0.45;
+    const r = this.el.getBoundingClientRect();
+    const left = (e.clientX - r.left) < r.width * 0.45;   // relative to the game view, robust to any page zoom/embedding
     if (left && this.joy.id === null && e.pointerType !== 'mouse') {
       this.joy = { id: e.pointerId, ox: e.clientX, oy: e.clientY, x: 0, y: 0 };
-      this.base.style.left = e.clientX + 'px'; this.base.style.top = e.clientY + 'px'; this.base.classList.add('on');
+      this.base.style.left = (e.clientX - r.left) + 'px'; this.base.style.top = (e.clientY - r.top) + 'px'; this.base.classList.add('on');
     } else if (this.cam.id === null) {
       this.cam = { id: e.pointerId, x: e.clientX, y: e.clientY };
     }
@@ -46,7 +48,7 @@ export class Input {
     }
   }
   _up(e) {
-    if (e.pointerId === this.joy.id) { this.joy = { id: null, x: 0, y: 0 }; this.knob.style.transform = ''; this.base.classList.remove('on'); }
+    if (e.pointerId === this.joy.id) { this.joy = { id: null, x: 0, y: 0 }; this.knob.style.transform = ''; this.base.classList.remove('on'); this.base.style.left = ''; this.base.style.top = ''; }
     if (e.pointerId === this.cam.id) this.cam = { id: null };
   }
   read() {

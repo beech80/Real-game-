@@ -5,10 +5,11 @@ const http = require('http'), fs = require('fs'), path = require('path');
 const DIST = process.env.DIST || path.join(__dirname, '..', 'dist'), OUT = path.join(__dirname, 'shots');
 fs.mkdirSync(OUT, { recursive: true });
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.glb': 'model/gltf-binary', '.json': 'application/json', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.txt': 'text/plain' };
+const wrap = (f, b) => (f.endsWith('index.html') && !b.slice(0, 200).toString().includes('<!doctype') ? Buffer.concat([Buffer.from('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>'), b, Buffer.from('</body></html>')]) : b);
 const srv = http.createServer((q, r) => {
   let f = path.join(DIST, decodeURIComponent(q.url.split('?')[0]));
   if (f.endsWith('/')) f += 'index.html';
-  fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(b); });
+  fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(wrap(f, b)); });
 }).listen(0);
 const port = () => srv.address().port;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

@@ -11,13 +11,17 @@ export const isMobile = matchMedia('(pointer: coarse)').matches || /Android|iPho
 export class Engine {
   constructor(canvasHost) {
     this.quality = isMobile ? 'medium' : 'high';
-    try { const q = localStorage.getItem('real.quality'); if (q) this.quality = q; } catch (e) {}
-    const r = this.renderer = new THREE.WebGLRenderer({ antialias: this.quality !== 'high', powerPreference: 'high-performance' });
+    this.manualQuality = false;
+    try { const q = localStorage.getItem('real.quality'); if (q) { this.quality = q; this.manualQuality = true; } } catch (e) {}
+    let r;
+    try { r = this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' }); }
+    catch (e) { throw new Error('This browser could not start 3D graphics (WebGL). Try updating your browser or turning off Low Power Mode.'); }
+    r.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); this.onContextLost && this.onContextLost(); });
     r.outputColorSpace = THREE.SRGBColorSpace;
     r.toneMapping = THREE.ACESFilmicToneMapping;
     r.toneMappingExposure = 1.0;
     r.shadowMap.enabled = this.quality !== 'low';
-    r.shadowMap.type = THREE.PCFSoftShadowMap;
+    r.shadowMap.type = this.quality === 'high' ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
     canvasHost.appendChild(r.domElement);
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(55, 1, 0.1, 1500);
@@ -33,21 +37,22 @@ export class Engine {
     this.timeOfDay = 17.5;
   }
 
-  setQuality(q) {
+  setQuality(q, auto = false) {
     this.quality = q;
-    try { localStorage.setItem('real.quality', q); } catch (e) {}
+    if (!auto) { this.manualQuality = true; try { localStorage.setItem('real.quality', q); } catch (e) {} }
+    this.renderer.shadowMap.type = q === 'high' ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
     this.renderer.shadowMap.enabled = q !== 'low';
     this.sun.castShadow = q !== 'low';
     const s = q === 'high' ? 2048 : 1024;
     this.sun.shadow.mapSize.set(s, s);
     if (this.sun.shadow.map) { this.sun.shadow.map.dispose(); this.sun.shadow.map = null; }
-    this.bloom.enabled = q !== 'low';
+    this.bloom.enabled = q !== 'low' && this.halfOK;
     this.resize();
   }
 
   resize() {
     const w = innerWidth, h = innerHeight;
-    const maxDpr = this.quality === 'high' ? 2 : this.quality === 'medium' ? 1.5 : 1;
+    const maxDpr = this.quality === 'high' ? 2 : this.quality === 'medium' ? 1.5 : 1.25;
     const dpr = Math.min(devicePixelRatio || 1, maxDpr);
     this.renderer.setPixelRatio(dpr);
     this.renderer.setSize(w, h);
@@ -101,12 +106,16 @@ export class Engine {
   }
 
   _setupPost() {
-    const rt = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: this.quality === 'high' ? 4 : 0 });
+    // Half-float targets keep bloom smooth, but some mobile GPUs can't render to them: fall back to 8-bit.
+    const ext = this.renderer.extensions;
+    const halfOK = this.renderer.capabilities.isWebGL2 && (ext.has('EXT_color_buffer_float') || ext.has('EXT_color_buffer_half_float'));
+    const rt = new THREE.WebGLRenderTarget(1, 1, { type: halfOK ? THREE.HalfFloatType : THREE.UnsignedByteType, samples: this.renderer.capabilities.isWebGL2 ? 4 : 0 });
     this.composer = new EffectComposer(this.renderer, rt);
     this.renderPass = new RenderPass(this.scene, this.camera);
     this.composer.addPass(this.renderPass);
     this.bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.7, 0.45, 2.2);
-    this.bloom.enabled = this.quality !== 'low';
+    this.halfOK = halfOK;
+    this.bloom.enabled = this.quality !== 'low' && halfOK;   // bloom's internal targets are half-float
     this.composer.addPass(this.bloom);
     this.composer.addPass(new OutputPass());
   }
@@ -158,9 +167,21 @@ export class Engine {
     this.sky.position.copy(this.camera.position);
   }
 
+  /** Frame-rate guard: steps graphics down when the device can't keep up (unless the player chose a level). */
+  adapt(dt) {
+    if (this.manualQuality || this.quality === 'low') return null;
+    this._fa = (this._fa || 0) + dt; this._fn = (this._fn || 0) + 1;
+    if (this._fa < 3) return null;
+    const fps = this._fn / this._fa; this._fa = 0; this._fn = 0;
+    if (this._grace > 0) { this._grace--; return null; }
+    if (fps < 26) { this.setQuality(this.quality === 'high' ? 'medium' : 'low', true); this._grace = 1; return this.quality; }
+    return null;
+  }
+
   render() {
-    if (this.quality === 'low') this.renderer.render(this.scene, this.camera);
-    else this.composer.render();
+    if (this.quality === 'low' || this.postFailed) { this.renderer.render(this.scene, this.camera); return; }
+    try { this.composer.render(); }
+    catch (e) { console.warn('post-processing disabled', e); this.postFailed = true; this.renderer.render(this.scene, this.camera); }
   }
 }
 

@@ -1,22 +1,23 @@
 // Full-story playtest: plays Day 1 through the real UI (application, shift, paycheck, Jax, groceries, home, bills, sleep).
 const { chromium, devices } = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
-const DIST = path.join(__dirname, '..', 'dist'), OUT = path.join(__dirname, 'shots');
+const DIST = process.env.DIST || path.join(__dirname, '..', 'dist'), OUT = path.join(__dirname, 'shots');
 fs.mkdirSync(OUT, { recursive: true });
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png' };
+const types = { '.txt': 'text/plain', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png' };
+const wrap = (f, b) => (f.endsWith('index.html') && !b.slice(0, 200).toString().includes('<!doctype') ? Buffer.concat([Buffer.from('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>'), b, Buffer.from('</body></html>')]) : b);
 const srv = http.createServer((q, r) => { let f = path.join(DIST, decodeURIComponent(q.url.split('?')[0])); if (f.endsWith('/')) f += 'index.html';
-  fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(b); }); }).listen(0);
+  fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(wrap(f, b)); }); }).listen(0);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let step = 0;
 
 (async () => {
   const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
-  const ctx = await b.newContext({ ...devices['iPhone 13 landscape'] });
-  const p = await ctx.newPage();
+  const ctx = await b.newContext({ ...devices[process.env.DEVICE || 'iPhone 13 landscape'] });
+  const p = await ctx.newPage(); global.__p = p;
   const errors = [];
   p.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
   p.on('pageerror', (e) => errors.push('[pageerror] ' + e.message));
-  const shot = async (n) => { step++; await p.screenshot({ path: path.join(OUT, `story_${String(step).padStart(2, '0')}_${n}.png`), timeout: 120000 }); console.log('✓', n); };
+  const shot = async (n) => { step++; await p.screenshot({ path: path.join(OUT, `${process.env.DEVICE ? 'p' : ''}story_${String(step).padStart(2, '0')}_${n}.png`), timeout: 120000 }); console.log('✓', n); };
   const ev = (f, a) => p.evaluate(f, a);
   const interact = async (key, where) => { await ev(([k, w]) => window.REAL.teleport(k, w), [key, where || 'district']); await sleep(700); await p.click('#btn-interact', { timeout: 8000 }); await sleep(500); };
   const nextDialog = async (choice) => { for (let i = 0; i < 8; i++) { if (await p.isHidden('#dialog')) return; const c = await p.$$('#dialog .d-choice'); if (c.length) { await c[choice ?? 0].click(); } else { await p.click('#dialog .d-text'); await p.click('#dialog .d-next'); } await sleep(400); } };
@@ -132,4 +133,4 @@ let step = 0;
   console.log('STATE', JSON.stringify(st));
   console.log('errors', errors.length, errors.slice(0, 10));
   await b.close(); srv.close();
-})().catch(async (e) => { console.error('FAILED at step', step, e.message.split('\n')[0]); srv.close(); process.exit(1); });
+})().catch(async (e) => { console.error('FAILED at step', step, e.message.split('\n')[0]); try { await global.__p.screenshot({ path: path.join(OUT, 'story_FAIL.png'), timeout: 120000 }); } catch (x) {} srv.close(); process.exit(1); });
