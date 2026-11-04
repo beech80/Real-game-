@@ -3,6 +3,7 @@
 // gives hints and alternate explanations, and never measures speed.
 import { h, UI, money, wait } from './ui.js';
 import { SKILLS, SUBJECTS, STATES } from './edu.js';
+import { runActivity } from './learnkit.js';
 
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -491,30 +492,27 @@ export function learn(G) {
           h('div', { class: 'bar' }, h('i', { style: { width: p.pct + '%' } })), h('small', {}, `${G.edu.band(k) <= 6 ? 'Now exploring: ' + ['Foundation', 'Beginner Independence', 'Practical Skills', 'Career Development', 'Professional Growth', 'Mastery & Leadership'][G.edu.band(k) - 1] : ''}`));
       }))));
     const subject = (k) => body.replaceChildren(h('div', { class: 'act' },
-      h('div', { class: 'skilllist' }, Object.values(SKILLS).filter((s) => s.subj === k && s.band <= G.edu.band(k) + 1).map((s) =>
-        h('button', { class: 'skillrow', onclick: () => skill(s.id) }, h('div', {}, h('b', {}, s.name), h('small', {}, s.objective)), stateChip(G, s.id)))),
+      h('p', { class: 'tip' }, 'Every skill is open to you. Start anywhere: the game adapts to what you show it.'),
+      h('div', { class: 'skilllist' }, Object.values(SKILLS).filter((s) => s.subj === k).sort((a, b) => a.band - b.band).map((s) =>
+        h('button', { class: 'skillrow' + (s.band > G.edu.band(k) + 1 ? ' later' : '') + (s.band === G.edu.band(k) ? ' now' : ''), onclick: () => skill(s.id) }, h('div', {}, h('b', {}, s.name), h('small', {}, s.objective)), stateChip(G, s.id)))),
       h('button', { class: 'ghost', onclick: menu }, '‹ Subjects')));
     const skill = (id) => {
       const sk = SKILLS[id];
       const gen = PRACTICE[id];
-      const practice = () => {
-        if (sk.subj === 'cursive') {
+      const practice = async () => {
+        if (['curs.strokes', 'curs.signature', 'curs.reading'].includes(id)) {
           const word = pick(['fresh', 'grow', 'real', 'learn', G.state.name]);
           body.replaceChildren(cursivePad(G, word, id === 'curs.signature' ? 'curs.signature' : 'curs.strokes', `Trace “${word}” in cursive.`, () => { UI.toast('Beautiful. Keep the letters joined.', 'good'); skill(id); }));
           return;
         }
         if (!gen) { UI.toast('You’ll practise this one out in the world.', 'info'); return; }
-        const Q = gen();
-        const hp = helpBox(G, id);
-        body.replaceChildren(h('div', { class: 'act' }, h('p', { class: 'lead' }, Q.q), hp.box,
-          h('div', { class: 'opts' }, shuffle([...new Set(Q.o)]).map((o) => h('button', { class: 'opt', onclick: (e) => {
-            const ok = o === Q.a; G.edu.record(id, ok, { ctx: 'learn', hinted: hp.hinted() });
-            if (ok) { G.sfx('good'); UI.toast('Nice. Try it out in the world, too.', 'good'); skill(id); } else { G.sfx('bad'); e.currentTarget.classList.add('wrong'); hp.box.hidden = false; hp.box.lastChild.textContent = G.edu.explain(id); }
-          } }, o))), h('div', { class: 'row' }, hp.btn, h('button', { class: 'ghost', onclick: () => skill(id) }, '‹ Back'))));
+        await runActivity(G, () => ({ skill: id, ...gen() }), 'learn', sk.name, SUBJECTS[sk.subj].icon);
+        skill(id);
       };
       body.replaceChildren(h('div', { class: 'act' }, h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj].icon} ${SUBJECTS[sk.subj].name}`), h('h3', {}, sk.name), stateChip(G, id),
         h('p', { class: 'lead' }, sk.objective), h('div', { class: 'lc-explain' }, sk.explain),
-        h('p', { class: 'tip' }, 'Where you’ll use it: ' + ({ math: 'the register, paychecks, recipes and inventory.', reading: 'signs, aisle labels, leases and instructions.', writing: 'applications and messages.', cursive: 'signatures and handwritten notes.', finance: 'bills, budgets and groceries.', thinking: 'every choice — especially when Jax is talking.' })[sk.subj]),
+        h('p', { class: 'tip' }, 'Where you’ll use it: ' + (sk.where && sk.where.length ? sk.where.join(' · ') : ({ math: 'the register, paychecks, recipes and inventory.', reading: 'signs, aisle labels, leases and instructions.', writing: 'applications and messages.', cursive: 'signatures and handwritten notes.', finance: 'bills, budgets and groceries.', thinking: 'every choice — especially when Jax is talking.' })[sk.subj])),
+        sk.prereq && sk.prereq.length ? h('p', { class: 'tip' }, 'Builds on: ' + sk.prereq.map((p) => SKILLS[p] ? SKILLS[p].name : p).join(', ')) : null,
         h('div', { class: 'row' }, h('button', { class: 'ghost', onclick: () => subject(sk.subj) }, '‹ Skills'), h('button', { class: 'primary', onclick: practice }, 'Practise'))));
     };
     menu();

@@ -17,6 +17,8 @@ import { makePet, PetFollower, makeCompanion, updateCompanion } from './pets.js'
 import { Neighbors } from './multiplayer.js';
 import { buildInterior, BUILDING_ROOMS, ROOM } from './interiors.js';
 import { MapView } from './mapview.js';
+import { runActivity } from './learnkit.js';
+import { PRACTICE } from './activities.js';
 import { carMesh, Pedestrian } from './city.js';
 installExpansion(Game);
 
@@ -171,6 +173,7 @@ async function creator() {
 }
 
 // ------------------------------------------------------------------------------------------ game start
+function applyA11y(st) { document.body.classList.toggle('a11y-large', !!st.large); document.body.classList.toggle('a11y-contrast', !!st.contrast); document.body.classList.toggle('a11y-calm', !!st.calm); }
 async function startGame(state, isNew) {
   mode = 'intro';
   const ch = new Character(await loadSpecies(state.species), { outfit: state.outfit });
@@ -178,6 +181,7 @@ async function startGame(state, isNew) {
   player = new Player(ch);
   input = new Input($('#view'));
   fcam = new FollowCamera(camera);
+  applyA11y(state.settings || {});
   game = new Game(state, {
     sfx: (n) => audio.play(n),
     enterApartment: (silent) => enterApartment(silent), exitApartment: () => exitApartment(),
@@ -186,10 +190,10 @@ async function startGame(state, isNew) {
     jaxLeave: () => { if (npcs.Jax) npcs.Jax.hidden = true; },
     goToClub: () => invitation(),
     JACKETS, quality: () => engine.quality, setQuality: (q) => engine.setQuality(q),
-    toggleSound: () => audio.toggle(), soundOn: () => audio.on,
+    toggleSound: () => audio.toggle(), soundOn: () => audio.on, applyA11y: (st) => applyA11y(st),
     travel: (loc) => travelTo(loc), enterBuilding: (loc, pt) => enterBuilding(loc, pt), refreshWorld: () => refreshWorld(), petTrick: () => { if (pet) pet.trick = 1; },
     DISTRICTS, HOMES, VEHICLES, PET_TYPES, WORK, CAREERS, COURSES,
-    peers: () => (neighbors && neighbors.room ? neighbors.count : null), emote: (i) => { if (neighbors) neighbors.emote(i); player.ch.oneShot && player.ch.oneShot('Wave'); UI.toast(['👋', '🎉', '👍', '💡'][i], 'info', 1200); },
+    peers: () => (game.state.settings && game.state.settings.noNeighbors ? null : neighbors && neighbors.room ? neighbors.count : null), emote: (i) => { if (neighbors) neighbors.emote(i); player.ch.oneShot && player.ch.oneShot('Wave'); UI.toast(['👋', '🎉', '👍', '💡'][i], 'info', 1200); },
   });
   neighbors = new Neighbors(scene); neighbors.connect();
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
@@ -599,7 +603,7 @@ function findInteraction() {
     else if (s.flags.jaxStealDue && !s.flags.jaxSteal) best = { label: 'Talk to Jax', run: () => game.jaxSteal(), npc: jax };
     else if (s.flags.jax3due && !s.flags.jax3) best = { label: 'Talk to Jax', run: () => game.jax3(), npc: jax };
   }
-  if (near(npcs.Counselor && npcs.Counselor.pos, 2.4)) best = s.flags.housed ? { label: 'Talk to Mr. Okafor', run: () => UI.say('Mr. Okafor · Community Center', pick(['Every career starts with one application.', 'The career board inside shows what each job needs. Every one of them is open to you.', 'You’re doing better than you think.'])) } : { label: 'Ask for help', run: () => game.housing(), npc: npcs.Counselor };
+  if (near(npcs.Counselor && npcs.Counselor.pos, 2.4)) best = s.flags.housed ? { label: 'Talk to Mr. Okafor', run: () => game.counselor(), npc: npcs.Counselor } : { label: 'Ask for help', run: () => game.housing(), npc: npcs.Counselor };
   if (near(npcs.Dee && npcs.Dee.pos, 2)) best = best || { label: 'Talk to Dee', run: () => UI.say('Dee · Daily Grind', 'Best coffee on Main St. Come in any time.') };
   if (!best && pet && near(pet.pos, 1.8)) best = { label: `Play with ${s.pet.name}`, run: () => game.petCare('play') };
   return best;
@@ -738,7 +742,7 @@ function loop(now) {
   audio.wind && audio.wind(wild ? 1 : 0);
   if (pet) { pet.m.visible = !club && !(s.location === 'interior' && !IR); if (!club) pet.update(dt, player.pos, apt ? () => 0 : gfn, apt ? -500 : 0); }
   if (companion && !s.companion.hidden) updateCompanion(companion, dt, player.ch.root, player.heading);
-  if (neighbors) neighbors.update(dt, { pos: player.pos, heading: player.heading, species: s.species, jacket: s.outfit.jacket, hoodie: s.outfit.hoodie, moving: input && (Math.abs(input.move?.x || 0) + Math.abs(input.move?.y || 0)) > 0.1 }, IR ? 'in:' + s.room.key : s.location);
+  if (neighbors && !(s.settings && s.settings.noNeighbors)) neighbors.update(dt, { pos: player.pos, heading: player.heading, species: s.species, jacket: s.outfit.jacket, hoodie: s.outfit.hoodie, moving: input && (Math.abs(input.move?.x || 0) + Math.abs(input.move?.y || 0)) > 0.1 }, IR ? 'in:' + s.room.key : s.location);
   if (companion && mode === 'play' && !busy() && (tipT -= dt) < 0) { tipT = 90; const tip = game.companionTip(); if (tip) UI.toast(tip, 'info', 3800); }
   if (DD) {
     for (const p of DD.peds) p.update(dt, player.pos, camera.position, isMobile ? 48 : 75);
@@ -816,6 +820,7 @@ window.REAL = {
   game: () => game, setTime: (h) => { game.state.time = h; },
   quality: (q) => engine.setQuality(q),
   life: () => game.life(),
+  practice: (sk) => runActivity(game, () => ({ skill: sk, ...PRACTICE[sk]() }), 'learn', 'Practice', '📚'),
   travel: (loc) => travelTo(loc, true), districtPoints: () => (W.d[game.state.location] || { points: [] }).points.map((p) => ({ ...p })),
   refresh: () => refreshWorld(), openMap: () => openMap(), mapOpen: () => !!(mapView && mapView.open), roomPoints: () => { const R = curRoom(); return R ? R.points.map((p) => ({ ...p })) : []; }, leave: () => leaveBuilding(),
   info: () => ({ draws: engine.renderer.info.render.calls, tris: engine.renderer.info.render.triangles, peds: peds.length, quality: engine.quality }),

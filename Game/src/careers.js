@@ -1,12 +1,14 @@
 // REAL — Chapter 6 "Finding your path": every career Tier 0–3 is playable as real work.
 // Each shift is three tasks drawn from that job, adapted to the player's level, with hints and no timers.
 import { h, UI, money, wait } from './ui.js';
-import { helpBox, paystub, PRACTICE, teach } from './activities.js';
+import { paystub, PRACTICE, teach } from './activities.js';
+import { runActivity } from './learnkit.js';
+import { GEN } from './curriculum.js';
 
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
-const doc = (title, lines) => h('div', { class: 'doc' }, title ? h('div', { class: 'doc-h' }, title) : null, ...lines.map((l) => h('div', { class: 'doc-l' }, l)));
+const doc = (title, lines) => ({ title, lines });
 const $ = (v) => '$' + (Number.isInteger(v) ? v : v.toFixed(2));
 const frac = (n) => { const w = Math.floor(n + 1e-9), r = n - w, f = { 0.25: '1/4', 0.5: '1/2', 0.75: '3/4' }[Math.round(r * 4) / 4]; return r < 0.01 ? `${w}` : w ? `${w} ${f}` : f; };
 const tm = (mins) => { let hh = Math.floor(mins / 60) % 24; const mm = mins % 60, ap = hh >= 12 ? 'PM' : 'AM'; hh = hh % 12 || 12; return `${hh}:${String(mm).padStart(2, '0')} ${ap}`; };
@@ -22,7 +24,7 @@ export const T = {
     { skill: 'read.instructions', v: doc('DELIVERY NOTE', ['Fragile: glass inside.', 'Keep this side up ↑', 'Ring the bell twice.']), q: 'How do you carry and deliver it?', a: 'Arrow side up, then ring the bell twice', o: ['Arrow side up, then ring the bell twice', 'Any way, then knock', 'Toss it on the porch'] }]),
   pallets: () => { const L = ri(3, 6), B = pick([6, 8, 9, 12]), P = ri(2, 5); const a = L * B * P; return { skill: 'math.multiply', v: doc('LOADING DOCK', [`Each pallet: ${L} layers × ${B} boxes`, `Pallets on the truck: ${P}`]), q: 'How many boxes are on the truck?', a: String(a), o: [a, L * B + P, a + B, (L + 1) * B * P].map(String) }; },
   slip: () => { const items = [['Rice 5 lb', ri(4, 9)], ['Canned beans', ri(10, 24)], ['Paper towels', ri(3, 8)]]; const k = ri(0, 2); const got = items.map(([n, q], i) => [n, i === k ? q - ri(1, 3) : q]);
-    return { skill: 'read.documents', v: h('div', { class: 'row2' }, doc('PACKING SLIP', items.map(([n, q]) => `${n}: ${q}`)), doc('IN THE BOX', got.map(([n, q]) => `${n}: ${q}`))), q: 'Which item is short?', a: items[k][0], o: items.map((x) => x[0]).concat(['Nothing is short']) }; },
+    return { skill: 'read.documents', v: { row: [doc('PACKING SLIP', items.map(([n, q]) => `${n}: ${q}`)), doc('IN THE BOX', got.map(([n, q]) => `${n}: ${q}`))] }, q: 'Which item is short?', a: items[k][0], o: items.map((x) => x[0]).concat(['Nothing is short']) }; },
   truckFrac: () => { const cap = pick([16, 20, 24, 32]), f = pick([[1, 4], [1, 2], [3, 4]]); const a = cap * f[0] / f[1]; return { skill: 'math.fractions', v: doc('TRUCK', [`Holds ${cap} pallets`, `Loaded: ${f[0]}/${f[1]} full`]), q: 'How many pallets are loaded?', a: String(a), o: [a, cap - a, cap / 3 | 0, a + 2].map(String) }; },
   manual: () => { const steps = ['Park and let the engine cool', 'Drain the old oil', 'Replace the oil filter', 'Fill with new oil', 'Check the level with the dipstick']; const i = ri(0, 3);
     return { skill: 'read.instructions', v: doc('SERVICE MANUAL · OIL CHANGE', steps.map((s, k) => `${k + 1}. ${s}`)), q: `What comes right after “${steps[i]}”?`, a: steps[i + 1], o: shuffle(steps.filter((_, k) => k !== i)).slice(0, 3).concat(steps[i + 1]) }; },
@@ -95,12 +97,25 @@ export const T = {
   taxQ: () => T.tax(),
   algebraQ: () => T.solve(),
 };
-// Learn app: random practice for every skill (no money, just growth)
-const BY_SKILL = {};
-for (const [k, g] of Object.entries(T)) { try { const s = g().skill; (BY_SKILL[s] = BY_SKILL[s] || []).push(g); } catch (e) {} }
-for (const [s, gens] of Object.entries(BY_SKILL)) { const old = PRACTICE[s]; PRACTICE[s] = () => { const all = old ? gens.concat([old]) : gens; const q = pick(all)(); return { q: q.v ? q.v.textContent.replace(/\s+/g, ' ').trim() + ' — ' + q.q : q.q, a: q.a, o: q.o }; }; }
+// Every curriculum generator is also a task generator (so careers and challenge zones can use any skill)
+for (const [sk, gens] of Object.entries(GEN)) gens.forEach((g, i) => { T[`${sk}#${i}`] = g; });
+// Learn app: practice for every skill draws on all generators for that skill (world tasks + curriculum)
+export const BY_SKILL = {};
+for (const [k, g] of Object.entries(T)) { try { const sk = g().skill; (BY_SKILL[sk] = BY_SKILL[sk] || []).push(g); } catch (e) {} }
+for (const [sk, gens] of Object.entries(BY_SKILL)) { const old = PRACTICE[sk]; PRACTICE[sk] = () => pick(old ? gens.concat([() => ({ skill: sk, ...old() })]) : gens)(); }
+export const genFor = (sk) => (BY_SKILL[sk] ? pick(BY_SKILL[sk]) : null);
 
 // ------------------------------------------------------------------------------------------- careers → workplace + tasks
+const EXTRA = {
+  courier: ['math.divide#0', 'think.planning#0', 'read.compare#0'], warehouse: ['math.divide#1', 'math.measure#1', 'read.multistep#0'],
+  mechanic: ['read.technical#0', 'think.problem#0', 'math.measure#0'], cook: ['math.ratio#0', 'math.measure#1', 'think.ethics#1'],
+  sales: ['math.ratio#1', 'think.persuasion#0', 'think.negotiate#0'], office: ['write.email#1', 'write.report#0', 'read.summarize#0'],
+  construction: ['math.geometry#0', 'math.geometry2#1', 'math.measure#0'], photo: ['read.contracts#0', 'write.proposal#0', 'write.email#0'],
+  programmer: ['math.prealgebra#0', 'think.problem#0', 'math.algebra2#0'], accountant: ['math.stats#0', 'fin.margins#0', 'fin.payroll#0'],
+  health: ['think.ethics#0', 'curs.documents#0', 'math.probability#1'], electrician: ['read.technical#0', 'math.prealgebra#0', 'think.problem#0'],
+  engineer: ['math.geometry2#0', 'math.optimize#0', 'math.statsadv#0'], doctor: ['math.statsadv#0', 'think.ethics#0', 'math.probability#0'],
+  architect: ['math.geometry#0', 'math.geometry2#1', 'math.ratio#0'], lawyer: ['read.contracts#0', 'read.evidence#0', 'write.argument#0'],
+};
 export const WORK = {
   courier: { place: ['midtown', 'express'], boss: ['Marisol', 'Midtown Express dispatcher'], tasks: ['address', 'delivery', 'note'], verb: 'Deliveries' },
   warehouse: { place: ['opportunity', 'logistics'], boss: ['Gus', 'Warehouse supervisor'], tasks: ['pallets', 'slip', 'truckFrac'], verb: 'Loading' },
@@ -120,22 +135,8 @@ export const WORK = {
   lawyer: { place: ['heights', 'legal'], boss: ['Ms. Reyes', 'Managing partner'], tasks: ['clause', 'evidence', 'brief'], verb: 'Cases' },
 };
 
-/** One task card. Resolves {ok: firstTry}. Never timed; hints are free; a mistake shows the alternate explanation. */
-export function runTask(G, gen, ctx, title = 'Task', icon = '🧩') {
-  const Q = typeof gen === 'function' ? gen() : gen;
-  G.edu.discover(Q.skill);
-  let tries = 0;
-  return UI.sheet(title, (close) => {
-    const hp = helpBox(G, Q.skill);
-    return h('div', { class: 'act' }, Q.v || null, h('p', { class: 'lead' }, Q.q), hp.box,
-      h('div', { class: 'opts' }, shuffle([...new Set(Q.o)]).map((o) => h('button', { class: 'opt', onclick: (e) => {
-        const ok = o === Q.a; tries++;
-        G.edu.record(Q.skill, ok, { ctx, hinted: hp.hinted() || tries > 1 });
-        if (ok) { G.sfx('good'); close({ ok: tries === 1 }); }
-        else { G.sfx('bad'); G.state.stats.mistakes++; e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; hp.box.hidden = false; hp.box.lastChild.textContent = G.edu.explain(Q.skill); }
-      } }, o))), h('div', { class: 'row' }, hp.btn));
-  }, { icon, noClose: true });
-}
+/** One task card (any activity type). Resolves {ok: firstTry}. Never timed; hints are free. */
+export function runTask(G, gen, ctx, title = 'Task', icon = '🧩') { return runActivity(G, gen, ctx, title, icon); }
 
 /** A full shift at any Tier 0–3 career. */
 export async function workShift(G, career) {
@@ -146,14 +147,17 @@ export async function workShift(G, career) {
   if (s.energy < 20) { UI.toast('You’re too tired to work safely. Eat or rest first.', 'warn'); return; }
   const raise = (s.raises || {})[career.id] || 0, rate = career.rate + raise;
   await UI.say(`${W.boss[0]} · ${W.boss[1]}`, pick([`Morning, ${s.name}. Three ${W.verb.toLowerCase()} on the board today.`, 'Good to see you. Take your time and get it right.', 'Here’s today’s list. Ask if you’re stuck.']));
-  for (const k of W.tasks) await teach(G, T[k]().skill, W.boss[0]);
+  // three tasks from this job's pool; skills the player has already mastered are swapped for harder ones (no busywork)
+  const pool = shuffle([...W.tasks, ...(EXTRA[career.id] || [])].filter((k) => T[k]));
+  const fresh = pool.filter((k) => G.edu.state(T[k]().skill) < 4), tasks = (fresh.length >= 3 ? fresh : pool).slice(0, 3);
+  for (const k of tasks) await teach(G, T[k]().skill, W.boss[0]);
   let first = 0;
-  for (let i = 0; i < W.tasks.length; i++) { const r = await runTask(G, T[W.tasks[i]], career.id, `${W.verb} · ${i + 1} of ${W.tasks.length}`, '🧰'); if (r && r.ok) first++; }
+  for (let i = 0; i < tasks.length; i++) { const r = await runTask(G, T[tasks[i]], career.id, `${W.verb} · ${i + 1} of ${tasks.length}`, '🧰'); if (r && r.ok) first++; }
   G.advance(hours);
   s.flags[`w_${career.id}_${s.day}`] = true; s.flags[`worked${s.day}`] = true;
   s.stats.shifts++; s.workLog = s.workLog || {}; s.workLog[career.id] = (s.workLog[career.id] || 0) + 1;
-  if (first === W.tasks.length) s.stats.perfectShifts = (s.stats.perfectShifts || 0) + 1;
-  const bonus = first === W.tasks.length && career.tier >= 1 ? Math.round(rate * 0.5) : 0;
+  if (first === tasks.length) s.stats.perfectShifts = (s.stats.perfectShifts || 0) + 1;
+  const bonus = first === tasks.length && career.tier >= 1 ? Math.round(rate * 0.5) : 0;
   const net = await paystub(G, hours, rate, bonus, career.employer.toUpperCase());
   G.earn(net, `${career.employer} pay`);
   G.befriend(W.boss[0], 0.5);
@@ -170,7 +174,7 @@ export async function workShift(G, career) {
 export async function apply(G, career) {
   const W = WORK[career.id], boss = `${W.boss[0]} · ${W.boss[1]}`;
   await UI.say(boss, `Thanks for coming in. Let’s see your application for ${career.title}.`);
-  const r1 = await runTask(G, { skill: 'write.professional', q: 'Your application ends with one sentence about you. Which is best?', a: `I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, o: [`I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, 'i need money lol', 'Hire me or else.'] }, 'application', 'Application', '📝');
+  const r1 = G.state.flags.resume ? (UI.toast('Your résumé from the Community Center made the application easy.', 'good', 2600), { ok: true }) : await runTask(G, { skill: 'write.professional', q: 'Your application ends with one sentence about you. Which is best?', a: `I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, o: [`I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, 'i need money lol', 'Hire me or else.'] }, 'application', 'Application', '📝');
   const r2 = await runTask(G, T[W.tasks[0]], 'interview', 'Interview question', '🤝');
   await UI.say(boss, r1.ok && r2.ok ? 'That’s exactly what I was hoping to hear. You’re hired.' : 'You worked through that carefully. That matters more than getting it instantly. You’re hired. We’ll train you.');
   G.state.jobs.push(career.id); G.sfx('level'); G.achieve('hired');

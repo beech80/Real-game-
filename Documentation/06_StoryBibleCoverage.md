@@ -40,27 +40,30 @@ Status key: ✅ playable now · 🟡 partly done · 🔜 planned (needs new dist
 | 12 — The REAL decision | ✅ | Gates open; three endings |
 | Epilogue — Your REAL life | ✅ | The empty road, the final message, play continues |
 
-## Educational Teaching & Leveling System
+## Educational Teaching & Leveling System (Complete Educational Game System master prompt)
 
 | Requirement | Status | Implementation |
 |---|---|---|
-| Learn by Living: Discover → Understand → Practice → Apply → Master | ✅ | `edu.js`: `discover()` opens a "New skill" card (Understand); `support()` = guided / hint / independent; mastery requires independent success in **two different contexts on a later day**; `dailyReview()` schedules Review |
-| Two systems: Life Level and Education Mastery | ✅ | `life.js` (10 categories, "never a measure of your worth") · `edu.js` (per-skill states) |
-| Six internal bands, not grades | ✅ | Foundation → Mastery & Leadership; shown only as "Now exploring…" in Learn; no grade labels anywhere |
-| Mastery states | ✅ | Not introduced → Learning → Practicing → Proficient → Mastered → Review |
-| Adaptive, private, per-subject | ✅ | `band(subj)`; register moves from whole dollars → cents → coupon %; inventory from counting → multiplication → fractions |
-| Hints, alternate explanations, no penalty for support | ✅ | Every activity: "Show a hint"; after a mistake the alternate explanation appears; mistakes drop you to Practicing at worst |
-| Never use speed | ✅ | No timers in any activity; evidence = correctness, hints, contexts, days |
-| Reading / writing / cursive / math / money / critical thinking | ✅ | ~33 skills across bands 1–6; ~50 task generators across 16 careers, courses, challenge zones and the Learn app |
-| Rewards = gameplay, not quiz money | ✅ | Skills unlock promotions, jobs (career requirements) and Life Level; Learn practice gives no money |
-| Wilderness / Fresh Mart / apartment first | ✅ | All three have contextual activities |
-| Challenge zones | ✅ | Learning Lab (Midtown Library) and The Think Tank: 5 zones × 5 rooms, hints free, no timer, progress saved |
-| Pets | ✅ | Paws & Friends: puppy / kitten / bunny that follows you, daily feeding, play, weekly care bill |
-| Multiplayer (child-safe) | ✅ | `multiplayer.js`: other players appear as anonymous REALs in the same district (shared link only). Presence only: species, jacket, position, 4 preset gestures. No names, chat or trading |
-| Plush companions | ✅ | Free starter companion, or link a plush with its tag code (REAL-XXXXXX: species + serial + check digit, `plush.js`). Tag codes are generated with `node Tools/plush_codes.mjs <species> <count>` (see `07_PlushCodes.md`) |
-| Relationships | ✅ | Six district friends (Marcus, Ms. Lindqvist, Priya, Coach Bo, Dr. Amara, Theo) with friendship levels and daily favors |
+| Curriculum separated from gameplay code | ✅ | `curriculum.js` (skills + generators, pure data/functions) · `edu.js` (mastery engine) · `learnkit.js` (activity runner). Full list: `09_Curriculum.md` (generated) |
+| Six subjects × six internal bands | ✅ | 120 skills: Reading 21, Writing 16, Cursive 10, Math 27, Money 28, Critical thinking 18, every subject in all six bands. Bands are never shown as grades |
+| Five-step learning cycle | ✅ | Discover → Understand (New-skill card) → Practice (guided, hints) → Apply (real task) → Master (no hints, 2+ contexts, later day) |
+| Mastery states and evidence | ✅ | Not introduced → Learning → Practicing → Proficient → Mastered → Review. Evidence: accuracy, hint use, error patterns, contexts, retention. Never speed |
+| Spaced review | ✅ | Reviews after 3, 7, 14 and 30 days |
+| Adaptive difficulty | ✅ | Private band per subject; advanced players skip foundations they never needed; mastered tasks swapped for harder ones at work; repeated misses point to an unmastered prerequisite |
+| Feedback that explains why | ✅ | Every generated activity carries a worked explanation shown after answering; alternate explanation after mistakes; worked solution after 3 tries |
+| Interaction types | ✅ | Choice, number entry, ordering steps, sorting/matching, open writing with rubric feedback (not keyword-only), budget allocation, cursive tracing |
+| Cursive accessibility | ✅ | Every tracing task has “Type instead”; handwriting never blocks careers or story |
+| Accessibility | ✅ | Settings: bigger text, high contrast, read aloud (device voice), reduce motion; 🔊 on every question |
+| World integration | ✅ | Wilderness signs; Fresh Mart; apartment bills; Midtown Library books (adaptive); Heights Bank (savings, simulated investing with risk, credit score, loans, scam spotting); 16 careers with skill pools; courses; Community Center résumé help; business forecasting & marketing (ethics); Calendar week planner; Jax advice that is sometimes good, sometimes misleading |
+| Failure and recovery | ✅ | Late fees can be undone with a rent payment plan; food bank; budgeting help. No one loses their home over a hard week or a wrong answer |
+| Mentoring (band 6) | ✅ | Community Center: mentor a newcomer (Life Level 8+ or after the ending) |
+| Privacy & child safety | ✅ | On-device saves only, no accounts, ads or purchases; private learning records; anonymous presence-only neighbors that can be switched off; scripted NPC advice; grown-ups page with privacy notes and progress |
+| Content validation | 🟡 | Automated: `node Game/tests/curriculum.test.mjs` checks ~40,000 generated activities (answers, options, explanations, rubrics, budgets, prerequisite order, coverage). **Expert/teacher review against learning standards is still required before release** |
+| Automated testing | ✅ | `tests/curriculum.test.mjs`, `tests/edu.cjs` (every activity type + world learning flows in the real UI), plus touch, story, world, rooms, map and neighbors tests |
 
 ## Honest gaps
+
+0. The curriculum has passed automated checks but has not been reviewed by teachers or curriculum experts.
 
 1. Live neighbors (multiplayer) work in the shared claude.ai link. The installable PWA build has no game server, so it plays solo.
 2. Physical plush toys don't exist yet. The tag-code system and code generator are ready for when they do.

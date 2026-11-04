@@ -6,6 +6,9 @@ import { CAREERS, careerStatus } from './life.js';
 import { WORK, T, runTask, workShift, apply, school, COURSES } from './careers.js';
 import { DISTRICTS } from './districts.js';
 import { readCode } from './plush.js';
+import { runActivity } from './learnkit.js';
+import { GEN } from './curriculum.js';
+import { SKILLS } from './edu.js';
 
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
@@ -61,12 +64,12 @@ export function installExpansion(Game) {
       lofts: [['🏢 Lease a loft', () => this.homeOffer('loft')], s.home === 'loft' ? ['🏠 Go home', () => this.hooks.enterApartment()] : null],
       residences: [['🏛️ Lease a residence', () => this.homeOffer('heights')], ['🔑 Buy a home', () => this.homeOffer('owned')], ['heights', 'owned'].includes(s.home) ? ['🏠 Go home', () => this.hooks.enterApartment()] : null],
       shelter: [[s.pet ? `🐾 Visit the shelter with ${s.pet.name}` : '🐾 Adopt a pet', () => this.shelter()]],
-      library: [['🧩 Learning Lab challenge zones', () => this.challengeZones('library')], ['📚 Study (free practice)', () => A.learn(G)]],
+      library: [['🧩 Learning Lab challenge zones', () => this.challengeZones('library')], ['📕 Read a book', () => this.readBook()], ['📚 Study (free practice)', () => A.learn(G)]],
       thinktank: [['🏆 Challenge zones', () => this.challengeZones('thinktank')]],
-      sbc: [['🚀 Small Business Center', () => this.sbc()]],
+      sbc: [['🚀 Small Business Center', () => this.sbc()], s.biz ? ['📈 Plan next week (forecast & marketing)', () => this.bizPlanWeek()] : null],
       bootcamp: [['🎓 Classes', () => school(G, 'bootcamp')]],
       college: [['🎓 Classes', () => school(G, 'college')]],
-      bank: [['🏦 Savings account', () => this.savings()]],
+      bank: [['🏦 Banking, investing & credit', () => this.bank()]],
       thread: [['🧥 Shop jackets', () => this.clothing()]],
       kitchen: [['🍳 Eat at Corner Kitchen', () => A.menuBuy(G, 'Corner Kitchen', '🍳', [
         { name: 'Veggie omelette', price: 9.5, icon: '🍳', note: '+50 food, +mood', apply: () => { this.feed(50); s.mood += 6; s.stats.mealsEaten = (s.stats.mealsEaten || 0) + 1; this.advance(0.5); } },
@@ -88,7 +91,7 @@ export function installExpansion(Game) {
       work: async () => { if (!held.length) { UI.toast(careers.length ? 'You don’t work here yet. Apply at the counter.' : 'Staff only.', 'info', 3000); return; } const c = held.find((x) => !s.flags[`w_${x.id}_${s.day}`]) || held[0]; await workShift(G, c); },
       eat: () => A.menuBuy(G, 'Corner Kitchen', '🍳', [{ name: 'Veggie omelette', price: 9.5, icon: '🍳', note: '+50 food, +mood', apply: () => { this.feed(50); s.mood += 6; s.stats.mealsEaten = (s.stats.mealsEaten || 0) + 1; this.advance(0.5); } }, { name: 'Soup & bread', price: 6, icon: '🥣', note: '+35 food', apply: () => { this.feed(35); this.advance(0.4); } }]),
       cars: () => this.dealer(), checkup: () => this.checkup(), rack: () => this.clothing(), pets: () => this.shelter(),
-      home: () => this.homeOffer(key === 'lofts' ? 'loft' : 'heights'), study: () => A.learn(G), zones: () => this.challengeZones(key), savings: () => this.savings(),
+      home: () => this.homeOffer(key === 'lofts' ? 'loft' : 'heights'), study: () => this.readBook(), zones: () => this.challengeZones(key), savings: () => this.bank(),
       sit: () => { this.hooks.playerAnim('Sit', 4); s.mood = Math.min(100, s.mood + 8); this.advance(0.4); },
       door: () => { const it = this.interaction({ key }); return it && it.run(); },
       class: () => school(G, key), mail: () => UI.toast(s.messages.length ? `Mail: ${s.messages[0].from} — “${s.messages[0].text.slice(0, 60)}…”` : 'No mail today.', 'info', 3600),
@@ -432,9 +435,152 @@ export function installExpansion(Game) {
   P.nightly = function () {
     const s = this.state, notes = [];
     const bz = this.bizOvernight(); if (bz) notes.push(bz);
+    if (s.portfolio) {   // simulated markets: safe barely moves, risky can swing a lot either way
+      const P = s.portfolio, before = P.safe + P.mixed + P.risky;
+      const move = (v, lo, hi) => Math.max(0, Math.round(v * (1 + (lo + Math.random() * (hi - lo)) / 100) * 100) / 100);
+      P.safe = move(P.safe, 0, 0.4); P.mixed = move(P.mixed, -3, 4); P.risky = move(P.risky, -14, 15);
+      const after = P.safe + P.mixed + P.risky;
+      if (before > 0) notes.push(`Investments: ${after >= before ? '+' : '−'}${money(Math.abs(after - before))} overnight (simulated). Values go up and down.`);
+    }
     if (s.savings > 0 && s.day % 7 === 0) { const i = r2(s.savings * 0.01); s.savings = r2(s.savings + i); notes.push(`Savings interest: +${money(i)}`); }
     if (s.vehicle && s.vehicle.type !== 'bike' && s.day - s.vehicle.service > 12 && !s.vehicle.broken) { s.vehicle.broken = true; s.bills.push({ id: 'repair' + s.day, name: 'Vehicle repair (skipped maintenance)', amount: 250, due: s.day + 5, paid: false }); notes.push('Your vehicle broke down. Skipped maintenance turned into a $250 repair. Service it at Midtown Motors every 10 days.'); }
     if (s.pet) { const p = s.pet; if (s.day - p.fed >= 2) { p.bond = Math.max(0, p.bond - 0.5); s.mood = Math.max(0, s.mood - 8); notes.push(`${p.name} is hungry. Feed your pet at home every day.`); } }
     return notes;
+  };
+  // ================================================================================== EDUCATION IN THE WORLD
+  const gen = (id) => { const g = GEN[id]; return g ? g[Math.floor(Math.random() * g.length)] : null; };
+  /** Mr. Okafor's desk at the Community Center: career board, hardship help, résumé help, mentoring. */
+  P.counselor = async function () {
+    const s = this.state, G = this, O = 'Mr. Okafor · Community Center', ll = this.life().level;
+    const lateRent = s.bills.filter((b) => !b.paid && /^rent/.test(b.id) && b.due < s.day);
+    const struggling = s.money < 30 || lateRent.length > 0 || s.hunger < 20;
+    const c = await UI.sheet('Community Center', (close) => h('div', { class: 'act' },
+      h('p', { class: 'lead' }, 'How can we help today?'),
+      h('div', { class: 'opts' },
+        h('button', { class: 'opt', onclick: () => close('board') }, '💼 Career board'),
+        h('button', { class: 'opt', onclick: () => close('resume') }, s.flags.resume ? '📝 Update my résumé' : '📝 Help me write a résumé'),
+        struggling ? h('button', { class: 'opt', onclick: () => close('help') }, '🤝 I’m struggling with money') : h('button', { class: 'opt', onclick: () => close('help') }, '🤝 Money help & advice'),
+        ll >= 8 || s.ending ? h('button', { class: 'opt', onclick: () => close('mentor') }, '🌱 Mentor a newcomer') : null)), { icon: '🤝' });
+    if (c === 'board') return this.careerBoard();
+    if (c === 'resume') {
+      await UI.say(O, 'A résumé shows employers what you can do. Start each line with an action word, and use numbers when you can.');
+      const r = await runActivity(G, gen('write.resume'), 'resume', 'Your résumé', '📝');
+      await runActivity(G, GEN['write.resume'][1], 'resume', 'Your résumé', '📝');
+      s.flags.resume = true; s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 0.5;
+      await UI.say(O, 'That’s a résumé an employer will read twice. It will help every application you send.'); this.save(); return;
+    }
+    if (c === 'help') return this.hardship(lateRent);
+    if (c === 'mentor') {
+      await UI.say(O, 'A young REAL just walked in from the old road, the same way you did. Would you help them get started?');
+      for (const k of ['think.leadership', 'think.systems', 'write.bizplan']) await runActivity(G, k === 'think.leadership' ? T.lead : gen(k), 'mentor', 'Mentoring', '🌱');
+      s.stats.mentored = (s.stats.mentored || 0) + 1; this.befriend('Okafor', 1); s.mood = Math.min(100, s.mood + 15); this.achieve('mentor');
+      await UI.say(O, 'You remember what it was like to have nothing. That’s what makes you a good mentor.'); this.save();
+    }
+  };
+  /** Safe recovery from financial hardship: nobody loses their home over a hard week. */
+  P.hardship = async function (lateRent) {
+    const s = this.state, O = 'Mr. Okafor · Community Center';
+    const opts = [];
+    if (s.flags.foodBank !== s.day && (s.flags.foodBankLast || 0) <= s.day - 2) opts.push(['🥫 Food bank (free groceries)', 'food']);
+    if (lateRent.length) opts.push(['🏠 Rent payment plan (no late fees)', 'plan']);
+    opts.push(['📊 Make a budget with me', 'budget']);
+    const c = await UI.sheet('Help is available', (close) => h('div', { class: 'act' },
+      h('p', { class: 'lead' }, 'Hard weeks happen to everyone. Using help is a smart move, not a failure.'),
+      h('div', { class: 'opts' }, opts.map(([l, k]) => h('button', { class: 'opt', onclick: () => close(k) }, l)))), { icon: '🤝' });
+    if (c === 'food') { s.flags.foodBankLast = s.day; s.pantry = s.pantry || {}; s.pantry.rice = (s.pantry.rice || 0) + 3; s.pantry.beans = (s.pantry.beans || 0) + 3; this.feed(25); UI.toast('Free groceries are in your fridge: rice and beans for a few meals.', 'good', 3600); }
+    if (c === 'plan') {
+      for (const b of lateRent) { const base = b.lateFee ? b.amount - 15 : b.amount; b.paid = true; b.renewed = true; s.bills.push({ id: 'plan' + s.day + 'a', name: `${b.name} (plan 1 of 2)`, amount: Math.round(base / 2 * 100) / 100, due: s.day + 7, paid: false }, { id: 'plan' + s.day + 'b', name: `${b.name} (plan 2 of 2)`, amount: Math.round(base / 2 * 100) / 100, due: s.day + 14, paid: false }); }
+      s.stats.lateFees = Math.max(0, (s.stats.lateFees || 0) - lateRent.length);
+      await UI.say(O, 'Done. Your late fees are removed and the rent is split into two payments. Your home is safe.');
+    }
+    if (c === 'budget') { await runActivity(this, GEN['fin.planning'][0], 'counselor', 'Budget with Mr. Okafor', '📊'); s.stats.budgetsPlanned = (s.stats.budgetsPlanned || 0) + 1; }
+    this.save();
+  };
+  /** Midtown Library: adaptive reading. Picks books at the player's working reading level. */
+  P.readBook = async function () {
+    const s = this.state, b = this.edu.band('reading');
+    const shelf = Object.values(SKILLS).filter((k) => k.subj === 'reading' && GEN[k.id]).sort((x, y) => Math.abs(x.band - b) - Math.abs(y.band - b)).slice(0, 4);
+    const titles = { 'read.letters': 'ABC City Walk', 'read.phonics': 'Sounds Around Town', 'read.sentences': 'A Day at Fresh Mart', 'read.paragraph': 'Community Notices', 'read.multistep': 'How Things Work', 'read.inference': 'The Mystery of Aisle 5', 'read.compare': 'Which Way to Go?', 'read.technical': 'The Fix-It Manual', 'read.evidence': 'City Stories', 'read.factopinion': 'Ads and Facts', 'read.purpose': 'Why Did They Write That?', 'read.summarize': 'News in Brief', 'read.contracts': 'The Fine Print', 'read.bias': 'Two Sides', 'read.sources': 'Trust the Source', 'read.research': 'The Research Desk' };
+    const pickId = await UI.sheet('Midtown Library', (close) => h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Pick a book. These are picked for where you are right now, but every shelf is open to you.'),
+      h('div', { class: 'opts' }, shelf.map((k) => h('button', { class: 'opt', onclick: () => close(k.id) }, `📕 ${titles[k.id] || k.name}`)), h('button', { class: 'opt', onclick: () => close('all') }, '📚 Browse every subject (Learn)'))), { icon: '📚' });
+    if (!pickId) return;
+    if (pickId === 'all') return A.learn(this);
+    for (let i = 0; i < 2; i++) await runActivity(this, gen(pickId), 'library', titles[pickId] || 'Reading', '📕');
+    s.stats.booksRead = (s.stats.booksRead || 0) + 1; s.mood = Math.min(100, s.mood + 5); this.advance(0.75); this.save();
+  };
+  /** Heights Bank: savings, simulated investing (risk explained), credit score, scam check, loan comparison. */
+  P.bank = async function () {
+    const s = this.state, G = this;
+    const c = await UI.sheet('Heights Bank', (close) => h('div', { class: 'act' },
+      h('div', { class: 'opts' },
+        h('button', { class: 'opt', onclick: () => close('save') }, '🏦 Savings account'),
+        h('button', { class: 'opt', onclick: () => close('invest') }, '📈 Investing simulator'),
+        h('button', { class: 'opt', onclick: () => close('score') }, '⭐ My credit score'),
+        h('button', { class: 'opt', onclick: () => close('loans') }, '📄 Compare loans'),
+        h('button', { class: 'opt', onclick: () => close('fraud') }, '🛡️ Spot the scam'))), { icon: '🏦' });
+    if (c === 'save') return this.savings();
+    if (c === 'score') {
+      const onTime = (s.stats.billsOnTime || 0) + s.bills.filter((b) => b.paid && !b.lateFee).length, late = s.stats.lateFees || 0;
+      const score = Math.max(300, Math.min(850, 620 + onTime * 12 - late * 35 + (s.vehicle && s.bills.some((b) => /carloan/.test(b.id)) ? 10 : 0)));
+      s.creditScore = score;
+      await UI.say('Advisor · Heights Bank', `Your simulated credit score is ${score}. ${score >= 700 ? 'That’s strong. On-time payments did that.' : 'Pay every bill on time and it will climb.'}`);
+      await runActivity(G, gen('fin.score'), 'bank', 'Credit scores', '⭐'); return;
+    }
+    if (c === 'loans') { await runActivity(G, gen('fin.loans'), 'bank', 'Compare loans', '📄'); await runActivity(G, gen('fin.debt'), 'bank', 'Debt', '📄'); return; }
+    if (c === 'fraud') { await runActivity(G, gen('fin.fraud'), 'bank', 'Spot the scam', '🛡️'); return; }
+    if (c === 'invest') return this.invest();
+  };
+  P.invest = async function () {
+    const s = this.state, G = this; s.portfolio = s.portfolio || { safe: 0, mixed: 0, risky: 0, day: s.day };
+    await runActivity(G, gen('fin.investing'), 'bank', 'Before you invest', '📈');
+    const P2 = s.portfolio;
+    const c = await UI.sheet('Investing simulator', (close) => h('div', { class: 'act' },
+      h('p', { class: 'tip' }, 'Simulated money only. Values change every night: safe funds barely move, risky ones can jump or drop a lot. Nothing is guaranteed.'),
+      h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'SAFE'), h('b', {}, money(P2.safe))), h('div', {}, h('small', {}, 'MIXED'), h('b', {}, money(P2.mixed))), h('div', {}, h('small', {}, 'RISKY'), h('b', {}, money(P2.risky)))),
+      h('div', { class: 'opts' }, ['safe', 'mixed', 'risky'].map((k) => h('button', { class: 'opt', disabled: s.money < 50, onclick: () => close(k) }, `Put $50 in ${k}`)), h('button', { class: 'opt', onclick: () => close('sell') }, 'Sell everything back to checking'))), { icon: '📈' });
+    if (!c) return;
+    if (c === 'sell') { const tot = Math.round((P2.safe + P2.mixed + P2.risky) * 100) / 100; if (tot > 0) { this.earn(tot, 'Investments sold'); s.stats.earned -= tot; } P2.safe = P2.mixed = P2.risky = 0; }
+    else { this.spend(50, `Invested ($50 ${c})`); s.stats.spent -= 50; P2[c] = Math.round((P2[c] + 50) * 100) / 100; if (P2.safe && P2.mixed && P2.risky) { s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1; await runActivity(G, gen('fin.diversify'), 'bank', 'Diversification', '🧺'); } }
+    this.save();
+  };
+  /** Jax's advice: sometimes good, sometimes misleading. The skill is judging it, not ignoring him. */
+  const JAX_TIPS = [
+    { t: 'Buy the 20-lb bag of rice instead of the little ones. Way cheaper per meal.', good: true, why: 'Unit price: the big bag costs less per pound. If you’ll use it before it spoils, it’s a good tip.', skill: 'think.compare' },
+    { t: 'Get the weekly bus pass. You ride every day anyway.', good: true, why: '7 rides × $2.75 = $19.25. If the pass costs less than that, it saves money.', skill: 'think.compare' },
+    { t: 'Skip the phone bill this week. Nobody pays on time.', good: false, why: 'Late bills add fees and hurt your credit score. “Nobody does it” isn’t evidence.', skill: 'think.consequence' },
+    { t: 'My buddy’s new coin is going to the moon. Put your rent money in. Guaranteed!', good: false, why: '“Guaranteed” returns don’t exist, and rent money is money you can’t afford to lose.', skill: 'think.risk' },
+    { t: 'Take that night class at City Tech. Brightline hires people who finish it.', good: true, why: 'It costs now but leads to higher pay. That’s long-term thinking.', skill: 'think.longterm' },
+    { t: 'Everyone in Midtown has the new phone. You look broke without it.', good: false, why: 'That’s peer pressure (“everyone has it”), not a reason. Check whether it fits your budget.', skill: 'think.persuasion' },
+    { t: 'Ask Rosa for more shifts before the holidays. Stores need extra hands.', good: true, why: 'Busy seasons mean more hours are available. Asking politely is smart.', skill: 'think.planning' },
+    { t: 'Text your bank PIN to that number. They said it’s to unlock your account.', good: false, why: 'Banks never ask for your PIN. That’s a scam.', skill: 'fin.fraud' },
+  ];
+  P.jaxAdvice = async function () {
+    const s = this.state, tip = JAX_TIPS[(s.day * 7 + (s.stats.shifts || 0)) % JAX_TIPS.length];
+    this.edu.discover(tip.skill);
+    const c = await UI.say('Jax', tip.t, ['Good advice, I’ll take it', 'Bad advice, I’ll pass', 'Let me think it through'], { tone: 'jax' });
+    let judged = c === 0 ? true : c === 1 ? false : null;
+    if (c === 2) { s.stats.thoughtThrough = (s.stats.thoughtThrough || 0) + 1; judged = await UI.say('Thinking it through', `Who benefits? Is there evidence? What could go wrong? …So, is Jax right this time?`, ['Yes, it’s good advice', 'No, it’s bad advice']) === 0; }
+    const ok = judged === tip.good;
+    this.edu.record(tip.skill, ok, { ctx: 'jax' }); this.edu.record('think.evaluate', ok, { ctx: 'jax' });
+    if (ok) s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1;
+    await UI.say(ok ? 'Good call' : 'Worth a second look', tip.why);
+    this.befriend('Jax', 0.3); this.save();
+  };
+  /** Calendar → plan the week: scheduling + budget allocation. */
+  P.planWeek = async function () {
+    await runActivity(this, gen('think.planning'), 'calendar', 'Plan your week', '📅');
+    await runActivity(this, GEN['fin.planning'][0], 'calendar', 'Plan your money', '📊');
+    this.state.stats.budgetsPlanned = (this.state.stats.budgetsPlanned || 0) + 1; this.save();
+  };
+  /** Business planning: forecast next week and pick a marketing idea. */
+  P.bizPlanWeek = async function () {
+    const s = this.state, b = s.biz; if (!b) return;
+    await runActivity(this, gen('math.forecast'), 'business', 'Forecast next week', '📈');
+    await runActivity(this, gen('fin.cashflow'), 'business', 'Cash flow', '💵');
+    const m = await UI.sheet('Marketing', (close) => h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Pick one idea for next week:'),
+      h('div', { class: 'opts' }, [['Loyalty card: 10th drink free', 'loyal'], ['Flyers at Fresh Mart ($15)', 'flyers'], ['Pay for fake reviews', 'fake']].map(([l, k]) => h('button', { class: 'opt', onclick: () => close(k) }, l)))), { icon: '📣' });
+    if (m === 'fake') { this.edu.record('think.ethics', false, { ctx: 'business' }); b.rep = Math.max(0, b.rep - 1); await UI.say('Advisor · Small Business Center', 'Fake reviews mislead customers, and when people find out, trust is gone. Your reputation dropped. Honest marketing lasts longer.'); }
+    else { this.edu.record('think.strategy', true, { ctx: 'business' }); if (m === 'flyers' && s.money >= 15) this.spend(15, `${b.name}: flyers`); b.rep = Math.min(10, b.rep + (m === 'loyal' ? 0.6 : 0.8)); UI.toast('Good plan. Reputation up.', 'good'); }
+    s.stats.businessSteps = (s.stats.businessSteps || 0) + 0.5; this.save();
   };
 }

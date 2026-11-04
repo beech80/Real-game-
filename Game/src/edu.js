@@ -3,6 +3,8 @@
 // Every skill moves through: Not Introduced → Learning → Practicing → Proficient → Mastered → Review.
 // Evidence comes only from correctness, hint use, variety of contexts and time between successes — never speed.
 
+import { NEW_SKILLS } from './curriculum.js';
+
 export const SUBJECTS = {
   reading: { name: 'Reading', icon: '📖' },
   writing: { name: 'Writing', icon: '✍️' },
@@ -128,7 +130,9 @@ const S = [
     'Ask: who does this decision help, who does it hurt, and can I make it fairer?'],
 ];
 
-export const SKILLS = Object.fromEntries(S.map(([id, subj, band, name, objective, prereq, explain, alt]) => [id, { id, subj, band, name, objective, prereq, explain, alt }]));
+const ALL = [...S, ...NEW_SKILLS.filter((n) => !S.some((o) => o[0] === n[0]))];
+export const SKILLS = Object.fromEntries(ALL.map(([id, subj, band, name, objective, prereq, explain, alt, where]) => [id, { id, subj, band, name, objective, prereq: prereq || [], explain, alt, where: where || [] }]));
+const REVIEW_GAPS = [3, 7, 14, 30];   // spaced review: each passed review pushes the next one further out
 
 export function newEdu() {
   return { skills: {}, journal: [] };
@@ -151,7 +155,7 @@ export class Edu {
   }
 
   /** Record evidence. ctx = where it happened (e.g. "register", "groceries"). hinted = used a hint. */
-  record(id, correct, { ctx = 'world', hinted = false } = {}) {
+  record(id, correct, { ctx = 'world', hinted = false, err = null } = {}) {
     const day = this.hooks.day ? this.hooks.day() : 1;
     const k = this.get(id);
     if (k.st === 0) k.st = 1;
@@ -163,7 +167,7 @@ export class Edu {
       else {
         k.streak++;
         if (!k.ctx.includes(ctx)) k.ctx.push(ctx);
-        if (k.st === 5) k.st = 4;                                       // review passed
+        if (k.st === 5) { k.st = 4; k.reviews = (k.reviews || 0) + 1; }   // review passed → next review later
         else if (k.st <= 1 && k.streak >= 1) k.st = 2;                   // Learning → Practicing
         else if (k.st === 2 && k.streak >= 2) k.st = 3;                  // Practicing → Proficient (independent, repeated)
         else if (k.st === 3 && k.ctx.length >= 2 && day > (k.firstProfDay || day)) k.st = 4;  // Mastered: new context, later day
@@ -171,7 +175,8 @@ export class Edu {
         k.lastOkDay = day;
       }
     } else {
-      k.streak = 0;
+      k.streak = 0; k.miss = (k.miss || 0) + 1;
+      if (err) { k.errs = k.errs || {}; k.errs[err] = (k.errs[err] || 0) + 1; }   // error patterns (private, on-device)
       k.needsAlt = true;       // next time, offer the alternate explanation
       if (k.st >= 3) k.st = 2; // gentle: back to practice, never below
     }
@@ -195,19 +200,26 @@ export class Edu {
     return sk.explain;
   }
 
-  /** Working band for a subject: lowest band that still has a skill below Proficient (adapts privately). */
+  /** Working band for a subject, private and adaptive: the lowest band where the player is still developing
+   *  something they've met; if nothing is in progress, one band above their highest proficient skill.
+   *  Advanced players are never sent back through foundations they've never needed. */
   band(subj) {
-    for (let b = 1; b <= 6; b++) {
-      const ids = Object.values(SKILLS).filter((s) => s.subj === subj && s.band === b);
-      if (!ids.length) continue;
-      if (ids.some((s) => this.state(s.id) < 3)) return b;
-    }
-    return 6;
+    const list = Object.values(SKILLS).filter((s) => s.subj === subj);
+    const developing = list.filter((s) => { const st = this.state(s.id); return st >= 1 && st < 3; }).map((s) => s.band);
+    if (developing.length) return Math.min(...developing);
+    const prof = list.filter((s) => this.state(s.id) >= 3).map((s) => s.band);
+    return prof.length ? Math.min(6, Math.max(...prof) + 1) : 1;
+  }
+  /** After repeated misses, point back to an unmastered prerequisite (review prerequisites when struggling). */
+  struggling(id) {
+    const k = this.get(id), sk = SKILLS[id];
+    if (!sk || (k.miss || 0) < 2 || k.streak > 0) return null;
+    return (sk.prereq || []).find((p) => SKILLS[p] && this.state(p) < 3) || null;
   }
 
   /** Spaced review: mastered skills unseen for 3+ days come back for a light check. */
   dailyReview(day) {
-    for (const [id, k] of Object.entries(this.s.skills)) if (k.st === 4 && day - (k.lastSeenDay || day) >= 3) { k.st = 5; }
+    for (const [id, k] of Object.entries(this.s.skills)) if (k.st === 4 && day - (k.lastSeenDay || day) >= REVIEW_GAPS[Math.min(REVIEW_GAPS.length - 1, k.reviews || 0)]) { k.st = 5; }
   }
 
   progress(subj) {

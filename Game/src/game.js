@@ -127,7 +127,7 @@ export class Game {
       if (/^Door_/.test(k)) return { label: 'Closed to you for now', run: () => UI.toast('You have no money and no account yet. Find the Community Center on Main St first.', 'info', 3800) };
     }
     const map = {
-      Door_CareerCenter: () => ({ label: s.flags.housed ? 'Career board' : 'Community Center', run: () => s.flags.housed ? this.careerBoard() : this.housing() }),
+      Door_CareerCenter: () => ({ label: 'Community Center', run: () => s.flags.housed ? this.counselor() : this.housing() }),
       Interact_TimeClock: () => (q === 'clockin' || (q !== 'shift' && s.flags.hired && !s.flags[`worked${s.day}`])) ? { label: 'Clock in', run: () => this.clockIn() } : { label: 'Training board', run: () => this.training() },
       Interact_TrainingBoard: () => ({ label: 'Read training board', run: () => this.training() }),
       Interact_Register_01: () => q === 'shift' && s.shift && s.shift.register < s.shift.need.register ? { label: 'Serve customer', run: () => this.registerTask() } : null,
@@ -436,6 +436,9 @@ export class Game {
     if (due) this.message('Reminder', `${due.name} (${money(due.amount)}) is due today. Pay it in the Bills app.`);
     if (s.flags.jaxStealDue) this.message('Unknown number', 'Hey. It’s Jax. Swing by Thread & Co after work.');
     if (s.flags.jax3due) this.message('Jax', 'Meet me at the corner of Main & Fresh. Got some real info for you.');
+    const broke = s.money < 30 || s.bills.some((b) => !b.paid && /^rent/.test(b.id) && b.due < s.day);
+    if (broke && s.flags.housed) this.message('Mr. Okafor', 'Rough week? The Community Center has a food bank, rent payment plans and budgeting help. Come see me any time.');
+    if (s.flags.jax1 && !s.flags.jaxStealDue && !s.flags.jax3due && s.day % 3 === 0) { await wait(400); await this.jaxAdvice(); }
   }
   async passOut() {
     this.busy = true;
@@ -485,7 +488,7 @@ export function openPhone(G) {
           ...Object.entries(G.hooks.DISTRICTS).map(([id, d]) => h('div', {}, h('div', { class: 'tier-h' }, `${d.name} ${ll.level >= d.life ? '' : '· Life Level ' + d.life}`), h('ul', { class: 'list' }, h('li', {}, d.buildings.map((x) => x.sign ? x.sign[0].replace(/\b(\w)(\w*)/g, (m, p, q) => p + q.toLowerCase()) : 'Overlook Park').join(' · '))))),
           h('p', { class: 'tip' }, 'Ride the bus from any bus stop. Districts open as your Life Level grows, never by wealth.')),
         Messages: () => { s.messages.forEach((m) => (m.read = true)); return h('div', { class: 'msgs' }, s.messages.map((m) => h('div', { class: 'msg' }, h('b', {}, m.from), h('small', {}, `Day ${m.day}`), h('p', {}, m.text)))); },
-        Calendar: () => h('div', { class: 'bill-list' }, [...Array(7)].map((_, i) => { const d = s.day + i; const ev = [];
+        Calendar: () => h('div', {}, h('button', { class: 'primary', onclick: () => { close(); G.planWeek(); } }, '🗓️ Plan my week'), h('div', { class: 'bill-list' }, [...Array(7)].map((_, i) => { const d = s.day + i; const ev = [];
           if (s.flags.hired) ev.push('Fresh Mart shift available (7 AM–5 PM)');
           if (s.jobs.includes('barista') && [6, 0].includes(d % 7)) ev.push('Daily Grind weekend shift');
           for (const j of s.jobs.filter((j) => G.hooks.WORK[j])) ev.push(`${G.hooks.CAREERS.find((c) => c.id === j).employer} shift`);
@@ -493,7 +496,7 @@ export function openPhone(G) {
           if (s.vehicle && s.vehicle.type !== 'bike' && s.vehicle.service + 10 === d) ev.push('Vehicle service due');
           for (const b of s.bills.filter((b) => !b.paid && b.due === d)) ev.push(`Due: ${b.name} ${money(b.amount)}`);
           if (s.flags.jaxChallenge && !s.flags.jaxChallengeDone && s.flags.jaxChallenge.by === d) ev.push('Jax’s $300 challenge deadline');
-          return h('div', { class: 'bill' }, h('div', {}, h('b', {}, i === 0 ? `Today · Day ${d}` : `Day ${d}`), h('small', {}, ev.join(' · ') || 'Free day'))); })),
+          return h('div', { class: 'bill' }, h('div', {}, h('b', {}, i === 0 ? `Today · Day ${d}` : `Day ${d}`), h('small', {}, ev.join(' · ') || 'Free day'))); }))),
         Business: () => s.biz ? h('div', { class: 'act' }, h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'DAYS'), h('b', {}, s.biz.days)), h('div', {}, h('small', {}, 'PROFIT'), h('b', { class: s.biz.profit >= 0 ? 'pos' : 'neg' }, money(s.biz.profit))), h('div', {}, h('small', {}, 'TEAM'), h('b', {}, s.biz.staff.length))),
             h('b', {}, s.biz.name + (s.biz.store ? ' · Midtown storefront' : ' · Brighter Park')), s.biz.loan > 0 ? h('p', { class: 'warnline' }, `Loan balance ${money(s.biz.loan)}`) : null,
             h('div', { class: 'tx' }, s.biz.log.map((l) => h('div', { class: 'rline' }, h('span', {}, `Day ${l.day}${l.team ? ' (team)' : ''} · sold ${l.sold}/${l.demand}`), h('span', { class: l.profit < 0 ? 'neg' : 'pos' }, money(l.profit))))),
@@ -526,10 +529,22 @@ export function openPhone(G) {
         Settings: () => h('div', { class: 'act' },
           h('div', { class: 'row' }, h('span', {}, 'Graphics'), ...['low', 'medium', 'high'].map((q) => h('button', { class: G.hooks.quality() === q ? 'primary sm' : 'ghost sm', onclick: () => { G.hooks.setQuality(q); open('Settings'); } }, q))),
           h('div', { class: 'row' }, h('span', {}, 'Time'), ...[[1, 'Normal'], [3, 'Fast']].map(([v, n]) => h('button', { class: (s.timeScale || 1) === v ? 'primary sm' : 'ghost sm', onclick: () => { s.timeScale = v; open('Settings'); } }, n))),
+          h('div', { class: 'tier-h' }, 'Accessibility'),
+          ...[['large', 'Bigger text'], ['contrast', 'High contrast'], ['readAloud', 'Read questions aloud'], ['calm', 'Reduce motion']].map(([k, n]) => { s.settings = s.settings || {}; return h('div', { class: 'row' }, h('span', {}, n), h('button', { class: s.settings[k] ? 'primary sm' : 'ghost sm', onclick: () => { s.settings[k] = !s.settings[k]; G.hooks.applyA11y(s.settings); G.save(); open('Settings'); } }, s.settings[k] ? 'On' : 'Off')); }),
+          h('div', { class: 'row' }, h('span', {}, 'Live neighbors'), h('button', { class: (s.settings || {}).noNeighbors ? 'ghost sm' : 'primary sm', onclick: () => { s.settings = s.settings || {}; s.settings.noNeighbors = !s.settings.noNeighbors; G.save(); open('Settings'); } }, (s.settings || {}).noNeighbors ? 'Off' : 'On')),
+          h('button', { class: 'ghost', onclick: () => open('Grown-ups') }, '👪 For grown-ups: privacy & progress'),
           h('div', { class: 'row' }, h('span', {}, 'Sound'), h('button', { class: 'ghost sm', onclick: (e) => { e.currentTarget.textContent = G.hooks.toggleSound() ? 'On' : 'Off'; } }, G.hooks.soundOn() ? 'On' : 'Off')),
           h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => { G.save(); UI.toast('Game saved.', 'good'); } }, 'Save now'), h('button', { class: 'danger sm', onclick: (e) => {
             if (e.currentTarget.dataset.arm) { clearSave(); location.reload(); } else { e.currentTarget.dataset.arm = 1; e.currentTarget.textContent = 'Tap again to erase'; }
           } }, 'New game'))),
+        'Grown-ups': () => h('div', { class: 'act' },
+          h('p', { class: 'lead' }, 'REAL teaches reading, writing, cursive, math, money and critical thinking through everyday life in the game.'),
+          h('div', { class: 'tier-h' }, 'Privacy'),
+          h('ul', { class: 'list' }, h('li', {}, 'Progress is saved only on this device. No account, no email, no ads, no purchases.'), h('li', {}, 'Learning records are private and never compared with other players.'), h('li', {}, 'Live neighbors (shared link only) see an anonymous character and 4 preset gestures. No names, chat or trading. You can turn it off above.'), h('li', {}, 'Characters in the game give scripted, age-appropriate advice only.')),
+          h('div', { class: 'tier-h' }, 'Learning progress'),
+          h('div', { class: 'skills' }, Object.entries(SUBJECTS).map(([k, sb]) => { const p = G.edu.progress(k); const m = p.list.filter((x) => G.edu.state(x.id) >= 4).length, pr = p.list.filter((x) => G.edu.state(x.id) === 3).length; return h('div', { class: 'skill' }, h('span', {}, `${sb.icon} ${sb.name}`), h('div', { class: 'bar' }, h('i', { style: { width: p.pct + '%' } })), h('small', {}, `${m} mastered · ${pr} proficient · of ${p.list.length}`)); })),
+          h('p', { class: 'tip' }, 'Mastery means the skill was used correctly without hints, in different places, on different days. Speed is never measured.'),
+          h('button', { class: 'ghost', onclick: () => open('Settings') }, '‹ Settings')),
       }[n];
       body.replaceChildren(h('div', { class: 'phone app-page' }, h('div', { class: 'ph-top' }, back, h('b', {}, n)), page()));
     };

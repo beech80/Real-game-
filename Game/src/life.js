@@ -106,4 +106,6 @@ export const ACHIEVEMENTS = {
   allzones: ['Think Tank champion', 'Cleared every challenge zone.'],
   companion: ['Plush pal', 'Linked a plush companion.'],
   investor: ['Investor', 'Opened a savings account that earns interest.'],
+  mentor: ['Mentor', 'Helped a newcomer get started in the city.'],
+  reader: ['Bookworm', 'Read five books at the library.'],
 };
