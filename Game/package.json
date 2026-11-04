@@ -1,0 +1,16 @@
+{
+  "name": "real-game",
+  "version": "0.1.0",
+  "private": true,
+  "description": "REAL — Learn • Live • Grow. Mobile/web 3D life-sim (three.js).",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node tests/playtest.cjs"
+  },
+  "devDependencies": {
+    "three": "0.160.0",
+    "esbuild": "0.24.0",
+    "@gltf-transform/cli": "4.1.1"
+  }
+}

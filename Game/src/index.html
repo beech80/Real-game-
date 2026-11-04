@@ -1,0 +1,84 @@
+<title>REAL</title>
+<meta name="description" content="REAL — Learn • Live • Grow. Start with almost nothing. Build something that's yours.">
+<meta name="theme-color" content="#0b1020">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=Caveat:wght@600&family=Dancing+Script:wght@600&family=Permanent+Marker&display=swap">
+<style>/*__CSS__*/</style>
+
+<div id="root">
+  <div id="view" aria-label="Game view"></div>
+
+  <!-- loading -->
+  <section id="loading" class="screen">
+    <div class="logo"><span class="logo-word">REAL</span><span class="logo-crown">♛</span></div>
+    <div class="tag">LEARN · LIVE · GROW</div>
+    <div class="load-track"><i id="load-bar"></i></div>
+    <div id="load-label" class="load-label">Loading…</div>
+    <p class="hand">Same city. Different REALs. A brighter tomorrow.</p>
+  </section>
+
+  <!-- title -->
+  <section id="title" class="screen glass-bottom" hidden>
+    <div class="title-top">
+      <div class="logo big"><span class="logo-word">REAL</span><span class="logo-crown">♛</span></div>
+      <div class="tag">LEARN · LIVE · GROW</div>
+    </div>
+    <div class="title-actions">
+      <button id="btn-new" class="primary xl">New game</button>
+      <button id="btn-continue" class="ghost xl" hidden>Continue<small></small></button>
+      <p class="hand">Start with almost nothing. Build something that’s yours.</p>
+    </div>
+  </section>
+
+  <!-- creator -->
+  <section id="creator" class="screen creator" hidden>
+    <div class="cr-panel">
+      <div class="cr-eyebrow">CREATE YOUR REAL</div>
+      <div class="cr-row">
+        <button id="cr-prev" class="round" aria-label="Previous species">‹</button>
+        <div class="cr-species-box"><div id="cr-species" class="cr-species">FOX</div><div id="cr-quote" class="cr-quote"></div><div id="cr-traits" class="cr-traits"></div></div>
+        <button id="cr-next" class="round" aria-label="Next species">›</button>
+      </div>
+      <div id="cr-loading" class="cr-loading" hidden>Loading…</div>
+      <label class="cr-label">Fur tone</label><div id="cr-fur" class="chips"></div>
+      <label class="cr-label">Jacket</label><div id="cr-jacket" class="chips"></div>
+      <label class="cr-label">Hoodie</label><div id="cr-hoodie" class="chips"></div>
+      <label class="cr-label" for="cr-name">Name</label>
+      <input id="cr-name" maxlength="14" placeholder="Your name" autocomplete="off">
+      <button id="cr-go" class="primary xl">Start my story</button>
+      <p class="fine">Every species can pursue every career. That’s REAL.</p>
+    </div>
+  </section>
+
+  <!-- HUD -->
+  <section id="hud" hidden>
+    <div class="hud-tl glass">
+      <div class="hud-money" id="hud-money">$100.00</div>
+      <div class="hud-when"><span id="hud-day">Day 1</span> · <span id="hud-time">8:00 AM</span></div>
+      <div class="bars">
+        <div class="bar-row"><span>⚡</span><div id="bar-energy" class="meter"></div></div>
+        <div class="bar-row"><span>🍎</span><div id="bar-hunger" class="meter food"></div></div>
+      </div>
+    </div>
+    <div class="hud-tr">
+      <canvas id="minimap" width="240" height="240"></canvas>
+      <button id="btn-phone" class="phone-btn" aria-label="Open phone">📱</button>
+    </div>
+    <div id="objective" class="objective glass" hidden><span class="crown">♛</span><span id="obj-text"></span><b id="obj-dist"></b></div>
+    <div id="taskpanel" class="taskpanel glass" hidden></div>
+    <div id="joy-base" class="joy-base"><div id="joy-knob" class="joy-knob"></div></div>
+    <button id="btn-sprint" class="sprint-btn" aria-label="Toggle run">RUN</button>
+    <button id="btn-interact" class="interact-btn" hidden><span class="i-key">E</span><span id="interact-label">Interact</span></button>
+  </section>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <div id="dialog" class="dialog" hidden></div>
+  <div id="modal" class="modal" hidden></div>
+  <div id="caption" class="caption" hidden></div>
+  <button id="skip" class="skip" hidden>Skip ›</button>
+  <div id="fade" class="fade"></div>
+</div>
+<script type="module" src="game.js"></script>

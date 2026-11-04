@@ -1,0 +1,5 @@
+dist-hosted/
+dist/
+node_modules/
+raw_assets/
+tests/shots/

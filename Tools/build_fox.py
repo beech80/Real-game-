@@ -24,6 +24,11 @@ from mathutils.kdtree import KDTree
 import real_lib as R
 
 SPECIES = "Fox"
+# Species parameters (overridden by build_species.py before build)
+MAIN, SEC, DARK = "MAT_REAL_Fur_FoxOrange", "MAT_REAL_Fur_FoxCream", "MAT_REAL_Fur_FoxDark"
+JACKET, HOODIE, PANTS, ACCENT = "MAT_REAL_Clothing_Black", "MAT_REAL_Clothing_Cream", "MAT_REAL_Clothing_Black", "MAT_REAL_Clothing_Gold"
+EXTRA_PARTS = []          # callables(fp) -> list of head-part objects (whiskers, horns, mane, trunk...)
+BODY_EXTRAS = []          # callables() -> list of objects weighted by caller (fins, wings...)
 HEAD_C = Vector((0, 0.0, 1.235))    # head centre
 HEAD_R = Vector((0.225, 0.20, 0.195))
 
@@ -216,7 +221,7 @@ def body_mesh():
         el = add((0.27 * s, 0.015, 0.765), (0.048, 0.048)); edges.append((sp, el))
         wr = add((0.37 * s, 0.0, 0.64), (0.04, 0.04)); edges.append((el, wr))
     body = skin_chain(f"SK_REAL_{SPECIES}_Body", pts, radii, edges, subsurf=2, root=0)
-    for m in ("MAT_REAL_Fur_FoxOrange", "MAT_REAL_Fur_FoxCream", "MAT_REAL_Fur_FoxDark"):
+    for m in (MAIN, SEC, DARK):
         body.data.materials.append(R.get_mat(m))
 
     def regions(c, n):
@@ -237,12 +242,12 @@ def hands():
         d = (h1 - h0).normalized()
         rot = Vector((0, 0, -1)).rotation_difference(d).to_matrix()
         palm_c = h0 + d * 0.045
-        parts.append(ellipsoid("t", palm_c, (0.042, 0.03, 0.05), "MAT_REAL_Fur_FoxOrange", 16, 10, rot))
+        parts.append(ellipsoid("t", palm_c, (0.042, 0.03, 0.05), MAIN, 16, 10, rot))
         for k, fx in enumerate((-0.022, 0.0, 0.022)):
             fc = palm_c + rot @ Vector((fx * s, -0.004, -0.045))
-            parts.append(ellipsoid("t", fc, (0.014, 0.016, 0.022), "MAT_REAL_Fur_FoxOrange", 10, 6, rot))
+            parts.append(ellipsoid("t", fc, (0.014, 0.016, 0.022), MAIN, 10, 6, rot))
         tc = palm_c + rot @ Vector((-0.03 * s, -0.03, 0.0))
-        parts.append(ellipsoid("t", tc, (0.015, 0.016, 0.026), "MAT_REAL_Fur_FoxOrange", 10, 6,
+        parts.append(ellipsoid("t", tc, (0.015, 0.016, 0.026), MAIN, 10, 6,
                                rot @ Matrix.Rotation(math.radians(-35 * s), 3, "Y")))
         for p in parts[-5:]:
             vgroup_all(p, f"hand_{side}")
@@ -258,7 +263,7 @@ def shoes():
         upper = R.box("t", (0.135, 0.26, 0.085), (x, -0.025, 0.05), "MAT_REAL_Clothing_Black", bevel=0.035)
         toe = R.box("t", (0.13, 0.09, 0.06), (x, -0.155, 0.05), "MAT_REAL_Shoe_White", bevel=0.028)
         collar = R.box("t", (0.12, 0.12, 0.06), (x, 0.03, 0.12), "MAT_REAL_Clothing_Black", bevel=0.025)
-        stripe = R.box("t", (0.15, 0.12, 0.02), (x, -0.03, 0.075), "MAT_REAL_Fur_FoxOrange", bevel=0.008)
+        stripe = R.box("t", (0.15, 0.12, 0.02), (x, -0.03, 0.075), MAIN, bevel=0.008)
         lace = R.box("t", (0.05, 0.1, 0.012), (x, -0.08, 0.13), "MAT_REAL_Clothing_Gold", rot=(math.radians(-25), 0, 0))
         tread = R.box("t", (0.152, 0.312, 0.012), (x, -0.045, 0.0), "MAT_REAL_Rubber")
         for p in (sole, upper, toe, collar, stripe, lace, tread):
@@ -284,7 +289,7 @@ def tail():
     radii = [(0.035, 0.035), (0.075, 0.07), (0.105, 0.095), (0.11, 0.1), (0.085, 0.08), (0.02, 0.02)]
     edges = [(i, i + 1) for i in range(len(pts) - 1)]
     t = skin_chain(f"SK_REAL_{SPECIES}_Tail", pts, radii, edges, subsurf=2)
-    for m in ("MAT_REAL_Fur_FoxOrange", "MAT_REAL_Fur_FoxCream"):
+    for m in (MAIN, SEC):
         t.data.materials.append(R.get_mat(m))
     assign_mat_by(t, lambda c, n: 1 if c.z > 0.8 else 0)
     smooth(t)
@@ -302,7 +307,7 @@ def head_base():
         top = 1.0 - 0.06 * max(0.0, z)
         yy = y * (0.92 if y > 0 else 1.0)
         v.co = Vector((x * HEAD_R.x * cheek, yy * HEAD_R.y, z * HEAD_R.z * top)) + HEAD_C
-    ob = mesh_obj("t_head", bm, ["MAT_REAL_Fur_FoxOrange", "MAT_REAL_Fur_FoxCream"])
+    ob = mesh_obj("t_head", bm, [MAIN, SEC])
     assign_mat_by(ob, lambda c, n: 1 if (c.z < HEAD_C.z - 0.045 and c.y < 0.06) else 0)
     smooth(ob)
     return ob
@@ -310,7 +315,7 @@ def head_base():
 
 def muzzle():
     c = Vector((0, HEAD_C.y - 0.15, HEAD_C.z - 0.085))
-    m = ellipsoid("t_muzzle", c, (0.07, 0.075, 0.048), "MAT_REAL_Fur_FoxCream", 24, 12)
+    m = ellipsoid("t_muzzle", c, (0.07, 0.075, 0.048), SEC, 24, 12)
     for v in m.data.vertices:
         if v.co.y < c.y:      # taper the snout forward
             k = (c.y - v.co.y) / 0.075
@@ -374,7 +379,7 @@ def eye(fp, side):
         bx = (0.045 + 0.065 * t) * s
         p2, _ = fp.hit(bx, HEAD_C.z + 0.1 + 0.012 * math.sin(math.pi * t), 0.004)
         bpts.append(p2)
-    brow = tube(f"t_brow_{side}", bpts, 0.0065, "MAT_REAL_Fur_FoxDark", 6)
+    brow = tube(f"t_brow_{side}", bpts, 0.0065, DARK, 6)
     brow.vertex_groups.new(name=f"FX_Brow_{side}").add(list(range(len(brow.data.vertices))), 1.0, "REPLACE")
     parts.append(brow)
     return parts
@@ -410,8 +415,8 @@ def ears():
         axis = (tip - base)
         L = axis.length
         rot = Vector((0, 0, 1)).rotation_difference(axis.normalized()).to_matrix()
-        for (rad, thick, off, mat, nm) in ((0.085, 0.045, 0.0, "MAT_REAL_Fur_FoxOrange", "outer"),
-                                           (0.058, 0.02, -0.022, "MAT_REAL_Fur_FoxCream", "inner")):
+        for (rad, thick, off, mat, nm) in ((0.085, 0.045, 0.0, MAIN, "outer"),
+                                           (0.058, 0.02, -0.022, SEC, "inner")):
             bm = bmesh.new()
             bmesh.ops.create_cone(bm, cap_ends=True, segments=16, radius1=rad, radius2=0.004, depth=L * (1 if nm == "outer" else 0.86))
             for v in bm.verts:
@@ -421,7 +426,7 @@ def ears():
                 co = Vector((v.co.x * bulge, v.co.y * (thick / rad), z))
                 v.co = base + rot @ co + Vector((0, off, 0))
             uv = bm.loops.layers.uv.verify()
-            o = mesh_obj(f"t_ear_{nm}_{side}", bm, [mat, "MAT_REAL_Fur_FoxDark"])
+            o = mesh_obj(f"t_ear_{nm}_{side}", bm, [mat, DARK])
             if nm == "outer":
                 assign_mat_by(o, lambda c, n, b=base, L=L: 1 if (c - b).length > L * 0.72 else 0)
             smooth(o)
@@ -444,12 +449,12 @@ def fluff():
     parts = []
     specs = []
     for s in (1, -1):
-        specs += [((0.205 * s, -0.02, HEAD_C.z - 0.085), (0.75 * s, -0.1, -0.45), 0.055, 0.12, "MAT_REAL_Fur_FoxCream"),
-                  ((0.19 * s, 0.0, HEAD_C.z - 0.13), (0.55 * s, 0.0, -0.8), 0.045, 0.1, "MAT_REAL_Fur_FoxCream"),
-                  ((0.17 * s, 0.04, HEAD_C.z - 0.04), (0.9 * s, 0.2, -0.1), 0.05, 0.1, "MAT_REAL_Fur_FoxOrange")]
-    specs += [((0.0, -0.13, HEAD_C.z + 0.15), (0.1, -0.7, 0.55), 0.05, 0.11, "MAT_REAL_Fur_FoxOrange"),
-              ((0.055, -0.12, HEAD_C.z + 0.14), (0.35, -0.7, 0.45), 0.045, 0.09, "MAT_REAL_Fur_FoxOrange"),
-              ((-0.06, -0.12, HEAD_C.z + 0.14), (-0.3, -0.75, 0.5), 0.045, 0.1, "MAT_REAL_Fur_FoxOrange")]
+        specs += [((0.205 * s, -0.02, HEAD_C.z - 0.085), (0.75 * s, -0.1, -0.45), 0.055, 0.12, SEC),
+                  ((0.19 * s, 0.0, HEAD_C.z - 0.13), (0.55 * s, 0.0, -0.8), 0.045, 0.1, SEC),
+                  ((0.17 * s, 0.04, HEAD_C.z - 0.04), (0.9 * s, 0.2, -0.1), 0.05, 0.1, MAIN)]
+    specs += [((0.0, -0.13, HEAD_C.z + 0.15), (0.1, -0.7, 0.55), 0.05, 0.11, MAIN),
+              ((0.055, -0.12, HEAD_C.z + 0.14), (0.35, -0.7, 0.45), 0.045, 0.09, MAIN),
+              ((-0.06, -0.12, HEAD_C.z + 0.14), (-0.3, -0.75, 0.5), 0.045, 0.1, MAIN)]
     for i, (pos, d, r, L, mat) in enumerate(specs):
         bm = bmesh.new()
         bmesh.ops.create_cone(bm, cap_ends=True, segments=10, radius1=r, radius2=0.003, depth=L)
@@ -468,6 +473,8 @@ def head_mesh():
     mz = muzzle()
     fp = FaceProjector([hb, mz])
     parts = [hb, mz] + eye(fp, "l") + eye(fp, "r") + mouth_parts(fp) + fluff()
+    for fn in EXTRA_PARTS:
+        parts += fn(fp)
     for p in parts:
         if "head" not in p.vertex_groups:
             vgroup_all(p, "head")
@@ -516,12 +523,12 @@ def clothing(body):
             return 2                     # waistband rib
         return 0
     jacket = shell_from(body, f"CLO_REAL_{SPECIES}_Jacket_Casual", jacket_sel, 0.022,
-                        ["MAT_REAL_Clothing_Black", "MAT_REAL_Clothing_Cream", "MAT_REAL_Clothing_Black"], jacket_mat)
+                        [JACKET, HOODIE, JACKET], jacket_mat)
 
     def pants_sel(c):
         return c.z < 0.665 and c.z > 0.13 and not (abs(c.x) > 0.25)
     pants = shell_from(body, f"CLO_REAL_{SPECIES}_Pants_Joggers", pants_sel, 0.016,
-                       ["MAT_REAL_Clothing_Black", "MAT_REAL_Clothing_Gold"],
+                       [PANTS, ACCENT],
                        lambda c, n: 1 if (abs(n.x) > 0.8 and abs(c.y) < 0.018 and 0.18 < c.z < 0.6) else 0)
     # hood roll + zipper tape + crown badge
     extra = []
@@ -537,7 +544,7 @@ def clothing(body):
         ang = math.atan2(y, x)
         back = 0.5 + 0.5 * math.sin(ang)
         v.co = Vector((x * (0.135 + 0.02 * back), y * (0.125 + 0.05 * back) + 0.02 * back, z * (0.045 + 0.03 * back) + 0.985))
-    hr = mesh_obj("t_hood", bm, ["MAT_REAL_Clothing_Cream"])
+    hr = mesh_obj("t_hood", bm, [HOODIE])
     smooth(hr)
     extra.append(hr)
     for s in (1, -1):
@@ -1037,7 +1044,12 @@ def build_fox():
     sh = shoes()
     tl = tail()
     clo = clothing(body)
+    extras = []
+    for fn in BODY_EXTRAS:
+        extras += fn()
     auto_skin(body, BODY_BONES)
+    for ex in extras:
+        auto_skin(ex, BODY_BONES)
     auto_skin(tl, TAIL_BONES, power=5)
     for g in clo:
         if g.name.endswith("Details"):
@@ -1045,7 +1057,7 @@ def build_fox():
             pass
         transfer_weights(body, g)
     keys = expressions(hd)
-    meshes = [body, hd, hn, sh, tl] + clo
+    meshes = [body, hd, hn, sh, tl] + clo + extras
     for m in meshes:
         R.ensure_uv(m)
         bind(m, arm)

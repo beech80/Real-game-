@@ -1,0 +1,63 @@
+{
+  "errors": [],
+  "warnings": [],
+  "object_count": 8,
+  "triangles": 22516,
+  "bones": 30,
+  "shape_keys": [
+    "Happy",
+    "Excited",
+    "Sad",
+    "Angry",
+    "Surprised",
+    "Worried",
+    "Confused",
+    "Focused",
+    "Tired",
+    "Thinking",
+    "Confident",
+    "Blink_L",
+    "Blink_R",
+    "Look_Left",
+    "Look_Right",
+    "Look_Up",
+    "Look_Down",
+    "Mouth_Open",
+    "Mouth_Smile",
+    "Mouth_Frown",
+    "Mouth_Narrow",
+    "Mouth_Wide"
+  ],
+  "actions": [
+    "ANIM_REAL_Cow_Idle",
+    "ANIM_REAL_Cow_Walk",
+    "ANIM_REAL_Cow_Run",
+    "ANIM_REAL_Cow_Sprint",
+    "ANIM_REAL_Cow_Jump",
+    "ANIM_REAL_Cow_Sit",
+    "ANIM_REAL_Cow_Drive",
+    "ANIM_REAL_Cow_PhoneUse",
+    "ANIM_REAL_Cow_Wave",
+    "ANIM_REAL_Cow_Talk",
+    "ANIM_REAL_Cow_Pickup",
+    "ANIM_REAL_Cow_Carry"
+  ],
+  "deformation_tests": {
+    "arms_up": {
+      "max_edge_stretch": 4.243,
+      "pass": false
+    },
+    "deep_squat": {
+      "max_edge_stretch": 2.268,
+      "pass": true
+    },
+    "elbows": {
+      "max_edge_stretch": 1.512,
+      "pass": true
+    },
+    "neck_turn": {
+      "max_edge_stretch": 2.005,
+      "pass": true
+    }
+  }
+}
