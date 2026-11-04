@@ -1,0 +1,19 @@
+{
+  "errors": [],
+  "warnings": [],
+  "object_count": 30,
+  "triangles": 9696,
+  "sockets": [
+    "SOCKET_Interact_Bills",
+    "SOCKET_Interact_Cook",
+    "SOCKET_Interact_Eat",
+    "SOCKET_Interact_ExitDoor",
+    "SOCKET_Interact_Fridge",
+    "SOCKET_Interact_Phone",
+    "SOCKET_Interact_Shower",
+    "SOCKET_Interact_Sleep",
+    "SOCKET_Interact_Storage",
+    "SOCKET_Interact_Wardrobe",
+    "SOCKET_Spawn_PlayerHome"
+  ]
+}

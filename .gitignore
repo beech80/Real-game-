@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.blend1
+*.blend@
+/Tests/tmp/
+# per-frame review images (the composed *_turnaround/_expressions/_animations/_deformation sheets are committed)
+/Renders/Characters/*/turn_*.png
+/Renders/Characters/*/expr_*.png
+/Renders/Characters/*/anim_*.png
+/Renders/Characters/*/deform_*.png

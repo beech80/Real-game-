@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><title>REAL GLB check</title>
+<style>html,body{margin:0;background:#0a0e1c}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/three/build/three.module.js","three/addons/":"/three/examples/jsm/"}}</script>
+</head><body><script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const P=new URLSearchParams(location.search);
+const W=640,H=760, r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+r.setSize(W,H); r.outputColorSpace=THREE.SRGBColorSpace; document.body.appendChild(r.domElement);
+const s=new THREE.Scene(); s.background=new THREE.Color(0x1a2240);
+const cam=new THREE.PerspectiveCamera(30,W/H,0.05,100); cam.position.set(1.6,1.1,3.4); cam.lookAt(0,0.8,0);
+s.add(new THREE.HemisphereLight(0xffffff,0x334466,1.6)); const d=new THREE.DirectionalLight(0xffeedd,2.2); d.position.set(2,4,3); s.add(d);
+const out={ok:false};
+new GLTFLoader().load(P.get('f'),g=>{
+  s.add(g.scene); const mixer=new THREE.AnimationMixer(g.scene);
+  let bones=0, morphs=new Set(), skinned=0;
+  g.scene.traverse(o=>{ if(o.isBone) bones++; if(o.isSkinnedMesh) skinned++; if(o.morphTargetDictionary) Object.keys(o.morphTargetDictionary).forEach(k=>morphs.add(k)); });
+  out.bones=bones; out.skinned=skinned; out.morphs=[...morphs]; out.clips=g.animations.map(a=>a.name+':'+a.duration.toFixed(2));
+  const clip=g.animations.find(a=>a.name.includes(P.get('clip')||'Walk'));
+  if(clip){ const act=mixer.clipAction(clip); act.play(); mixer.setTime(parseFloat(P.get('t')||'0.27')); }
+  const ex=P.get('expr'); if(ex) g.scene.traverse(o=>{ if(o.morphTargetDictionary && ex in o.morphTargetDictionary) o.morphTargetInfluences[o.morphTargetDictionary[ex]]=1; });
+  const box=new THREE.Box3().setFromObject(g.scene); out.box3_unskinned_height=+(box.max.y-box.min.y).toFixed(3); // three.js Box3 ignores skinning; scale is verified in verify_exports.py
+  r.render(s,cam); out.ok=true; window.__out=out;
+},undefined,e=>{out.error=String(e); window.__out=out;});
+</script></body></html>

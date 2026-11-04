@@ -1,0 +1,22 @@
+{
+  "errors": [],
+  "warnings": [
+    "unapplied scale: ENV_REAL_ClubExterior_FarLOD (2.5, 2.5, 2.5)"
+  ],
+  "object_count": 1801,
+  "mesh_objects": 1801,
+  "unique_meshes": 124,
+  "sockets": 92,
+  "socket_names_sample": [
+    "SOCKET_Door_ApartmentLobby",
+    "SOCKET_Door_CareerCenter",
+    "SOCKET_Door_Clothing",
+    "SOCKET_Door_CoffeeShop",
+    "SOCKET_Door_Diner",
+    "SOCKET_Door_Entry",
+    "SOCKET_Door_FreshMart",
+    "SOCKET_Door_Gym",
+    "SOCKET_Door_Office",
+    "SOCKET_Door_Stockroom"
+  ]
+}
