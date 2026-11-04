@@ -415,21 +415,28 @@ function findInteraction() {
   if (s.quest === 'shift' && s.shift && s.shift.register >= s.shift.need.register && s.shift.stock < s.shift.need.stock) {
     for (let a = 1; a <= 5; a++) { const so = sock(`Interact_StockShelf_A${a}`); if (so && Math.abs(P.x - so.x) < 1.8 && P.y > 30 && P.y < 42) { const it = game.interaction({ key: `Interact_StockShelf_A${a}` }); if (it) best = it; } }
   }
-  if (near(npcs.Rosa && npcs.Rosa.pos, 2.4)) best = { label: s.quest === 'job' ? 'Ask about the job' : 'Talk to Rosa', run: () => game.talkManager() };
+  if (near(npcs.Rosa && npcs.Rosa.pos, 2.4)) best = { label: s.quest === 'job' ? 'Ask about the job' : 'Talk to Rosa', run: () => game.talkManager(), npc: npcs.Rosa };
   const jax = npcs.Jax;
   if (jax && !jax.hidden && near(jax.pos, 2.8)) {
-    if (s.quest === 'jax1') best = { label: 'Talk to Jax', run: () => game.jax1() };
-    else if (s.flags.jaxStealDue && !s.flags.jaxSteal) best = { label: 'Talk to Jax', run: () => game.jaxSteal() };
-    else if (s.flags.jax3due && !s.flags.jax3) best = { label: 'Talk to Jax', run: () => game.jax3() };
+    if (s.quest === 'jax1') best = { label: 'Talk to Jax', run: () => game.jax1(), npc: jax };
+    else if (s.flags.jaxStealDue && !s.flags.jaxSteal) best = { label: 'Talk to Jax', run: () => game.jaxSteal(), npc: jax };
+    else if (s.flags.jax3due && !s.flags.jax3) best = { label: 'Talk to Jax', run: () => game.jax3(), npc: jax };
   }
-  if (near(npcs.Counselor && npcs.Counselor.pos, 2.4)) best = s.flags.housed ? { label: 'Talk to Mr. Okafor', run: () => UI.say('Mr. Okafor · Community Center', pick(['Every career starts with one application.', 'The career board inside shows what each job needs. Every one of them is open to you.', 'You’re doing better than you think.'])) } : { label: 'Ask for help', run: () => game.housing() };
+  if (near(npcs.Counselor && npcs.Counselor.pos, 2.4)) best = s.flags.housed ? { label: 'Talk to Mr. Okafor', run: () => UI.say('Mr. Okafor · Community Center', pick(['Every career starts with one application.', 'The career board inside shows what each job needs. Every one of them is open to you.', 'You’re doing better than you think.'])) } : { label: 'Ask for help', run: () => game.housing(), npc: npcs.Counselor };
   if (near(npcs.Dee && npcs.Dee.pos, 2)) best = best || { label: 'Talk to Dee', run: () => UI.say('Dee · Daily Grind', 'Best coffee on Main St. Come in any time.') };
   return best;
 }
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
+function faceNPC(n) {
+  if (!n) return;
+  const dx = n.pos.x - player.pos.x, dy = n.pos.y - player.pos.y;
+  player.heading = Math.atan2(dx, dy); player.apply();
+  fcam.yaw = -player.heading + 0.45; fcam.pitch = 0.18; fcam.dist = Math.min(fcam.dist, 4.2);
+}
 async function doInteract() {
   if (mode !== 'play' || busy() || !nearest) return;
   audio.play('click');
+  if (nearest.npc) faceNPC(nearest.npc);
   game.busy = true; input.enabled = false; UI.interact(null);
   try { await nearest.run(); } finally { game.busy = false; input.enabled = true; }
 }
@@ -483,7 +490,7 @@ function storyTriggers() {
   if (s.flags.jaxStealDue && !s.flags.jaxSteal && !s.flags.jaxStealPlaced && s.time > 11) { const d = sock('Door_Clothing'); placeJax(d.x - 2.2, d.y + 1.6, Math.PI); s.flags.jaxStealPlaced = true; }
   if (s.flags.jax3due && !s.flags.jax3 && !s.flags.jax3placed) { const hs = sock('NPC_Jax_Hangout'); placeJax(hs.x, hs.y); s.flags.jax3placed = true; }
   // Jax starts the first conversation himself when you walk past
-  if (s.quest === 'jax1' && !J.hidden && near(J.pos, 4) && !busy() && !s.flags.jaxStarted) { s.flags.jaxStarted = true; nearest = { run: () => game.jax1() }; doInteract(); }
+  if (s.quest === 'jax1' && !J.hidden && near(J.pos, 4) && !busy() && !s.flags.jaxStarted) { s.flags.jaxStarted = true; nearest = { run: () => game.jax1(), npc: J }; doInteract(); }
 }
 
 // ------------------------------------------------------------------------------------------ loop
@@ -580,6 +587,18 @@ window.REAL = {
   npcPos: (n) => npcs[n] && !npcs[n].hidden && { ...npcs[n].pos },
   wildSign: (i) => ({ ...W.wild.signs[i] }), club: () => ({ ...CLUB }),
   skipPrologue: async () => { if (game.state.chapter === 'prologue') { game.state.flags.council = true; game.busy = false; input.enabled = true; await startWilderness(); } },
+  // test-only: jump to a story checkpoint (skips the parts already covered by the full saga run)
+  devJump: async (stage) => {
+    const s = game.state;
+    if (s.chapter === 'prologue') { s.flags.council = true; game.busy = false; input.enabled = true; leaveClubSpace(); $('#hud').classList.remove('prologue'); }
+    Object.assign(s, { chapter: 'city', location: 'district', money: 100, time: 8.5 });
+    Object.assign(s.flags, { housed: true, phone: true, readFirstSign: true, path: 'road' });
+    s.bills = [{ id: 'phone1', name: 'Phone plan', amount: 25, due: s.day + 4, paid: false }, { id: 'rent1', name: 'Rent — The Starter Apartments (week 2)', amount: 120, due: s.day + 6, paid: false }];
+    if (stage === 'hired') { s.flags.hired = true; s.jobs = ['cashier']; s.job = { id: 'cashier', title: 'Cashier', employer: 'Fresh Mart', rate: 15, hours: 4 }; s.quest = 'clockin'; }
+    fcam.mode = 'follow'; mode = 'play'; UI.showHUD(true);
+    const d = sock('Spawn_StoreEntry'); player.pos = { x: d.x, y: d.y + 2 }; player.apply();
+  },
+  sheets: () => [...document.querySelectorAll('#modal .sh-title')].map((e) => e.textContent),
   game: () => game, setTime: (h) => { game.state.time = h; },
   quality: (q) => engine.setQuality(q),
   life: () => game.life(),

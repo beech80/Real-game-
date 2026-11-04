@@ -47,6 +47,14 @@ let step = 0, p;
   await p.click('#btn-new'); await p.waitForSelector('#cr-loading', { state: 'hidden' });
   await p.fill('#cr-name', 'Nova'); await p.click('#cr-go');
 
+  if (process.env.START === 'ending') {
+    await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 90000 });
+    await ev(() => window.REAL.devJump('hired')); await sleep(1500);
+  }
+  if (process.env.START === 'hired') {
+    await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 90000 });
+    await ev(() => window.REAL.devJump('hired')); await sleep(1500);
+  } else if (process.env.START !== 'ending') {
   // PROLOGUE
   await p.waitForFunction(() => window.REAL.mode === 'play' && window.REAL.state.location === 'club', null, { timeout: 90000 });
   await waitIdle(); await sleep(1500); await shot('prologue_club_hall');
@@ -94,10 +102,14 @@ let step = 0, p;
   await shot('interview'); await dialog('Listen, check'); await dialog('Message the manager'); await dialog('To earn my own money'); await dialog();
   console.log('hired:', await ev(() => window.REAL.state.flags.hired));
 
+  }
+  if (process.env.START !== 'ending') {
   // first shift
   await interact(() => window.REAL.teleport('Interact_TimeClock'));
+  console.log('sheets at clock:', JSON.stringify(await ev(() => window.REAL.sheets())));
   const early = await p.$eval('.clockface', (e) => 60 - parseInt(e.firstChild.textContent.split(':')[1], 10));
-  await p.click(`.sheet .opt:has-text("${early} minutes")`); await sleep(500);
+  await p.click(`.sheet .opt:text-is("${early} minutes")`); await sleep(700);
+  console.log('sheets after clock:', JSON.stringify(await ev(() => window.REAL.sheets())), await ev(() => window.REAL.state.quest));
   await interact(() => window.REAL.teleport('Interact_Register_01'));
   for (const it of await p.$$('.item')) { await it.click(); await sleep(120); }
   await sleep(800); await settle();
@@ -111,7 +123,8 @@ let step = 0, p;
   const [tt, paid] = [...txt.matchAll(/\$([\d.]+)/g)].map((m) => parseFloat(m[1]));
   let need = Math.round((paid - tt) * 100);
   for (const [v, lab] of [[2000, '$20'], [1000, '$10'], [500, '$5'], [100, '$1'], [25, '25¢'], [10, '10¢'], [5, '5¢'], [1, '1¢']]) while (need >= v && await p.$(`.cash:text-is("${lab}")`)) { await p.click(`.cash:text-is("${lab}")`); need -= v; }
-  await p.click('button.primary:has-text("Give change")'); await sleep(700);
+  await p.click('button.primary:has-text("Give change")'); await sleep(900);
+  console.log('sheets after register:', JSON.stringify(await ev(() => window.REAL.sheets())), 'quest', await ev(() => window.REAL.state.quest), JSON.stringify(await ev(() => window.REAL.state.shift)));
   for (let i = 0; i < 2; i++) {
     const aisle = await ev(() => window.REAL.state.shift.product[1]);
     await ev((a) => window.REAL.teleport(`Interact_StockShelf_A${a}`), aisle); await sleep(800); await p.click('#btn-interact'); await sleep(700); await settle();
@@ -155,9 +168,10 @@ let step = 0, p;
   await p.click('button.ghost:has-text("Home")'); await p.click('.app:has-text("Learn")'); await sleep(500); await shot('learn_mastery');
   await p.click('.card:has-text("Math")'); await sleep(400); await shot('learn_math_skills'); await p.click('.sh-x'); await sleep(300);
 
+  }
   // CHAPTERS 11–12 — the invitation, the decision, the epilogue (invitation forced: reaching Life Level 6 takes several in-game days)
   await ev(() => { const g = window.REAL.game(); g.state.flags.invited = g.state.day; g.state.quest = 'invite'; });
-  await ev(() => window.REAL.game().hooks.goToClub());
+  await ev(() => { window.REAL.game().hooks.goToClub(); });
   await p.waitForSelector('#dialog:not([hidden])', { timeout: 90000 }); await sleep(600); await shot('invitation');
   await dialog(); await p.waitForSelector('#dialog .d-choice', { timeout: 90000 }); await shot('real_decision');
   await dialog('Rebuild'); await dialog();
