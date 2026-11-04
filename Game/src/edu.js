@@ -11,6 +11,7 @@ export const SUBJECTS = {
   cursive: { name: 'Cursive', icon: '🖋️' },
   math: { name: 'Math', icon: '➗' },
   finance: { name: 'Money', icon: '💰' },
+  science: { name: 'Science', icon: '🔬' },
   thinking: { name: 'Critical thinking', icon: '🧠' },
 };
 

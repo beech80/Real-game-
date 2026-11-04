@@ -15,20 +15,20 @@ const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const r2 = (v) => Math.round(v * 100) / 100;
 
 export const BUSINESSES = {
-  coffee: { name: 'Coffee cart', icon: '☕', startup: 350, unit: 1.2, price: 3.5, demand: 42, perish: true, desc: 'Cart $250 + espresso kit $100. Sells cups of coffee.' },
-  bakery: { name: 'Bake stall', icon: '🥐', startup: 300, unit: 0.9, price: 2.5, demand: 50, perish: true, desc: 'Stall $200 + oven $100. Sells pastries.' },
-  bikes: { name: 'Bike repair', icon: '🚲', startup: 400, unit: 4, price: 15, demand: 8, perish: false, desc: 'Tools $300 + stand $100. Fixes bikes.' },
+  coffee: { name: 'Coffee cart', icon: '☕', startup: 2000, unit: 1.2, price: 3.5, demand: 60, perish: true, desc: 'Cart $1,400 + espresso machine $600. Sells cups of coffee.' },
+  bakery: { name: 'Bake stall', icon: '🥐', startup: 2500, unit: 0.9, price: 2.5, demand: 50, perish: true, desc: 'Stall $1,500 + oven $1,000. Sells pastries.' },
+  bikes: { name: 'Bike repair', icon: '🚲', startup: 3000, unit: 4, price: 15, demand: 8, perish: false, desc: 'Workshop tools $2,200 + stand $800. Fixes bikes.' },
 };
 export const VEHICLES = {
   bike: { name: 'City bike', icon: '🚲', price: 150, weekly: 0, desc: 'No fuel, no insurance. Free rides between districts. Good exercise.' },
   scooter: { name: 'Electric scooter', icon: '🛵', price: 900, weekly: 14, desc: 'Charging $4/week + insurance $10/week.' },
-  car: { name: 'Used car', icon: '🚗', price: 4000, weekly: 43, desc: 'Fuel $15/week + insurance $28/week + an oil change every 10 days.' },
+  car: { name: 'Used car', icon: '🚗', price: 2500, weekly: 43, desc: 'Fuel $15/week + insurance $28/week + an oil change every 10 days.' },
 };
 export const HOMES = {
-  starter: { name: 'The Starter Apartments', district: 'district', rent: 120, door: 'Door_ApartmentLobby' },
-  loft: { name: 'Midtown Lofts', district: 'midtown', rent: 210, door: 'lofts', life: 4 },
-  heights: { name: 'Heights Residences', district: 'heights', rent: 380, door: 'residences', life: 8 },
-  owned: { name: 'Your home in The Heights', district: 'heights', rent: 0, door: 'residences', price: 40000, down: 4000, mortgage: 210, life: 10 },
+  starter: { name: 'The Starter Apartments', district: 'district', rent: 300, door: 'Door_ApartmentLobby' },
+  loft: { name: 'Midtown Lofts', district: 'midtown', rent: 450, door: 'lofts', life: 4 },
+  heights: { name: 'Heights Residences', district: 'heights', rent: 700, door: 'residences', life: 8 },
+  owned: { name: 'Your home in The Heights', district: 'heights', rent: 0, door: 'residences', price: 60000, down: 6000, mortgage: 520, life: 10 },
 };
 export const PET_TYPES = { puppy: { name: 'Puppy', icon: '🐶', color: 0xc98a4a }, kitten: { name: 'Kitten', icon: '🐱', color: 0x8a8d96 }, bunny: { name: 'Bunny', icon: '🐰', color: 0xf1ece4 } };
 export const PET_NAMES = ['Biscuit', 'Pepper', 'Mochi', 'Scout', 'Juniper', 'Pip', 'Waffles', 'Luna'];
@@ -124,13 +124,13 @@ export function installExpansion(Game) {
       h('p', { class: 'lead' }, 'Starting District ⇄ Midtown ⇄ Opportunity District ⇄ The Heights ⇄ The Club'),
       h('div', { class: 'bill-list' }, stops.map(([id, n, lv, tag]) => h('div', { class: 'bill' + (id === here ? ' paid' : '') },
         h('div', {}, h('b', {}, n), h('small', {}, id === here ? 'You are here.' : ll >= lv ? tag : `Grow to Life Level ${lv} to find opportunities here.`)),
-        id === here ? h('span', { class: 'ok' }, '●') : ll >= lv ? h('button', { class: 'primary sm', onclick: () => close(id) }, v ? `${v.icon} Go` : '$2.75') : h('span', { class: 'amt' }, `LL ${lv}`))),
+        id === here ? h('span', { class: 'ok' }, '●') : ll >= lv ? h('button', { class: 'primary sm', onclick: () => close(id) }, v ? `${v.icon} Go` : '$2.00') : h('span', { class: 'amt' }, `LL ${lv}`))),
         h('div', { class: 'bill' }, h('div', {}, h('b', {}, '♛ The Club'), h('small', {}, s.flags.invited && !s.ending ? 'You have been invited.' : s.ending ? 'You’ve made your decision. The city is your home.' : 'Members and invited guests only.')),
           s.flags.invited && !s.ending ? h('button', { class: 'primary sm', onclick: () => close('club') }, 'Ride') : h('span', { class: 'amt' }, '—'))),
       h('p', { class: 'tip' }, v ? `You own a ${v.name.toLowerCase()}: no bus fare.` : 'Buses run every 20 minutes from 6:00 AM to 11:40 PM. A bus pass costs less than a car, but a car can save time.')), { icon: '🚌' });
     this.edu.record('read.signs', true, { ctx: 'bus' });
     if (!go) return;
-    if (!v) { if (s.money < 2.75) { UI.toast('The fare is $2.75. You don’t have enough.', 'warn'); return; } this.spend(2.75, 'Bus fare'); }
+    if (!v) { if (s.money < 2) { UI.toast('The fare is $2. You don’t have enough.', 'warn'); return; } this.spend(2, 'Bus fare'); }
     if (go === 'club') { await this.hooks.goToClub(); return; }
     this.advance(v && s.vehicle.type === 'car' ? 0.25 : 0.4);
     if (v && s.vehicle.type === 'car') s.vehicle.km = (s.vehicle.km || 0) + 8;
@@ -181,13 +181,13 @@ export function installExpansion(Game) {
       h('p', { class: 'lead' }, `You need ${money(need)}. You have ${money(s.money)}.`),
       h('div', { class: 'opts' },
         h('button', { class: 'opt', disabled: s.money < need, onclick: () => close('cash') }, `Pay with savings (${money(need)})`),
-        h('button', { class: 'opt', disabled: s.money < 100, onclick: () => close('loan') }, `Pay $100 now + small business loan of ${money(need - 100)} (10% interest)`)),
-      h('p', { class: 'tip' }, `A loan lets you start sooner, but interest means you pay back more: ${money(r2((need - 100) * 1.1))} in total over 10 weekly payments.`)), { icon: '🏦' });
+        h('button', { class: 'opt', disabled: s.money < 200, onclick: () => close('loan') }, `Pay $200 now + small business loan of ${money(need - 200)} (10% interest, 20 weekly payments)`)),
+      h('p', { class: 'tip' }, `A loan lets you start sooner, but interest means you pay back more: ${money(r2((need - 200) * 1.1))} in total over 20 weekly payments.`)), { icon: '🏦' });
     if (!how) return;
     if (how === 'cash') this.spend(need, `${B.name}: startup + license`);
     else {
-      this.spend(100, `${B.name}: down payment`); const owed = r2((need - 100) * 1.1);
-      s.bills.push({ id: 'bizloan1', name: 'Business loan payment (1 of 10)', amount: r2(owed / 10), due: s.day + 7, paid: false, recur: r2(owed / 10), period: 7, left: 9 });
+      this.spend(200, `${B.name}: down payment`); const owed = r2((need - 200) * 1.1);
+      s.bills.push({ id: 'bizloan1', name: 'Business loan payment', amount: r2(owed / 20), due: s.day + 7, paid: false, recur: r2(owed / 20), period: 7, left: 19 });
       this.edu.record('fin.credit', true, { ctx: 'business' });
       s.bizLoan = owed;
     }
@@ -278,11 +278,11 @@ export function installExpansion(Game) {
     const how = await UI.sheet(v.name, (close) => h('div', { class: 'act' },
       h('div', { class: 'opts' },
         h('button', { class: 'opt', disabled: s.money < v.price, onclick: () => close('cash') }, `Pay ${money(v.price)} in full`),
-        finance ? h('button', { class: 'opt', disabled: s.money < 500, onclick: () => close('loan') }, 'Finance: $500 down + $90/week for 45 weeks') : null),
-      finance ? h('p', { class: 'tip' }, `Financing total: $500 + 45 × $90 = ${money(500 + 45 * 90)}. That’s ${money(500 + 45 * 90 - v.price)} more than the price — the cost of borrowing.`) : null,
+        finance ? h('button', { class: 'opt', disabled: s.money < 300, onclick: () => close('loan') }, 'Finance: $300 down + $55/week for 45 weeks') : null),
+      finance ? h('p', { class: 'tip' }, `Financing total: $300 + 45 × $55 = ${money(300 + 45 * 55)}. That’s ${money(300 + 45 * 55 - v.price)} more than the price — the cost of borrowing.`) : null,
       s.money < v.price && !finance ? h('p', { class: 'warnline' }, `You need ${money(v.price - s.money)} more. Save up and come back.`) : null), { icon: v.icon });
     if (!how) return;
-    if (how === 'loan') { await runTask(G, { skill: 'fin.credit', q: 'Financing costs $4,550 in total. The cash price is $4,000. How much is the interest?', a: '$550', o: ['$550', '$4,550', '$90', '$500'] }, 'vehicle', 'Read the loan', '📄'); this.spend(500, 'Car down payment'); s.bills.push({ id: 'carloan1', name: 'Car loan payment', amount: 90, due: s.day + 7, paid: false, recur: 90, period: 7, left: 44 }); }
+    if (how === 'loan') { await runTask(G, { skill: 'fin.credit', q: 'Financing costs $2,775 in total. The cash price is $2,500. How much is the interest?', a: '$275', o: ['$275', '$2,775', '$55', '$300'], why: '$2,775 − $2,500 = $275. That extra is the cost of borrowing.' }, 'vehicle', 'Read the loan', '📄'); this.spend(300, 'Car down payment'); s.bills.push({ id: 'carloan1', name: 'Car loan payment', amount: 55, due: s.day + 7, paid: false, recur: 55, period: 7, left: 44 }); }
     else this.spend(v.price, v.name);
     if (s.vehicle) s.bills = s.bills.filter((b) => !(b.id.startsWith('veh') && !b.paid));
     s.vehicle = { type: c, bought: s.day, service: s.day, km: 0 };
@@ -310,8 +310,8 @@ export function installExpansion(Game) {
       if (s.money < H.down) { UI.toast(`Save ${money(H.down - s.money)} more for the down payment.`, 'warn'); return; }
       this.spend(H.down, 'Home down payment');
     } else {
-      await UI.say(`Leasing office · ${H.name}`, `Rent is ${money(H.rent)} a week. We ask that you earn at least twice the rent each week. You earned ${money(weekIncome)} in the last 7 days.`);
-      if (weekIncome < H.rent * 2) { await UI.say(`Leasing office · ${H.name}`, `Come back when you earn ${money(H.rent * 2)} a week. A second job or a better career will get you there.`); return; }
+      await UI.say(`Leasing office · ${H.name}`, `Rent is ${money(H.rent)} a week. We ask that you earn at least one and a half times the rent each week. You earned ${money(weekIncome)} in the last 7 days.`);
+      if (weekIncome < H.rent * 1.5) { await UI.say(`Leasing office · ${H.name}`, `Come back when you earn ${money(H.rent * 1.5)} a week. A second job or a better career will get you there.`); return; }
       await runTask(G, T.clause, 'lease', 'Read the lease', '📄');
       if (s.money < H.rent) { UI.toast(`You need a deposit of ${money(H.rent)}.`, 'warn'); return; }
       this.spend(H.rent, `${H.name}: deposit`);
@@ -546,7 +546,7 @@ export function installExpansion(Game) {
   /** Jax's advice: sometimes good, sometimes misleading. The skill is judging it, not ignoring him. */
   const JAX_TIPS = [
     { t: 'Buy the 20-lb bag of rice instead of the little ones. Way cheaper per meal.', good: true, why: 'Unit price: the big bag costs less per pound. If you’ll use it before it spoils, it’s a good tip.', skill: 'think.compare' },
-    { t: 'Get the weekly bus pass. You ride every day anyway.', good: true, why: '7 rides × $2.75 = $19.25. If the pass costs less than that, it saves money.', skill: 'think.compare' },
+    { t: 'Get the weekly bus pass. You ride every day anyway.', good: true, why: '7 rides × $2 = $14. If the pass costs less than that, it saves money.', skill: 'think.compare' },
     { t: 'Skip the phone bill this week. Nobody pays on time.', good: false, why: 'Late bills add fees and hurt your credit score. “Nobody does it” isn’t evidence.', skill: 'think.consequence' },
     { t: 'My buddy’s new coin is going to the moon. Put your rent money in. Guaranteed!', good: false, why: '“Guaranteed” returns don’t exist, and rent money is money you can’t afford to lose.', skill: 'think.risk' },
     { t: 'Take that night class at City Tech. Brightline hires people who finish it.', good: true, why: 'It costs now but leads to higher pay. That’s long-term thinking.', skill: 'think.longterm' },

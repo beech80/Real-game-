@@ -54,6 +54,16 @@ export const CAREERS = [
   { id: 'doctor', tier: 3, title: 'Medical professional', employer: 'Heights Medical', rate: 60, where: 'The Heights', req: { course: 'med', life: 11, skills: { 'read.documents': 3 } }, desc: 'Years of study to care for others.' },
   { id: 'architect', tier: 3, title: 'Architect', employer: 'Form Studio', rate: 48, where: 'The Heights', req: { course: 'arch', life: 10, skills: { 'math.multiply': 3 } }, desc: 'Buildings, geometry and clients.' },
   { id: 'lawyer', tier: 3, title: 'Lawyer', employer: 'Heights Legal', rate: 55, where: 'The Heights', req: { course: 'law', life: 11, skills: { 'read.documents': 3 } }, desc: 'Contracts, evidence and argument.' },
+  // careers that grow out of adventures (the adventure character becomes your boss)
+  { id: 'racemech', tier: 1, title: 'Race mechanic', employer: 'Rita’s Garage', rate: 19, where: 'Starting District', adv: 'race', req: { life: 3, flag: 'adv_race_1' }, desc: 'Tune cars, fix engines, prep racers.' },
+  { id: 'firefighter', tier: 1, title: 'Firefighter cadet', employer: 'Station 7', rate: 18, where: 'Starting District', adv: 'rescue', req: { life: 3, flag: 'adv_rescue_2' }, desc: 'Safety checks, drills and community rescues.' },
+  { id: 'vettech', tier: 1, title: 'Animal care assistant', employer: 'Brighter Park Pet Club', rate: 17, where: 'Starting District', adv: 'pets', req: { flag: 'adv_pets_1' }, desc: 'Feed, exercise and care for animals.' },
+  { id: 'medasst', tier: 1, title: 'Medical assistant', employer: 'City Clinic', rate: 19, where: 'Midtown', adv: 'medical', req: { life: 4, flag: 'adv_medical_2' }, desc: 'Check-in, supplies and patient care.' },
+  { id: 'detective', tier: 1, title: 'Junior investigator', employer: 'City Detective Agency', rate: 20, where: 'Starting District', adv: 'mystery', req: { life: 4, flag: 'adv_mystery_1' }, desc: 'Find facts, interview people, solve cases.' },
+  { id: 'robotech', tier: 2, title: 'Robotics technician', employer: 'Opportunity Robo Lab', rate: 26, where: 'Opportunity District', adv: 'robots', req: { life: 6, flag: 'adv_robots_3' }, desc: 'Build, program and test robots.' },
+  { id: 'chef', tier: 2, title: 'Chef', employer: 'Corner Kitchen', rate: 27, where: 'Midtown', adv: 'culinary', req: { life: 6, flag: 'adv_culinary_2' }, desc: 'Create menus, run the kitchen, train cooks.' },
+  { id: 'designer', tier: 2, title: 'Product designer', employer: 'Volt Works Lab', rate: 29, where: 'Opportunity District', adv: 'inventor', req: { life: 7, flag: 'adv_inventor_2' }, desc: 'Invent, prototype and test new products.' },
+  { id: 'contractor', tier: 2, title: 'Contractor', employer: 'Build Right Co', rate: 30, where: 'Opportunity District', adv: 'construction', req: { life: 7, flag: 'adv_construction_3' }, desc: 'Plan and lead building projects.' },
   { id: 'owner', tier: 4, title: 'Business owner', employer: 'Your own company', rate: 0, where: 'Business app', req: { life: 6, skills: { 'fin.budget': 3 } }, desc: 'Build something that’s yours. Start with a business plan in the Business app.' },
 ];
 export const COURSE_NAMES = { code: 'Intro to Programming (City Tech)', trades: 'Electrical Safety (City Tech)', acct: 'Accounting Basics (City Tech)', eng: 'Engineering Design (Heights College)', med: 'Pre-Medicine (Heights College)', arch: 'Architecture Studio (Heights College)', law: 'Law Foundations (Heights College)' };
@@ -62,8 +72,8 @@ export const TIER_NAMES = ['Starter work', 'Skilled work', 'Careers', 'Professio
 export function careerStatus(c, s, edu, ll) {
   const r = c.req, missing = [];
   if (r.shifts && s.stats.shifts < r.shifts) missing.push(`${r.shifts} shifts worked (${s.stats.shifts} so far)`);
-  if (r.life && ll < r.life) missing.push(`Life Level ${r.life}`);
-  if (r.flag && !s.flags[r.flag]) missing.push('A tip about the opening');
+  if (r.life && ll < r.life && !s.flags['ref_' + c.id]) missing.push(`Life Level ${r.life}`);
+  if (r.flag && !s.flags[r.flag]) missing.push(/^adv_/.test(r.flag) ? 'More experience in this adventure' : 'A tip about the opening');
   if (r.course && !(s.courses && s.courses[r.course] && s.courses[r.course].done)) missing.push(`Course: ${COURSE_NAMES[r.course]}`);
   for (const [id, need] of Object.entries(r.skills || {})) if (edu.state(id) < need) missing.push(`${skillName(id)} — ${['', 'learning', 'practicing', 'proficient', 'mastered'][need]}`);
   const held = (s.jobs || []).includes(c.id);
@@ -107,5 +117,12 @@ export const ACHIEVEMENTS = {
   companion: ['Plush pal', 'Linked a plush companion.'],
   investor: ['Investor', 'Opened a savings account that earns interest.'],
   mentor: ['Mentor', 'Helped a newcomer get started in the city.'],
+  racewin: ['Checkered flag', 'Won a race.'],
+  petchamp: ['Champion team', 'Won the Pet Championship.'],
+  cookchamp: ['Top chef', 'Wowed the cook-off judges.'],
+  robot: ['It works!', 'Programmed a robot to complete a challenge.'],
+  inventor: ['Inventor', 'Invented something that passed its test.'],
+  bestbiz: ['Best in the city', 'Won the Best Business award.'],
+  explorer2: ['Curious mind', 'Tried five different adventures.'],
   reader: ['Bookworm', 'Read five books at the library.'],
 };

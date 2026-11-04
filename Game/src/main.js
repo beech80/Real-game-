@@ -17,10 +17,13 @@ import { makePet, PetFollower, makeCompanion, updateCompanion } from './pets.js'
 import { Neighbors } from './multiplayer.js';
 import { buildInterior, BUILDING_ROOMS, ROOM } from './interiors.js';
 import { MapView } from './mapview.js';
+import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
+import { Race } from './race.js';
+import { PetCourse, RobotArena } from './arenas.js';
 import { runActivity } from './learnkit.js';
 import { PRACTICE } from './activities.js';
 import { carMesh, Pedestrian } from './city.js';
-installExpansion(Game);
+installExpansion(Game); installAdventures(Game); installAdventureHelpers(Game);
 
 // ---------------------------------------------------------------- crash/diagnostic panel (never a silent black screen)
 function fatal(msg) {
@@ -46,7 +49,7 @@ const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
 
 const W = { district: null, apartment: null, wild: null, club: null, data: null, lamps: [], d: {}, rooms: {} };
-let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60;
+let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60, mini = null, race = null, petCourse = null, arena = null, markT = 0;
 let player = null, game = null, input = null, fcam = null, traffic = null, peds = [], npcs = {}, coll = null, aptColl = null, clubColl = null, members = [];
 var mode = 'loading';
 let beacon = null, minimap = null, mapView = null, lastTarget = null;
@@ -191,6 +194,7 @@ async function startGame(state, isNew) {
     goToClub: () => invitation(),
     JACKETS, quality: () => engine.quality, setQuality: (q) => engine.setQuality(q),
     toggleSound: () => audio.toggle(), soundOn: () => audio.on, applyA11y: (st) => applyA11y(st),
+    race: (trk, build, opts) => runMini('race', trk, build, opts), petRace: (p, care, tier) => runMini('pet', p, care, tier), robotRun: (lv, build, prog) => runMini('robot', lv, build, prog),
     travel: (loc) => travelTo(loc), enterBuilding: (loc, pt) => enterBuilding(loc, pt), refreshWorld: () => refreshWorld(), petTrick: () => { if (pet) pet.trick = 1; },
     DISTRICTS, HOMES, VEHICLES, PET_TYPES, WORK, CAREERS, COURSES,
     peers: () => (game.state.settings && game.state.settings.noNeighbors ? null : neighbors && neighbors.room ? neighbors.count : null), emote: (i) => { if (neighbors) neighbors.emote(i); player.ch.oneShot && player.ch.oneShot('Wave'); UI.toast(['👋', '🎉', '👍', '💡'][i], 'info', 1200); },
@@ -226,6 +230,9 @@ async function spawnStoryNPCs() {
   const jax = await make('Jax', 'NPC_Jax_Hangout', 'Jax'); if (jax) jax.hidden = true;
   await make('Elephant', 'Door_CareerCenter', 'Counselor', { jacket: 0x13214a });
   await make('Dog', 'Door_CoffeeShop', 'Dee', { jacket: 0x0f5c5c, hoodie: 0xe6dccb });
+  for (const [id, A] of Object.entries(ADVENTURES)) if (A.npc.loc === 'district') {
+    try { const ch = new Character(await loadSpecies(A.npc.species), { outfit: A.npc.outfit }); scene.add(ch.root); const n = new StoryNPC(ch, { x: A.npc.x, y: A.npc.y, r: 0, z: 0.13 }, A.npc.name, A.npc.role); n.advId = id; coll.dynamic.push(n.collider); npcs['adv:' + id] = n; n.mark = advMarker(); ch.root.add(n.mark); } catch (e) {}
+  }
   for (const k of ['Counselor', 'Dee']) { const n = npcs[k]; if (n) { n.pos.x += 1.6; n.collider.x = n.pos.x; n.ch.root.position.copy(P2W(n.pos.x, n.pos.y, 0.13)); } }
 }
 function placeJax(x, y, facing) {
@@ -236,7 +243,7 @@ function placeJax(x, y, facing) {
 // ------------------------------------------------------------------------------------------ spaces
 function setCitySpace(on) {
   for (const D of Object.values(W.d)) showDistrict(D, false);
-  if (cart) cart.visible = on;
+  if (cart) cart.visible = on; for (const m of Object.values(W.built || {})) m.visible = on;
   W.district.visible = on; W.wild.group.visible = on; if (W.pools) W.pools.visible = on; W.ccSign.visible = on;
   for (const c of traffic.cars) c.m.visible = on;
   for (const p of peds) p.ch.root.visible = on && p.ch.root.visible;
@@ -413,6 +420,9 @@ async function ensureDistrict(id) {
     const sp = SPECIES[(i * 3 + id.length) % SPECIES.length].id;
     try { const ch = new Character(await loadSpecies(sp), { outfit: { jacket: pk(JACKETS).color, hoodie: pk(HOODIES).color } }); scene.add(ch.root); const p = new Pedestrian(ch, D.routes[i % D.routes.length]); D.coll.dynamic.push(p.collider); D.peds.push(p); } catch (e) {}
   }
+  for (const [aid, A] of Object.entries(ADVENTURES)) if (A.npc.loc === id) {
+    try { const ch = new Character(await loadSpecies(A.npc.species), { outfit: A.npc.outfit }); scene.add(ch.root); const n = new StoryNPC(ch, { x: DISTRICTS[id].ox + A.npc.x, y: A.npc.y, r: A.npc.x > 0 ? Math.PI / 2 : -Math.PI / 2, z: 0.13 }, A.npc.name, A.npc.role); n.advId = aid; D.coll.dynamic.push(n.collider); n.mark = advMarker(); ch.root.add(n.mark); D.friends.push(n); } catch (e) {}
+  }
   for (const f of DISTRICTS[id].friends) {
     try { const ch = new Character(await loadSpecies(f.species), { outfit: f.outfit }); scene.add(ch.root); const n = new StoryNPC(ch, { x: DISTRICTS[id].ox + f.x, y: f.y, r: f.x > 0 ? Math.PI / 2 : -Math.PI / 2, z: 0.13 }, f.id, f.role); D.coll.dynamic.push(n.collider); D.friends.push(n); } catch (e) {}
   }
@@ -486,8 +496,85 @@ function placeCar() {
   const at = D ? { x: D.spawn.x - 3.4, y: D.spawn.y + 5 } : { x: sock('Interact_BusStop').x - 9, y: -3.2 };
   myCar.position.copy(P2W(at.x, at.y, 0)); myCar.rotation.y = D ? 0 : Math.PI / 2; scene.add(myCar);
 }
+function advMarker() {
+  const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
+  g.fillStyle = '#e8a33a'; g.beginPath(); g.arc(64, 64, 54, 0, Math.PI * 2); g.fill(); g.fillStyle = '#14204a'; g.font = 'bold 92px Arial'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('!', 64, 70);
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false })); sp.scale.set(0.55, 0.55, 1); sp.position.y = 2.45; sp.renderOrder = 6; return sp;
+}
+const BUILT_AT = { bench: [24, -20], playground: [56, -22], shed: [62, -64] };
+function builtMesh(key) {
+  const g = new THREE.Group(), wood = new THREE.MeshStandardMaterial({ color: 0x8a5a3a, roughness: 0.7 }), metal = new THREE.MeshStandardMaterial({ color: 0x2a5bd2, roughness: 0.4, metalness: 0.5 }), red = new THREE.MeshStandardMaterial({ color: 0xd23b2a, roughness: 0.6 }), y = new THREE.MeshStandardMaterial({ color: 0xe8b23a, roughness: 0.6 });
+  const b = (w, hh, d, m, x, yy, z) => { const o = new THREE.Mesh(new THREE.BoxGeometry(w, hh, d), m); o.position.set(x, yy, z); o.castShadow = true; g.add(o); return o; };
+  if (key === 'bench') { b(2.2, 0.08, 0.5, wood, 0, 0.48, 0); b(2.2, 0.5, 0.06, wood, 0, 0.8, -0.24); for (const x of [-0.9, 0.9]) b(0.08, 0.48, 0.5, metal, x, 0.24, 0); }
+  if (key === 'playground') { b(3, 0.2, 3, wood, 0, 1.8, 0); for (const x of [-1.4, 1.4]) for (const z of [-1.4, 1.4]) b(0.15, 1.9, 0.15, metal, x, 0.95, z); const sl = b(0.9, 0.08, 3.6, y, 2.6, 0.95, 0); sl.rotation.x = 0; sl.rotation.z = -0.5; b(0.1, 1.8, 0.1, red, -1.4, 2.7, -1.4); const roof = new THREE.Mesh(new THREE.ConeGeometry(2.3, 1.2, 4), red); roof.position.y = 3.3; roof.rotation.y = Math.PI / 4; g.add(roof); for (let k = 0; k < 3; k++) { const sw = b(0.5, 0.06, 0.25, y, -3.2 + k * 0.9, 0.6, 2.4); } b(3.2, 0.1, 0.1, metal, -2.3, 2.1, 2.4); }
+  if (key === 'shed') { b(3, 2.2, 2.4, wood, 0, 1.1, 0); const roof = new THREE.Mesh(new THREE.ConeGeometry(2.4, 1, 4), red); roof.position.y = 2.7; roof.rotation.y = Math.PI / 4; g.add(roof); b(0.9, 1.8, 0.05, y, 0, 0.9, 1.22); }
+  const sign = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 0.4), new THREE.MeshStandardMaterial({ map: new THREE.CanvasTexture((() => { const c = document.createElement('canvas'); c.width = 512; c.height = 128; const x = c.getContext('2d'); x.fillStyle = '#1f6b35'; x.fillRect(0, 0, 512, 128); x.fillStyle = '#fff'; x.font = 'bold 44px Arial'; x.textAlign = 'center'; x.fillText('Built by ' + (game.state.name || 'you'), 256, 80); return c; })()) }));
+  sign.position.set(0, 0.5, key === 'bench' ? 0.6 : 2.2); g.add(sign);
+  return g;
+}
+
+// ------------------------------------------------------------------------------------------ minigames (race, pet agility, robot arena)
+function hideForMini(on) {
+  const s = game.state;
+  if (on) { W.prevVis = { apt: W.apartment && W.apartment.visible }; setCitySpace(false); hideRooms(); if (W.apartment) W.apartment.visible = false; }
+  else {
+    if (s.location === 'apartment' && W.apartment) W.apartment.visible = true;
+    else if (s.location === 'interior') { const R = curRoom(); if (R) { R.group.visible = true; if (R.npc) R.npc.ch.root.visible = true; } }
+    else if (W.d[s.location]) { setCitySpace(false); showDistrict(W.d[s.location], true); }
+    else setCitySpace(true);
+  }
+  player.ch.root.visible = !on; if (pet) pet.m.visible = !on; if (companion) companion.visible = !on && !(s.companion && s.companion.hidden); if (myCar) myCar.visible = !on; if (beacon) beacon.visible = false;
+}
+function miniHud(kind) {
+  let el = document.getElementById('minihud');
+  if (!el) { el = document.createElement('div'); el.id = 'minihud'; document.body.appendChild(el); }
+  el.className = 'minihud ' + kind; el.hidden = false;
+  el.innerHTML = '<div class="mh-top"><b class="mh-a"></b><b class="mh-b"></b><b class="mh-c"></b></div><div class="mh-count"></div><div class="mh-tip"></div>' +
+    (kind === 'race' ? '<button class="mh-brake">BRAKE</button><button class="mh-gas">GAS</button>' : '') + (kind === 'pet' ? '<button class="mh-cue">Cue!</button>' : '');
+  const hold = (sel, key) => { const b = el.querySelector(sel); if (!b) return; const on = (e) => { e.preventDefault(); race[key] = 1; }, off = () => { race[key] = 0; }; b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('pointerleave', off); };
+  hold('.mh-gas', 'gas'); hold('.mh-brake', 'brake');
+  const cue = el.querySelector('.mh-cue'); if (cue) cue.onclick = () => { if (petCourse.cue()) audio.play('good'); };
+  return el;
+}
+async function runMini(kind, a, b, c) {
+  const s = game.state;
+  await UI.fade(1, 350);
+  hideForMini(true); UI.showHUD(false); mode = 'mini'; input.enabled = true;
+  const el = miniHud(kind), q = (k) => el.querySelector(k);
+  let res;
+  const start = () => {
+    if (kind === 'race') {
+      race = race || new Race(scene, textures);
+      const hud = (d) => { q('.mh-a').textContent = `LAP ${d.lap}/${d.laps}`; q('.mh-b').textContent = `POS ${d.pos}/${d.of}`; q('.mh-c').textContent = `${d.kmh} km/h`; q('.mh-count').textContent = d.count; q('.mh-tip').textContent = d.slide ? 'Sliding! Ease off the steering' : d.off ? 'Off the track!' : d.dirt ? 'Dirt section' : ''; };
+      const p = race.start(a, b, input, camera, hud, c && c.laps);
+      mini = race; return p;
+    }
+    if (kind === 'pet') {
+      petCourse = petCourse || new PetCourse(scene);
+      const tier = c || 0, rivals = [['Dash', 'puppy', 0xc98a4a], ['Mochi', 'kitten', 0x8a8d96], ['Bun', 'bunny', 0xf1ece4]].map(([n, t, col], i) => ({ name: n, type: t, color: col, speed: 6.4 + tier * 0.6 + i * 0.25 }));
+      const hud = (d) => { q('.mh-a').textContent = `${b >= 1 ? 'Happy & healthy' : 'Needs care'}`; q('.mh-b').textContent = `POS ${d.pos}/${d.of}`; q('.mh-c').textContent = ''; q('.mh-count').textContent = d.count; const cb = q('.mh-cue'); cb.textContent = d.cue || 'Cue!'; cb.classList.toggle('ready', !!d.cue); q('.mh-tip').textContent = d.cue ? `Tap “${d.cue}” now!` : ''; };
+      const p = petCourse.start(a, b, rivals, camera, hud); mini = petCourse; return p;
+    }
+    if (kind === 'robot') {
+      arena = arena || new RobotArena(scene);
+      const hud = (d) => { q('.mh-a').textContent = `STEP ${Math.min(d.step + 1, d.prog.length)}/${d.prog.length}`; q('.mh-b').textContent = `⚡ ${Math.max(0, d.energy).toFixed(1)}/${d.energy0}`; q('.mh-c').textContent = ''; };
+      mini = { update: () => arena.g ? P2W(-10000 + 4.4, 4.4, 0) : null }; return arena.run(a, b, c, camera, hud);
+    }
+  };
+  const p = start();
+  await UI.fade(0, 350);
+  res = await p;
+  await UI.fade(1, 350);
+  el.hidden = true; mini = null; mode = 'play'; hideForMini(false); UI.showHUD(true); fcam.cur.set(0, 1e4, 0);
+  await UI.fade(0, 350);
+  return res;
+}
+
 function refreshWorld() {
   const s = game.state;
+  W.built = W.built || {};
+  for (const k of s.built || []) if (!W.built[k]) { const m = builtMesh(k); const [x, y] = BUILT_AT[k]; m.position.copy(P2W(x, y, 0.13)); scene.add(m); W.built[k] = m; coll.items.push({ t: 'circle', x, y, r: k === 'bench' ? 1.1 : 2.2, cos: 1, sin: 0, n: 'built' }); }
+  for (const m of Object.values(W.built)) m.visible = s.location === 'district';
   if (s.biz && !cart) {
     cart = new THREE.Group();
     const wood = new THREE.MeshStandardMaterial({ color: 0x7a5230, roughness: 0.7 }), cloth = new THREE.MeshStandardMaterial({ color: 0x2f8f5a, roughness: 0.8 }), metal = new THREE.MeshStandardMaterial({ color: 0xcfd3d8, metalness: 0.8, roughness: 0.3 });
@@ -576,7 +663,8 @@ function findInteraction() {
   const D = W.d[where];
   if (D) {
     for (const pt of D.points) { const d = Math.hypot(pt.x - P.x, pt.y - P.y); if (d < 2.6 && d < bd) { const it = game.districtInteraction(where, pt); if (it) { best = it; bd = d; } } }
-    for (const f of D.friends) if (near(f.pos, 2.4)) best = { label: `Talk to ${f.name}`, run: () => game.talkFriend(f.name, f.role), npc: f };
+    for (const f of D.friends) if (near(f.pos, 2.4)) best = f.advId ? { label: `Talk to ${f.name}`, run: () => game.advTalk(f.advId), npc: f } : { label: `Talk to ${f.name}`, run: () => game.talkFriend(f.name, f.role), npc: f };
+    const M = s.mission; if (M && M.loc === where && near({ x: D.def.ox + M.x, y: M.y }, 2.4)) best = { label: M.label, run: () => game.missionArrive() };
     if (!best && pet && near(pet.pos, 2)) best = { label: `Play with ${s.pet.name}`, run: () => game.petCare('play') };
     return best;
   }
@@ -605,6 +693,8 @@ function findInteraction() {
   }
   if (near(npcs.Counselor && npcs.Counselor.pos, 2.4)) best = s.flags.housed ? { label: 'Talk to Mr. Okafor', run: () => game.counselor(), npc: npcs.Counselor } : { label: 'Ask for help', run: () => game.housing(), npc: npcs.Counselor };
   if (near(npcs.Dee && npcs.Dee.pos, 2)) best = best || { label: 'Talk to Dee', run: () => UI.say('Dee · Daily Grind', 'Best coffee on Main St. Come in any time.') };
+  for (const n of Object.values(npcs)) if (n.advId && !n.hidden && near(n.pos, 2.4)) best = { label: `Talk to ${n.name}`, run: () => game.advTalk(n.advId), npc: n };
+  if (s.mission && s.mission.loc === 'district' && near(s.mission, 2.6)) best = { label: s.mission.label, run: () => game.missionArrive() };
   if (!best && pet && near(pet.pos, 1.8)) best = { label: `Play with ${s.pet.name}`, run: () => game.petCare('play') };
   return best;
 }
@@ -716,6 +806,8 @@ function loop(now) {
     return;
   }
   if (!player) { engine.render(); return; }
+  if (mode === 'mini' && mini) { const f = mini.update(dt); engine.setTime(12.5, f || new THREE.Vector3()); engine.scene.fog.near = 120; engine.scene.fog.far = 700; engine.render(); return; }
+  if ((markT -= dt) < 0) { markT = 0.5; for (const n of [...Object.values(npcs), ...Object.values(W.d).flatMap((D) => D.friends)]) if (n.mark) n.mark.visible = game.state.flags.housed && game.advOffer(n.advId); }
   const adapted = engine.adapt(dt);
   if (adapted) UI.toast(`Graphics set to ${adapted} for smoother play (change in 📱 Settings)`, 'info', 3500);
   const s = game.state;
@@ -761,6 +853,7 @@ function loop(now) {
     const obj = game.objective();
     let target = null;
     if (obj.target === 'CLUB_COUNCIL') target = CLUB.councilDoor;
+    else if (obj.target === 'MISSION' && s.mission) target = s.mission.loc === s.location ? (DD ? { x: DD.def.ox + s.mission.x, y: s.mission.y } : s.mission) : null;
     else if (obj.target === 'D:bus') target = DD ? DD.points.find((p) => p.key === 'bus') : null;
     else if (obj.target === 'CART') target = W.cartPos || null;
     else if (DD || IR) target = null;
@@ -775,7 +868,7 @@ function loop(now) {
     lastTarget = target;
     const dist = target ? Math.hypot(target.x - player.pos.x, target.y - player.pos.y) : null;
     UI.objective(fcam.mode === 'follow' ? obj.text : null, dist);
-    if (target) { beacon.visible = dist > 2.2; beacon.position.copy(P2W(target.x, target.y, apt ? -500 : target === W.wild.signs[0] ? wildHeight(target.x, target.y) : 0.14)); beacon.userData.ring.scale.setScalar(1 + Math.sin(t * 3) * 0.12); }
+    if (target) { beacon.visible = dist > 2.2; beacon.position.copy(P2W(target.x, target.y, apt ? -500 : target.y < WILD.edge ? wildHeight(target.x, target.y) : 0.14)); beacon.userData.ring.scale.setScalar(1 + Math.sin(t * 3) * 0.12); }
     else beacon.visible = false;
     UI.taskPanel(s.quest === 'shift' ? 'JOB PROGRESS' : null, s.quest === 'shift' ? game.taskRows() : null, s.quest === 'shift' ? (s.job ? s.job.rate * s.job.hours : 60) : undefined);
     nearest = busy() ? null : findInteraction();
@@ -822,7 +915,7 @@ window.REAL = {
   life: () => game.life(),
   practice: (sk) => runActivity(game, () => ({ skill: sk, ...PRACTICE[sk]() }), 'learn', 'Practice', '📚'),
   travel: (loc) => travelTo(loc, true), districtPoints: () => (W.d[game.state.location] || { points: [] }).points.map((p) => ({ ...p })),
-  refresh: () => refreshWorld(), openMap: () => openMap(), mapOpen: () => !!(mapView && mapView.open), roomPoints: () => { const R = curRoom(); return R ? R.points.map((p) => ({ ...p })) : []; }, leave: () => leaveBuilding(),
+  refresh: () => refreshWorld(), camPos: () => camera.position.toArray().map((v) => Math.round(v)), mini: () => mode === 'mini', raceState: () => race && race.player && { x: race.player.x, y: race.player.y, v: race.player.v, lap: race.player.lap, idx: race.player.idx, t: race.t }, petCue: () => petCourse && petCourse.cue(), openMap: () => openMap(), mapOpen: () => !!(mapView && mapView.open), roomPoints: () => { const R = curRoom(); return R ? R.points.map((p) => ({ ...p })) : []; }, leave: () => leaveBuilding(),
   info: () => ({ draws: engine.renderer.info.render.calls, tris: engine.renderer.info.render.triangles, peds: peds.length, quality: engine.quality }),
 };
 

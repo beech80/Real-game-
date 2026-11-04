@@ -354,3 +354,23 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--gold-2); ou
 body.a11y-large .sheet, body.a11y-large #hud { font-size: 118%; } body.a11y-large .opt { font-size: 18px; padding: 14px; }
 body.a11y-contrast .sheet { background: #000 !important; color: #fff; } body.a11y-contrast .opt { background: #fff; color: #000; border: 2px solid #000; } body.a11y-contrast .doc { background: #fff; color: #000; border: 2px solid #000; }
 body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+
+/* ---------- adventures: minigame HUD, garage, robot programming, training */
+.minihud { position: fixed; inset: 0; z-index: 30; pointer-events: none; font-family: "Barlow Condensed", system-ui, sans-serif; }
+.minihud .mh-top { position: absolute; top: max(14px, env(safe-area-inset-top)); left: 0; right: 0; display: flex; justify-content: center; gap: 10px; }
+.minihud .mh-top b { background: rgba(14,19,34,.75); color: #fff; padding: 6px 12px; border-radius: 10px; font-size: 20px; letter-spacing: .04em; }
+.minihud .mh-top b:empty { display: none; }
+.minihud .mh-count { position: absolute; top: 30%; width: 100%; text-align: center; font-size: 96px; font-weight: 700; color: #e8b23a; text-shadow: 0 4px 16px rgba(0,0,0,.6); }
+.minihud .mh-tip { position: absolute; top: calc(max(14px, env(safe-area-inset-top)) + 52px); width: 100%; text-align: center; color: #ffd27a; font-size: 20px; text-shadow: 0 2px 6px #000; }
+.minihud button { pointer-events: auto; position: absolute; bottom: max(24px, env(safe-area-inset-bottom)); width: 104px; height: 104px; border-radius: 50%; border: 0; font: 700 22px "Barlow Condensed", sans-serif; color: #141a2c; touch-action: none; }
+.minihud .mh-gas { right: 18px; background: #3fd27a; } .minihud .mh-brake { right: 136px; width: 84px; height: 84px; background: #ff7a6a; }
+.minihud .mh-cue { right: 22px; background: #55607e; color: #fff; width: 120px; height: 120px; } .minihud .mh-cue.ready { background: #e8b23a; color: #141a2c; transform: scale(1.08); }
+.partrow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.part { text-align: left; border-radius: 12px; border: 2px solid transparent; background: #232b45; color: #fff; padding: 8px; display: flex; flex-direction: column; gap: 2px; }
+.part.sel { border-color: #e8b23a; background: #2e3858; } .part small { opacity: .8; font-size: 11px; }
+.swatch.sel { outline: 3px solid #fff; }
+.robogrid { display: inline-flex; flex-direction: column; gap: 3px; margin: 4px auto 8px; } .rrow { display: flex; gap: 3px; }
+.rc { width: 38px; height: 38px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.rc.tf, .rc.tst { background: #d8dde4; } .rc.tr { background: #b8a58a; color: #5a4a38; } .rc.ts { background: #f0ece4; color: #8a8478; } .rc.tw { background: #3a4258; } .rc.tg { background: #2f8f5a; } .rc.to { background: #d8dde4; }
+.cmds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; } .prog { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; } .prog .cmd { background: #232b45; padding: 4px 8px; border-radius: 8px; font-size: 13px; }
+.trainface { font-size: 64px; margin: 10px 0; min-height: 80px; }

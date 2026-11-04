@@ -103,6 +103,7 @@ export class Game {
       case 'invite': return s.location === 'apartment' ? T('The Club has invited you back. Head out to the bus stop.', 'Interact_ExitDoor') : T('The Club has invited you back. Take the bus to The Club.', 'Interact_BusStop');
       default: {
         if (s.location === 'apartment') return T(s.time > 20 ? 'Get some sleep' : 'Head out and live your day', s.time > 20 ? 'Interact_Sleep' : 'Interact_ExitDoor');
+        if (s.mission) return T(`${s.mission.text}${s.mission.loc !== s.location ? ' (' + ({ district: 'Starting District', midtown: 'Midtown', opportunity: 'Opportunity District', heights: 'The Heights' })[s.mission.loc] + ')' : ''}`, 'MISSION');
         if (s.flags.jaxStealDue && !s.flags.jaxSteal) return T('Someone’s waiting by Thread & Co…', 'NPC_Jax');
         if (s.flags.jax3due && !s.flags.jax3) return T('Jax wants to talk at the corner of Main & Fresh', 'NPC_Jax');
         if (!s.flags[`worked${s.day}`] && s.time < 17) return T('Work today’s shift at Fresh Mart (clock in)', 'Interact_TimeClock');
@@ -182,12 +183,12 @@ export class Game {
     await UI.say(O, 'Welcome to the Starting District. You look like you walked a long way. Let’s get you sorted out: somewhere to sleep, and a way to earn.');
     const c = await UI.say(O, 'Where are you staying tonight?', ['Nowhere. I just got here.', 'I used to be in The Club.']);
     if (c === 1) await UI.say(O, 'The Club, huh? Doesn’t matter here. Here, everybody starts somewhere. Most people start right where you are.');
-    await UI.say(O, 'The Fresh Start program covers your first week in a starter unit at The Starter Apartments, Unit 3B. After that, rent is $120 a week. It’s modest, but it’s yours to keep up.');
+    await UI.say(O, 'The Fresh Start program covers your first week in a starter unit at The Starter Apartments, Unit 3B. After that, rent is $300 a week, and Fresh Start pays half of it for your first four weeks, so you pay $150. It’s modest, but it’s yours to keep up.');
     await UI.say(O, 'I also checked your basic bank account. Everything linked to The Club is gone, but there’s a remaining balance of $100. And here’s a basic phone. It’s not fancy, but it works.');
     s.flags.housed = true; s.flags.phone = true; this.achieve('first_home'); this.befriend('Okafor', 2);
     this.earn(100, 'Remaining balance (basic account)');
-    s.bills = [{ id: 'phone1', name: 'Phone plan', amount: 25, due: s.day + 4, paid: false }, { id: 'rent1', name: 'Rent — The Starter Apartments (week 2)', amount: 120, due: s.day + 6, paid: false }, { id: 'util1', name: 'Utilities', amount: 20, due: s.day + 6, paid: false }];
-    s.messages.unshift({ from: 'The Starter Apartments', text: 'Welcome to Unit 3B! Your first week is covered by Fresh Start. Rent ($120/week) is due every 7 days starting Day ' + (s.day + 6) + '.', day: s.day, read: false });
+    s.bills = [{ id: 'phone1', name: 'Phone plan', amount: 25, due: s.day + 4, paid: false }, { id: 'rent1', name: 'Rent — The Starter Apartments (week 2)', amount: 150, due: s.day + 6, paid: false }, { id: 'util1', name: 'Utilities', amount: 20, due: s.day + 6, paid: false }];
+    s.messages.unshift({ from: 'The Starter Apartments', text: 'Welcome to Unit 3B! Your first week is covered by Fresh Start. Rent ($300/week, $150 with your Fresh Start subsidy for 4 weeks) is due every 7 days starting Day ' + (s.day + 6) + '.', day: s.day, read: false });
     await UI.say(O, '$100 won’t last long. Before you spend any of it, let’s make sure you know what you need, and what can wait.');
     await A.needsWants(this);
     await A.firstBudget(this);
@@ -413,7 +414,8 @@ export class Game {
       b.renewed = true; const kind = b.id.replace(/\d+$/, ''), n = parseInt(b.id.replace(/\D/g, ''), 10) + 1;
       if (kind === 'bizloan' && s.biz) s.biz.loan = Math.max(0, Math.round((s.biz.loan - b.amount) * 100) / 100);
       if (b.left === 0) continue;
-      const amount = kind === 'rent' ? (s.rent || b.recur || 120) : b.recur || (kind === 'util' ? 20 : 25);
+      if (kind === 'rent' && !s.home && (s.subsidyWeeks ?? 3) > 0) s.subsidyWeeks = (s.subsidyWeeks ?? 3) - 1;
+      const amount = kind === 'rent' ? (s.rent || (s.home && s.home !== 'starter' ? b.recur : (s.subsidyWeeks ?? 3) > 0 ? 150 : 300)) : b.recur || (kind === 'util' ? 20 : 25);
       s.bills.push({ ...b, id: kind + n, name: b.name.replace(/\(week \d+\)/, `(week ${n + 1})`), amount, due: b.due + (b.period || (kind === 'phone' ? 30 : 7)), paid: false, renewed: false, lateFee: false, left: b.left === undefined ? undefined : b.left - 1 });
       if (kind === 'rent') s.stats.rentPaidSelf = (s.stats.rentPaidSelf || 0) + 0;
     }
@@ -468,7 +470,7 @@ export function openPhone(G) {
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Settings', '⚙️', '#55607e']];
+      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Settings', '⚙️', '#55607e']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -506,10 +508,11 @@ export function openPhone(G) {
             h('div', { class: 'bill' }, h('div', {}, h('b', {}, '2. Register it'), h('small', {}, 'At the Small Business Center in the Opportunity District (Life Level 5).'))),
             h('button', { class: 'primary', onclick: () => { close(); A.businessPlan(G); } }, s.achievements.plan ? 'Revise the plan' : 'Start the plan')),
         Home: () => { const H = G.hooks.HOMES[s.home || 'starter'], v = s.vehicle && G.hooks.VEHICLES[s.vehicle.type]; return h('div', { class: 'act' },
-          h('div', { class: 'bill' }, h('div', {}, h('b', {}, '🏠 ' + H.name), h('small', {}, s.home === 'owned' ? `Mortgage ${money(s.rent)}/week` : `Rent ${money(s.rent || 120)}/week`))),
+          h('div', { class: 'bill' }, h('div', {}, h('b', {}, '🏠 ' + H.name), h('small', {}, s.home === 'owned' ? `Mortgage ${money(s.rent)}/week` : `Rent ${money(s.rent || ((s.subsidyWeeks ?? 3) > 0 ? 150 : 300))}/week`))),
           h('div', { class: 'bill' }, h('div', {}, h('b', {}, v ? `${v.icon} ${v.name}` : '🚌 Bus rider'), h('small', {}, v ? (s.vehicle.type === 'bike' ? 'No running costs.' : `Last service: Day ${s.vehicle.service}${s.day - s.vehicle.service >= 10 ? ' · SERVICE DUE at Midtown Motors' : ''}`) : 'Vehicles are sold at Midtown Motors.'))),
           s.pet ? h('div', { class: 'bill' }, h('div', {}, h('b', {}, `${G.hooks.PET_TYPES[s.pet.type].icon} ${s.pet.name}`), h('small', {}, `Bond ${'♥'.repeat(Math.max(1, Math.round(s.pet.bond / 2)))} · ${s.pet.fed === s.day ? 'Fed today' : 'Hungry: feed at home'}`)), h('button', { class: 'primary sm', onclick: () => { G.petCare('play'); open('Home'); } }, 'Play')) : h('div', { class: 'bill' }, h('div', {}, h('b', {}, '🐾 No pet yet'), h('small', {}, 'Paws & Friends shelter in Midtown.'))),
           s.savings ? h('div', { class: 'bill' }, h('div', {}, h('b', {}, '🏦 Savings'), h('small', {}, `${money(s.savings)} earning 1% a week`))) : null); },
+        Discover: () => G.discoverApp(body, open),
         Pal: () => { setTimeout(() => { close(); G.companion(); }, 0); return h('div'); },
         Neighbors: () => { const n = G.hooks.peers ? G.hooks.peers() : null; return h('div', { class: 'act' },
           h('p', { class: 'lead' }, n === null ? 'Neighbors appear when you play REAL in its shared link. Right now you’re playing solo.' : n ? `${n} other REAL${n === 1 ? '' : 's'} in the city right now.` : 'No other REALs are online right now.'),

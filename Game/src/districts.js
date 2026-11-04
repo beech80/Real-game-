@@ -15,7 +15,7 @@ export const AVE = { half: 5, walk: 9, y0: -8, y1: 128, crossY: 60, crossX: 40 }
 // Building: side W/E, y0..y1 along the avenue, depth, floors, style (brick|glass|stone), key = interaction id
 export const DISTRICTS = {
   midtown: {
-    name: 'Midtown', ox: 3000, life: 3, fare: 2.75, sky: 0x6a7fa8,
+    name: 'Midtown', ox: 3000, life: 3, fare: 2, sky: 0x6a7fa8,
     tag: 'Busy streets, small businesses, skilled jobs.',
     buildings: [
       { key: 'express', side: 'W', y0: -6, y1: 20, depth: 16, floors: 4, style: 'brick', color: 0xb5583c, awning: 0xe8a33a, sign: ['MIDTOWN EXPRESS', 'COURIERS · HIRING'], bg: '#c2362a' },
@@ -30,7 +30,7 @@ export const DISTRICTS = {
     friends: [{ id: 'Marcus', species: 'Horse', x: 6.5, y: 34, role: 'Courier', outfit: { jacket: 0xc2362a, hoodie: 0x0b0b0e } }, { id: 'Ms. Lindqvist', species: 'Bird', x: -6.5, y: 98, role: 'Librarian', outfit: { jacket: 0x3a2a6a, hoodie: 0xe6dccb } }],
   },
   opportunity: {
-    name: 'Opportunity District', ox: 6000, life: 5, fare: 2.75, sky: 0x7d9cc4,
+    name: 'Opportunity District', ox: 6000, life: 5, fare: 2, sky: 0x7d9cc4,
     tag: 'Glass towers, technology, trades and big ideas.',
     buildings: [
       { key: 'logistics', side: 'W', y0: -6, y1: 22, depth: 22, floors: 3, style: 'glass', color: 0x8a8f99, awning: 0xe8a33a, sign: ['OPPORTUNITY LOGISTICS', 'WAREHOUSE · NOW HIRING'], bg: '#e8a33a' },
@@ -46,7 +46,7 @@ export const DISTRICTS = {
     friends: [{ id: 'Priya', species: 'Cat', x: 6.5, y: 47, role: 'Developer', outfit: { jacket: 0x0f5c5c, hoodie: 0xe6dccb } }, { id: 'Coach Bo', species: 'Lion', x: -6.5, y: 116, role: 'Challenge coach', outfit: { jacket: 0x5a3fd2, hoodie: 0xe8a33a } }],
   },
   heights: {
-    name: 'The Heights', ox: 9000, life: 8, fare: 2.75, sky: 0x9ab4d8,
+    name: 'The Heights', ox: 9000, life: 8, fare: 2, sky: 0x9ab4d8,
     tag: 'Professional careers, elegant streets, views over the whole city.',
     buildings: [
       { key: 'college', side: 'W', y0: -6, y1: 28, depth: 22, floors: 5, style: 'stone', color: 0xd8cfb8, awning: 0x5a1020, sign: ['HEIGHTS COLLEGE', 'MEDICINE · LAW · ENGINEERING'], bg: '#5a1020', ornate: true },

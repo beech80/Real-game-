@@ -117,6 +117,15 @@ const EXTRA = {
   architect: ['math.geometry#0', 'math.geometry2#1', 'math.ratio#0'], lawyer: ['read.contracts#0', 'read.evidence#0', 'write.argument#0'],
 };
 export const WORK = {
+  racemech: { place: ['district', 'adv:race'], boss: ['Rita', 'Rita’s Garage'], tasks: ['sci.friction#0', 'manual', 'diagnose', 'sci.method#0'], verb: 'Jobs' },
+  firefighter: { place: ['district', 'adv:rescue'], boss: ['Captain Rhodes', 'Station 7'], tasks: ['sci.safety#0', 'sci.safety#1', 'sci.health#0', 'breaker'], verb: 'Calls' },
+  vettech: { place: ['district', 'adv:pets'], boss: ['Penny', 'Brighter Park Pet Club'], tasks: ['sci.animals#0', 'sci.animals#1', 'sci.nutrition#0'], verb: 'Animals' },
+  medasst: { place: ['midtown', 'adv:medical'], boss: ['Nurse Kim', 'City Clinic'], tasks: ['sci.body#0', 'allergy', 'meds', 'sci.health#0'], verb: 'Patients' },
+  detective: { place: ['district', 'adv:mystery'], boss: ['Detective Ivy', 'City Detective Agency'], tasks: ['read.inference#0', 'read.evidence#0', 'think.evidence#0', 'sci.observe#0'], verb: 'Cases' },
+  robotech: { place: ['opportunity', 'adv:robots'], boss: ['Dr. Bolt', 'Opportunity Robo Lab'], tasks: ['sci.circuits#0', 'bug', 'sci.design#0', 'sci.energy#0'], verb: 'Builds' },
+  chef: { place: ['midtown', 'adv:culinary'], boss: ['Chef Lou', 'Corner Kitchen'], tasks: ['recipe', 'sci.heat#0', 'fin.margins#0', 'math.ratio#0'], verb: 'Orders' },
+  designer: { place: ['opportunity', 'adv:inventor'], boss: ['Professor Volt', 'Volt Works Lab'], tasks: ['sci.innovation#0', 'sci.design#0', 'sci.materials#0'], verb: 'Projects' },
+  contractor: { place: ['opportunity', 'adv:construction'], boss: ['Jo', 'Build Right Co'], tasks: ['math.geometry#0', 'sci.forces#0', 'area', 'fin.planning#0'], verb: 'Projects' },
   courier: { place: ['midtown', 'express'], boss: ['Marisol', 'Midtown Express dispatcher'], tasks: ['address', 'delivery', 'note'], verb: 'Deliveries' },
   warehouse: { place: ['opportunity', 'logistics'], boss: ['Gus', 'Warehouse supervisor'], tasks: ['pallets', 'slip', 'truckFrac'], verb: 'Loading' },
   mechanic: { place: ['midtown', 'motors'], boss: ['Ray', 'Head mechanic'], tasks: ['manual', 'wrench', 'diagnose'], verb: 'Repairs' },
