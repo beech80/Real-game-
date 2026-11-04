@@ -14,10 +14,13 @@ export const Voice = {
   enabled: () => !window.__voiceOff,
   speak(text, who = '') {
     try {
-      if (!('speechSynthesis' in window) || window.__voiceOff || !text) return;
+      if (!('speechSynthesis' in window) || window.__voiceOff || !text || !/[a-z0-9]/i.test(text)) return;
+      // only the player's own REAL speaks; every other character's lines stay silent text
+      const me = String(window.__playerName || '').trim().toLowerCase();
+      if (who !== '__me' && (!me || String(who).split('·')[0].trim().toLowerCase() !== me)) return;
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(String(text).replace(/[★☆♛🎤💡✓○]/g, ''));
-      const k = Math.abs(hash(who.split('·')[0].trim()));
+      const k = Math.abs(hash(who === '__me' ? me : who.split('·')[0].trim().toLowerCase()));
       if (voices.length) u.voice = voices[k % voices.length];
       u.pitch = /Jax/.test(who) ? 0.9 : 0.85 + (k % 5) * 0.1; u.rate = 0.98 + (k % 3) * 0.04; u.lang = 'en-US';
       speechSynthesis.speak(u);

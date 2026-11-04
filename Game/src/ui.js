@@ -77,7 +77,7 @@ export const UI = {
       D.className = 'dialog ' + (opts.tone || '');
       const body = h('div', { class: 'd-text' });
       const letters = ['A', 'B', 'C', 'D'];
-      const list = choices ? h('div', { class: 'd-choices' }, choices.map((c, i) => h('button', { class: 'd-choice', onclick: () => { click(); D.hidden = true; res(i); } }, h('span', { class: 'd-key' }, letters[i]), c))) : null;
+      const list = choices ? h('div', { class: 'd-choices' }, choices.map((c, i) => h('button', { class: 'd-choice', onclick: () => { click(); if (this.voiceHooks) this.voiceHooks.speak(c, '__me'); D.hidden = true; res(i); } }, h('span', { class: 'd-key' }, letters[i]), c))) : null;
       const next = !choices ? h('button', { class: 'd-next', onclick: () => { click(); D.hidden = true; res(); } }, 'Continue ›') : null;
       const voice = this.voiceHooks;
       const mic = choices && voice && voice.canListen() ? h('button', { class: 'd-mic', 'aria-label': 'Answer out loud', onclick: async (e) => {
