@@ -21,6 +21,12 @@ Ordinary technical decisions made autonomously under directive §31. Anything to
 | D-015 | 2026-11-04 | Placeholder business names (Daily Grind, Main St Diner, Thread & Co, Grow Gym, Brighter Park, The Starter Apartments) | The directive specifies the location types, not their names. These are placeholders for approval | **Needs approval** |
 | D-016 | 2026-11-04 | **Jax not modelled** | Directive §18: don't decide Jax's species or look without approved reference. Only socket placeholders (`SOCKET_NPC_Jax_*`) exist | — |
 | D-017 | 2026-11-04 | Fox outfit and colours follow the character sheet (black jacket, cream hoodie, gold crown, joggers, chunky sneakers, amber eyes) | Approved reference image `References/Concept/REAL_CharacterSheet_v1.png` | — |
+| D-018 | 2026-11-04 | **Platform pivot: mobile/web game in three.js** instead of Unreal | The user asked for a mobile app and said not to worry about Unreal. three.js runs on any phone browser, installs as a PWA, and uses the same Blender GLB exports | Yes. The Unreal contract still applies if UE work resumes |
+| D-019 | 2026-11-04 | All nine species built from the Fox pipeline (shared skeleton, rig, animations, morphs) | One retargetable skeleton for everything; species identity comes from head, ears, muzzle, tail and accessories | Yes |
+| D-020 | 2026-11-04 | **Jax = grey cat with a red cap and red/black jacket** | The user delegated design choices ("I trust your choices"); matches the Jax character in the gameplay key art | Yes. Rebuild with `build_species.py Jax` |
+| D-021 | 2026-11-04 | Fresh Mart manager is "Rosa", a Cow in a Fresh Mart green jacket | The key art shows a Cow manager at Fresh Mart | Yes |
+| D-022 | 2026-11-04 | Runtime assets: quantized + gzip (inflated by the browser's DecompressionStream); base64 `.txt` copies for the hosted build | Avoids a WebAssembly decoder (may be blocked by host CSP); the host only serves text/media types | Yes |
+| D-023 | 2026-11-04 | Economy: $12/h cashier, 5-hour shift, FICA 7.65% shown on the pay stub; rent $120 due Day 3; phone bill $25 due Day 5; $15 late fee | Small, readable numbers that still teach gross vs net pay and due dates | Tunable in `game.js` / `activities.js` |
 
 ## Known issues (measured)
 
