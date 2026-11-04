@@ -57,6 +57,17 @@ let step = 0, p;
       if (!top) { idle++; continue; }
       const lead = (await top.$eval('.lead', (e) => e.textContent).catch(() => '')) || '';
       const pad = await top.$('.keypad');
+      const isAct = !!(await top.$('.activity'));
+      if (isAct) { const cont = await top.$('button.primary:text-is("Continue")'); if (cont && await cont.isVisible()) { await cont.click(); idle = 0; continue; } }
+      if (pad && isAct) { const Q = await ev(() => ({ a: window.__lastQ.a, d: window.__lastQ.decimals })); const v = Q.d ? String(Math.round(Q.a * 100)) : String(Q.a); for (const d of v) await (await top.$(`.key:text-is("${d}")`)).click(); await (await top.$('.key.ok')).click(); idle = 0; continue; }
+      if (isAct && !(await top.$('.opt:not([disabled]):not(.wrong)'))) {
+        const Q = await ev(() => ({ type: window.__lastQ.type, items: window.__lastQ.items, word: window.__lastQ.word, total: window.__lastQ.total, cats: window.__lastQ.cats }));
+        if (Q.type === 'order') { for (const it of Q.items) await (await top.$(`.opt:text-is(${JSON.stringify(it)})`)).click(); idle = 0; continue; }
+        if (Q.type === 'sort') { for (const [t, bin] of Q.items) { await (await top.$(`.sort-items .opt:text-is(${JSON.stringify(t)})`)).click(); await (await top.$(`.bin:has(b:text-is(${JSON.stringify(bin)}))`)).click(); } idle = 0; continue; }
+        if (Q.type === 'write') { await (await top.$('button:text-is("See an example")')).click(); await (await top.$('button:text-is("Check my writing")')).click(); idle = 0; continue; }
+        if (Q.type === 'budget') { const extra = Q.total - Q.cats.reduce((x, c) => x + c.min, 0); for (let k = 0; k < extra / 10; k++) { const rows = await top.$$('.brow'); await (await rows[rows.length - 1].$$('.key'))[1].click(); } await (await top.$('button:text-is("Check my plan")')).click(); idle = 0; continue; }
+        if (Q.type === 'trace') { await (await top.$('button:has-text("Type instead")')).click(); await (await top.$('input.writebox')).fill(Q.word); await (await top.$('button.primary.sm:text-is("Done")')).click(); idle = 0; continue; }
+      }
       if (pad) { const m = lead.match(/worked (\d+) hours at \$([\d.]+)/); const v = m ? String(Math.round(+m[1] * +m[2])) : '0'; for (const d of v) await (await top.$(`.key:text-is("${d}")`)).click(); await (await top.$('.key.ok')).click(); idle = 0; continue; }
       if (opts.pick) { const want = await top.$(`button:has-text("${opts.pick}")`); if (want && await want.isEnabled()) { await want.click(); opts.pick = null; idle = 0; continue; } }
       const o = await top.$$('.opt:not([disabled]):not(.wrong), .card');

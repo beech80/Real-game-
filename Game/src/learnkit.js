@@ -38,7 +38,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     const hp = helpFor(G, id);
     const why = h('div', { class: 'whybox', hidden: true });
     const done = h('button', { class: 'primary', hidden: true }, 'Continue');
-    const finish = (ok) => { why.hidden = false; why.replaceChildren(h('b', {}, ok ? '✓ ' : '💡 '), Q.why || (ok ? 'Nice work.' : '')); done.hidden = false; done.onclick = () => close({ ok: tries === 1 && ok }); if (settings.readAloud && Q.why) speak(Q.why); };
+    const finish = (ok) => { if (body) body.querySelectorAll('button').forEach((b) => { if (!b.classList.contains('right')) b.disabled = true; }); why.hidden = false; why.replaceChildren(h('b', {}, ok ? '✓ ' : '💡 '), Q.why || (ok ? 'Nice work.' : '')); done.hidden = false; done.onclick = () => close({ ok: tries === 1 && ok }); if (settings.readAloud && Q.why) speak(Q.why); };
     const attempt = (ok, err) => {
       tries++;
       G.edu.record(id, ok, { ctx, hinted: hp.hinted() || tries > 1, err });
