@@ -91,7 +91,7 @@ export class Game {
       case 'job': return T('Fresh Mart is hiring. Talk to the manager.', 'NPC_Manager_Idle');
       case 'clockin': return T('Clock in at the time clock (back room)', 'Interact_TimeClock');
       case 'shift': {
-        const sh = s.shift;
+        const sh = s.shift; if (!sh) return T('Great work today!', null);
         if (sh.register < sh.need.register) return T(`Serve customers at Register 1 (${sh.register}/${sh.need.register})`, 'Interact_Register_01');
         if (sh.stock < sh.need.stock) return T(`Stock the shelf: ${sh.product[0]} ${sh.product[2]}. Find the right aisle.`, null);
         if (sh.inv < sh.need.inv) return T('Count the inventory in the stockroom', 'Interact_InventoryCount');
@@ -130,8 +130,8 @@ export class Game {
       Door_CareerCenter: () => ({ label: s.flags.housed ? 'Career board' : 'Community Center', run: () => s.flags.housed ? this.careerBoard() : this.housing() }),
       Interact_TimeClock: () => (q === 'clockin' || (q !== 'shift' && s.flags.hired && !s.flags[`worked${s.day}`])) ? { label: 'Clock in', run: () => this.clockIn() } : { label: 'Training board', run: () => this.training() },
       Interact_TrainingBoard: () => ({ label: 'Read training board', run: () => this.training() }),
-      Interact_Register_01: () => q === 'shift' && s.shift.register < s.shift.need.register ? { label: 'Serve customer', run: () => this.registerTask() } : null,
-      Interact_InventoryCount: () => q === 'shift' && s.shift.register >= s.shift.need.register && s.shift.stock >= s.shift.need.stock && s.shift.inv < s.shift.need.inv ? { label: 'Count inventory', run: () => this.inventoryTask() } : null,
+      Interact_Register_01: () => q === 'shift' && s.shift && s.shift.register < s.shift.need.register ? { label: 'Serve customer', run: () => this.registerTask() } : null,
+      Interact_InventoryCount: () => q === 'shift' && s.shift && s.shift.register >= s.shift.need.register && s.shift.stock >= s.shift.need.stock && s.shift.inv < s.shift.need.inv ? { label: 'Count inventory', run: () => this.inventoryTask() } : null,
       Interact_BasketPickup: () => ({ label: 'Shop for groceries', run: () => A.shop(G).then((ok) => ok && UI.toast('Groceries are in your fridge at home.', 'good')) }),
       Interact_ProduceRestock: () => ({ label: 'Shop for groceries', run: () => A.shop(G) }),
       Door_ApartmentLobby: () => (s.home && s.home !== 'starter' ? { label: 'The Starter Apartments', run: () => UI.toast('You moved out. Your home is now ' + this.hooks.HOMES[s.home].name + '.', 'info', 3200) } : { label: 'Enter The Starter Apartments', run: () => this.hooks.enterApartment() }),
@@ -158,7 +158,7 @@ export class Game {
     };
     if (/^Interact_ParkBench/.test(k)) return { label: 'Sit and relax', run: () => { this.hooks.playerAnim('Sit', 4); s.mood = Math.min(100, s.mood + 10); this.advance(0.5); } };
     if (/^Interact_StockShelf_A/.test(k)) {
-      if (q === 'shift' && s.shift.register >= s.shift.need.register && s.shift.stock < s.shift.need.stock) { const aisle = parseInt(k.slice(-1), 10); return { label: `Stock aisle ${aisle}`, run: () => this.stockTask(aisle) }; }
+      if (q === 'shift' && s.shift && s.shift.register >= s.shift.need.register && s.shift.stock < s.shift.need.stock) { const aisle = parseInt(k.slice(-1), 10); return { label: `Stock aisle ${aisle}`, run: () => this.stockTask(aisle) }; }
       return null;
     }
     const f = map[k];

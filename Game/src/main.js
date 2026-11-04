@@ -575,7 +575,7 @@ function boundsFn(p) {
 function clampCamera(want, target) {
   const s = game && game.state;
   if (s && s.location === 'apartment') { want.x = THREE.MathUtils.clamp(want.x, -3.75, 3.75); want.z = THREE.MathUtils.clamp(want.z, -5.8, -0.3); want.y = THREE.MathUtils.clamp(want.y, -499.6, -497.4); return; }
-  if (s && s.location === 'club') { const b = W.club.bounds; want.x = THREE.MathUtils.clamp(want.x, b[0] + 0.5, b[2] - 0.5); want.z = THREE.MathUtils.clamp(want.z, -(b[3] - 0.5), -(CLUB.oy + 0.6)); want.y = THREE.MathUtils.clamp(want.y, 0.5, 10.5); return; }
+  if (s && s.location === 'club' && W.club) { const b = W.club.bounds; want.x = THREE.MathUtils.clamp(want.x, b[0] + 0.5, b[2] - 0.5); want.z = THREE.MathUtils.clamp(want.z, -(b[3] - 0.5), -(CLUB.oy + 0.6)); want.y = THREE.MathUtils.clamp(want.y, 0.5, 10.5); return; }
   const DD = s && W.d[s.location];
   if (DD) {
     want.y = Math.max(want.y, 0.6);
@@ -645,7 +645,7 @@ function loop(now) {
   const s = game.state;
   const playing = mode === 'play' && !busy();
   if (playing) game.tick(dt / 360 * (s.timeScale || 1));   // 1 real minute ≈ 10 game minutes
-  const apt = s.location === 'apartment', club = s.location === 'club', DD = W.d[s.location];
+  const apt = s.location === 'apartment', club = s.location === 'club' && !!W.club, DD = W.d[s.location];
   const gfn = DD ? (x, y) => districtHeight(x, y, DD.def) : apt || club ? () => 0 : groundAt;
   if (mode === 'play' && fcam.mode === 'follow') {
     if (!busy()) player.update(dt, input, fcam, apt ? aptColl : club ? clubColl : DD ? DD.coll : coll, gfn, apt ? W.data.apartment.bounds : club ? W.club.bounds : DD ? (p) => clampToWalk(p, DD.walk) : boundsFn);

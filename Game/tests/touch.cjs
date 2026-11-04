@@ -56,8 +56,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await p.waitForFunction(() => window.REAL.state.chapter === 'nowhere' && document.querySelector('#caption').hidden, null, { timeout: 90000 });
   await p.evaluate(() => { const s = window.REAL.wildSign(0); window.REAL.teleportXY(s.x - 1.5, s.y - 1); }); await sleep(800);
   await tapEl('#btn-interact'); await sleep(800);
-  if (await p.isVisible('.learn-card')) await tapEl('.learn-card button.primary');
-  await sleep(500);
+  for (let i = 0; i < 20 && !(await p.isVisible('.signcard')); i++) { if (await p.isVisible('.learn-card')) await tapEl('.learn-card button.primary'); await sleep(500); }
   const opened = await p.isVisible('.signcard');
   console.log('tapping interact opened the road sign:', opened);
   await p.screenshot({ path: path.join(OUT, 'touch_sign.png'), timeout: 150000 });
