@@ -315,3 +315,18 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--gold-2); ou
 .keys-alpha { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; margin: 10px 0; }
 .key.sm { padding: 8px 0; font-size: 15px; min-height: 38px; }
 .opt:disabled { opacity: .45; }
+
+/* ---------- full-screen map */
+.mapview { position: fixed; inset: 0; z-index: 45; background: #141a2c; touch-action: none; }
+.mapview canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+.mv-top { position: absolute; left: 0; right: 0; top: 0; display: flex; align-items: center; justify-content: space-between; padding: calc(max(12px, env(safe-area-inset-top)) + 4px) 16px 10px; background: linear-gradient(#141a2cee, #141a2c00); pointer-events: none; }
+.mv-title { font: 700 26px "Barlow Condensed", system-ui, sans-serif; letter-spacing: .04em; color: #e9a93a; text-transform: uppercase; }
+.mv-x { pointer-events: auto; width: 48px; height: 48px; border-radius: 50%; border: 0; background: #232b45; color: #fff; font-size: 22px; }
+.mv-tabs { position: absolute; left: 0; right: 0; bottom: max(16px, env(safe-area-inset-bottom)); display: flex; gap: 6px; justify-content: center; padding: 0 16px; }
+.mv-tabs button { flex: 1 1 0; min-width: 0; max-width: 130px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border: 0; border-radius: 999px; padding: 11px 6px; background: #232b45; color: #dfe5f5; font: 700 15px "Barlow Condensed", system-ui, sans-serif; letter-spacing: .03em; }
+.mv-tabs button.on { background: #e9a93a; color: #141a2c; }
+.mv-zoom { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; }
+.mv-zoom button { width: 48px; height: 48px; border-radius: 14px; border: 0; background: #232b45; color: #fff; font-size: 22px; }
+.mv-note { position: absolute; left: 16px; right: 16px; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 60px); text-align: center; color: #e9d6a8; font: 600 15px system-ui, sans-serif; pointer-events: none; text-shadow: 0 1px 3px #000; }
+.mv-note:empty { display: none; }
+#minimap { cursor: pointer; }

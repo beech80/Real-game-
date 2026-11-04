@@ -16,6 +16,7 @@ import { CAREERS } from './life.js';
 import { makePet, PetFollower, makeCompanion, updateCompanion } from './pets.js';
 import { Neighbors } from './multiplayer.js';
 import { buildInterior, BUILDING_ROOMS, ROOM } from './interiors.js';
+import { MapView } from './mapview.js';
 import { carMesh, Pedestrian } from './city.js';
 installExpansion(Game);
 
@@ -46,7 +47,7 @@ const W = { district: null, apartment: null, wild: null, club: null, data: null,
 let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60;
 let player = null, game = null, input = null, fcam = null, traffic = null, peds = [], npcs = {}, coll = null, aptColl = null, clubColl = null, members = [];
 var mode = 'loading';
-let beacon = null, minimap = null;
+let beacon = null, minimap = null, mapView = null, lastTarget = null;
 
 // ------------------------------------------------------------------------------------------ loading
 function progress(p, label) { $('#load-bar').style.width = Math.round(p * 100) + '%'; if (label) $('#load-label').textContent = label; }
@@ -75,6 +76,9 @@ async function boot() {
   W.pools = makeLightPools(data.district.colliders.filter((c) => c.n === 'PROP_StreetLight'));
   scene.add(W.pools);
   minimap = new Minimap($('#minimap'), data.district); minimap.wildRoad = WILD.road; minimap.wildTrail = WILD.trail;
+  mapView = new MapView(data.district, { wildRoad: WILD.road, wildTrail: WILD.trail });
+  mapView.onClose = () => { if (game) { game.busy = false; if (input) input.enabled = true; } };
+  $('#minimap').addEventListener('click', () => openMap());
   W.ccSign = floatingSign(['COMMUNITY CENTER', 'HOUSING · JOBS · HELP']);
   const cc = sock('Door_CareerCenter'); W.ccSign.position.copy(P2W(cc.x, cc.y - 0.4, 4.6)); scene.add(W.ccSign);
   progress(1, 'Ready');
@@ -615,6 +619,16 @@ async function doInteract() {
   try { await nearest.run(); } finally { game.busy = false; input.enabled = true; }
 }
 const busy = () => game.busy || UI.anySheet() || !$('#dialog').hidden;
+function openMap() {
+  if (!game || mode !== 'play' || busy() || !mapView) return;
+  const s = game.state;
+  if (s.location === 'club' || s.chapter === 'prologue') { UI.toast('The Club grounds. No map needed here.', 'info'); return; }
+  let area = s.location, x = player.pos.x, y = player.pos.y, inside = null;
+  if (s.location === 'interior' && s.room) { area = s.room.loc; x = s.room.door.x; y = s.room.door.y; inside = (s.room.sign || '').replace(/\b(\w)(\w*)/g, (m, a, b) => a + b.toLowerCase()); }
+  if (s.location === 'apartment') { const H = HOMES[s.home || 'starter']; area = H.district; inside = 'your home'; const pt = H.district === 'district' ? sock('Door_ApartmentLobby') : W.d[H.district] && W.d[H.district].points.find((q) => q.key === H.door); if (pt) { x = pt.x; y = pt.y; } }
+  game.busy = true; if (input) input.enabled = false; audio.play('click');
+  mapView.show({ area, x, y, heading: inside ? 0 : player.heading, inside }, inside ? null : lastTarget, { life: game.life().level, cart: W.cartPos });
+}
 function phone() { if (mode !== 'play' || busy()) return; game.busy = true; input.enabled = false; Promise.resolve(openPhone(game)).finally(() => { game.busy = false; input.enabled = true; }); }
 function playerAnim(name, secs) {
   if (name === 'Sit') { player.ch.lock = true; player.ch.play('Sit', 0.3); setTimeout(() => { player.ch.lock = false; }, (secs || 3) * 1000); }
@@ -754,6 +768,7 @@ function loop(now) {
       const sameSpace = so && (apt ? !!sock(obj.target, 'apartment') : !!sock(obj.target, 'district') || /^NPC_Manager/.test(obj.target));
       if (so && sameSpace) target = so; else if (so && apt) target = sock('Interact_ExitDoor', 'apartment'); else if (so && !apt) target = sock('Door_ApartmentLobby');
     }
+    lastTarget = target;
     const dist = target ? Math.hypot(target.x - player.pos.x, target.y - player.pos.y) : null;
     UI.objective(fcam.mode === 'follow' ? obj.text : null, dist);
     if (target) { beacon.visible = dist > 2.2; beacon.position.copy(P2W(target.x, target.y, apt ? -500 : target === W.wild.signs[0] ? wildHeight(target.x, target.y) : 0.14)); beacon.userData.ring.scale.setScalar(1 + Math.sin(t * 3) * 0.12); }
@@ -766,6 +781,7 @@ function loop(now) {
     saveT += dt;
     if (saveT > 20 && !busy() && !club && !IR) { saveT = 0; s.pos = { ...player.pos }; s.heading = player.heading; game.save(); }
   }
+  if (mapView && mapView.open) mapView.draw(t);
   engine.render();
 }
 function lampsUpdate() {
@@ -801,7 +817,7 @@ window.REAL = {
   quality: (q) => engine.setQuality(q),
   life: () => game.life(),
   travel: (loc) => travelTo(loc, true), districtPoints: () => (W.d[game.state.location] || { points: [] }).points.map((p) => ({ ...p })),
-  refresh: () => refreshWorld(), roomPoints: () => { const R = curRoom(); return R ? R.points.map((p) => ({ ...p })) : []; }, leave: () => leaveBuilding(),
+  refresh: () => refreshWorld(), openMap: () => openMap(), mapOpen: () => !!(mapView && mapView.open), roomPoints: () => { const R = curRoom(); return R ? R.points.map((p) => ({ ...p })) : []; }, leave: () => leaveBuilding(),
   info: () => ({ draws: engine.renderer.info.render.calls, tris: engine.renderer.info.render.triangles, peds: peds.length, quality: engine.quality }),
 };
 
