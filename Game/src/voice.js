@@ -264,7 +264,7 @@ export function speakTask(G, task, who, skill = 'write.professional') {
   }, { icon: '🗣️', noClose: true });
 }
 
-/** Ask a character anything (by voice or typing); they answer in character and out loud. */
+/** Ask a character anything (typed); they answer in character, as text. */
 export function askNPC(G, npc) {
   const history = [];
   return UI.sheet(`Talk with ${npc.name}`, (close) => {
@@ -278,9 +278,8 @@ export function askNPC(G, npc) {
       wait.textContent = `${npc.name}: ${a.text}`; log.scrollTop = 1e6; Voice.speak(a.text, npc.name);
       G.befriend(npc.name, 0.1); G.state.stats.questionsAsked = (G.state.stats.questionsAsked || 0) + 1;
     };
-    const mic = h('button', { class: 'mic', 'aria-label': 'Ask out loud', onclick: async () => { mic.classList.add('on'); const t = await Voice.ask({ prompt: `Ask ${npc.name} a question` }); mic.classList.remove('on'); if (t) send(t); } }, '🎤');
     inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
-    return h('div', { class: 'act' }, log, h('div', { class: 'microw' }, mic, inp, h('button', { class: 'primary sm', onclick: () => send() }, 'Ask')),
+    return h('div', { class: 'act' }, log, h('div', { class: 'microw' }, inp, h('button', { class: 'primary sm', onclick: () => send() }, 'Ask')),
       h('p', { class: 'tip' }, 'Characters only talk about the game world. Never share personal information.'), h('button', { class: 'ghost', onclick: () => { Voice.stop(); close(); } }, 'Thanks, bye!'));
   }, { icon: '💬' });
 }

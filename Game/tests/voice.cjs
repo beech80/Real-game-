@@ -38,17 +38,13 @@ const MOCK = () => {
   // walk to the council: the representative's question can be answered out loud
   await p.waitForFunction(() => document.querySelector('#caption').hidden, null, { timeout: 60000 });
   await ev(() => { const c = window.REAL.club(); window.REAL.teleportXY(c.councilDoor.x, c.councilDoor.y - 1.5); });
-  let spoke = false;
-  for (let i = 0; i < 40 && !spoke; i++) {
+  let micInDialog = false, sawChoices = false;
+  for (let i = 0; i < 40; i++) {
     await sleep(500);
-    if (await p.isVisible('#dialog .d-mic')) {
-      const before = await p.textContent('#dialog .d-text'); const choices = await p.$$eval('#dialog .d-choice', (e) => e.map((x) => x.textContent));
-      await ev((t) => { window.__say = t; }, choices[0].slice(1, 30)); await shot('dialog_mic');
-      await p.click('#dialog .d-mic'); await sleep(1500);
-      const after = await p.$eval('#dialog', (d) => (d.hidden ? '(closed)' : d.querySelector('.d-text').textContent));
-      spoke = after !== before; results.dialogAnsweredByVoice = spoke;
-    } else if (await p.isVisible('#dialog .d-next')) { await p.click('#dialog .d-next'); }
+    if (await p.isVisible('#dialog .d-mic')) micInDialog = true;
+    const ch = await p.$$('#dialog .d-choice'); if (ch.length) { sawChoices = true; await ch[0].click(); } else if (await p.isVisible('#dialog .d-next')) await p.click('#dialog .d-next').catch(() => {});
   }
+  results.noMicInDialog = sawChoices && !micInDialog;
   // into the city
   await ev(() => window.REAL.devJump('hired')); await sleep(1500);
   await p.evaluate(() => { while (!document.querySelector('#dialog').hidden) document.querySelector('#dialog .d-next, #dialog .d-choice') && document.querySelector('#dialog .d-next, #dialog .d-choice').click(); });
@@ -57,19 +53,18 @@ const MOCK = () => {
   await p.waitForSelector('.chatlog'); await p.fill('.microw input', 'How do I corner faster in a race?'); await p.click('button:text-is("Ask")');
   await p.waitForFunction(() => [...document.querySelectorAll('.bubble.npc')].some((b) => /friction/.test(b.textContent)), null, { timeout: 30000 });
   results.npcAnsweredQuestion = true; await shot('ask_npc');
-  await ev(() => window.__say = 'what time does fresh mart close'); await p.click('.chatlog ~ .microw .mic').catch(() => {}); await sleep(1500);
-  results.askByVoice = await ev(() => [...document.querySelectorAll('.bubble.me')].some((b) => /fresh mart/i.test(b.textContent)));
+  results.noMicInAsk = !(await p.$('.chatlog ~ .microw .mic'));
   await p.click('button:text-is("Thanks, bye!")');
   // speaking practice, graded
   await ev(() => { window.__manualSpeak = true; window.__say = 'Hello, welcome to Fresh Mart! How can I help you today?'; window.__sp = window.REAL.speakPractice('cashier', 0); });
   await p.waitForSelector('.speakact .mic'); await p.click('.speakact .mic');
   await p.waitForSelector('.speakact .stars', { timeout: 30000 }); results.speakingStars = await p.textContent('.speakact .stars'); await shot('speaking_graded');
   await p.click('.speakact button.primary:text-is("Continue")');
-  // a learning task answered out loud
+  // learning questions are tapped, not spoken
   await ev(() => { window.__pr = window.REAL.practice('fin.prices'); });
-  await p.waitForSelector('.activity .mic'); await ev(() => { window.__say = String(window.__lastQ.a); }); await p.click('.activity .mic');
-  results.taskAnsweredByVoice = await p.waitForSelector('.activity button.primary:text-is("Continue")', { timeout: 8000 }).then(() => true, () => false); await shot('task_by_voice');
-  await p.click('.activity button.primary:text-is("Continue")').catch(() => {}); await sleep(500);
+  await p.waitForSelector('.activity .opt'); results.noMicInTasks = !(await p.$('.activity .mic'));
+  await p.click('.activity .opt'); await sleep(400);
+  await p.evaluate(() => { const b = document.querySelector('.activity button.primary'); if (b) b.click(); }); await sleep(500);
   // the phone/app blocks the browser mic: the 🎤 opens an answer box for the keyboard's own dictation instead
   await ev(() => { window.__srBlocked = true; window.__say = 'Hello! Welcome to Fresh Mart, how can I help you?'; window.__sp = window.REAL.speakPractice('cashier', 0); });
   await p.waitForSelector('.speakact .mic'); await p.click('.speakact .mic');
@@ -77,16 +72,16 @@ const MOCK = () => {
   await p.fill('.dictate textarea', 'Hello! Welcome to Fresh Mart, how can I help you?'); await p.click('.dictate button:text-is("Done ✓")');
   await p.waitForSelector('.speakact .stars', { timeout: 30000 }); results.gradedFromDictation = await p.textContent('.speakact .stars');
   await p.click('.speakact button.primary:text-is("Continue")');
-  // no speech recognition at all (e.g. inside an app): the 🎤 still shows and opens the box straight away
-  await ev(() => { delete window.webkitSpeechRecognition; delete window.SpeechRecognition; window.__pr = window.REAL.practice('fin.prices'); });
-  await p.waitForSelector('.activity .mic'); await p.click('.activity .mic');
+  // no speech recognition at all (e.g. inside an app): speaking practice opens the box with the keyboard straight away
+  await ev(() => { window.webkitSpeechRecognition = undefined; window.SpeechRecognition = undefined; window.__sp = window.REAL.speakPractice('cashier', 0); });
+  await p.waitForSelector('.speakact .mic'); await p.click('.speakact .mic');
   await p.waitForSelector('.dictate textarea', { timeout: 5000 }); results.dictateFocused = await ev(() => document.activeElement && document.activeElement.closest('.dictate') != null);
-  await p.fill('.dictate textarea', String(await ev(() => window.__lastQ.a)));   // dictated words arrive; nobody taps Done
-  results.taskByDictation = await p.waitForSelector('.activity button.primary:text-is("Continue")', { timeout: 8000 }).then(() => true, () => false);
+  await p.fill('.dictate textarea', 'Hi there, welcome! How can I help you today?');   // dictated words arrive; nobody taps Done
+  results.speakByDictation = await p.waitForSelector('.speakact .stars', { timeout: 15000 }).then(() => true, () => false);
   results.claudeCalls = await ev(() => window.__samples.join(','));
   console.log(JSON.stringify(results, null, 1));
   console.log('page errors', errors.length, errors.slice(0, 5));
-  const ok = results.loaderShown && results.savedOnCreate && results.reachedPrologue && results.dialogAnsweredByVoice && results.npcAnsweredQuestion && results.speakingStars && results.taskAnsweredByVoice && results.dictationBoxWhenBlocked && results.gradedFromDictation && results.dictateFocused && results.taskByDictation && !errors.length;
+  const ok = results.loaderShown && results.savedOnCreate && results.reachedPrologue && results.noMicInDialog && results.noMicInAsk && results.noMicInTasks && results.npcAnsweredQuestion && results.speakingStars && results.dictationBoxWhenBlocked && results.gradedFromDictation && results.dictateFocused && results.speakByDictation && !errors.length;
   console.log(ok ? 'VOICE TEST PASSED' : 'VOICE TEST FAILED');
   await b.close(); srv.close(); process.exit(ok ? 0 : 1);
 })().catch(async (e) => { console.error('FAIL', e); process.exit(2); });
