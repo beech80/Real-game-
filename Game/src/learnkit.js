@@ -58,9 +58,9 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     if (Q.type === 'choice') {
       const optsShown = shuffle([...new Set(Q.o)]);
       body = h('div', { class: 'opts' }, optsShown.map((o) => h('button', { class: 'opt', onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; } else e.currentTarget.classList.add('right'); } }, o)));
-      if (Voice.canListen()) {
+      {
         const mic = h('button', { class: 'mic sm', 'aria-label': 'Answer out loud', onclick: async () => {
-          if (!done.hidden) return; mic.classList.add('on'); const said = await Voice.listen(); mic.classList.remove('on');
+          if (!done.hidden) return; mic.classList.add('on'); const said = await Voice.ask({ prompt: Q.q }); mic.classList.remove('on');
           if (!said) { UI.toast('I didn’t catch that. Try again or tap an answer.', 'info'); return; }
           const i = await Brain.pick(Q.q, optsShown, said); if (i == null) { UI.toast(`Heard “${said}”. Which answer did you mean? Tap it.`, 'info', 3200); return; }
           const btn = body.querySelectorAll('.opt')[i]; if (btn && !btn.disabled) btn.click();

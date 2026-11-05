@@ -80,9 +80,9 @@ export const UI = {
       const list = choices ? h('div', { class: 'd-choices' }, choices.map((c, i) => h('button', { class: 'd-choice', onclick: () => { click(); D.hidden = true; res(i); } }, h('span', { class: 'd-key' }, letters[i]), c))) : null;
       const next = !choices ? h('button', { class: 'd-next', onclick: () => { click(); D.hidden = true; res(); } }, 'Continue ›') : null;
       const voice = this.voiceHooks;
-      const mic = choices && voice && voice.canListen() ? h('button', { class: 'd-mic', 'aria-label': 'Answer out loud', onclick: async (e) => {
-        e.stopPropagation(); mic.classList.add('on'); mic.textContent = '🎤 Listening…';
-        const idx = await voice.listenPick(text, choices); mic.classList.remove('on'); mic.textContent = '🎤 Say your answer';
+      const mic = choices && voice ? h('button', { class: 'd-mic', 'aria-label': 'Answer out loud', onclick: async (e) => {
+        e.stopPropagation(); mic.classList.add('on'); mic.textContent = '🎤 Listening…'; D.classList.add('asking');
+        const idx = await voice.listenPick(text, choices); mic.classList.remove('on'); D.classList.remove('asking'); mic.textContent = '🎤 Say your answer';
         if (idx != null && !D.hidden) { click(); D.hidden = true; voice.stop(); res(idx); } else this.toast('I didn’t catch that. Try again or tap an answer.', 'info');
       } }, '🎤 Say your answer') : null;
       fill(D, h('div', { class: 'd-name' }, opts.crown !== false ? h('span', { class: 'crown' }, '♛') : null, speaker), body, list, mic, next);

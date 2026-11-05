@@ -77,17 +77,33 @@ export class FollowCamera {
   }
   update(dt, focus, input, indoor) {
     if (this.mode !== 'follow') return;
+    const now = performance.now();
     if (input) {
+      if (input.look.x || input.look.y || input.zoom) this.lastLook = now;
       this.yaw -= input.look.x * 0.006; this.pitch = THREE.MathUtils.clamp(this.pitch + input.look.y * 0.004, 0.05, 1.1);
       input.look.set(0, 0);
       if (input.zoom) { this.dist = THREE.MathUtils.clamp(this.dist + input.zoom * 0.5, this.minDist, this.maxDist); input.zoom = 0; }
+    }
+    // walking: ease back behind the player unless they've just turned the camera themselves
+    if (this.follow != null && now - (this.lastLook || 0) > 1500) {
+      const dy = Math.atan2(Math.sin(-this.follow - this.yaw), Math.cos(-this.follow - this.yaw));
+      if (Math.abs(dy) < 2.3) this.yaw += dy * Math.min(1, dt * 1.1);
     }
     const d = indoor ? Math.min(this.dist, typeof indoor === 'number' ? indoor : 3.6) : this.dist;
     this.target.copy(focus).add(new THREE.Vector3(0, 1.15, 0));
     const off = new THREE.Vector3(Math.sin(this.yaw) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(this.yaw) * Math.cos(this.pitch)).multiplyScalar(d);
     const want = this.target.clone().add(off);
     if (this.clamp) this.clamp(want, this.target);
-    this.cur.lerp(want, 1 - Math.exp(-dt * 10));
+    const reach = want.distanceTo(this.target);
+    if (reach < 1.3) {   // tight spot (wall right behind): look down over the shoulder instead of into the back of the head
+      const hz = new THREE.Vector3(off.x, 0, off.z).normalize(); let best = reach + 0.1;
+      const cands = [this.target.clone().addScaledVector(hz, 0.6).add(new THREE.Vector3(0, 1.5, 0)), this.target.clone().add(new THREE.Vector3(hz.x * 0.25, 1.9, hz.z * 0.25))];
+      for (const a of [0.9, -0.9]) { const y = this.yaw + a; cands.push(this.target.clone().add(new THREE.Vector3(Math.sin(y) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(y) * Math.cos(this.pitch)).multiplyScalar(d))); }
+      for (const alt of cands) { if (this.clamp) this.clamp(alt, this.target); const r = alt.distanceTo(this.target); if (r > best + 0.15) { best = r; want.copy(alt); } }
+    }
+    // pull in fast when something blocks the view, glide back out gently
+    const pullIn = want.distanceTo(this.target) < this.cur.distanceTo(this.target) - 0.05;
+    this.cur.lerp(want, 1 - Math.exp(-dt * (pullIn ? 22 : 7)));
     if (this.cur.distanceTo(want) > 12) this.cur.copy(want);
     this.cam.position.copy(this.cur);
     this.cam.lookAt(this.target);

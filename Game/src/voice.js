@@ -38,14 +38,47 @@ export const Voice = {
         this.stop();
         const r = new SR(); r.lang = 'en-US'; r.interimResults = false; r.maxAlternatives = 3; r.continuous = false;
         r.onresult = (e) => fin([...e.results[0]].map((a) => a.transcript)[0] || null);
-        r.onerror = (e) => { onStatus && onStatus(e.error === 'not-allowed' || e.error === 'service-not-allowed' ? 'denied' : 'error'); fin(null); };
+        r.onaudiostart = () => { onStatus && onStatus('audio'); };
+        r.onerror = (e) => { if (/not-allowed|service-not-allowed|audio-capture|network/.test(e.error)) window.__micBroken = true; onStatus && onStatus(e.error === 'not-allowed' || e.error === 'service-not-allowed' ? 'denied' : 'error'); fin(null); };
         r.onend = () => fin(null);
         r.start(); onStatus && onStatus('listening');
         setTimeout(() => { try { r.stop(); } catch (e) {} }, 9000);
-      } catch (e) { fin(null); }
+      } catch (e) { window.__micBroken = true; fin(null); }
+    });
+  },
+  /** Hear the player's answer, whatever the device allows. Uses the browser's speech recognition when it works;
+   *  otherwise (blocked in the app/iframe, unsupported, mic denied) opens an answer box so the keyboard's own 🎤 dictation
+   *  can be used. Call it straight from the tap so the keyboard can open. Resolves the words (string) or null. */
+  ask({ prompt = 'Say your answer', onStatus } = {}) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR || window.__micBroken) return dictate(prompt);
+    let gotAudio = false;
+    return this.listen({ onStatus: (s) => { if (s === 'audio') gotAudio = true; else onStatus && onStatus(s); } }).then((t) => {
+      if (t) return t;
+      if (!gotAudio || window.__micBroken) { window.__micBroken = true; return dictate(prompt); }   // mic never opened: use keyboard dictation from now on
+      return null;
     });
   },
 };
+
+/** Answer box for keyboard dictation (works in every phone browser and app: the keyboard's 🎤 key). */
+function dictate(prompt) {
+  return new Promise((res) => {
+    const old = document.querySelector('.dictate'); if (old) old.remove();
+    const inp = h('textarea', { class: 'writebox', rows: 2, maxlength: 400, placeholder: 'Your answer…', autocomplete: 'off', enterkeyhint: 'done' });
+    let done = false;
+    const fin = (v) => { if (done) return; done = true; wrap.remove(); res(v && v.trim() ? v.trim() : null); };
+    const wrap = h('div', { class: 'dictate', role: 'dialog', 'aria-label': 'Say your answer' },
+      h('div', { class: 'dictate-card' },
+        h('p', { class: 'lead' }, '🎤 ' + prompt),
+        h('p', { class: 'tip' }, 'Tap the 🎤 microphone key on your keyboard and talk. Your words appear here. (You can type too.)'),
+        inp,
+        h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => fin(null) }, 'Cancel'), h('button', { class: 'primary sm', onclick: () => fin(inp.value) }, 'Done ✓'))));
+    inp.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); fin(inp.value); } });
+    document.body.append(wrap);
+    try { inp.focus(); } catch (e) {}
+  });
+}
 
 // ------------------------------------------------------------------------------------------- the brain
 let sampleP = null;
@@ -176,7 +209,7 @@ export const SPEAK_TASKS = {
 export function speakTask(G, task, who, skill = 'write.professional') {
   G.edu.discover(skill);
   return UI.sheet('Speaking practice', (close) => {
-    const status = h('p', { class: 'tip' }, Voice.canListen() ? 'Tap 🎤 and say your answer out loud. (You can type instead.)' : 'Type your answer, or use your keyboard’s 🎤 dictation button to speak it.');
+    const status = h('p', { class: 'tip' }, 'Tap 🎤 and say your answer out loud. (You can type instead.)');
     const said = h('textarea', { class: 'writebox', rows: 3, placeholder: 'Your answer…', maxlength: 400 });
     const out = h('div', { class: 'whybox', hidden: true });
     const done = h('button', { class: 'primary', hidden: true, onclick: () => close(true) }, 'Continue');
@@ -190,8 +223,8 @@ export function speakTask(G, task, who, skill = 'write.professional') {
       Voice.speak(`${g.feedback} ${g.tip || ''}`, who); status.textContent = g.smart ? '' : '';
       G.sfx(g.stars >= 3 ? 'good' : 'click'); done.hidden = false;
     };
-    const mic = h('button', { class: 'mic', hidden: !Voice.canListen(), onclick: async () => {
-      mic.classList.add('on'); const t = await Voice.listen({ onStatus: (s) => { status.textContent = s === 'listening' ? 'Listening…' : s === 'denied' ? 'Microphone isn’t allowed here. Type, or use your keyboard’s 🎤 dictation.' : 'I didn’t catch that. Try again or type.'; } });
+    const mic = h('button', { class: 'mic', 'aria-label': 'Say your answer', onclick: async () => {
+      mic.classList.add('on'); const t = await Voice.ask({ prompt: task.prompt, onStatus: (s) => { status.textContent = s === 'listening' ? 'Listening…' : s === 'denied' ? 'Microphone isn’t allowed here. Type, or use your keyboard’s 🎤 dictation.' : 'I didn’t catch that. Try again or type.'; } });
       mic.classList.remove('on'); if (t) { said.value = t; status.textContent = `Heard: “${t}”`; check(); }
     } }, '🎤');
     setTimeout(() => Voice.speak(task.prompt, who), 200);
@@ -214,7 +247,7 @@ export function askNPC(G, npc) {
       wait.textContent = `${npc.name}: ${a.text}`; log.scrollTop = 1e6; Voice.speak(a.text, npc.name);
       G.befriend(npc.name, 0.1); G.state.stats.questionsAsked = (G.state.stats.questionsAsked || 0) + 1;
     };
-    const mic = h('button', { class: 'mic', hidden: !Voice.canListen(), onclick: async () => { mic.classList.add('on'); const t = await Voice.listen(); mic.classList.remove('on'); if (t) send(t); else UI.toast('Didn’t catch that. Try again or type.', 'info'); } }, '🎤');
+    const mic = h('button', { class: 'mic', 'aria-label': 'Ask out loud', onclick: async () => { mic.classList.add('on'); const t = await Voice.ask({ prompt: `Ask ${npc.name} a question` }); mic.classList.remove('on'); if (t) send(t); else UI.toast('Didn’t catch that. Try again or type.', 'info'); } }, '🎤');
     inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
     return h('div', { class: 'act' }, log, h('div', { class: 'microw' }, mic, inp, h('button', { class: 'primary sm', onclick: () => send() }, 'Ask')),
       h('p', { class: 'tip' }, 'Characters only talk about the game world. Never share personal information.'), h('button', { class: 'ghost', onclick: () => { Voice.stop(); close(); } }, 'Thanks, bye!'));

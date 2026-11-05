@@ -31,7 +31,7 @@ const MOCKS = {
     const mode = await p.evaluate(() => window.REAL.mode);
     await sleep(4000);
     const crash = await p.isVisible('#crash');
-    await p.screenshot({ path: path.join(OUT, `startup_${name}.png`) });
+    await p.screenshot({ path: path.join(OUT, `startup_${name}.png`), timeout: 180000 });
     const ok = mode === 'play' && !crash;
     console.log(name, '| loader shown:', loaderShown, '| saved on create:', saved, '| mode:', mode, '| crash panel:', crash, '| page errors:', errors.length, ok ? 'OK' : 'FAIL');
     if (!ok) failed++;

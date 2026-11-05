@@ -46,7 +46,7 @@ engine.onContextLost = () => { try { game && game.save(); } catch (e) {} fatal('
 const audio = new Audio();
 setSfx((n) => audio.play(n));
 UI.init();
-UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.listen(); return said ? Brain.pick(q, choices, said) : null; } };
+UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.ask({ prompt: q }); return said ? Brain.pick(q, choices, said) : null; } };
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
 
@@ -768,7 +768,28 @@ function boundsFn(p) {
   if (p.y < -80) { const b = WILD.bounds; p.x = THREE.MathUtils.clamp(p.x, b.x0, b.x1); p.y = Math.max(p.y, b.y0); }
   else { const b = W.data.district.bounds; p.x = THREE.MathUtils.clamp(p.x, b[0], b[2]); p.y = Math.min(p.y, b[3]); if (p.y < b[1] && Math.abs(p.x) > 9) p.y = b[1]; }
 }
+// anything solid between the player and the camera (walls, buildings, trees, hills) pulls the camera in front of it
+const camRay = new THREE.Raycaster(); let camBlk = { key: null, list: [] };
+function camBlockers() {
+  const s = game.state, IR = curRoom(), DD = W.d[s.location];
+  const key = IR ? 'in:' + s.room.key : s.location === 'apartment' ? 'apt' : s.location === 'club' ? 'club' : DD ? 'd:' + s.location : inWild(player.pos) ? 'wild' : 'district';
+  if (camBlk.key === key && performance.now() - camBlk.t < 4000) return camBlk.list;
+  const roots = IR ? [IR.group] : key === 'apt' ? [W.apartment] : key === 'club' ? [W.club && W.club.group] : DD ? [DD.group] : key === 'wild' ? [W.wild && W.wild.group, W.district] : [W.district];
+  const list = [];
+  for (const r of roots) if (r) r.traverse((o) => { if (o.isMesh && !o.isSkinnedMesh && o.castShadow && o.material && !o.material.transparent) list.push(o); });
+  camBlk = { key, list, t: performance.now() }; return list;
+}
+function occludeCamera(want, target) {
+  const dir = want.clone().sub(target), len = dir.length(); if (len < 0.05) return;
+  dir.divideScalar(len); camRay.set(target, dir); camRay.near = 0.25; camRay.far = len + 0.3;
+  const hit = camRay.intersectObjects(camBlockers(), false)[0];
+  if (hit) want.copy(target).addScaledVector(dir, Math.max(0.3, Math.min(len, hit.distance - 0.3)));
+}
 function clampCamera(want, target) {
+  clampCameraBounds(want, target);
+  try { occludeCamera(want, target); } catch (e) { console.warn('camera occlusion off', e); camBlk = { key: '__off', list: [], t: 1e15 }; }
+}
+function clampCameraBounds(want, target) {
   const s = game && game.state;
   if (s && s.location === 'apartment') { want.x = THREE.MathUtils.clamp(want.x, -3.75, 3.75); want.z = THREE.MathUtils.clamp(want.z, -5.8, -0.3); want.y = THREE.MathUtils.clamp(want.y, -499.6, -497.4); return; }
   if (s && s.location === 'club' && W.club) { const b = W.club.bounds; want.x = THREE.MathUtils.clamp(want.x, b[0] + 0.5, b[2] - 0.5); want.z = THREE.MathUtils.clamp(want.z, -(b[3] - 0.5), -(CLUB.oy + 0.6)); want.y = THREE.MathUtils.clamp(want.y, 0.5, 10.5); return; }
@@ -856,6 +877,7 @@ function loop(now) {
   for (const m of members) m.update(dt);
   const focus = player.ch.root.position.clone();
   fcam.clamp = clampCamera;
+  const mv = input && input.move; fcam.follow = playing && mv && mv.y > 0.2 && Math.hypot(mv.x, mv.y) > 0.3 ? player.heading : null;
   fcam.update(dt, focus, playing ? input : null, IR ? 5.6 : apt || club || inFreshMart(player.pos));
   engine.setTime(IR ? 12.5 : apt ? Math.min(Math.max(s.time, 6), 23.9) : s.time % 24, apt ? new THREE.Vector3(0, -500, 0) : focus);
   if (IR) { engine.sun.intensity *= 0.4; engine.renderer.toneMappingExposure *= 0.9; }
@@ -925,7 +947,8 @@ window.REAL = {
   get state() { return game && game.state; }, get mode() { return mode; },
   teleport(key, where = 'district') { const so = sock(key, where); if (so) { player.pos = { x: so.x, y: so.y }; player.apply(); } return !!so; },
   cam(yaw, pitch, dist) { fcam.yaw = yaw; fcam.pitch = pitch; fcam.dist = dist; fcam.cur.set(0, 1e4, 0); },
-  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw,
+  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, playerHeading: () => player.heading,
+  camCheck: () => { const t = fcam.target.clone(), c = camera.position.clone(), dir = t.clone().sub(c), len = dir.length(); camRay.set(c, dir.normalize()); camRay.near = 0.05; camRay.far = Math.max(0.06, len - 0.35); const hit = camRay.intersectObjects(camBlockers(), false)[0]; camRay.near = 0.25; const n = t.project(camera); return { dist: +len.toFixed(2), blocked: !!hit, onScreen: Math.abs(n.x) < 1 && Math.abs(n.y) < 1 && n.z < 1, where: game.state.location }; },
   teleportXY(x, y) { player.pos = { x, y }; player.apply(); },
   npcPos: (n) => npcs[n] && !npcs[n].hidden && { ...npcs[n].pos },
   wildSign: (i) => ({ ...W.wild.signs[i] }), club: () => ({ ...CLUB }),

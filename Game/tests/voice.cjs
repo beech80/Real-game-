@@ -9,7 +9,7 @@ const srv = http.createServer((q, r) => { const f = path.join(DIST, decodeURICom
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const MOCK = () => {
   window.__samples = [];
-  class FakeSR { start() { setTimeout(() => { const t = window.__say; if (t && this.onresult) this.onresult({ results: [[{ transcript: t }]] }); else if (this.onerror) this.onerror({ error: 'no-speech' }); this.onend && this.onend(); }, 400); } stop() {} }
+  class FakeSR { start() { if (window.__srBlocked) return setTimeout(() => { this.onerror && this.onerror({ error: 'not-allowed' }); this.onend && this.onend(); }, 100); this.onaudiostart && this.onaudiostart(); setTimeout(() => { const t = window.__say; if (t && this.onresult) this.onresult({ results: [[{ transcript: t }]] }); else if (this.onerror) this.onerror({ error: 'no-speech' }); this.onend && this.onend(); }, 400); } stop() {} }
   window.webkitSpeechRecognition = FakeSR; window.SpeechRecognition = FakeSR;
   const S = async (msgs) => { window.__samples.push('answer'); return { text: 'Great question! Tires grip the road with friction, so better tires help you corner.', truncated: false }; };
   S.json = async (prompt) => { window.__samples.push(/option index/.test(prompt) ? 'pick' : 'grade'); return /option index/.test(prompt) ? { index: 0 } : { stars: 4, feedback: 'Lovely warm greeting!', tip: '' }; };
@@ -69,10 +69,24 @@ const MOCK = () => {
   await ev(() => { window.__pr = window.REAL.practice('fin.prices'); });
   await p.waitForSelector('.activity .mic'); await ev(() => { window.__say = String(window.__lastQ.a); }); await p.click('.activity .mic'); await sleep(1200);
   results.taskAnsweredByVoice = await p.isVisible('.activity button.primary:text-is("Continue")'); await shot('task_by_voice');
+  await p.click('.activity button.primary:text-is("Continue")').catch(() => {}); await sleep(500);
+  // the phone/app blocks the browser mic: the 🎤 opens an answer box for the keyboard's own dictation instead
+  await ev(() => { window.__srBlocked = true; window.__say = 'Hello! Welcome to Fresh Mart, how can I help you?'; window.__sp = window.REAL.speakPractice('cashier', 0); });
+  await p.waitForSelector('.speakact .mic'); await p.click('.speakact .mic');
+  await p.waitForSelector('.dictate textarea', { timeout: 10000 }); results.dictationBoxWhenBlocked = true; await shot('dictate_box');
+  await p.fill('.dictate textarea', 'Hello! Welcome to Fresh Mart, how can I help you?'); await p.click('.dictate button:text-is("Done ✓")');
+  await p.waitForSelector('.speakact .stars', { timeout: 30000 }); results.gradedFromDictation = await p.textContent('.speakact .stars');
+  await p.click('.speakact button.primary:text-is("Continue")');
+  // no speech recognition at all (e.g. inside an app): the 🎤 still shows and opens the box straight away
+  await ev(() => { delete window.webkitSpeechRecognition; delete window.SpeechRecognition; window.__pr = window.REAL.practice('fin.prices'); });
+  await p.waitForSelector('.activity .mic'); await p.click('.activity .mic');
+  await p.waitForSelector('.dictate textarea', { timeout: 5000 }); results.dictateFocused = await ev(() => document.activeElement && document.activeElement.closest('.dictate') != null);
+  await p.fill('.dictate textarea', String(await ev(() => window.__lastQ.a))); await p.keyboard.press('Enter'); await sleep(1200);
+  results.taskByDictation = await p.isVisible('.activity button.primary:text-is("Continue")');
   results.claudeCalls = await ev(() => window.__samples.join(','));
   console.log(JSON.stringify(results, null, 1));
   console.log('page errors', errors.length, errors.slice(0, 5));
-  const ok = results.loaderShown && results.savedOnCreate && results.reachedPrologue && results.dialogAnsweredByVoice && results.npcAnsweredQuestion && results.speakingStars && results.taskAnsweredByVoice && !errors.length;
+  const ok = results.loaderShown && results.savedOnCreate && results.reachedPrologue && results.dialogAnsweredByVoice && results.npcAnsweredQuestion && results.speakingStars && results.taskAnsweredByVoice && results.dictationBoxWhenBlocked && results.gradedFromDictation && results.dictateFocused && results.taskByDictation && !errors.length;
   console.log(ok ? 'VOICE TEST PASSED' : 'VOICE TEST FAILED');
   await b.close(); srv.close(); process.exit(ok ? 0 : 1);
 })().catch(async (e) => { console.error('FAIL', e); process.exit(2); });

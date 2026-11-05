@@ -385,3 +385,8 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .chatlog { max-height: 46vh; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
 .bubble { padding: 8px 12px; border-radius: 14px; max-width: 86%; line-height: 1.35; } .bubble.npc { background: #232b45; align-self: flex-start; } .bubble.me { background: #2f8f5a; align-self: flex-end; }
 .stars { font-size: 28px; color: #e8b23a; letter-spacing: 2px; }
+/* keyboard-dictation answer box (used when the browser/app can't open the mic itself) */
+.dictate { position: fixed; inset: 0; z-index: 90; display: flex; align-items: flex-start; justify-content: center; padding: max(16px, env(safe-area-inset-top)) 16px 16px; background: rgba(5, 8, 18, .55); }
+.dictate-card { width: min(460px, 100%); margin-top: 8vh; background: var(--ink-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; box-shadow: 0 12px 40px rgba(0, 0, 0, .5); }
+.dictate-card .lead { margin: 0 0 4px; font-weight: 600; }
+.dictate-card .row { display: flex; gap: 8px; justify-content: flex-end; }
