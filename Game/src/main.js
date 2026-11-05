@@ -60,12 +60,32 @@ let beacon = null, minimap = null, mapView = null, lastTarget = null;
 function progress(p, label) { $('#load-bar').style.width = Math.round(p * 100) + '%'; if (label) $('#load-label').textContent = label; }
 function addColliders(c, list) { for (const x of list) c.items.push({ ...x, cos: Math.cos(x.r || 0), sin: Math.sin(x.r || 0) }); }
 
+// Fresh Mart was built tight (under 1 m behind the aisles, 1.2 m in the stockroom). Shift a few fixtures so every
+// walkway is about 1.5 m wide. Moves the 3D model, its collider and any interaction points together.
+function roomierFreshMart(root, D) {
+  const moves = [[/^PROP_REAL_GroceryShelf_Aisle/, 0, -0.6], [/^PROP_REAL_Checkout_/, 0, -0.6], [/^PROP_REAL_StockPallet_/, 0, 0.5],
+    [/^PROP_REAL_Table_Break$/, 0.6, 0.4], [/^PROP_REAL_Chair_Break_01$/, 0.3, 0.3], [/^PROP_REAL_Chair_Break_02$/, 1.2, 1.0]];
+  const sockMoves = [[/StockShelf_A|CustomerBrowse_A/, 0, -0.6], [/Register_0|CustomerQueue_0/, 0, -0.6], [/InventoryCount/, 0, 0.5]];
+  try {
+    root.updateMatrixWorld(true);
+    const v = new THREE.Vector3();
+    for (const [re, dx, dy] of moves) {
+      const hits = []; root.traverse((o) => { if (o.name && re.test(o.name) && !(o.parent && re.test(o.parent.name || ''))) hits.push(o); });
+      for (const o of hits) { o.getWorldPosition(v); v.x += dx; v.z -= dy; o.parent.worldToLocal(v); o.position.copy(v); }
+      for (const c of D.colliders) if (re.test(c.n || '')) { c.x += dx; c.y += dy; }
+    }
+    for (const [re, dx, dy] of sockMoves) for (const so of D.sockets) if (re.test(so.n)) { so.x += dx; so.y += dy; }
+    root.updateMatrixWorld(true);
+  } catch (e) { console.warn('fresh mart layout kept', e); }
+}
+
 async function boot() {
   progress(0.02, 'Loading the city…');
   const data = W.data = await (await fetch('assets/world.json')).json();
   const g = await loadGLB('assets/district.glb.gz', (p) => progress(0.05 + p * 0.62, 'Loading the Starting District…'));
   progress(0.7, 'Building streets…');
   await wait(30);
+  roomierFreshMart(g.scene, data.district);
   W.district = mergeStatic(g.scene, textures, 40);
   scene.add(W.district);
   W.lamps = W.district.userData.lamps;
@@ -786,7 +806,7 @@ function occludeCamera(want, target) {
   if (hit) want.copy(target).addScaledVector(dir, Math.max(0.3, Math.min(len, hit.distance - 0.3)));
 }
 function clampCamera(want, target) {
-  clampCameraBounds(want, target);
+  if (clampCameraBounds(want, target) === 'fm') return;   // the store has its own bounds; shelves shouldn't make the camera jump
   try { occludeCamera(want, target); } catch (e) { console.warn('camera occlusion off', e); camBlk = { key: '__off', list: [], t: 1e15 }; }
 }
 function clampCameraBounds(want, target) {
@@ -804,7 +824,13 @@ function clampCameraBounds(want, target) {
   }
   if (inWild(player.pos)) { want.y = Math.max(want.y, groundAt(-0, -0) + wildHeight(want.x, -want.z) + 0.6); return; }
   want.y = Math.max(want.y, 0.6);
-  if (inFreshMart(player.pos)) { const fm = W.data.district.freshmart; want.x = THREE.MathUtils.clamp(want.x, fm.x - 13.4, fm.x + 13.4); want.z = THREE.MathUtils.clamp(want.z, -(fm.y + 17.6), -(fm.y + 0.7)); want.y = Math.min(want.y, 4.6); return; }
+  if (inFreshMart(player.pos)) {   // keep the camera in the same part of the store as the player: shop floor, stockroom or office
+    const fm = W.data.district.freshmart, P = player.pos, wall = fm.y + fm.boh - 0.5, back = P.y > wall, office = back && P.x > fm.x + 7;
+    const x0 = office ? fm.x + 7.2 : fm.x - fm.w / 2 + 0.35, x1 = back && !office ? fm.x + 6.8 : fm.x + fm.w / 2 - 0.35;
+    const y0 = back ? wall + 0.65 : fm.y + 0.45, y1 = back ? fm.y + fm.d - 0.3 : wall - 0.25;
+    want.x = THREE.MathUtils.clamp(want.x, x0, x1); want.z = THREE.MathUtils.clamp(want.z, -y1, -y0); want.y = Math.min(want.y, back ? 4.2 : 4.4);
+    return 'fm';
+  }
   const dir = want.clone().sub(target);
   for (let k = 0.15; k <= 1.0001; k += 0.08) {
     const p = target.clone().addScaledVector(dir, k), x = p.x, y = -p.z;
@@ -869,7 +895,13 @@ function loop(now) {
   const apt = s.location === 'apartment', club = s.location === 'club' && !!W.club, DD = W.d[s.location], IR = curRoom();
   const gfn = DD ? (x, y) => districtHeight(x, y, DD.def) : apt || club || IR ? () => 0 : groundAt;
   if (mode === 'play' && fcam.mode === 'follow') {
-    player.speedMul = !apt && !club && !IR && !DD && inWild(player.pos) ? 2 : 1;   // the countryside walk into the city goes by twice as fast
+    player.speedMul = !apt && !club && !IR && !DD && inWild(player.pos) ? 2 : 1;
+    const inFM = !apt && !club && !IR && !DD && inFreshMart(player.pos);
+    player.radius = inFM || IR ? 0.22 : 0.3;   // indoors: slip between shelves and through doorways more easily
+    if (inFM && !busy()) for (const k of ['Door_Stockroom', 'Door_Office']) {   // ease the player into narrow back-room doorways
+      const d = sock(k); const P = player.pos;
+      if (d && Math.abs(P.y - d.y) < 1.4 && Math.abs(P.x - d.x) < 1.0 && Math.hypot(input.move.x, input.move.y) > 0.2) P.x += (d.x - P.x) * Math.min(1, dt * 5);
+    }   // the countryside walk into the city goes by twice as fast
     if (!busy()) player.update(dt, input, fcam, IR ? IR.coll : apt ? aptColl : club ? clubColl : DD ? DD.coll : coll, gfn, IR ? IR.bounds : apt ? W.data.apartment.bounds : club ? W.club.bounds : DD ? (p) => clampToWalk(p, DD.walk) : boundsFn);
     else player.ch.locomote(0, dt);
     if (apt) player.ch.root.position.y = -500 + player.h;
@@ -878,8 +910,12 @@ function loop(now) {
   for (const m of members) m.update(dt);
   const focus = player.ch.root.position.clone();
   fcam.clamp = clampCamera;
+  { const fmNow = !apt && !club && !IR && !DD && inFreshMart(player.pos), fm = W.data.district.freshmart; fcam.minPitch = fmNow ? (player.pos.y > fm.y + fm.boh - 0.5 ? 0.95 : 0.5) : 0;
+    // walking through a doorway: jump the camera into the new room rather than gliding through the wall
+    const zone = fmNow ? (player.pos.y > fm.y + fm.boh - 0.5 ? (player.pos.x > fm.x + 7 ? 'office' : 'stock') : 'floor') : 'out';
+    if (fcam.zone && zone !== fcam.zone) fcam.snap = true; fcam.zone = zone; }   // look over the shelves; near-overhead in the small back rooms
   const mv = input && input.move; fcam.follow = playing && mv && mv.y > 0.2 && Math.hypot(mv.x, mv.y) > 0.3 ? player.heading : null;
-  fcam.update(dt, focus, playing ? input : null, IR ? 5.6 : apt || club || inFreshMart(player.pos));
+  fcam.update(dt, focus, playing ? input : null, IR ? 5.6 : apt || club || (inFreshMart(player.pos) ? 4.6 : false));
   engine.setTime(IR ? 12.5 : apt ? Math.min(Math.max(s.time, 6), 23.9) : s.time % 24, apt ? new THREE.Vector3(0, -500, 0) : focus);
   if (IR) { engine.sun.intensity *= 0.4; engine.renderer.toneMappingExposure *= 0.9; }
   if (IR && IR.npc) IR.npc.update(dt, player.pos, camera.position);
@@ -948,7 +984,10 @@ window.REAL = {
   get state() { return game && game.state; }, get mode() { return mode; },
   teleport(key, where = 'district') { const so = sock(key, where); if (so) { player.pos = { x: so.x, y: so.y }; player.apply(); } return !!so; },
   cam(yaw, pitch, dist) { fcam.yaw = yaw; fcam.pitch = pitch; fcam.dist = dist; fcam.cur.set(0, 1e4, 0); },
-  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, playerHeading: () => player.heading, speedMul: () => player.speedMul,
+  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, playerHeading: () => player.heading, speedMul: () => player.speedMul, camPlanY: () => -camera.position.z, camDebug: () => { const w = fcam.cur.clone(); const r = clampCameraBounds(w, fcam.target.clone()); return { cur: fcam.cur.toArray().map((v) => +v.toFixed(2)), target: fcam.target.toArray().map((v) => +v.toFixed(2)), pitchNow: fcam.pitchNow, minPitch: fcam.minPitch, zone: fcam.zone, mode: fcam.mode, ret: r, clamped: w.toArray().map((v) => +v.toFixed(2)), loc: game.state.location, room: !!curRoom(), pos: { ...player.pos } }; },
+  // walk a path in small steps against the real colliders; returns how far along it got (1 = all the way)
+  pathClear: (pts, r = 0.22) => { let done = 0, total = 0; for (let i = 1; i < pts.length; i++) total += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+    let p = { x: pts[0][0], y: pts[0][1] }; for (let i = 1; i < pts.length; i++) { const [tx, ty] = pts[i]; for (let k = 0; k < 4000; k++) { const dx = tx - p.x, dy = ty - p.y, d = Math.hypot(dx, dy); if (d < 0.05) break; const st = Math.min(0.05, d), q = { x: p.x + dx / d * st, y: p.y + dy / d * st }; coll.resolve(q, r); const moved = Math.hypot(q.x - p.x, q.y - p.y); done += Math.max(0, (dx * (q.x - p.x) + dy * (q.y - p.y)) / d); p = q; if (moved < 0.002) return +(done / total).toFixed(2); } } return +Math.min(1, done / total).toFixed(2); },
   camCheck: () => { const t = fcam.target.clone(), c = camera.position.clone(), dir = t.clone().sub(c), len = dir.length(); camRay.set(c, dir.normalize()); camRay.near = 0.05; camRay.far = Math.max(0.06, len - 0.35); const hit = camRay.intersectObjects(camBlockers(), false)[0]; camRay.near = 0.25; const n = t.project(camera); return { dist: +len.toFixed(2), blocked: !!hit, onScreen: Math.abs(n.x) < 1 && Math.abs(n.y) < 1 && n.z < 1, where: game.state.location }; },
   teleportXY(x, y) { player.pos = { x, y }; player.apply(); },
   npcPos: (n) => npcs[n] && !npcs[n].hidden && { ...npcs[n].pos },
