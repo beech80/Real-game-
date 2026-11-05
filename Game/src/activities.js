@@ -159,44 +159,80 @@ export async function interview(G) {
   return true;
 }
 
-/** Cursive tracing pad (signature, letter practice). */
+/** Cursive tracing pad (signature, letter practice). Builds up step by step: each letter on its own first,
+ *  then the whole word joined. (A sentence goes word by word, then the whole sentence.) */
 export function cursivePad(G, text, skill, prompt, done) {
   G.edu.discover(skill);
-  const wrap = h('div', { class: 'act' }, h('p', { class: 'lead' }, prompt));
-  const cv = h('canvas', { class: 'sig', width: 640, height: 220 });
-  const guide = document.createElement('canvas'); guide.width = 640; guide.height = 220;
-  const gg = guide.getContext('2d');
-  const fit = Math.min(110, 560 / Math.max(3, text.length * 0.55));
-  gg.font = `${fit}px "Dancing Script", "Segoe Script", cursive`; gg.textAlign = 'center'; gg.textBaseline = 'middle';
-  gg.lineWidth = 26; gg.lineJoin = 'round'; gg.strokeStyle = '#000'; gg.strokeText(text, 320, 115); gg.fillText(text, 320, 115);
-  const g = cv.getContext('2d');
-  const drawGuide = () => { g.clearRect(0, 0, 640, 220); g.font = gg.font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(233,169,58,.32)'; g.fillText(text, 320, 115); g.strokeStyle = 'rgba(233,169,58,.15)'; g.lineWidth = 1; g.beginPath(); g.moveTo(40, 160); g.lineTo(600, 160); g.stroke(); };
-  drawGuide();
-  const ink = document.createElement('canvas'); ink.width = 640; ink.height = 220; const ig = ink.getContext('2d');
-  let drawing = false, last = null;
-  const pos = (e) => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * 640 / r.width, (e.clientY - r.top) * 220 / r.height]; };
-  cv.addEventListener('pointerdown', (e) => { drawing = true; last = pos(e); cv.setPointerCapture(e.pointerId); e.preventDefault(); });
-  cv.addEventListener('pointermove', (e) => {
-    if (!drawing) return; const p = pos(e);
-    for (const c of [g, ig]) { c.strokeStyle = c === g ? '#f4ead7' : '#000'; c.lineWidth = c === g ? 5 : 28; c.lineCap = 'round'; c.beginPath(); c.moveTo(...last); c.lineTo(...p); c.stroke(); }
-    last = p;
-  });
-  cv.addEventListener('pointerup', () => { drawing = false; });
-  const hp = helpBox(G, skill);
-  const score = () => {
-    const a = gg.getImageData(0, 0, 640, 220).data, b = ig.getImageData(0, 0, 640, 220).data;
-    let tot = 0, hit = 0, stray = 0;
-    for (let i = 3; i < a.length; i += 16) { if (a[i] > 0) { tot++; if (b[i] > 0) hit++; } else if (b[i] > 0) stray++; }
-    return { cover: hit / Math.max(1, tot), stray: stray / Math.max(1, tot) };
+  text = String(text || '').trim() || 'a';
+  const sentence = /\s/.test(text);
+  const parts = sentence ? text.split(/\s+/) : [...text];
+  const steps = parts.length > 1 ? [...parts.map((t, i) => ({ t, i, final: false })), { t: text, final: true }] : [{ t: text, final: true }];
+  const wrap = h('div', { class: 'act cursivepad' }, prompt ? h('p', { class: 'lead' }, prompt) : null);
+  const strip = h('div', { class: 'cursive-steps', 'aria-label': 'Progress' });
+  const stepLbl = h('p', { class: 'tip cursive-steplbl' });
+  const holder = h('div', {});
+  const hp = helpBox(G, skill); if (!prompt) hp.box.hidden = true;   // inside a learning card the tip is already shown above
+  if (steps.length > 1) wrap.append(strip, stepLbl);
+  wrap.append(holder, hp.box);
+  let k = 0;
+  const drawStrip = () => {
+    const st = steps[k];
+    strip.replaceChildren(...parts.map((t, i) => h('span', { class: st.final ? 'now' : i < st.i ? 'done' : i === st.i ? 'now' : '' }, t)));
+    strip.classList.toggle('sentence', sentence);
+    stepLbl.textContent = st.final
+      ? `Now join them! Trace the whole ${sentence ? 'sentence' : 'word'} “${text}” in one smooth line.`
+      : `${sentence ? 'Word' : 'Letter'} ${st.i + 1} of ${parts.length}: trace “${st.t}”.`;
   };
-  wrap.append(cv, hp.box, h('div', { class: 'row' }, hp.btn,
-    h('button', { class: 'ghost', onclick: () => { drawGuide(); ig.clearRect(0, 0, 640, 220); } }, 'Clear'),
-    h('button', { class: 'primary', onclick: () => {
-      const s = score(); const ok = s.cover > 0.42 && s.stray < 1.2;
-      G.edu.record(skill, ok, { ctx: skill === 'curs.signature' ? 'application' : 'practice', hinted: hp.hinted() });
-      if (ok) { G.sfx('good'); G.state.stats.cursive = (G.state.stats.cursive || 0) + 1; done(); }
-      else { G.sfx('bad'); hp.box.hidden = false; UI.toast(s.cover <= 0.42 ? 'Follow the gold letters more closely. Cursive letters connect.' : 'Try to stay on the letters.', 'warn'); }
-    } }, 'Done')));
+  const show = () => {
+    const st = steps[k]; if (steps.length > 1) drawStrip();
+    holder.replaceChildren(tracer(st.t, st.final, () => {
+      if (st.final) { G.sfx('good'); G.state.stats.cursive = (G.state.stats.cursive || 0) + 1; done(); return; }
+      G.sfx('click'); UI.toast(k + 1 === steps.length - 1 ? `✓ “${st.t}”. Now the whole ${sentence ? 'sentence' : 'word'}!` : `✓ “${st.t}”`, 'good', 1400);
+      k++; show();
+    }));
+  };
+  const tracer = (t, final, ok) => {
+    const cv = h('canvas', { class: 'sig', width: 640, height: 220, 'data-text': t, 'data-final': final ? '1' : '0' });
+    const guide = document.createElement('canvas'); guide.width = 640; guide.height = 220;
+    const gg = guide.getContext('2d');
+    const fit = t.length === 1 ? 150 : Math.min(110, 560 / Math.max(3, t.length * 0.55));
+    cv.dataset.fit = String(fit);
+    const font = `${fit}px "Dancing Script", "Segoe Script", cursive`;
+    const drawTarget = () => { gg.clearRect(0, 0, 640, 220); gg.font = font; gg.textAlign = 'center'; gg.textBaseline = 'middle'; gg.lineWidth = 26; gg.lineJoin = 'round'; gg.strokeStyle = '#000'; gg.strokeText(t, 320, 115); gg.fillText(t, 320, 115); };
+    drawTarget();
+    const g = cv.getContext('2d');
+    // the cursive font may still be loading: redraw the gold letters in cursive as soon as it arrives
+    if (document.fonts && document.fonts.load) document.fonts.load(`${fit}px "Dancing Script"`).then(() => { if (!cv.isConnected && !holder.isConnected) return; drawTarget(); if (!inked) drawGuide(); }).catch(() => {});
+    let inked = false;
+    const drawGuide = () => { g.clearRect(0, 0, 640, 220); g.font = gg.font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(233,169,58,.32)'; g.fillText(t, 320, 115); g.strokeStyle = 'rgba(233,169,58,.15)'; g.lineWidth = 1; g.beginPath(); g.moveTo(40, 160); g.lineTo(600, 160); g.stroke(); };
+    drawGuide();
+    const ink = document.createElement('canvas'); ink.width = 640; ink.height = 220; const ig = ink.getContext('2d');
+    let drawing = false, last = null;
+    const pos = (e) => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * 640 / r.width, (e.clientY - r.top) * 220 / r.height]; };
+    cv.addEventListener('pointerdown', (e) => { drawing = true; last = pos(e); try { cv.setPointerCapture(e.pointerId); } catch (x) {} e.preventDefault(); });
+    cv.addEventListener('pointermove', (e) => {
+      if (!drawing) return; const p = pos(e); inked = true;
+      for (const c of [g, ig]) { c.strokeStyle = c === g ? '#f4ead7' : '#000'; c.lineWidth = c === g ? 5 : 28; c.lineCap = 'round'; c.beginPath(); c.moveTo(...last); c.lineTo(...p); c.stroke(); }
+      last = p;
+    });
+    cv.addEventListener('pointerup', () => { drawing = false; });
+    const score = () => {
+      const a = gg.getImageData(0, 0, 640, 220).data, b = ig.getImageData(0, 0, 640, 220).data;
+      let tot = 0, hit = 0, stray = 0;
+      for (let i = 3; i < a.length; i += 16) { if (a[i] > 0) { tot++; if (b[i] > 0) hit++; } else if (b[i] > 0) stray++; }
+      return { cover: hit / Math.max(1, tot), stray: stray / Math.max(1, tot) };
+    };
+    return h('div', {}, cv, h('div', { class: 'row' }, hp.btn,
+      h('button', { class: 'ghost', onclick: () => { inked = false; drawGuide(); ig.clearRect(0, 0, 640, 220); } }, 'Clear'),
+      h('button', { class: 'primary', onclick: () => {
+        const s = score(); const good = s.cover > 0.42 && s.stray < 1.2;
+        // the skill is recorded once, on the whole word; single letters are warm-up steps
+        if (final) G.edu.record(skill, good, { ctx: skill === 'curs.signature' ? 'application' : 'practice', hinted: hp.hinted() });
+        if (good) ok();
+        else { G.sfx('bad'); hp.box.hidden = false; UI.toast(s.cover <= 0.42 ? (final ? 'Follow the gold letters more closely. Cursive letters connect.' : 'Follow the gold letter more closely.') : 'Try to stay on the letters.', 'warn'); }
+      } }, final ? 'Done' : 'Next ›')));
+  };
+  show();
   return wrap;
 }
 

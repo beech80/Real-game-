@@ -394,3 +394,10 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .dictate-status { min-height: 1.3em; }
 .dictate-card .row { flex-wrap: wrap; align-items: center; }
 .dictate-card .row .primary { min-width: 110px; }
+/* cursive: letter-by-letter progress, then the whole word */
+.cursive-steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; font-family: 'Dancing Script', 'Segoe Script', cursive; font-size: 34px; line-height: 1.2; margin: 2px 0; }
+.cursive-steps.sentence { gap: 12px; font-size: 28px; }
+.cursive-steps span { padding: 0 4px; border-radius: 8px; color: rgba(244, 234, 215, .45); }
+.cursive-steps span.done { color: #7fd99a; }
+.cursive-steps span.now { color: #ffd27a; background: rgba(233, 169, 58, .16); }
+.cursive-steplbl { text-align: center; margin: 0 0 6px; }

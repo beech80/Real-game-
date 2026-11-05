@@ -1,5 +1,6 @@
 // Full-story playtest (iPhone 13 portrait): Prologue → Nowhere → Community Center → Fresh Mart (application, interview,
 // shift, paycheck) → Jax → home → sleep → phone → Invitation → ending → epilogue. Drives the real UI.
+const traceSteps = require('./trace.cjs');
 const { chromium, devices } = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
 const DIST = process.env.DIST || path.join(__dirname, '..', 'dist-hosted'), OUT = path.join(__dirname, 'shots');
@@ -94,11 +95,7 @@ let step = 0, p;
   await p.waitForSelector('.posting', { timeout: 20000 }); await settle(); await shot('application_posting');
   await p.click('.sheet .opt:has-text("hiring a cashier")'); await sleep(400); await settle();
   for (const t of ['Nova', 'Mornings and weekends', 'I am reliable']) { await p.click(`.sheet .opt:has-text("${t}")`); await sleep(350); await settle(); }
-  await p.waitForSelector('canvas.sig', { timeout: 20000 });
-  const box = await p.$eval('canvas.sig', (c) => { const r = c.getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height }; });
-  const pts = await p.evaluate(() => { const c = document.createElement('canvas'); c.width = 640; c.height = 220; const g = c.getContext('2d'); g.font = `110px "Dancing Script", cursive`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('Nova', 320, 115); const d = g.getImageData(0, 0, 640, 220).data, out = []; for (let x = 0; x < 640; x += 6) { const col = []; for (let y = 0; y < 220; y += 4) if (d[(y * 640 + x) * 4 + 3] > 100) col.push(y); if (col.length) out.push([x, col[0], col[col.length - 1]]); } return out; });
-  for (const [x, y0, y1] of pts) { await p.mouse.move(box.x + x / 640 * box.w, box.y + y0 / 220 * box.h); await p.mouse.down(); await p.mouse.move(box.x + x / 640 * box.w, box.y + y1 / 220 * box.h, { steps: 3 }); await p.mouse.up(); }
-  await p.click('.sheet button.primary:has-text("Done")', { force: true, timeout: 60000 }); await sleep(800);
+  console.log('signature traced:', (await traceSteps(p, '.sheet')).join(' → ')); await sleep(800);
   await shot('interview'); await dialog('Listen, check'); await dialog('Message the manager'); await dialog('To earn my own money'); await dialog();
   console.log('hired:', await ev(() => window.REAL.state.flags.hired));
 

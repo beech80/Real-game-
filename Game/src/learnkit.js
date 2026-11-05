@@ -113,7 +113,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       body = h('div', {}, rows, left, h('button', { class: 'primary sm', onclick: () => { if (!done.hidden) return; const rem = Q.total - vals.reduce((a, v) => a + v, 0); const needsOk = Q.cats.every((c, i) => vals[i] >= c.min); const ok = rem === 0 && needsOk; if (!attempt(ok, ok ? null : rem !== 0 ? 'unbalanced' : 'needs')) UI.toast(rem !== 0 ? `Every dollar needs a job: $${rem} ${rem > 0 ? 'still unplanned' : 'too much planned'}.` : 'Cover every need first.', 'info'); } }, 'Check my plan'));
     } else if (Q.type === 'trace') {
       const pad = h('div', {});
-      const mount = () => import('./activities.js').then((A) => pad.replaceChildren(A.cursivePad(G, Q.word, id, Q.q, () => { tries = 1; finish(true); })));
+      const mount = () => import('./activities.js').then((A) => pad.replaceChildren(A.cursivePad(G, Q.word, id, '', () => { tries = 1; finish(true); })));
       mount();
       const typeAlt = h('button', { class: 'ghost sm', onclick: () => {   // accessible alternative: handwriting is never a barrier
         const inp = h('input', { class: 'writebox', placeholder: `Type “${Q.word}”` });
