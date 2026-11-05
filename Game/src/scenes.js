@@ -190,7 +190,7 @@ export function buildWilderness(tex) {
 
 // ---------------------------------------------------------------------------------------- The Club (prologue + invitation)
 // Built 2 km north of the city (plan y ≈ 2000), its own space.
-export const CLUB = { ox: 0, oy: 2000, hallStart: { x: 0, y: 2004 }, councilDoor: { x: 0, y: 2052 }, seat: { x: 0, y: 2060 }, rep: { x: 0, y: 2066 }, gateOut: { x: 0, y: 1978 } };
+export const CLUB = { ox: 0, oy: 2000, hallStart: { x: 0, y: 2026 }, councilDoor: { x: 0, y: 2052 }, seat: { x: 0, y: 2060 }, rep: { x: 0, y: 2066 }, gateOut: { x: 0, y: 1978 } };
 
 export function buildClub(tex) {
   const g = new THREE.Group(); g.name = 'club';

@@ -295,7 +295,7 @@ async function spawnMembers(withRep = true) {
   const looks = [['Lion', 0x14204a, 0xe9a93a, 6, 12], ['Horse', 0x0b0b0e, 0xe6dccb, -6, 14], ['Bird', 0x14204a, 0xe6dccb, -11, 22], ['Cat', 0x5a1020, 0xe9a93a, 11, 26], ['Elephant', 0x0b0b0e, 0xe9a93a, -12, 36], ['Dolphin', 0x14204a, 0xf0b3c0, 12, 40], ['Cow', 0x0b0b0e, 0xe6dccb, 6, 46]];
   for (const [sp, j, hd, x, y] of (isMobile ? looks.slice(0, 4) : looks)) {
     const c = new Character(await loadSpecies(sp), { outfit: { jacket: j, hoodie: hd } });
-    c.root.position.copy(P2W(CLUB.ox + x, CLUB.oy + y, 0)); c.root.rotation.y = Math.random() * 6; c.play(Math.random() < 0.6 ? 'Talk' : 'Idle', 0);
+    c.root.position.copy(P2W(CLUB.ox + x, CLUB.oy + (y < 24 ? y + 10 : y), 0)); c.root.rotation.y = Math.random() * 6;   // grouped along the (shorter) walk to the Council c.play(Math.random() < 0.6 ? 'Talk' : 'Idle', 0);
     scene.add(c.root); members.push(c);
   }
   if (withRep) {
@@ -869,6 +869,7 @@ function loop(now) {
   const apt = s.location === 'apartment', club = s.location === 'club' && !!W.club, DD = W.d[s.location], IR = curRoom();
   const gfn = DD ? (x, y) => districtHeight(x, y, DD.def) : apt || club || IR ? () => 0 : groundAt;
   if (mode === 'play' && fcam.mode === 'follow') {
+    player.speedMul = !apt && !club && !IR && !DD && inWild(player.pos) ? 2 : 1;   // the countryside walk into the city goes by twice as fast
     if (!busy()) player.update(dt, input, fcam, IR ? IR.coll : apt ? aptColl : club ? clubColl : DD ? DD.coll : coll, gfn, IR ? IR.bounds : apt ? W.data.apartment.bounds : club ? W.club.bounds : DD ? (p) => clampToWalk(p, DD.walk) : boundsFn);
     else player.ch.locomote(0, dt);
     if (apt) player.ch.root.position.y = -500 + player.h;
@@ -947,7 +948,7 @@ window.REAL = {
   get state() { return game && game.state; }, get mode() { return mode; },
   teleport(key, where = 'district') { const so = sock(key, where); if (so) { player.pos = { x: so.x, y: so.y }; player.apply(); } return !!so; },
   cam(yaw, pitch, dist) { fcam.yaw = yaw; fcam.pitch = pitch; fcam.dist = dist; fcam.cur.set(0, 1e4, 0); },
-  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, playerHeading: () => player.heading,
+  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, playerHeading: () => player.heading, speedMul: () => player.speedMul,
   camCheck: () => { const t = fcam.target.clone(), c = camera.position.clone(), dir = t.clone().sub(c), len = dir.length(); camRay.set(c, dir.normalize()); camRay.near = 0.05; camRay.far = Math.max(0.06, len - 0.35); const hit = camRay.intersectObjects(camBlockers(), false)[0]; camRay.near = 0.25; const n = t.project(camera); return { dist: +len.toFixed(2), blocked: !!hit, onScreen: Math.abs(n.x) < 1 && Math.abs(n.y) < 1 && n.z < 1, where: game.state.location }; },
   teleportXY(x, y) { player.pos = { x, y }; player.apply(); },
   npcPos: (n) => npcs[n] && !npcs[n].hidden && { ...npcs[n].pos },
