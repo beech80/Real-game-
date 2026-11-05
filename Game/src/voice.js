@@ -92,7 +92,15 @@ function answerBox(prompt) {
         h('div', { class: 'row' }, again, h('button', { class: 'ghost sm', onclick: () => fin(null) }, 'Cancel'), h('button', { class: 'primary', onclick: () => fin(inp.value) }, 'Done ✓'))));
     // typing or keyboard dictation takes over: free the mic for the keyboard
     inp.addEventListener('focus', () => { if (Voice._rec) { Voice.cancelListen(); wrap.classList.remove('hearing'); status.textContent = keyboardHelp; } });
-    inp.addEventListener('input', () => { edited = true; });
+    // keyboard dictation: words arrive in chunks. When they stop for a moment, send — no need to find the Done button
+    let lastLen = 0, spoke = false, autoT = null;
+    const autoSend = (ms) => { clearTimeout(autoT); autoT = setTimeout(() => { if (!done && inp.value.trim()) { status.textContent = '✓ Got it! Sending…'; fin(inp.value); } }, ms); };
+    inp.addEventListener('input', (e) => {
+      edited = true; const n = inp.value.length, jump = n - lastLen; lastLen = n;
+      if (jump >= 3 || /Replacement|FromDictation|Paste/.test(e.inputType || '')) spoke = true;   // whole words at once = dictation
+      if (spoke && inp.value.trim()) { status.textContent = '🎙️ Got your words… (sending when you stop talking)'; autoSend(2200); } else clearTimeout(autoT);
+    });
+    inp.addEventListener('blur', () => { if (inp.value.trim() && !done) autoSend(600); });   // keyboard closed with words in the box
     inp.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); fin(inp.value); } });
     document.body.append(wrap);
     // inside the Claude app/page the browser mic is normally blocked, so open the keyboard for its 🎤 right away
@@ -137,7 +145,7 @@ export const Brain = {
     const local = matchOption(options, said); if (local != null) return local;
     const S = await sampler(); if (!S) return null;
     try {
-      const r = await S.json(`${SAFE}\nA player was asked: "${question}". Options: ${options.map((o, i) => `${i}: ${o}`).join(' | ')}. The player said: "${said}". Which option index best matches what they meant? Reply JSON {"index": number or null}. Use null if it matches none.`, { modelTier: 'quick' });
+      const r = await Promise.race([new Promise((r) => setTimeout(() => r(null), 7000)), S.json(`${SAFE}\nA player was asked: "${question}". Options: ${options.map((o, i) => `${i}: ${o}`).join(' | ')}. The player said: "${said}". Which option index best matches what they meant? Reply JSON {"index": number or null}. Use null if it matches none.`, { modelTier: 'quick' })]);
       return Number.isInteger(r && r.index) && r.index >= 0 && r.index < options.length ? r.index : null;
     } catch (e) { return null; }
   },
@@ -146,7 +154,7 @@ export const Brain = {
     const S = await sampler();
     if (S) {
       try {
-        const r = await S.json(`${SAFE}\nYou are ${who}, coaching a player's speaking practice at work.\nSituation: ${task.prompt}\nA strong answer would: ${task.goals.join('; ')}.\nThe player said: "${said}"\nGive encouraging feedback. Reply JSON {"stars": 1-4 (4 = covers every goal clearly and politely), "feedback": one short sentence in character praising something specific, "tip": one short concrete suggestion (or "" if perfect)}.`, { modelTier: 'quick' });
+        const r = await Promise.race([new Promise((r) => setTimeout(() => r(null), 9000)), S.json(`${SAFE}\nYou are ${who}, coaching a player's speaking practice at work.\nSituation: ${task.prompt}\nA strong answer would: ${task.goals.join('; ')}.\nThe player said: "${said}"\nGive encouraging feedback. Reply JSON {"stars": 1-4 (4 = covers every goal clearly and politely), "feedback": one short sentence in character praising something specific, "tip": one short concrete suggestion (or "" if perfect)}.`, { modelTier: 'quick' })]);
         if (r && r.stars) return { stars: Math.max(1, Math.min(4, Math.round(r.stars))), feedback: String(r.feedback || '').slice(0, 220), tip: String(r.tip || '').slice(0, 200), smart: true };
       } catch (e) {}
     }
@@ -165,7 +173,7 @@ export const Brain = {
         const msgs = [...history.slice(-6), { role: 'user', content: question }];
         msgs[0] = { role: msgs[0].role, content: `${SAFE}\nYou are ${npc.name}, ${kb.role}. What you know well: ${kb.facts.join(' ')} City facts: ${CITY.join(' ')}\n\nPlayer: ${msgs[0].content}` };
         if (msgs[0].role !== 'user') msgs.shift();
-        const r = await S(msgs, { modelTier: 'quick' });
+        const r = await Promise.race([new Promise((r) => setTimeout(() => r(null), 12000)), S(msgs, { modelTier: 'quick' })]);
         if (r && r.text) return { text: r.text.trim().slice(0, 400), smart: true };
       } catch (e) {}
     }

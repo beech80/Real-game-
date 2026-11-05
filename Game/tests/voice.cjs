@@ -81,8 +81,8 @@ const MOCK = () => {
   await ev(() => { delete window.webkitSpeechRecognition; delete window.SpeechRecognition; window.__pr = window.REAL.practice('fin.prices'); });
   await p.waitForSelector('.activity .mic'); await p.click('.activity .mic');
   await p.waitForSelector('.dictate textarea', { timeout: 5000 }); results.dictateFocused = await ev(() => document.activeElement && document.activeElement.closest('.dictate') != null);
-  await p.fill('.dictate textarea', String(await ev(() => window.__lastQ.a))); await p.keyboard.press('Enter'); await sleep(1200);
-  results.taskByDictation = await p.isVisible('.activity button.primary:text-is("Continue")');
+  await p.fill('.dictate textarea', String(await ev(() => window.__lastQ.a)));   // dictated words arrive; nobody taps Done
+  results.taskByDictation = await p.waitForSelector('.activity button.primary:text-is("Continue")', { timeout: 8000 }).then(() => true, () => false);
   results.claudeCalls = await ev(() => window.__samples.join(','));
   console.log(JSON.stringify(results, null, 1));
   console.log('page errors', errors.length, errors.slice(0, 5));
