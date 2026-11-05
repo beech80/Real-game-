@@ -41,7 +41,7 @@ const MOCK = () => {
   console.log('dialog speakers seen:', speakers.join(' | '));
   console.log('spoken aloud:', JSON.stringify(spoken));
   const npcLeak = spoken.some((t) => /Tires|Council|membership|Ask me anything/i.test(t));
-  const ok = spoken.length > 0 && !npcLeak && !errors.length;
-  console.log(ok ? 'ONLY-MY-VOICE PASSED' : 'ONLY-MY-VOICE FAILED', errors.slice(0, 3));
+  const ok = spoken.length === 0 && !npcLeak && !errors.length;   // characters never talk; the player speaks
+  console.log(ok ? 'NO-CHARACTER-VOICES PASSED' : 'NO-CHARACTER-VOICES FAILED', errors.slice(0, 3));
   await b.close(); srv.close(); process.exit(ok ? 0 : 1);
 })().catch((e) => { console.error('FAIL', e); process.exit(2); });

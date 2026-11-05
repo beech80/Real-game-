@@ -15,9 +15,9 @@ export const Voice = {
   speak(text, who = '') {
     try {
       if (!('speechSynthesis' in window) || window.__voiceOff || !text || !/[a-z0-9]/i.test(text)) return;
-      // only the player's own REAL speaks; every other character's lines stay silent text
-      const me = String(window.__playerName || '').trim().toLowerCase();
-      if (who !== '__me' && (!me || String(who).split('·')[0].trim().toLowerCase() !== me)) return;
+      // characters never talk: the real player speaks their own answers. (Only the opt-in 'Read questions aloud' setting uses speech.)
+      if (who !== '__readaloud') return;
+      const me = '';
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(String(text).replace(/[★☆♛🎤💡✓○]/g, ''));
       const k = Math.abs(hash(who === '__me' ? me : who.split('·')[0].trim().toLowerCase()));
