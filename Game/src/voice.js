@@ -27,56 +27,77 @@ export const Voice = {
     } catch (e) {}
   },
   stop() { try { speechSynthesis.cancel(); } catch (e) {} },
-  canListen: () => !!(window.SpeechRecognition || window.webkitSpeechRecognition),
-  /** Listen once. Resolves with the transcript (string) or null (unsupported, denied, silence). */
-  listen({ onStatus } = {}) {
+  canListen: () => !!(window.SpeechRecognition || window.webkitSpeechRecognition) && !window.__micBroken,
+  /** Listen once. Shows words live through onText; resolves with everything heard (string) or null.
+   *  Uses interim results because iPhones often never send a "final" result otherwise. */
+  listen({ onStatus, onText } = {}) {
     return new Promise((res) => {
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SR) return res(null);
-      let done = false; const fin = (v) => { if (!done) { done = true; res(v); } };
+      let done = false, best = '', started = false, quiet = null;
+      const fin = () => { if (done) return; done = true; clearTimeout(quiet); clearTimeout(watch); clearTimeout(cap); if (Voice._rec === r) Voice._rec = null; try { r.abort(); } catch (e) {} res(best.trim() || null); };
+      let r, watch, cap;
       try {
-        this.stop();
-        const r = new SR(); r.lang = 'en-US'; r.interimResults = false; r.maxAlternatives = 3; r.continuous = false;
-        r.onresult = (e) => fin([...e.results[0]].map((a) => a.transcript)[0] || null);
-        r.onaudiostart = () => { onStatus && onStatus('audio'); };
-        r.onerror = (e) => { if (/not-allowed|service-not-allowed|audio-capture|network/.test(e.error)) window.__micBroken = true; onStatus && onStatus(e.error === 'not-allowed' || e.error === 'service-not-allowed' ? 'denied' : 'error'); fin(null); };
-        r.onend = () => fin(null);
+        this.stop(); if (Voice._rec) try { Voice._rec.abort(); } catch (e) {}
+        r = new SR(); Voice._rec = r; r.lang = 'en-US'; r.interimResults = true; r.maxAlternatives = 1; r.continuous = false;
+        const go = () => { if (!started) { started = true; onStatus && onStatus('audio'); } };
+        r.onstart = go; r.onaudiostart = go;
+        r.onresult = (e) => {
+          go(); let t = '', final = false;
+          for (let i = 0; i < e.results.length; i++) { const x = e.results[i]; t += (x[0] && x[0].transcript || '') + ' '; if (x.isFinal) final = true; }
+          if (t.trim()) { best = t.replace(/\s+/g, ' '); onText && onText(best.trim()); }
+          clearTimeout(quiet); quiet = setTimeout(fin, final ? 500 : 1800);   // stop once they pause
+        };
+        r.onerror = (e) => { if (/not-allowed|service-not-allowed|audio-capture/.test(e.error)) window.__micBroken = true; onStatus && onStatus(window.__micBroken ? 'denied' : 'error'); fin(); };
+        r.onend = fin;
         r.start(); onStatus && onStatus('listening');
-        setTimeout(() => { try { r.stop(); } catch (e) {} }, 9000);
-      } catch (e) { window.__micBroken = true; fin(null); }
+        watch = setTimeout(() => { if (!started) { window.__micBroken = true; onStatus && onStatus('denied'); fin(); } }, 3000);   // never opened the mic
+        cap = setTimeout(fin, 12000);
+      } catch (e) { window.__micBroken = true; onStatus && onStatus('denied'); fin(); }
     });
   },
-  /** Hear the player's answer, whatever the device allows. Uses the browser's speech recognition when it works;
-   *  otherwise (blocked in the app/iframe, unsupported, mic denied) opens an answer box so the keyboard's own 🎤 dictation
-   *  can be used. Call it straight from the tap so the keyboard can open. Resolves the words (string) or null. */
-  ask({ prompt = 'Say your answer', onStatus } = {}) {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR || window.__micBroken) return dictate(prompt);
-    let gotAudio = false;
-    return this.listen({ onStatus: (s) => { if (s === 'audio') gotAudio = true; else onStatus && onStatus(s); } }).then((t) => {
-      if (t) return t;
-      if (!gotAudio || window.__micBroken) { window.__micBroken = true; return dictate(prompt); }   // mic never opened: use keyboard dictation from now on
-      return null;
-    });
-  },
+  cancelListen() { const r = Voice._rec; Voice._rec = null; if (r) try { r.abort(); } catch (e) {} },
+  /** Hear the player's answer, whatever the device allows. Opens an answer box straight from the tap:
+   *  the game listens and writes the words in live when the browser allows it; the keyboard's own 🎤 dictation
+   *  works in the same box everywhere else (the Claude app, blocked mic). Resolves the words (string) or null. */
+  ask({ prompt = 'Say your answer' } = {}) { return answerBox(prompt); },
 };
+const embedded = () => { try { return window.self !== window.top; } catch (e) { return true; } };
 
-/** Answer box for keyboard dictation (works in every phone browser and app: the keyboard's 🎤 key). */
-function dictate(prompt) {
+function answerBox(prompt) {
   return new Promise((res) => {
     const old = document.querySelector('.dictate'); if (old) old.remove();
-    const inp = h('textarea', { class: 'writebox', rows: 2, maxlength: 400, placeholder: 'Your answer…', autocomplete: 'off', enterkeyhint: 'done' });
-    let done = false;
-    const fin = (v) => { if (done) return; done = true; wrap.remove(); res(v && v.trim() ? v.trim() : null); };
+    const inp = h('textarea', { class: 'writebox', rows: 3, maxlength: 400, placeholder: 'Your words show up here…', autocomplete: 'off', enterkeyhint: 'done' });
+    const status = h('p', { class: 'tip dictate-status' });
+    let done = false, edited = false;
+    const fin = (v) => { if (done) return; done = true; Voice.cancelListen(); wrap.remove(); res(v && v.trim() ? v.trim() : null); };
+    const keyboardHelp = 'Tap the box, then the 🎤 key on your keyboard and talk. Tap Done when your words appear.';
+    const listen = () => {
+      if (!Voice.canListen()) { status.textContent = keyboardHelp; again.hidden = true; return; }
+      wrap.classList.add('hearing'); again.hidden = true; status.textContent = '🎙️ Listening… speak now';
+      Voice.listen({
+        onText: (t) => { if (!edited) inp.value = t; status.textContent = '🎙️ Hearing you…'; },
+        onStatus: (s) => { if (s === 'denied') status.textContent = 'This phone won’t let the game use the mic here. ' + keyboardHelp; },
+      }).then((t) => {
+        wrap.classList.remove('hearing'); if (done) return;
+        if (t && !edited) { inp.value = t; status.textContent = `✓ Heard you! Sending…`; setTimeout(() => { if (!edited) fin(inp.value); }, 900); return; }
+        if (!window.__micBroken) { status.textContent = 'I didn’t hear anything. Tap “Listen again” and speak a bit louder — or use your keyboard’s 🎤.'; again.hidden = false; }
+        else { status.textContent = 'This phone won’t let the game use the mic here. ' + keyboardHelp; again.hidden = true; }
+      });
+    };
+    const again = h('button', { class: 'ghost sm', hidden: true, onclick: () => listen() }, '🎙️ Listen again');
     const wrap = h('div', { class: 'dictate', role: 'dialog', 'aria-label': 'Say your answer' },
       h('div', { class: 'dictate-card' },
-        h('p', { class: 'lead' }, '🎤 ' + prompt),
-        h('p', { class: 'tip' }, 'Tap the 🎤 microphone key on your keyboard and talk. Your words appear here. (You can type too.)'),
-        inp,
-        h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => fin(null) }, 'Cancel'), h('button', { class: 'primary sm', onclick: () => fin(inp.value) }, 'Done ✓'))));
+        h('p', { class: 'lead' }, '🎤 ' + prompt), status, inp,
+        h('div', { class: 'row' }, again, h('button', { class: 'ghost sm', onclick: () => fin(null) }, 'Cancel'), h('button', { class: 'primary', onclick: () => fin(inp.value) }, 'Done ✓'))));
+    // typing or keyboard dictation takes over: free the mic for the keyboard
+    inp.addEventListener('focus', () => { if (Voice._rec) { Voice.cancelListen(); wrap.classList.remove('hearing'); status.textContent = keyboardHelp; } });
+    inp.addEventListener('input', () => { edited = true; });
     inp.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); fin(inp.value); } });
     document.body.append(wrap);
-    try { inp.focus(); } catch (e) {}
+    // inside the Claude app/page the browser mic is normally blocked, so open the keyboard for its 🎤 right away
+    if (!Voice.canListen() || embedded()) { status.textContent = keyboardHelp; try { inp.focus(); } catch (e) {} if (Voice.canListen()) again.hidden = false, again.textContent = '🎙️ Try the game’s listener'; }
+    else listen();
   });
 }
 
@@ -95,8 +116,10 @@ const NUMS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seve
 export function matchOption(options, said) {
   if (!said) return null;
   const sw = new Set(words(said)), sn = (String(said).match(/\d+(\.\d+)?/g) || []).concat(words(said).filter((w) => NUMS[w] != null).map((w) => String(NUMS[w])));
-  const letter = String(said).trim().toLowerCase().match(/^(?:option |answer )?([abcd])\b/);
+  const letter = String(said).trim().toLowerCase().match(/^(?:option |answer |letter )?([abcd])\W*$/);
   if (letter && options.length > 'abcd'.indexOf(letter[1])) return 'abcd'.indexOf(letter[1]);
+  const ord = String(said).trim().toLowerCase().match(/^(?:the )?(?:(first|second|third|fourth|last)(?: one| answer| option)?|(?:number|option|answer) (one|two|three|four|1|2|3|4))\W*$/);
+  if (ord) { const w = ord[1] || ord[2], i = w === 'last' ? options.length - 1 : ({ first: 0, second: 1, third: 2, fourth: 3, one: 0, two: 1, three: 2, four: 3, 1: 0, 2: 1, 3: 2, 4: 3 })[w]; if (i < options.length) return i; }
   let best = -1, bs = 0, second = 0;
   options.forEach((o, i) => {
     const ow = words(o); if (!ow.length) return;
@@ -224,7 +247,7 @@ export function speakTask(G, task, who, skill = 'write.professional') {
       G.sfx(g.stars >= 3 ? 'good' : 'click'); done.hidden = false;
     };
     const mic = h('button', { class: 'mic', 'aria-label': 'Say your answer', onclick: async () => {
-      mic.classList.add('on'); const t = await Voice.ask({ prompt: task.prompt, onStatus: (s) => { status.textContent = s === 'listening' ? 'Listening…' : s === 'denied' ? 'Microphone isn’t allowed here. Type, or use your keyboard’s 🎤 dictation.' : 'I didn’t catch that. Try again or type.'; } });
+      mic.classList.add('on'); const t = await Voice.ask({ prompt: task.prompt });
       mic.classList.remove('on'); if (t) { said.value = t; status.textContent = `Heard: “${t}”`; check(); }
     } }, '🎤');
     setTimeout(() => Voice.speak(task.prompt, who), 200);
@@ -247,7 +270,7 @@ export function askNPC(G, npc) {
       wait.textContent = `${npc.name}: ${a.text}`; log.scrollTop = 1e6; Voice.speak(a.text, npc.name);
       G.befriend(npc.name, 0.1); G.state.stats.questionsAsked = (G.state.stats.questionsAsked || 0) + 1;
     };
-    const mic = h('button', { class: 'mic', 'aria-label': 'Ask out loud', onclick: async () => { mic.classList.add('on'); const t = await Voice.ask({ prompt: `Ask ${npc.name} a question` }); mic.classList.remove('on'); if (t) send(t); else UI.toast('Didn’t catch that. Try again or type.', 'info'); } }, '🎤');
+    const mic = h('button', { class: 'mic', 'aria-label': 'Ask out loud', onclick: async () => { mic.classList.add('on'); const t = await Voice.ask({ prompt: `Ask ${npc.name} a question` }); mic.classList.remove('on'); if (t) send(t); } }, '🎤');
     inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
     return h('div', { class: 'act' }, log, h('div', { class: 'microw' }, mic, inp, h('button', { class: 'primary sm', onclick: () => send() }, 'Ask')),
       h('p', { class: 'tip' }, 'Characters only talk about the game world. Never share personal information.'), h('button', { class: 'ghost', onclick: () => { Voice.stop(); close(); } }, 'Thanks, bye!'));

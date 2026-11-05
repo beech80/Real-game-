@@ -390,3 +390,7 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .dictate-card { width: min(460px, 100%); margin-top: 8vh; background: var(--ink-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; box-shadow: 0 12px 40px rgba(0, 0, 0, .5); }
 .dictate-card .lead { margin: 0 0 4px; font-weight: 600; }
 .dictate-card .row { display: flex; gap: 8px; justify-content: flex-end; }
+.dictate.hearing .dictate-card { border-color: #e9a93a; box-shadow: 0 0 0 3px rgba(233, 169, 58, .35), 0 12px 40px rgba(0, 0, 0, .5); animation: micpulse 1.2s infinite; }
+.dictate-status { min-height: 1.3em; }
+.dictate-card .row { flex-wrap: wrap; align-items: center; }
+.dictate-card .row .primary { min-width: 110px; }

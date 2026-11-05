@@ -46,7 +46,7 @@ engine.onContextLost = () => { try { game && game.save(); } catch (e) {} fatal('
 const audio = new Audio();
 setSfx((n) => audio.play(n));
 UI.init();
-UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.ask({ prompt: q }); return said ? Brain.pick(q, choices, said) : null; } };
+UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.ask({ prompt: q }); if (!said) return null; const i = await Brain.pick(q, choices, said); if (i == null) UI.toast(`I heard “${said}”. Which answer did you mean? Tap it, or say it again.`, 'info', 4200); return i; } };
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
 

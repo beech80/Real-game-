@@ -61,7 +61,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       {
         const mic = h('button', { class: 'mic sm', 'aria-label': 'Answer out loud', onclick: async () => {
           if (!done.hidden) return; mic.classList.add('on'); const said = await Voice.ask({ prompt: Q.q }); mic.classList.remove('on');
-          if (!said) { UI.toast('I didn’t catch that. Try again or tap an answer.', 'info'); return; }
+          if (!said) return;
           const i = await Brain.pick(Q.q, optsShown, said); if (i == null) { UI.toast(`Heard “${said}”. Which answer did you mean? Tap it.`, 'info', 3200); return; }
           const btn = body.querySelectorAll('.opt')[i]; if (btn && !btn.disabled) btn.click();
         } }, '🎤');

@@ -83,7 +83,7 @@ export const UI = {
       const mic = choices && voice ? h('button', { class: 'd-mic', 'aria-label': 'Answer out loud', onclick: async (e) => {
         e.stopPropagation(); mic.classList.add('on'); mic.textContent = '🎤 Listening…'; D.classList.add('asking');
         const idx = await voice.listenPick(text, choices); mic.classList.remove('on'); D.classList.remove('asking'); mic.textContent = '🎤 Say your answer';
-        if (idx != null && !D.hidden) { click(); D.hidden = true; voice.stop(); res(idx); } else this.toast('I didn’t catch that. Try again or tap an answer.', 'info');
+        if (idx != null && !D.hidden) { click(); D.hidden = true; voice.stop(); res(idx); }
       } }, '🎤 Say your answer') : null;
       fill(D, h('div', { class: 'd-name' }, opts.crown !== false ? h('span', { class: 'crown' }, '♛') : null, speaker), body, list, mic, next);
       if (voice && !opts.silent) voice.speak(text, speaker);

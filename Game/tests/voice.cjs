@@ -9,7 +9,7 @@ const srv = http.createServer((q, r) => { const f = path.join(DIST, decodeURICom
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const MOCK = () => {
   window.__samples = [];
-  class FakeSR { start() { if (window.__srBlocked) return setTimeout(() => { this.onerror && this.onerror({ error: 'not-allowed' }); this.onend && this.onend(); }, 100); this.onaudiostart && this.onaudiostart(); setTimeout(() => { const t = window.__say; if (t && this.onresult) this.onresult({ results: [[{ transcript: t }]] }); else if (this.onerror) this.onerror({ error: 'no-speech' }); this.onend && this.onend(); }, 400); } stop() {} }
+  class FakeSR { start() { if (window.__srBlocked) return setTimeout(() => { this.onerror && this.onerror({ error: 'not-allowed' }); this.onend && this.onend(); }, 100); this.onaudiostart && this.onaudiostart(); setTimeout(() => { const t = window.__say; if (t && this.onresult) { const w = t.split(' '), half = w.slice(0, Math.ceil(w.length / 2)).join(' '); this.onresult({ results: [[{ transcript: half }]] }); this.onresult({ results: [[{ transcript: t }]] }); } else if (this.onerror) this.onerror({ error: 'no-speech' }); this.onend && this.onend(); }, 400); } stop() {} abort() {} }
   window.webkitSpeechRecognition = FakeSR; window.SpeechRecognition = FakeSR;
   const S = async (msgs) => { window.__samples.push('answer'); return { text: 'Great question! Tires grip the road with friction, so better tires help you corner.', truncated: false }; };
   S.json = async (prompt) => { window.__samples.push(/option index/.test(prompt) ? 'pick' : 'grade'); return /option index/.test(prompt) ? { index: 0 } : { stars: 4, feedback: 'Lovely warm greeting!', tip: '' }; };
@@ -67,8 +67,8 @@ const MOCK = () => {
   await p.click('.speakact button.primary:text-is("Continue")');
   // a learning task answered out loud
   await ev(() => { window.__pr = window.REAL.practice('fin.prices'); });
-  await p.waitForSelector('.activity .mic'); await ev(() => { window.__say = String(window.__lastQ.a); }); await p.click('.activity .mic'); await sleep(1200);
-  results.taskAnsweredByVoice = await p.isVisible('.activity button.primary:text-is("Continue")'); await shot('task_by_voice');
+  await p.waitForSelector('.activity .mic'); await ev(() => { window.__say = String(window.__lastQ.a); }); await p.click('.activity .mic');
+  results.taskAnsweredByVoice = await p.waitForSelector('.activity button.primary:text-is("Continue")', { timeout: 8000 }).then(() => true, () => false); await shot('task_by_voice');
   await p.click('.activity button.primary:text-is("Continue")').catch(() => {}); await sleep(500);
   // the phone/app blocks the browser mic: the 🎤 opens an answer box for the keyboard's own dictation instead
   await ev(() => { window.__srBlocked = true; window.__say = 'Hello! Welcome to Fresh Mart, how can I help you?'; window.__sp = window.REAL.speakPractice('cashier', 0); });
