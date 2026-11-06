@@ -18,13 +18,14 @@ import { Neighbors } from './multiplayer.js';
 import { Voice, Brain, askNPC } from './voice.js';
 import { buildInterior, BUILDING_ROOMS, ROOM } from './interiors.js';
 import { MapView } from './mapview.js';
+import { installEvents } from './events.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
 import { PetCourse, RobotArena } from './arenas.js';
 import { runActivity, forgetRecent } from './learnkit.js';
 import { PRACTICE } from './activities.js';
 import { carMesh, Pedestrian } from './city.js';
-installExpansion(Game); installAdventures(Game); installAdventureHelpers(Game);
+installExpansion(Game); installEvents(Game); installAdventures(Game); installAdventureHelpers(Game);
 
 // ---------------------------------------------------------------- crash/diagnostic panel (never a silent black screen)
 function fatal(msg) {

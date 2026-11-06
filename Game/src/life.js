@@ -90,6 +90,7 @@ export const ACHIEVEMENTS = {
   found_way: ['Found your way', 'Walked from nowhere to the Starting District.'],
   first_home: ['A place to sleep', 'Got your first apartment key.'],
   hired: ['Hired', 'Got your first job.'],
+  regular: ['Part of the neighbourhood', 'Joined in 5 afternoon events around town.'],
   first_pay: ['The first dollar', 'Earned your first paycheck.'],
   said_no: ['Not today, Jax', 'Thought it through before spending.'],
   honest: ['Clean hands', 'Refused to take what you didn’t pay for.'],

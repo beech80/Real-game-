@@ -57,6 +57,7 @@ export class Game {
     if (s.energy < 12 && !this._ew) { this._ew = true; UI.toast('You’re exhausted. Head home and sleep.', 'warn', 3500); }
     if (s.energy > 25) this._ew = false;
     if (s.time >= 24.5 && !this.busy && s.flags.housed) this.passOut();
+    if (this.eventsTick) this.eventsTick();
     this.checkMilestones();
   }
   advance(hours) { this.state.time += hours; this.state.energy = Math.max(0, this.state.energy - hours * 2); this.state.hunger = Math.max(0, this.state.hunger - hours * 3); }
@@ -116,6 +117,7 @@ export class Game {
         const unpaid = s.bills.find((b) => !b.paid && b.due <= s.day + 1);
         if (unpaid) return T(`Pay your bill: ${unpaid.name} (${money(unpaid.amount)}) — Bills app`, null);
         if (s.flags.baristaTip && !(s.jobs || []).includes('barista')) return T('Ask Dee about the barista job at Daily Grind', 'Door_CoffeeShop');
+        if (s.event && s.location === 'district' && this.constructor.EVENTS && this.constructor.EVENTS[s.event.id]) { const E = this.constructor.EVENTS[s.event.id]; return T(`${E.icon} ${E.title} (optional)`, s.location === 'district' ? s.event.at : null); }
         const ll = this.life();
         const next = [['midtown', 3, 'Midtown'], ['opportunity', 5, 'the Opportunity District'], ['heights', 8, 'The Heights']].find(([k, lv]) => ll.level >= lv && !(s.visited || {})[k]);
         if (next) return T(`New district open: take the bus to ${next[2]}`, s.location === 'district' ? 'Interact_BusStop' : 'D:bus');
@@ -179,6 +181,7 @@ export class Game {
       Interact_BusStop: () => ({ label: s.quest === 'invite' ? 'Take the bus to The Club' : 'Bus schedule', run: () => this.bus() }),
       Interact_ParkJog: () => ({ label: 'Go for a jog', run: () => { s.mood = Math.min(100, s.mood + 12); s.energy = Math.max(0, s.energy - 8); s.stats.workouts = (s.stats.workouts || 0) + 0.5; this.advance(0.5); UI.toast('A free workout. +Mood', 'good'); } }),
     };
+    if (s.event && s.event.at === k && s.location === 'district' && this.constructor.EVENTS && this.constructor.EVENTS[s.event.id]) { const E = this.constructor.EVENTS[s.event.id]; return { label: `${E.icon} ${E.title.replace(/ (in|at) .*$/, '')}`, run: () => this.runEvent() }; }
     if (/^Interact_ParkBench/.test(k)) return { label: 'Sit and relax', run: () => { this.hooks.playerAnim('Sit', 4); s.mood = Math.min(100, s.mood + 10); this.advance(0.5); } };
     if (/^Interact_StockShelf_A/.test(k)) {
       if (q === 'shift' && s.shift && s.shift.register >= s.shift.need.register && s.shift.stock < s.shift.need.stock) { const aisle = parseInt(k.slice(-1), 10); return { label: `Stock aisle ${aisle}`, run: () => this.stockTask(aisle) }; }
@@ -493,7 +496,7 @@ export function openPhone(G) {
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Settings', '⚙️', '#55607e']];
+      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -552,6 +555,28 @@ export function openPhone(G) {
             : s.flags.invited ? h('div', {}, h('h3', {}, 'You have been invited back'), h('p', {}, 'Take the bus to The Club when you are ready.'))
               : h('div', {}, h('h3', {}, 'Membership revoked'), h('p', {}, '“You’ve experienced what success looks like. But have you ever experienced what it takes?”'),
                 h('p', { class: 'tip' }, `The Council looks for independence, responsibility, knowledge and personal achievement: Life Level ${ll.level} of ${INVITE_LEVEL}, and at least ${INVITE_MIN_DAY} days on your own (day ${s.day}).`))),
+        // playtest notes: write what felt off; each note records where you were, so it can be found and fixed
+        Feedback: () => {
+          const KEY = 'real.feedback.v1';
+          const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } };
+          const list = h('div', { class: 'bill-list' });
+          const draw = () => { const notes = load(); list.replaceChildren(...(notes.length ? notes.slice().reverse().map((n) => h('div', { class: 'bill' }, h('div', {}, h('b', {}, n.text), h('small', {}, `Day ${n.day} ${n.clock} · ${n.where} · goal: ${n.goal}`)))) : [h('p', { class: 'tip' }, 'No notes yet.')])); };
+          const ta = h('textarea', { class: 'writebox', rows: 3, maxlength: 600, placeholder: 'What felt wrong, confusing, too hard, too easy, or fun?' });
+          const save = () => {
+            const t = ta.value.trim(); if (!t) return UI.toast('Type a note first.', 'info');
+            const ob = G.objective();
+            const note = { text: t, day: s.day, clock: clock(s.time), where: s.location + (s.room ? ':' + s.room.key : ''), goal: ob.text || '', quest: s.quest, ll: G.life().level, screen: `${innerWidth}×${innerHeight}`, device: navigator.userAgent.slice(0, 120), at: new Date().toISOString() };
+            const notes = load(); notes.push(note); try { localStorage.setItem(KEY, JSON.stringify(notes.slice(-200))); } catch (e) {}
+            ta.value = ''; UI.toast('Saved. Thank you!', 'good'); draw();
+          };
+          const asText = () => load().map((n, i) => `${i + 1}. ${n.text}\n   [Day ${n.day} ${n.clock} · ${n.where} · quest ${n.quest} · LL ${n.ll} · goal: ${n.goal} · screen ${n.screen} · ${n.device}]`).join('\n');
+          const copy = async () => { const t = asText(); if (!t) return UI.toast('No notes yet.', 'info'); try { await navigator.clipboard.writeText(t); UI.toast('Copied. Paste it into a message to send it.', 'good', 3200); } catch (e) { ta.value = t; ta.select(); UI.toast('Select the text in the box and copy it.', 'info', 3200); } };
+          const share = async () => { const t = asText(); if (!t) return UI.toast('No notes yet.', 'info'); if (navigator.share) { try { await navigator.share({ title: 'REAL playtest notes', text: t }); } catch (e) {} } else copy(); };
+          draw();
+          return h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Playtest notes'), h('p', { class: 'tip' }, 'Write anything that felt off. Each note remembers where you were and what your goal said.'),
+            ta, h('div', { class: 'row' }, h('button', { class: 'primary sm', onclick: save }, 'Save note'), h('button', { class: 'ghost sm', onclick: copy }, 'Copy all'), h('button', { class: 'ghost sm', onclick: share }, 'Share')),
+            list, h('button', { class: 'ghost sm', onclick: () => { if (confirm('Delete all notes?')) { try { localStorage.removeItem(KEY); } catch (e) {} draw(); } } }, 'Clear notes'));
+        },
         Settings: () => h('div', { class: 'act' },
           h('div', { class: 'row' }, h('span', {}, 'Graphics'), ...['low', 'medium', 'high'].map((q) => h('button', { class: G.hooks.quality() === q ? 'primary sm' : 'ghost sm', onclick: () => { G.hooks.setQuality(q); open('Settings'); } }, q))),
           h('div', { class: 'row' }, h('span', {}, 'Time'), ...[[1, 'Normal'], [3, 'Fast']].map(([v, n]) => h('button', { class: (s.timeScale || 1) === v ? 'primary sm' : 'ghost sm', onclick: () => { s.timeScale = v; open('Settings'); } }, n))),
