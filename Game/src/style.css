@@ -413,3 +413,23 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .gloss { display: inline; padding: 0; margin: 0; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline dotted rgba(233, 169, 58, .9); text-underline-offset: 3px; text-decoration-thickness: 2px; cursor: help; }
 .wordcard { background: rgba(233, 169, 58, .14); border: 1px solid rgba(233, 169, 58, .45); border-radius: 12px; padding: 8px 12px; margin: 6px 0; font-size: 15px; }
 .wordcard small { color: #ffd27a; }
+
+/* tablets (iPad, Galaxy Tab…): roomier cards, larger text and bigger touch targets for kids on big screens */
+@media (min-width: 700px) and (min-height: 700px) {
+  .sheet { width: min(620px, 100%); }
+  .sheet.wide { width: min(780px, 100%); }
+  .lead { font-size: 18px; }
+  .activity.lv1 .lead { font-size: 21px; }
+  .opt, .activity .opt { font-size: 17px; min-height: 54px; }
+  .activity.lv1 .opt { font-size: 20px; min-height: 60px; }
+  .key { padding: 18px 0; font-size: 26px; min-height: 60px; }
+  .keypad-disp { font-size: 46px; }
+  .helpbox, .whybox, .wordcard { font-size: 16px; }
+  .interact-btn { min-width: 132px; max-width: 168px; min-height: 108px; font-size: 16px; }
+  .sprint-btn { width: 66px; height: 66px; font-size: 14px; }
+  .phone-btn { width: 60px; height: 60px; font-size: 30px; }
+  .d-text { font-size: 20px; }
+  .d-choice { font-size: 17px; min-height: 52px; }
+}
+@media (min-width: 700px) and (min-height: 700px) and (orientation: landscape) { .sprint-btn { right: calc(max(16px, env(safe-area-inset-right)) + 176px); } }
+@media (min-width: 700px) and (min-height: 700px) and (orientation: portrait) { .sprint-btn { right: calc(max(16px, env(safe-area-inset-right)) + 33px); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 140px); } }
