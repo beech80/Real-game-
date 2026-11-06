@@ -2,6 +2,7 @@
 // Built in-engine from a compact plan (streets, buildings with storefronts and windows, trees, lamps,
 // parked cars, a far skyline), then merged by material for phone-friendly draw counts.
 import * as THREE from 'three';
+import { lookMaterial } from './lookfx.js';
 import { P2W, mergeStatic } from './world.js';
 import { textTexture } from './scenes.js';
 import { carMesh } from './city.js';
@@ -74,7 +75,7 @@ function uvBox(w, h, d) {   // box with metre-scaled planar UVs so tiling textur
 const M = {};
 function mat(name, color, o = {}) {
   const k = name + color.toString(16);
-  if (!M[k]) { M[k] = new THREE.MeshStandardMaterial({ color, roughness: o.rough ?? 0.8, metalness: o.metal ?? 0, emissive: o.emissive ?? 0, emissiveIntensity: o.ei ?? 1 }); M[k].name = name; }
+  if (!M[k]) { M[k] = new THREE.MeshStandardMaterial({ color, roughness: o.rough ?? 0.8, metalness: o.metal ?? 0, emissive: o.emissive ?? 0, emissiveIntensity: o.ei ?? 1 }); M[k].name = name; lookMaterial(M[k]); }
   return M[k];
 }
 function skylineTexture() {

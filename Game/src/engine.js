@@ -4,6 +4,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { lookMaterial, setLookQuality, LK_NOISE } from './lookfx.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 export const isMobile = matchMedia('(pointer: coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -20,7 +21,7 @@ export class Engine {
     r.outputColorSpace = THREE.SRGBColorSpace;
     r.toneMapping = THREE.ACESFilmicToneMapping;
     r.toneMappingExposure = 1.0;
-    r.shadowMap.enabled = this.quality !== 'low';
+    r.shadowMap.enabled = this.quality !== 'low'; setLookQuality(this.quality);
     r.shadowMap.type = this.quality === 'high' ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
     canvasHost.appendChild(r.domElement);
     this.scene = new THREE.Scene();
@@ -42,6 +43,7 @@ export class Engine {
     if (!auto) { this.manualQuality = true; try { localStorage.setItem('real.quality', q); } catch (e) {} }
     this.renderer.shadowMap.type = q === 'high' ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
     this.renderer.shadowMap.enabled = q !== 'low';
+    setLookQuality(q);
     this.sun.castShadow = q !== 'low';
     const s = q === 'high' ? 2048 : 1024;
     this.sun.shadow.mapSize.set(s, s);
@@ -81,18 +83,23 @@ export class Engine {
     const geo = new THREE.SphereGeometry(900, 32, 16);
     this.skyUniforms = {
       top: { value: new THREE.Color() }, mid: { value: new THREE.Color() }, bot: { value: new THREE.Color() },
-      sunDir: { value: new THREE.Vector3(0, 1, 0) }, sunCol: { value: new THREE.Color() }, stars: { value: 0 },
+      sunDir: { value: new THREE.Vector3(0, 1, 0) }, sunCol: { value: new THREE.Color() }, stars: { value: 0 }, ctime: { value: 0 },
     };
     const mat = new THREE.ShaderMaterial({
       uniforms: this.skyUniforms, side: THREE.BackSide, depthWrite: false, fog: false,
       vertexShader: `varying vec3 vDir; void main(){ vDir = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
-      fragmentShader: `uniform vec3 top; uniform vec3 mid; uniform vec3 bot; uniform vec3 sunDir; uniform vec3 sunCol; uniform float stars; varying vec3 vDir;
+      fragmentShader: `uniform vec3 top; uniform vec3 mid; uniform vec3 bot; uniform vec3 sunDir; uniform vec3 sunCol; uniform float stars; uniform float ctime; varying vec3 vDir;
+        ${LK_NOISE}
         float hash(vec3 p){ p = fract(p*0.3183099+.1); p*=17.0; return fract(p.x*p.y*p.z*(p.x+p.y+p.z)); }
         void main(){
           float h = vDir.y;
           vec3 c = h > 0.0 ? mix(mid, top, pow(clamp(h*1.6,0.0,1.0), 0.7)) : mix(mid, bot, clamp(-h*4.0,0.0,1.0));
           float d = max(dot(vDir, normalize(sunDir)), 0.0);
           c += sunCol * (pow(d, 600.0) * 3.0 + pow(d, 12.0) * 0.35 + pow(d, 3.0) * 0.12);
+          if (h > 0.0) { vec2 uv = vDir.xz / (h + 0.12); float n = lk_fbm(uv * 1.1 + vec2(ctime * 0.006, ctime * 0.002));
+            float cl = smoothstep(0.5, 0.78, n) * smoothstep(0.0, 0.22, h);
+            vec3 cc = mix(mid, vec3(1.0), 0.55) * (0.75 + 0.25 * smoothstep(0.5, 0.9, n)) + sunCol * pow(d, 4.0) * 0.35;
+            c = mix(c, cc * max(0.25, 1.0 - stars), cl * 0.8); }
           if (stars > 0.0 && h > 0.05) { vec3 q = floor(vDir*320.0); float s = step(0.9975, hash(q)); c += vec3(s) * stars * smoothstep(0.05, 0.4, h); }
           gl_FragColor = vec4(c, 1.0);
           #include <tonemapping_fragment>
@@ -292,5 +299,6 @@ export function enhanceMaterial(m, T) {
   // keep bright paints/tiles below the bloom threshold in full sun
   if (/RoadLine|TileWhite|MAT_REAL_White$|Sidewalk|Plaster$/.test(n) && m.emissive.getHex() === 0) m.color.multiplyScalar(0.82);
   if (/Emit|GlassLit/.test(n)) m.userData.lamp = m.emissiveIntensity || 1;
+  lookMaterial(m);
   return m;
 }

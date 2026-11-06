@@ -19,6 +19,7 @@ import { Voice, Brain, askNPC } from './voice.js';
 import { buildInterior, BUILDING_ROOMS, ROOM } from './interiors.js';
 import { MapView } from './mapview.js';
 import { installEvents } from './events.js';
+import { scatterFlora, updateLook } from './lookfx.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
 import { PetCourse, RobotArena } from './arenas.js';
@@ -89,6 +90,7 @@ async function boot() {
   roomierFreshMart(g.scene, data.district);
   W.district = mergeStatic(g.scene, textures, 40);
   scene.add(W.district);
+  try { const fl = scatterFlora(W.district, isMobile ? { tufts: 2200, flowers: 450 } : {}); if (fl) W.district.add(W.flora = fl); } catch (e) { console.warn('flora off', e); }
   W.lamps = W.district.userData.lamps;
   for (const m of W.lamps) m.userData.lamp = m.emissiveIntensity;
   coll = new Collision(data.district.colliders);
@@ -467,6 +469,7 @@ async function ensureDistrict(id) {
   const D = buildDistrict(id, textures);
   D.coll = new Collision(D.colliders); D.peds = []; D.friends = [];
   D.pools = makeLightPools(D.lamps); D.group.add(D.pools);
+  try { const fl = scatterFlora(D.group, { tufts: isMobile ? 1500 : 2500, flowers: isMobile ? 300 : 500, seed: id.length * 7 }); if (fl) D.group.add(fl); } catch (e) { console.warn('flora off', e); }
   scene.add(D.group); W.d[id] = D;
   const pk = (a) => a[Math.floor(Math.random() * a.length)];
   for (let i = 0; i < (isMobile ? 6 : 10); i++) {
@@ -888,6 +891,7 @@ function loop(now) {
   if (!player) { engine.render(); return; }
   if (mode === 'mini' && mini) { const f = mini.update(dt); engine.setTime(12.5, f || new THREE.Vector3()); engine.scene.fog.near = 120; engine.scene.fog.far = 700; engine.render(); return; }
   if ((markT -= dt) < 0) try { markT = 0.5; for (const n of [...Object.values(npcs), ...Object.values(W.d).flatMap((D) => D.friends)]) if (n.mark) n.mark.visible = game.state.flags.housed && game.advOffer(n.advId); } catch (e) { markT = 1e9; console.warn('markers off', e); }
+  updateLook(engine, dt);
   const adapted = engine.adapt(dt);
   if (adapted) UI.toast(`Graphics set to ${adapted} for smoother play (change in 📱 Settings)`, 'info', 3500);
   const s = game.state;

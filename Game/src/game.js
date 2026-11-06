@@ -109,6 +109,11 @@ export class Game {
       }
       case 'invite': return s.location === 'apartment' ? T('The Club has invited you back. Head out to the bus stop.', 'Interact_ExitDoor') : T('The Club has invited you back. Take the bus to The Club.', 'Interact_BusStop');
       default: {
+        if (s.hunger < 22 && s.chapter !== 'prologue') {   // starving: eating comes first, with an arrow to food
+          const food = Object.values(s.pantry || {}).some((n) => n > 0);
+          if (s.location === 'apartment') return T(food ? 'You’re very hungry. Eat something from the fridge' : 'You’re very hungry and the fridge is empty. Get a meal at the Main St Diner', food ? 'Interact_Fridge' : 'Interact_ExitDoor');
+          return T('You’re very hungry. Get a meal at the Main St Diner (or eat at home)', 'Door_Diner');
+        }
         if (s.location === 'apartment') return T(s.time > 20 ? 'Get some sleep' : 'Head out and live your day', s.time > 20 ? 'Interact_Sleep' : 'Interact_ExitDoor');
         if (s.mission) return T(`${s.mission.text}${s.mission.loc !== s.location ? ' (' + ({ district: 'Starting District', midtown: 'Midtown', opportunity: 'Opportunity District', heights: 'The Heights' })[s.mission.loc] + ')' : ''}`, 'MISSION');
         if (s.flags.jaxStealDue && !s.flags.jaxSteal) return T('Someone’s waiting by Thread & Co…', 'NPC_Jax');

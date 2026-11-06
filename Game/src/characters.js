@@ -1,5 +1,6 @@
 // REAL — characters: species models, animation state, outfits/tints, facial expressions.
 import * as THREE from 'three';
+import { lookCharacter } from './lookfx.js';
 import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { loadGLB } from './world.js';
 
@@ -53,6 +54,7 @@ export class Character {
         o.material.userData.base = o.material.color.clone();
       }
     });
+    lookCharacter(this.root);
     this.mixer = new THREE.AnimationMixer(this.root);
     this.actions = {};
     for (const clip of gltf.animations) {
