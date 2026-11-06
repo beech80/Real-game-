@@ -5,6 +5,8 @@
 // `why` is the worked explanation shown after every answer ("4 + 6 = 10, then add 3 to get 13").
 // Generators are pure (no DOM), so tests/curriculum.test.mjs can validate every one of them.
 
+import { MORE_SKILLS, MORE_GEN } from './curriculum2.js';
+
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const $ = (v) => '$' + (Number.isInteger(v) ? v.toLocaleString('en-US') : v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
@@ -267,3 +269,7 @@ export const GEN = {
   'sci.systems': [() => ({ type: 'order', skill: 'sci.systems', q: 'Your car’s cooling fan breaks. Put what happens next in order.', items: ['The fan stops', 'The engine gets hotter', 'The engine loses power to protect itself', 'Lap times get slower'], why: 'Parts of a system are linked. One broken part can ripple all the way to your results.' })],
   'sci.ethics': [() => ch('sci.ethics', 'Your invention failed one safety test, but the competition is tomorrow. What is responsible?', 'Report the result honestly and fix it before showing it', ['Hide the failed test', 'Change the numbers', 'Blame a teammate'], 'Honest testing protects people. Science and engineering only work when results are reported truthfully.')],
 };
+
+// part 2: social studies, health & life skills, technology, and the core topics part 1 didn't cover
+NEW_SKILLS.push(...MORE_SKILLS);
+for (const [k, g] of Object.entries(MORE_GEN)) GEN[k] = (GEN[k] || []).concat(g);

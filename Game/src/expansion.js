@@ -145,10 +145,22 @@ export function installExpansion(Game) {
     const s = this.state; s.mood = Math.min(100, s.mood + 15); this.advance(0.3);
     await UI.caption(['From up here you can see all of it.', 'The Starting District. Midtown. The towers of Opportunity.', 'And far away, the old road where you started.'], 2600);
   };
+  /** One short lesson from a subject, at the player's own working level (and not the one they just did). */
+  P.lessonIn = async function (subj, ctx, title, icon, filter = () => true) {
+    const b = this.edu.band(subj), last = this.state.flags[`lastLesson_${subj}`];
+    const pool = Object.values(SKILLS).filter((k) => k.subj === subj && GEN[k.id] && filter(k)).sort((x, y) => Math.abs(x.band - b) - Math.abs(y.band - b) || (this.edu.state(x.id) - this.edu.state(y.id)));
+    if (!pool.length) return;
+    const near = pool.filter((k) => Math.abs(k.band - pool[0].band) <= 1 && k.id !== last);
+    const k = (near.length ? near : pool)[Math.floor(Math.random() * Math.min(3, (near.length ? near : pool).length))];
+    this.state.flags[`lastLesson_${subj}`] = k.id;
+    await runActivity(this, () => ({ skill: k.id, ...GEN[k.id][Math.floor(Math.random() * GEN[k.id].length)]() }), ctx, title || k.name, icon);
+  };
   P.checkup = async function () {
     const s = this.state;
     await UI.say('Nurse Kim · City Clinic', `Energy ${Math.round(s.energy)}, food ${Math.round(s.hunger)}, mood ${Math.round(s.mood)}. ${s.hunger < 40 ? 'Eat regular meals. Cooking at home is cheaper and healthier.' : 'You’re eating well.'} ${s.energy < 40 ? 'Sleep is part of health. Get to bed before midnight.' : 'Rested and ready.'}`);
     s.stats.checkups = (s.stats.checkups || 0) + 1; s.stats.goodNights = (s.stats.goodNights || 0) + 0.5;
+    await UI.say('Nurse Kim · City Clinic', 'Before you go, one quick health question. Knowing this keeps you and your friends well.');
+    await this.lessonIn('health', 'clinic', 'Health check', '🩺');
   };
 
   // ---------------------------------------------------------------------------------- Ch.9: owning a business
@@ -462,11 +474,13 @@ export function installExpansion(Game) {
       h('div', { class: 'opts' },
         h('button', { class: 'opt', onclick: () => close('board') }, '💼 Career board'),
         h('button', { class: 'opt', onclick: () => close('ask') }, '💬 Ask Mr. Okafor a question'),
+        h('button', { class: 'opt', onclick: () => close('civics') }, '🏛️ How our city works (rights, laws, voting)'),
         h('button', { class: 'opt', onclick: () => close('resume') }, s.flags.resume ? '📝 Update my résumé' : '📝 Help me write a résumé'),
         struggling ? h('button', { class: 'opt', onclick: () => close('help') }, '🤝 I’m struggling with money') : h('button', { class: 'opt', onclick: () => close('help') }, '🤝 Money help & advice'),
         ll >= 8 || s.ending ? h('button', { class: 'opt', onclick: () => close('mentor') }, '🌱 Mentor a newcomer') : null)), { icon: '🤝' });
     if (c === 'board') return this.careerBoard();
     if (c === 'ask') return askNPC(this, { name: 'Mr. Okafor' });
+    if (c === 'civics') { await UI.say(O, 'A city runs on people who understand how it works. Let’s look at one piece of it.'); for (let i = 0; i < 2; i++) await this.lessonIn('social', 'counselor', 'How our city works', '🏛️'); s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 0.25; this.save(); return; }
     if (c === 'resume') {
       await UI.say(O, 'A résumé shows employers what you can do. Start each line with an action word, and use numbers when you can.');
       const r = await runActivity(G, gen('write.resume'), 'resume', 'Your résumé', '📝');
@@ -506,10 +520,14 @@ export function installExpansion(Game) {
     const s = this.state, b = this.edu.band('reading');
     const shelf = Object.values(SKILLS).filter((k) => k.subj === 'reading' && GEN[k.id]).sort((x, y) => Math.abs(x.band - b) - Math.abs(y.band - b)).slice(0, 4);
     const titles = { 'read.letters': 'ABC City Walk', 'read.phonics': 'Sounds Around Town', 'read.sentences': 'A Day at Fresh Mart', 'read.paragraph': 'Community Notices', 'read.multistep': 'How Things Work', 'read.inference': 'The Mystery of Aisle 5', 'read.compare': 'Which Way to Go?', 'read.technical': 'The Fix-It Manual', 'read.evidence': 'City Stories', 'read.factopinion': 'Ads and Facts', 'read.purpose': 'Why Did They Write That?', 'read.summarize': 'News in Brief', 'read.contracts': 'The Fine Print', 'read.bias': 'Two Sides', 'read.sources': 'Trust the Source', 'read.research': 'The Research Desk' };
+    const NF = { social: ['🌍', 'History & the world'], science: ['🔬', 'Science'], tech: ['💻', 'Technology'], health: ['🩺', 'Health'] };
     const pickId = await UI.sheet('Midtown Library', (close) => h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Pick a book. These are picked for where you are right now, but every shelf is open to you.'),
-      h('div', { class: 'opts' }, shelf.map((k) => h('button', { class: 'opt', onclick: () => close(k.id) }, `📕 ${titles[k.id] || k.name}`)), h('button', { class: 'opt', onclick: () => close('all') }, '📚 Browse every subject (Learn)'))), { icon: '📚' });
+      h('div', { class: 'opts' }, shelf.slice(0, 3).map((k) => h('button', { class: 'opt', onclick: () => close(k.id) }, `📕 ${titles[k.id] || k.name}`)),
+        h('div', { class: 'tier-h' }, 'Nonfiction shelf'), ...Object.entries(NF).map(([k, [ic, nm]]) => h('button', { class: 'opt', onclick: () => close('nf:' + k) }, `${ic} ${nm}`)),
+        h('button', { class: 'opt', onclick: () => close('all') }, '📚 Browse every subject (Learn)'))), { icon: '📚' });
     if (!pickId) return;
     if (pickId === 'all') return A.learn(this);
+    if (pickId.startsWith('nf:')) { const k = pickId.slice(3); for (let i = 0; i < 2; i++) await this.lessonIn(k, 'library', NF[k][1], NF[k][0]); s.stats.booksRead = (s.stats.booksRead || 0) + 1; s.mood = Math.min(100, s.mood + 5); this.advance(0.75); this.save(); return; }
     for (let i = 0; i < 2; i++) await runActivity(this, gen(pickId), 'library', titles[pickId] || 'Reading', '📕');
     s.stats.booksRead = (s.stats.booksRead || 0) + 1; s.mood = Math.min(100, s.mood + 5); this.advance(0.75); this.save();
   };

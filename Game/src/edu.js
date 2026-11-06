@@ -1,5 +1,5 @@
 // REAL — Education Mastery engine ("Learn by Living").
-// Private, adaptive skill tracking across six subjects and six internal bands (never shown as grade labels).
+// Private, adaptive skill tracking across ten subjects and six internal bands (never shown as grade labels).
 // Every skill moves through: Not Introduced → Learning → Practicing → Proficient → Mastered → Review.
 // Evidence comes only from correctness, hint use, variety of contexts and time between successes — never speed.
 
@@ -13,6 +13,9 @@ export const SUBJECTS = {
   finance: { name: 'Money', icon: '💰' },
   science: { name: 'Science', icon: '🔬' },
   thinking: { name: 'Critical thinking', icon: '🧠' },
+  social: { name: 'Social studies', icon: '🌍' },
+  health: { name: 'Health & life skills', icon: '🩺' },
+  tech: { name: 'Technology', icon: '💻' },
 };
 
 export const STATES = ['Not introduced', 'Learning', 'Practicing', 'Proficient', 'Mastered', 'Review'];
