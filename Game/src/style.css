@@ -101,10 +101,10 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--gold-2); ou
 .joy-base.on { opacity: 1; }
 @media (pointer: coarse) { #hud .joy-base { opacity: .35; } #hud .joy-base.on { opacity: 1; } }
 .joy-knob { position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff, #c9d2ea); box-shadow: 0 4px 12px rgba(0, 0, 0, .4); }
-.sprint-btn { position: absolute; right: calc(max(16px, env(safe-area-inset-right)) + 128px); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 18px); width: 58px; height: 58px; border-radius: 50%; background: var(--panel); border: 1px solid rgba(255, 255, 255, .2); font-family: var(--f-head); font-weight: 700; letter-spacing: .06em; font-size: 13px; }
+.sprint-btn { position: absolute; right: calc(max(16px, env(safe-area-inset-right)) + 152px); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 18px); width: 58px; height: 58px; border-radius: 50%; background: var(--panel); border: 1px solid rgba(255, 255, 255, .2); font-family: var(--f-head); font-weight: 700; letter-spacing: .06em; font-size: 13px; }
 .sprint-btn.on { background: var(--gold); color: #241503; }
 @media (pointer: fine) { .sprint-btn { display: none; } }
-.interact-btn { position: absolute; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); min-width: 112px; max-width: 46vw; min-height: 96px; border-radius: 22px; background: linear-gradient(180deg, var(--gold-2), var(--gold)); color: #241503; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 12px; font-family: var(--f-head); font-weight: 700; font-size: 15px; line-height: 1.1; text-transform: uppercase; letter-spacing: .03em; box-shadow: 0 8px 24px rgba(233, 169, 58, .45); animation: pop .25s ease-out; }
+.interact-btn { position: absolute; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); min-width: 112px; max-width: 140px; overflow-wrap: break-word; min-height: 96px; border-radius: 22px; background: linear-gradient(180deg, var(--gold-2), var(--gold)); color: #241503; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 12px; font-family: var(--f-head); font-weight: 700; font-size: 15px; line-height: 1.1; text-transform: uppercase; letter-spacing: .03em; box-shadow: 0 8px 24px rgba(233, 169, 58, .45); animation: pop .25s ease-out; }
 .i-key { width: 30px; height: 30px; border-radius: 8px; background: rgba(36, 21, 3, .15); display: grid; place-items: center; font-size: 16px; }
 @media (pointer: coarse) { .i-key { display: none; } }
 @keyframes pop { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -401,3 +401,5 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .cursive-steps span.done { color: #7fd99a; }
 .cursive-steps span.now { color: #ffd27a; background: rgba(233, 169, 58, .16); }
 .cursive-steplbl { text-align: center; margin: 0 0 6px; }
+/* held upright: RUN sits above the action button (narrow phones have no room beside it next to the joystick) */
+@media (orientation: portrait) { .sprint-btn { right: calc(max(16px, env(safe-area-inset-right)) + 27px); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 126px); } }

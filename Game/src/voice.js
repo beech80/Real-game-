@@ -178,10 +178,16 @@ export const Brain = {
       } catch (e) {}
     }
     // on-device: best matching fact
-    const q = new Set(words(question));
-    const all = [...kb.facts, ...CITY];
+    // match by meaning, not exact words: "work", "hired" and "apply" all count as being about jobs
+    const SYN = { job: /^(jobs?|work(ing|s)?|careers?|hir(e|ed|ing)|apply(ing)?|applications?|employ(er|ment)?|shifts?|interviews?)$/, money: /^(money|dollars?|cash|pay(check)?s?|earn(ing|s)?|sav(e|ing|ings)|budget(s|ing)?)$/,
+      home: /^(home|rent|apartments?|house|lofts?|lease)$/, food: /^(food|eat(ing)?|hungry|groceries|meals?|cook(ing)?)$/, learn: /^(learn(ing)?|school|courses?|classes|skills?|study(ing)?|practi[sc]e)$/ };
+    const concepts = (t) => new Set(words(t).map((w) => { for (const [k, re] of Object.entries(SYN)) if (re.test(w)) return '#' + k; return w.replace(/(ing|ed|s)$/, ''); }));
+    const q = concepts(question);
+    const qw = words(question), bigrams = qw.slice(1).map((w, i) => `${qw[i]} ${w}`);
+    const all = [...kb.facts.map((f) => [f, 0.5]), ...CITY.map((f) => [f, 0])];   // a character's own facts win ties
     let best = null, bs = 0;
-    for (const f of all) { const sc = words(f).filter((w) => q.has(w)).length; if (sc > bs) { bs = sc; best = f; } }
+    for (const [f, bonus] of all) { const c = concepts(f); let sc = 0; for (const w of q) if (c.has(w)) sc += w[0] === '#' ? 2 : 1; const low = f.toLowerCase(); for (const bg of bigrams) if (low.includes(bg)) sc += 2;   // the question's words together as a phrase ("first job")
+      const tot = sc && sc + bonus - c.size * 0.02; if (sc && tot > bs) { bs = tot; best = f; } }   // ties: the shorter, more focused answer
     return { text: best && bs > 0 ? best : pickOne(kb.unsure || ['Good question! I’m not sure. Mr. Okafor at the Community Center knows a lot about the city.']), smart: false };
   },
 };
@@ -201,9 +207,9 @@ const CITY = [
 ];
 export const KNOW = {
   _default: { role: 'a friendly resident of the city', facts: ['People here help each other. Ask around and you will find work, friends and adventures.'] },
-  Rosa: { role: 'the manager of Fresh Mart (a cow)', facts: ['At the register, scan every item, read the total, then count change back starting from the total.', 'Stock each product in the aisle that matches the sign above it.', 'Inventory means counting what is on the shelves; rows times columns is faster than counting one by one.', 'Show up on time, greet every customer, and ask when you are unsure.', 'After four shifts and solid register skills you can become a Shift Lead for $17 an hour.'] },
+  Rosa: { role: 'the manager of Fresh Mart (a cow)', facts: ['At the register, scan every item, read the total, then count change back starting from the total.', 'Stock each product in the aisle that matches the sign above it.', 'Inventory means counting what is on the shelves; rows times columns is faster than counting one by one.', 'Show up on time, greet every customer, and ask when you are unsure.', 'After four shifts and solid register skills you can become a Shift Lead for $17 an hour.', 'Fresh Mart shifts start at 9 in the morning. Clock in a few minutes early at the time clock in the back room.'] },
   Dee: { role: 'the barista at Daily Grind (a dog)', facts: ['A latte is espresso plus steamed milk; a cappuccino has more foam.', 'Weekend barista shifts pay $15 an hour plus tips.', 'Measuring carefully makes every cup taste the same.'] },
-  'Mr. Okafor': { role: 'the counselor at the Community Center (an elephant)', facts: ['Every career is open to everyone; skills and Life Level unlock them, never wealth.', 'A résumé lists what you did with action words and numbers.', 'A budget gives every dollar a job: needs first, then savings, then wants.', 'If a week goes badly, the Community Center offers a food bank and rent payment plans.'] },
+  'Mr. Okafor': { role: 'the counselor at the Community Center (an elephant)', facts: ['Every career is open to everyone; skills and Life Level unlock them, never wealth.', 'A résumé lists what you did with action words and numbers.', 'A budget gives every dollar a job: needs first, then savings, then wants.', 'If a week goes badly, the Community Center offers a food bank and rent payment plans.', 'Your first job: Fresh Mart is hiring. Talk to Rosa, the manager, fill out the application honestly and sign it.', 'To get hired, read the job posting, answer the interview questions honestly and always show up on time.', 'Better jobs open up as you learn: practise skills, take courses and build your Life Level.'] },
   Jax: { role: 'a confident cat with a red cap who used to be in The Club', facts: ['Looking good matters, but so does paying rent.', 'The Club only cares about what you build yourself.'] },
   Rita: { role: 'a mechanic who races cars (a horse)', facts: ['Tires grip the road with friction; more grip lets you corner faster without sliding.', 'A bigger engine adds speed on straights but can make you slide in corners without good tires.', 'Rally suspension keeps the car steady on dirt and grass.', 'When testing parts, change one thing at a time so you know what made the difference.', 'A car that clicks but will not start with dim lights usually has a weak battery.'] },
   Penny: { role: 'a pet trainer at Brighter Park (a dog)', facts: ['Reward the exact moment your pet does the right thing; that is positive reinforcement.', 'Never yell at or punish a pet; kindness teaches faster.', 'Pets need food, fresh water, rest, play and a safe home every day.', 'A pet that ate and rested well runs faster in competitions.'] },

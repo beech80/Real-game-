@@ -992,6 +992,7 @@ window.REAL = {
   teleportXY(x, y) { player.pos = { x, y }; player.apply(); },
   npcPos: (n) => npcs[n] && !npcs[n].hidden && { ...npcs[n].pos },
   wildSign: (i) => ({ ...W.wild.signs[i] }), club: () => ({ ...CLUB }),
+  skip: async () => { await window.REAL.devJump(); },   // older tests: straight into the city
   skipPrologue: async () => { if (game.state.chapter === 'prologue') { game.state.flags.council = true; game.busy = false; input.enabled = true; await startWilderness(); } },
   // test-only: jump to a story checkpoint (skips the parts already covered by the full saga run)
   devJump: async (stage) => {
@@ -1000,6 +1001,7 @@ window.REAL = {
     Object.assign(s, { chapter: 'city', location: 'district', money: 100, time: 8.5 });
     Object.assign(s.flags, { housed: true, phone: true, readFirstSign: true, path: 'road' });
     s.bills = [{ id: 'phone1', name: 'Phone plan', amount: 25, due: s.day + 4, paid: false }, { id: 'rent1', name: 'Rent — The Starter Apartments (week 2)', amount: 120, due: s.day + 6, paid: false }];
+    s.quest = 'job';   // arrived and housed: next, find a job
     if (stage === 'hired') { s.flags.hired = true; s.jobs = ['cashier']; s.job = { id: 'cashier', title: 'Cashier', employer: 'Fresh Mart', rate: 15, hours: 4 }; s.quest = 'clockin'; }
     fcam.mode = 'follow'; mode = 'play'; UI.showHUD(true); await spawnAdventureNPCs();
     const d = sock('Spawn_StoreEntry'); player.pos = { x: d.x, y: d.y + 2 }; player.apply();

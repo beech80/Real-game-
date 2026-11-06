@@ -69,7 +69,7 @@ const MOCK = () => {
   await ev(() => { window.__srBlocked = true; window.__say = 'Hello! Welcome to Fresh Mart, how can I help you?'; window.__sp = window.REAL.speakPractice('cashier', 0); });
   await p.waitForSelector('.speakact .mic'); await p.click('.speakact .mic');
   await p.waitForSelector('.dictate textarea', { timeout: 10000 }); results.dictationBoxWhenBlocked = true; await shot('dictate_box');
-  await p.fill('.dictate textarea', 'Hello! Welcome to Fresh Mart, how can I help you?'); await p.click('.dictate button:text-is("Done ✓")');
+  await p.fill('.dictate textarea', 'Hello! Welcome to Fresh Mart, how can I help you?'); await p.click('.dictate button:text-is("Done ✓")', { timeout: 5000 }).catch(() => {});   // it may already have sent itself
   await p.waitForSelector('.speakact .stars', { timeout: 30000 }); results.gradedFromDictation = await p.textContent('.speakact .stars');
   await p.click('.speakact button.primary:text-is("Continue")');
   // no speech recognition at all (e.g. inside an app): speaking practice opens the box with the keyboard straight away
