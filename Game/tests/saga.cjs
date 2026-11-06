@@ -167,7 +167,7 @@ let step = 0, p;
   await p.click('.card:has-text("Math")'); await sleep(400); await shot('learn_math_skills'); await p.click('.sh-x'); await sleep(300);
 
   }
-  // CHAPTERS 11–12 — the invitation, the decision, the epilogue (invitation forced: reaching Life Level 6 takes several in-game days)
+  // CHAPTERS 11–12 — the invitation, the decision, the epilogue (invitation forced: reaching Life Level 10 takes at least a week of in-game days)
   await ev(() => { const g = window.REAL.game(); g.state.flags.invited = g.state.day; g.state.quest = 'invite'; });
   await ev(() => { window.REAL.game().hooks.goToClub(); });
   await p.waitForSelector('#dialog:not([hidden])', { timeout: 90000 }); await sleep(600); await shot('invitation');

@@ -864,7 +864,7 @@ function storyTriggers() {
 }
 
 // ------------------------------------------------------------------------------------------ loop
-let saveT = 0, last = performance.now();
+let saveT = 0, last = performance.now(), lastObjective = null;
 function loop(now) {
   requestAnimationFrame(loop);
   const dt = Math.min(0.05, (now - last) / 1000); last = now;
@@ -942,12 +942,16 @@ function loop(now) {
   if (mode === 'play') {
     UI.updateHUD(s);
     const obj = game.objective();
-    let target = null;
+    let target = null; lastObjective = obj;
     if (obj.target === 'CLUB_COUNCIL') target = CLUB.councilDoor;
     else if (obj.target === 'MISSION' && s.mission) target = s.mission.loc === s.location ? (DD ? { x: DD.def.ox + s.mission.x, y: s.mission.y } : s.mission) : null;
     else if (obj.target === 'D:bus') target = DD ? DD.points.find((p) => p.key === 'bus') : null;
     else if (obj.target === 'CART') target = W.cartPos || null;
-    else if (DD || IR) target = null;
+    else if (IR) {   // inside a building: point at the counter if the goal is this place, otherwise at the way out
+      const here = s.room && obj.target && (s.room.doorKey === obj.target || s.room.key === obj.target);
+      target = obj.target ? (IR.points.find((q) => q.act === (here ? 'counter' : 'exit')) || null) : null;
+    }
+    else if (DD) target = null;
     else if (obj.target === 'WILD_SIGN') target = W.wild.signs[0];
     else if (obj.target === 'NPC_Jax') target = npcs.Jax && !npcs.Jax.hidden ? npcs.Jax.pos : null;
     else if (obj.target === 'NPC_Counselor') target = apt ? sock('Interact_ExitDoor', 'apartment') : npcs.Counselor.pos;
@@ -957,6 +961,7 @@ function loop(now) {
       if (so && sameSpace) target = so; else if (so && apt) target = sock('Interact_ExitDoor', 'apartment'); else if (so && !apt) target = sock('Door_ApartmentLobby');
     }
     lastTarget = target;
+    lastObjective = { ...obj, pos: target ? { x: target.x, y: target.y } : null, inDistrict: !!DD, inRoom: !!IR };
     const dist = target ? Math.hypot(target.x - player.pos.x, target.y - player.pos.y) : null;
     UI.objective(fcam.mode === 'follow' ? obj.text : null, dist);
     if (target) { beacon.visible = dist > 2.2; beacon.position.copy(P2W(target.x, target.y, apt ? -500 : target.y < WILD.edge ? wildHeight(target.x, target.y) : 0.14)); beacon.userData.ring.scale.setScalar(1 + Math.sin(t * 3) * 0.12); }
@@ -984,7 +989,7 @@ window.REAL = {
   get state() { return game && game.state; }, get mode() { return mode; },
   teleport(key, where = 'district') { const so = sock(key, where); if (so) { player.pos = { x: so.x, y: so.y }; player.apply(); } return !!so; },
   cam(yaw, pitch, dist) { fcam.yaw = yaw; fcam.pitch = pitch; fcam.dist = dist; fcam.cur.set(0, 1e4, 0); },
-  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, playerHeading: () => player.heading, speedMul: () => player.speedMul, forgetRecent: () => forgetRecent(), camPlanY: () => -camera.position.z, camDebug: () => { const w = fcam.cur.clone(); const r = clampCameraBounds(w, fcam.target.clone()); return { cur: fcam.cur.toArray().map((v) => +v.toFixed(2)), target: fcam.target.toArray().map((v) => +v.toFixed(2)), pitchNow: fcam.pitchNow, minPitch: fcam.minPitch, zone: fcam.zone, mode: fcam.mode, ret: r, clamped: w.toArray().map((v) => +v.toFixed(2)), loc: game.state.location, room: !!curRoom(), pos: { ...player.pos } }; },
+  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, playerHeading: () => player.heading, speedMul: () => player.speedMul, objective: () => lastObjective, forgetRecent: () => forgetRecent(), camPlanY: () => -camera.position.z, camDebug: () => { const w = fcam.cur.clone(); const r = clampCameraBounds(w, fcam.target.clone()); return { cur: fcam.cur.toArray().map((v) => +v.toFixed(2)), target: fcam.target.toArray().map((v) => +v.toFixed(2)), pitchNow: fcam.pitchNow, minPitch: fcam.minPitch, zone: fcam.zone, mode: fcam.mode, ret: r, clamped: w.toArray().map((v) => +v.toFixed(2)), loc: game.state.location, room: !!curRoom(), pos: { ...player.pos } }; },
   // walk a path in small steps against the real colliders; returns how far along it got (1 = all the way)
   pathClear: (pts, r = 0.22) => { let done = 0, total = 0; for (let i = 1; i < pts.length; i++) total += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
     let p = { x: pts[0][0], y: pts[0][1] }; for (let i = 1; i < pts.length; i++) { const [tx, ty] = pts[i]; for (let k = 0; k < 4000; k++) { const dx = tx - p.x, dy = ty - p.y, d = Math.hypot(dx, dy); if (d < 0.05) break; const st = Math.min(0.05, d), q = { x: p.x + dx / d * st, y: p.y + dy / d * st }; coll.resolve(q, r); const moved = Math.hypot(q.x - p.x, q.y - p.y); done += Math.max(0, (dx * (q.x - p.x) + dy * (q.y - p.y)) / d); p = q; if (moved < 0.002) return +(done / total).toFixed(2); } } return +Math.min(1, done / total).toFixed(2); },

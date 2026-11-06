@@ -2,7 +2,7 @@
 import { UI, h, money, clock, wait } from './ui.js';
 import * as A from './activities.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
-import { lifeLevel, LIFE_CATS, CAREERS, TIER_NAMES, careerStatus, setSkillNames, ACHIEVEMENTS, INVITE_LEVEL } from './life.js';
+import { lifeLevel, LIFE_CATS, CAREERS, TIER_NAMES, careerStatus, setSkillNames, ACHIEVEMENTS, INVITE_LEVEL, INVITE_MIN_DAY } from './life.js';
 setSkillNames(SKILLS);
 
 const SAVE_KEY = 'real.save.v2';
@@ -42,7 +42,7 @@ export class Game {
   befriend(n, v = 1) { this.state.friends[n] = (this.state.friends[n] || 0) + v; }
   spend(amt, desc) { const s = this.state; s.money = Math.round((s.money - amt) * 100) / 100; s.stats.spent += amt; s.bank.unshift({ day: s.day, desc, amt: -amt }); }
   earn(amt, desc) { const s = this.state; s.money = Math.round((s.money + amt) * 100) / 100; s.stats.earned += amt; s.bank.unshift({ day: s.day, desc, amt }); if (s.money >= 300) this.achieve('saver'); }
-  feed(n) { this.state.hunger = Math.min(100, this.state.hunger + n); }
+  feed(n) { this.state.hunger = Math.min(100, this.state.hunger + n); if (n > 0) this.state.flags.ate = true; }
   message(from, text) { this.state.messages.unshift({ from, text, day: this.state.day, read: false }); this.sfx('msg'); if (this.state.flags.phone) UI.toast(`New message · ${from}`, 'info'); }
 
   // ------------------------------------------------------------------ time & needs (1 real minute ≈ 10 game minutes)
@@ -72,7 +72,7 @@ export class Game {
       s.flags.jaxChallengeDone = 'won'; this.befriend('Jax', 2); s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1;
       this.message('Jax', 'Okay. $300. You’re for real. Coffee’s on me… this time.');
     }
-    if (ll >= INVITE_LEVEL && s.flags.hired && !s.flags.invited && s.chapter !== 'prologue') {
+    if (ll >= INVITE_LEVEL && s.day >= INVITE_MIN_DAY && s.flags.hired && !s.flags.invited && s.chapter !== 'prologue') {
       s.flags.invited = s.day; s.quest = 'invite'; this.achieve('invited');
       this.message('The Club', `${s.name}, the Council has followed your progress. You have shown independence, responsibility, knowledge and personal achievement. The Club is prepared to reconsider your membership. Take the bus to The Club when you are ready.`);
       setTimeout(() => this.message('Jax', 'Heard The Club’s calling you back. Funny. I never left… and I’m still not sure I belong there.'), 4000);
@@ -98,8 +98,14 @@ export class Game {
         return T('Shift done! See the manager for your pay', 'NPC_Manager_Idle');
       }
       case 'jax1': return T('Your first paycheck. Walk down Main St.', 'NPC_Jax');
-      case 'home': return s.location === 'apartment' ? T(s.flags.ate ? (s.flags.billsSeen ? 'Get some sleep' : 'Check your bills at the desk') : 'Eat something (fridge)', s.flags.ate ? (s.flags.billsSeen ? 'Interact_Sleep' : 'Interact_Bills') : 'Interact_Fridge')
+      case 'home': {
+        const food = Object.values(s.pantry || {}).some((n) => n > 0);
+        if (!s.flags.ate && !food) return T('Your fridge is empty. Get a meal at the Main St Diner (or groceries at Fresh Mart)', s.location === 'apartment' ? 'Interact_ExitDoor' : 'Door_Diner');
+        // sleeping only works in the evening: before then, the goal suggests what to do with free time instead
+        if (s.flags.ate && s.flags.billsSeen && s.time < 19 && s.energy > 40) return T('Free time until tonight: practise in 📚 Learn, jog in Brighter Park, or relax. Sleep after 7 PM', s.location === 'apartment' ? 'Interact_ExitDoor' : 'Interact_ParkJog');
+        return s.location === 'apartment' ? T(s.flags.ate ? (s.flags.billsSeen ? 'Get some sleep' : 'Check your bills at the desk') : 'Eat something (fridge)', s.flags.ate ? (s.flags.billsSeen ? 'Interact_Sleep' : 'Interact_Bills') : 'Interact_Fridge')
         : T('Buy groceries (optional), then go home to The Starter Apartments', 'Door_ApartmentLobby');
+      }
       case 'invite': return s.location === 'apartment' ? T('The Club has invited you back. Head out to the bus stop.', 'Interact_ExitDoor') : T('The Club has invited you back. Take the bus to The Club.', 'Interact_BusStop');
       default: {
         if (s.location === 'apartment') return T(s.time > 20 ? 'Get some sleep' : 'Head out and live your day', s.time > 20 ? 'Interact_Sleep' : 'Interact_ExitDoor');
@@ -115,7 +121,23 @@ export class Game {
         if (next) return T(`New district open: take the bus to ${next[2]}`, s.location === 'district' ? 'Interact_BusStop' : 'D:bus');
         if (s.biz && s.biz.last !== s.day && !s.biz.staff.length && s.time < 18) return T(`Open your ${s.biz.name} for the day (Brighter Park)`, s.location === 'district' ? 'CART' : null);
         if (s.pet && s.pet.fed !== s.day && s.time > 17) return T(`Go home and feed ${s.pet.name}`, null);
-        return T(`Grow your Life Level (${ll.level} → ${ll.level + 1}) · 📱 Stats`, null);
+        // free time: suggest one concrete step in the area that is furthest behind, so there's always a clear next thing to do
+        const home = s.location === 'district';
+        const tips = {
+          education: ['practise a skill in 📚 Learn on your phone', null],
+          career: ['look for a better job on the Career board at the Community Center', 'Door_CareerCenter'],
+          financial: ['save some money and pay bills on time (🧾 Bills app)', null],
+          health: ['go for a jog in Brighter Park', 'Interact_ParkJog'],
+          decisions: ['practise critical thinking in 📚 Learn on your phone', null],
+          relationships: ['say hi to Dee at the Daily Grind', 'Door_CoffeeShop'],
+          reputation: ['do great work on your next shift', null],
+          independence: ['keep paying your own rent on time', null],
+          entrepreneurship: ll.level >= 6 ? ['plan a business at the Small Business Center (Opportunity District)', null] : null,
+        };
+        const behind = Object.entries(ll.scores).filter(([k]) => tips[k]).sort((a, b) => a[1] - b[1]).slice(0, 3);
+        const lowest = behind[Math.floor(s.time) % Math.max(1, behind.length)];   // rotate hourly among the three areas furthest behind
+        const [tip, key] = lowest ? tips[lowest[0]] : ['explore the city', null];
+        return T(`Grow your Life Level (${ll.level} → ${ll.level + 1}): ${tip}`, home ? key : null);
       }
     }
   }
@@ -359,7 +381,7 @@ export class Game {
   }
 
   async coffee() {
-    const s = this.state; this.befriend('Dee', 0.3);
+    const s = this.state; this.befriend('Dee', s.flags[`dee${s.day}`] ? 0.1 : 0.8); s.flags[`dee${s.day}`] = true;   // a daily hello builds a real friendship
     if (s.flags.baristaTip && !s.jobs.includes('barista')) {
       await UI.say('Dee · Daily Grind', 'Jax sent you? Ha. If you can work the register and stay calm, you’re hired for weekend shifts.');
       const r = await A.register(this);
@@ -529,7 +551,7 @@ export function openPhone(G) {
           s.ending ? h('div', {}, h('h3', {}, { return: 'Member (returned)', reject: 'Declined membership', rebuild: 'Founder: Open Door Network' }[s.ending]), h('p', {}, G.endingText(s.ending).join(' ')))
             : s.flags.invited ? h('div', {}, h('h3', {}, 'You have been invited back'), h('p', {}, 'Take the bus to The Club when you are ready.'))
               : h('div', {}, h('h3', {}, 'Membership revoked'), h('p', {}, '“You’ve experienced what success looks like. But have you ever experienced what it takes?”'),
-                h('p', { class: 'tip' }, `The Council looks for independence, responsibility, knowledge and personal achievement. Life Level ${ll.level} of ${INVITE_LEVEL}.`))),
+                h('p', { class: 'tip' }, `The Council looks for independence, responsibility, knowledge and personal achievement: Life Level ${ll.level} of ${INVITE_LEVEL}, and at least ${INVITE_MIN_DAY} days on your own (day ${s.day}).`))),
         Settings: () => h('div', { class: 'act' },
           h('div', { class: 'row' }, h('span', {}, 'Graphics'), ...['low', 'medium', 'high'].map((q) => h('button', { class: G.hooks.quality() === q ? 'primary sm' : 'ghost sm', onclick: () => { G.hooks.setQuality(q); open('Settings'); } }, q))),
           h('div', { class: 'row' }, h('span', {}, 'Time'), ...[[1, 'Normal'], [3, 'Fast']].map(([v, n]) => h('button', { class: (s.timeScale || 1) === v ? 'primary sm' : 'ghost sm', onclick: () => { s.timeScale = v; open('Settings'); } }, n))),

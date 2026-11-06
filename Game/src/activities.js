@@ -6,6 +6,8 @@ import { SKILLS, SUBJECTS, STATES } from './edu.js';
 import { runActivity } from './learnkit.js';
 import { lookup as lookupWord } from './glossary.js';
 
+// automated playtests only (navigator.webdriver): expose the expected keypad answer so a test bot can play like a person
+const forBot = (k, v) => { try { if (navigator.webdriver) window[k] = v; } catch (e) {} };
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
@@ -85,6 +87,7 @@ export async function needsWants(G) {
 export async function firstBudget(G) {
   await teach(G, 'fin.budget', 'Mr. Okafor');
   const q = 'You have $100. Groceries for the week cost about $25 and your phone bill ($25) is due Day 5. Rent is covered for your first week. How much is left for everything else?';
+  forBot('__keyAns', 50);
   return UI.sheet('Your first budget', (close) => {
     const hp = helpBox(G, 'fin.budget');
     const { disp, pad } = keypad((v, reset) => {
@@ -282,6 +285,7 @@ export async function register(G) {
     const totalStep = async () => {
       if (coupon) await teach(G, 'math.percent', 'Rosa');
       const skill = coupon ? 'math.percent' : addSkill;
+      forBot('__keyAns', total);
       const hp = helpBox(G, skill);
       const { disp, pad } = keypad((v, reset) => {
         const ok = Math.abs(v - total) < 0.005;
@@ -297,7 +301,7 @@ export async function register(G) {
       await teach(G, 'math.change', 'Rosa');
       const notes = [5, 10, 20, 50].filter((v) => v > total);
       const paid = notes.length ? (whole ? notes[0] : pick(notes.slice(0, 2))) : Math.ceil(total / 10) * 10 + 10;   // always more than the total
-      const change = Math.round((paid - total) * 100) / 100;
+      const change = Math.round((paid - total) * 100) / 100; forBot('__change', change);
       const hp = helpBox(G, 'math.change');
       const tray = whole ? [10, 5, 1] : [20, 10, 5, 1, 0.25, 0.1, 0.05, 0.01];
       let given = 0;
@@ -359,6 +363,7 @@ export async function inventory(G) {
     q = `A case of ${total} cans arrived. 1/${den} of them are dented and go back. How many good cans go on the shelf?`;
     viz = h('div', { class: 'cases' }, h('div', { class: 'case wide' }, `${total} cans`), h('div', { class: 'loose' }, `1/${den} dented`));
   }
+  forBot('__keyAns', ans);
   return UI.sheet('Stockroom inventory', (close) => {
     const hp = helpBox(G, skill);
     const { disp, pad } = keypad((v, reset) => {
@@ -376,6 +381,7 @@ export async function paystub(G, hours, rate, bonus = 0, employer = 'FRESH MART'
   const fica = Math.round(gross * 0.0765 * 100) / 100;
   const net = Math.round((gross - fica) * 100) / 100;
   // Apply: the player works out the base pay before seeing the stub
+  forBot('__keyAns', hours * rate);
   await UI.sheet('Your hours', (close) => {
     const hp = helpBox(G, 'math.multiply');
     const { disp, pad } = keypad((v, reset) => {

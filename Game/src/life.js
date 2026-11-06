@@ -4,7 +4,8 @@ export const LIFE_CATS = [
   ['decisions', 'Decision making', '🧠'], ['independence', 'Independence', '🏠'], ['relationships', 'Relationships', '🤝'],
   ['reputation', 'Reputation', '⭐'], ['entrepreneurship', 'Entrepreneurship', '🚀'], ['achievements', 'Achievements', '🏆'],
 ];
-export const INVITE_LEVEL = 6;   // The Club takes notice
+export const INVITE_LEVEL = 10;   // The Club takes notice: after the bigger world (The Heights opens at 8), careers and homes
+export const INVITE_MIN_DAY = 7;   // …and after at least a week of living on your own
 
 const cap = (v) => Math.max(0, Math.min(10, Math.round(v * 10) / 10));
 
@@ -14,16 +15,17 @@ export function lifeScores(s, edu) {
   const savings = s.money;
   const friends = Object.values(s.friends || {}).reduce((a, v) => a + v, 0);
   return {
-    education: cap(edu.proficientCount() * 0.7 + edu.masteredCount() * 0.8 + Object.values(s.courses || {}).filter((c) => c.done).length * 1.2 + (st.challenges || 0) * 0.5),
+    // tuned with a full natural playthrough (tests/playthrough.cjs): each area should grow over one to two weeks of play
+    education: cap(edu.proficientCount() * 0.35 + edu.masteredCount() * 0.5 + Object.values(s.courses || {}).filter((c) => c.done).length * 1.2 + (st.challenges || 0) * 0.5),
     career: cap(st.shifts * 0.8 + (s.jobs || []).length * 1 + (st.promotions || 0) * 2 + Math.max(0, ...(s.jobs || []).map((j) => (CAREERS.find((c) => c.id === j) || { tier: 0 }).tier)) * 1.5),
-    financial: cap(paidOnTime * 2 + (savings >= 100 ? 1 : 0) + (savings >= 300 ? 1.5 : 0) + (savings >= 500 ? 1.5 : 0) - (st.lateFees || 0) + (st.budgetsPlanned || 0) * 0.5),
-    health: cap((st.mealsCooked || 0) * 0.7 + (st.workouts || 0) * 1 + (st.goodNights || 0) * 0.5 + (st.mealsEaten || 0) * 0.2),
-    decisions: cap((st.wiseChoices || 0) * 1.5 + (st.thoughtThrough || 0) * 1),
+    financial: cap(paidOnTime * 0.8 + (savings >= 100 ? 1 : 0) + (savings >= 300 ? 1.5 : 0) + (savings >= 500 ? 1.5 : 0) - (st.lateFees || 0) + (st.budgetsPlanned || 0) * 0.3),
+    health: cap((st.mealsCooked || 0) * 0.5 + (st.workouts || 0) * 0.5 + (st.goodNights || 0) * 0.4 + (st.mealsEaten || 0) * 0.15),
+    decisions: cap((st.wiseChoices || 0) * 1.5 + (st.thoughtThrough || 0) * 1 + Object.keys(edu.s.skills || {}).filter((id) => /^think\./.test(id) && edu.state(id) >= 3).length * 0.6),   // critical-thinking skills count too
     independence: cap((f.housed ? 2 : 0) + (f.hired ? 2 : 0) + (st.rentPaidSelf || 0) * 2 + Math.min(4, (st.daysIndependent || 0) * 0.5) + (s.vehicle ? 1 : 0) + ({ loft: 1, heights: 2, owned: 3 }[s.home] || 0)),
-    relationships: cap(friends * 0.5 + (s.pet ? s.pet.bond * 0.3 : 0)),
+    relationships: cap(friends * 0.35 + (s.pet ? s.pet.bond * 0.3 : 0)),
     reputation: cap((st.perfectShifts || 0) * 1.2 + (st.shifts || 0) * 0.4 - (st.thefts || 0) * 3),
     entrepreneurship: cap((st.businessSteps || 0) * 2 + (s.biz ? 1 + s.biz.days * 0.3 + Math.max(0, s.biz.profit) / 250 + s.biz.staff.length : 0)),
-    achievements: cap(Object.keys(s.achievements || {}).length * 0.8),
+    achievements: cap(Object.keys(s.achievements || {}).length * 0.5),
   };
 }
 export function lifeLevel(s, edu) {
