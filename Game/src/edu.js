@@ -191,8 +191,10 @@ export class Edu {
 
   /** Scaffold level for an activity: 'guided' (Understand/Practice with help), 'hint' (hint available), 'independent'. */
   support(id) {
-    const st = this.state(id);
-    if (st <= 1) return 'guided';
+    const st = this.state(id), band = (SKILLS[id] || {}).band || 1;
+    // new skill: early levels show the help up front (worked example first); from level 3 learners try first,
+    // with the hint one tap away, since that productive struggle helps older learners remember more
+    if (st <= 1) return band <= 2 ? 'guided' : 'hint';
     if (st === 2) return 'hint';
     return 'independent';
   }

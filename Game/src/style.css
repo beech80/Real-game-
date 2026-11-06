@@ -403,3 +403,8 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .cursive-steplbl { text-align: center; margin: 0 0 6px; }
 /* held upright: RUN sits above the action button (narrow phones have no room beside it next to the joystick) */
 @media (orientation: portrait) { .sprint-btn { right: calc(max(16px, env(safe-area-inset-right)) + 27px); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 126px); } }
+
+/* answer buttons big enough for small fingers on small phones; level-1 questions a little larger for early readers */
+.activity .opt { min-height: 48px; }
+.activity.lv1 .lead { font-size: 19px; line-height: 1.35; }
+.activity.lv1 .opt { font-size: 18px; min-height: 54px; }

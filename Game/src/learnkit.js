@@ -5,6 +5,7 @@
 import { h, UI } from './ui.js';
 import { SKILLS, SUBJECTS } from './edu.js';
 import { Voice } from './voice.js';
+import { GEN } from './curriculum.js';
 
 const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
 const fmt = (Q, v) => `${Q.prefix || ''}${Q.decimals ? Number(v).toFixed(2) : v}${Q.suffix ? ' ' + Q.suffix : ''}`;
@@ -20,16 +21,26 @@ function visual(v) {
 }
 function helpFor(G, id) {
   const sup = G.edu.support(id);
-  const box = h('div', { class: 'helpbox', hidden: sup === 'independent' }, h('b', {}, '💡 '), h('span', {}, G.edu.explain(id)));
+  const box = h('div', { class: 'helpbox', hidden: sup !== 'guided' }, h('b', {}, '💡 '), h('span', {}, G.edu.explain(id)));
   let used = false;
-  const btn = h('button', { class: 'ghost sm', hidden: sup !== 'independent', onclick: () => { box.hidden = false; btn.hidden = true; used = true; } }, 'Show a hint');
+  const btn = h('button', { class: 'ghost sm', hidden: sup === 'guided', onclick: () => { box.hidden = false; btn.hidden = true; used = true; } }, 'Show a hint');
   return { box, btn, hinted: () => sup === 'guided' || used, show: () => { box.hidden = false; box.lastChild.textContent = G.edu.explain(id); } };
 }
 
+const RECENT = {};   // skill → keys of the last few questions shown
 /** Run one activity. Resolves { ok: correct on the first try }. */
 export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩') {
   let Q;
-  try { Q = typeof gen === 'function' ? gen() : gen; } catch (e) { console.warn('activity', e); return Promise.resolve({ ok: true }); }
+  try {
+    Q = typeof gen === 'function' ? gen() : gen;
+    // practise the idea, not one memorised answer: avoid the last few questions this skill asked
+    if (typeof gen === 'function' && Q && Q.skill) {
+      const key = (q) => JSON.stringify([q.q, q.a, q.word, q.items]);
+      const seen = RECENT[Q.skill] || (RECENT[Q.skill] = []);
+      for (let tries = 0; tries < 8 && seen.includes(key(Q)); tries++) { const n = gen(); if (n && n.skill === Q.skill) Q = n; }
+      seen.push(key(Q)); if (seen.length > 6) seen.shift();
+    }
+  } catch (e) { console.warn('activity', e); return Promise.resolve({ ok: true }); }
   Q.type = Q.type || 'choice'; window.__lastQ = Q;
   const id = Q.skill, sk = SKILLS[id] || { name: '', subj: 'thinking' };
   G.edu.discover(id);
@@ -46,7 +57,11 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       if (ok) { G.sfx('good'); finish(true); return true; }
       G.sfx('bad'); G.state.stats.mistakes = (G.state.stats.mistakes || 0) + 1; hp.show();
       const pre = G.edu.struggling(id);
-      if (pre) hint2.replaceChildren(`Tip: this builds on “${SKILLS[pre].name}”. You can practise it in 📚 Learn.`), (hint2.hidden = false);
+      if (pre) {   // step back to the skill this one builds on, right now, with one tap
+        const g = GEN[pre];
+        hint2.replaceChildren(`This builds on “${SKILLS[pre].name}”. `, g ? h('button', { class: 'ghost sm stepback', onclick: async (e) => { e.currentTarget.disabled = true; for (let i = 0; i < 2; i++) await runActivity(G, () => ({ skill: pre, ...g[Math.floor(Math.random() * g.length)]() }), ctx, SKILLS[pre].name, '🪜'); } }, `🪜 Practise “${SKILLS[pre].name}” first`) : 'You can practise it in 📚 Learn.');
+        hint2.hidden = false;
+      }
       if (tries >= 3 && Q.why) finish(false);   // after a few tries, show the worked solution and move on; mistakes teach
       return false;
     };
@@ -123,6 +138,6 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       Q.why = Q.why || 'Cursive letters join with smooth upward swings. Neat comes before fast.';
     }
     if (settings.readAloud || Voice.enabled() && Q.say) setTimeout(() => speak((Q.say ? Q.say + '. ' : '') + Q.q), 250);
-    return h('div', { class: 'act activity' }, ...head.filter(Boolean), hp.box, body, hint2, why, h('div', { class: 'row' }, hp.btn), done);
+    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') }, ...head.filter(Boolean), hp.box, body, hint2, why, h('div', { class: 'row' }, hp.btn), done);
   }, { icon, noClose: true });
 }
