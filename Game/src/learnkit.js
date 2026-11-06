@@ -6,6 +6,8 @@ import { h, UI } from './ui.js';
 import { SKILLS, SUBJECTS } from './edu.js';
 import { Voice } from './voice.js';
 import { GEN } from './curriculum.js';
+import { splitWords } from './glossary.js';
+import { difficulty } from './readlevel.js';
 
 const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
 const fmt = (Q, v) => `${Q.prefix || ''}${Q.decimals ? Number(v).toFixed(2) : v}${Q.suffix ? ' ' + Q.suffix : ''}`;
@@ -21,13 +23,24 @@ function visual(v) {
 }
 function helpFor(G, id) {
   const sup = G.edu.support(id);
-  const box = h('div', { class: 'helpbox', hidden: sup !== 'guided' }, h('b', {}, '💡 '), h('span', {}, G.edu.explain(id)));
+  const band = (SKILLS[id] || {}).band || 1, card = h('div', { class: 'wordcard', hidden: true });
+  const box = h('div', { class: 'helpbox', hidden: sup !== 'guided' }, h('b', {}, '💡 '), h('span', {}, ...wordful(G, G.edu.explain(id), band, card)));
   let used = false;
   const btn = h('button', { class: 'ghost sm', hidden: sup === 'guided', onclick: () => { box.hidden = false; btn.hidden = true; used = true; } }, 'Show a hint');
-  return { box, btn, hinted: () => sup === 'guided' || used, show: () => { box.hidden = false; box.lastChild.textContent = G.edu.explain(id); } };
+  return { box, btn, card, hinted: () => sup === 'guided' || used, show: () => { box.hidden = false; box.lastChild.replaceChildren(...wordful(G, G.edu.explain(id), band, card)); } };
 }
 
 const RECENT = {};   // skill → keys of the last few questions shown
+export const forgetRecent = () => { for (const k of Object.keys(RECENT)) delete RECENT[k]; };
+/** text with the lesson's key words underlined; tapping one shows its meaning and adds it to the learner's words */
+function wordful(G, text, band, card) {
+  return splitWords(text, band).map((p) => typeof p === 'string' ? p : h('button', { class: 'gloss', type: 'button', onclick: (e) => {
+    e.stopPropagation();
+    const w = p.entry.base.toLowerCase(), words = G.state.words || (G.state.words = []);
+    const fresh = !words.includes(w); if (fresh) words.push(w);
+    card.hidden = false; card.replaceChildren(h('b', {}, `📖 ${p.word}`), ` — ${p.entry.meaning}`, fresh ? h('small', {}, ` · new word! You know ${words.length}`) : null);
+  } }, p.word));
+}
 /** Run one activity. Resolves { ok: correct on the first try }. */
 export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩') {
   let Q;
@@ -38,6 +51,15 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       const key = (q) => JSON.stringify([q.q, q.a, q.word, q.items]);
       const seen = RECENT[Q.skill] || (RECENT[Q.skill] = []);
       for (let tries = 0; tries < 8 && seen.includes(key(Q)); tries++) { const n = gen(); if (n && n.skill === Q.skill) Q = n; }
+      // grow with the learner: easier versions while a skill is new, harder ones (more reading, bigger numbers,
+      // more steps) as they get better. Draw a few fresh candidates and pick the one that fits.
+      const st = G.edu.state(Q.skill), pool = [Q];
+      for (let k = 0; k < 6; k++) { const n = gen(); if (n && n.skill === Q.skill && !seen.includes(key(n)) && !pool.some((p) => key(p) === key(n))) pool.push(n); }
+      if (pool.length > 1) {
+        pool.sort((a, b) => difficulty(a) - difficulty(b));
+        const at = st <= 1 ? 0 : st === 2 ? 0.5 : 1;   // new → easiest, practising → middle, proficient+ → hardest
+        Q = pool[Math.round(at * (pool.length - 1))];
+      }
       seen.push(key(Q)); if (seen.length > 6) seen.shift();
     }
   } catch (e) { console.warn('activity', e); return Promise.resolve({ ok: true }); }
@@ -50,7 +72,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     const hp = helpFor(G, id);
     const why = h('div', { class: 'whybox', hidden: true });
     const done = h('button', { class: 'primary', hidden: true }, 'Continue');
-    const finish = (ok) => { if (body) body.querySelectorAll('button').forEach((b) => { if (!b.classList.contains('right')) b.disabled = true; }); why.hidden = false; why.replaceChildren(h('b', {}, ok ? '✓ ' : '💡 '), Q.why || (ok ? 'Nice work.' : '')); done.hidden = false; done.onclick = () => close({ ok: tries === 1 && ok }); if (settings.readAloud && Q.why) speak(Q.why); };
+    const finish = (ok) => { if (body) body.querySelectorAll('button').forEach((b) => { if (!b.classList.contains('right')) b.disabled = true; }); why.hidden = false; why.replaceChildren(h('b', {}, ok ? '✓ ' : '💡 '), ...wordful(G, Q.why || (ok ? 'Nice work.' : ''), sk.band || 1, hp.card)); done.hidden = false; done.onclick = () => close({ ok: tries === 1 && ok }); if (settings.readAloud && Q.why) speak(Q.why); };
     const attempt = (ok, err) => {
       tries++;
       G.edu.record(id, ok, { ctx, hinted: hp.hinted() || tries > 1, err });
@@ -68,7 +90,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     const hint2 = h('p', { class: 'tip', hidden: true });
     const head = [h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj] ? SUBJECTS[sk.subj].icon + ' ' + SUBJECTS[sk.subj].name : ''} · ${sk.name || ''}`),
       visual(Q.v), Q.cursive ? h('div', { class: 'cursive-note' }, ...Q.cursive.map((l) => h('div', {}, l))) : null,
-      h('div', { class: 'qrow' }, h('p', { class: 'lead' }, Q.q), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak((Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
+      h('div', { class: 'qrow' }, h('p', { class: 'lead' }, ...wordful(G, Q.q, sk.band || 1, hp.card)), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak((Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
     let body;
     if (Q.type === 'choice') {
       const optsShown = shuffle([...new Set(Q.o)]);
@@ -138,6 +160,6 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       Q.why = Q.why || 'Cursive letters join with smooth upward swings. Neat comes before fast.';
     }
     if (settings.readAloud || Voice.enabled() && Q.say) setTimeout(() => speak((Q.say ? Q.say + '. ' : '') + Q.q), 250);
-    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') }, ...head.filter(Boolean), hp.box, body, hint2, why, h('div', { class: 'row' }, hp.btn), done);
+    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') }, ...head.filter(Boolean), hp.card, hp.box, body, hint2, why, h('div', { class: 'row' }, hp.btn), done);
   }, { icon, noClose: true });
 }

@@ -21,7 +21,7 @@ import { MapView } from './mapview.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
 import { PetCourse, RobotArena } from './arenas.js';
-import { runActivity } from './learnkit.js';
+import { runActivity, forgetRecent } from './learnkit.js';
 import { PRACTICE } from './activities.js';
 import { carMesh, Pedestrian } from './city.js';
 installExpansion(Game); installAdventures(Game); installAdventureHelpers(Game);
@@ -984,7 +984,7 @@ window.REAL = {
   get state() { return game && game.state; }, get mode() { return mode; },
   teleport(key, where = 'district') { const so = sock(key, where); if (so) { player.pos = { x: so.x, y: so.y }; player.apply(); } return !!so; },
   cam(yaw, pitch, dist) { fcam.yaw = yaw; fcam.pitch = pitch; fcam.dist = dist; fcam.cur.set(0, 1e4, 0); },
-  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, playerHeading: () => player.heading, speedMul: () => player.speedMul, camPlanY: () => -camera.position.z, camDebug: () => { const w = fcam.cur.clone(); const r = clampCameraBounds(w, fcam.target.clone()); return { cur: fcam.cur.toArray().map((v) => +v.toFixed(2)), target: fcam.target.toArray().map((v) => +v.toFixed(2)), pitchNow: fcam.pitchNow, minPitch: fcam.minPitch, zone: fcam.zone, mode: fcam.mode, ret: r, clamped: w.toArray().map((v) => +v.toFixed(2)), loc: game.state.location, room: !!curRoom(), pos: { ...player.pos } }; },
+  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, playerHeading: () => player.heading, speedMul: () => player.speedMul, forgetRecent: () => forgetRecent(), camPlanY: () => -camera.position.z, camDebug: () => { const w = fcam.cur.clone(); const r = clampCameraBounds(w, fcam.target.clone()); return { cur: fcam.cur.toArray().map((v) => +v.toFixed(2)), target: fcam.target.toArray().map((v) => +v.toFixed(2)), pitchNow: fcam.pitchNow, minPitch: fcam.minPitch, zone: fcam.zone, mode: fcam.mode, ret: r, clamped: w.toArray().map((v) => +v.toFixed(2)), loc: game.state.location, room: !!curRoom(), pos: { ...player.pos } }; },
   // walk a path in small steps against the real colliders; returns how far along it got (1 = all the way)
   pathClear: (pts, r = 0.22) => { let done = 0, total = 0; for (let i = 1; i < pts.length; i++) total += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
     let p = { x: pts[0][0], y: pts[0][1] }; for (let i = 1; i < pts.length; i++) { const [tx, ty] = pts[i]; for (let k = 0; k < 4000; k++) { const dx = tx - p.x, dy = ty - p.y, d = Math.hypot(dx, dy); if (d < 0.05) break; const st = Math.min(0.05, d), q = { x: p.x + dx / d * st, y: p.y + dy / d * st }; coll.resolve(q, r); const moved = Math.hypot(q.x - p.x, q.y - p.y); done += Math.max(0, (dx * (q.x - p.x) + dy * (q.y - p.y)) / d); p = q; if (moved < 0.002) return +(done / total).toFixed(2); } } return +Math.min(1, done / total).toFixed(2); },

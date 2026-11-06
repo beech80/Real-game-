@@ -4,6 +4,7 @@
 import { h, UI, money, wait } from './ui.js';
 import { SKILLS, SUBJECTS, STATES } from './edu.js';
 import { runActivity } from './learnkit.js';
+import { lookup as lookupWord } from './glossary.js';
 
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -518,10 +519,18 @@ export const PRACTICE = {
   'think.evaluate': () => ({ q: 'An ad says “9 out of 10 people love Star Bites!” What should you ask first?', a: 'Who asked them, and how many people?', o: ['Who asked them, and how many people?', 'What color is the box?', 'Nothing, it must be true'] }),
   'think.opportunity': () => ({ q: 'If you spend $40 on a hoodie, what is the opportunity cost?', a: 'Whatever else that $40 could have paid for', o: ['Whatever else that $40 could have paid for', 'Nothing', 'The hoodie'] }),
 };
+/** “Words I know”: every lesson word the learner has tapped and learned. Tap to see them with their meanings. */
+function wordsLine(G) {
+  const words = G.state.words || [];
+  if (!words.length) return h('p', { class: 'tip' }, '📖 Tip: tap an underlined word in any lesson to learn what it means.');
+  return h('button', { class: 'ghost sm', onclick: () => UI.sheet('Words I know', () => h('div', { class: 'act' }, h('p', { class: 'lead' }, `You’ve learned ${words.length} new word${words.length === 1 ? '' : 's'}.`),
+    h('div', { class: 'wordlist' }, words.map((w) => { const e = lookupWord(w); return h('p', {}, h('b', {}, w), e ? ` — ${e.meaning}` : ''); }))), { icon: '📖' }) }, `📖 Words I know: ${words.length}`);
+}
 export function learn(G) {
   return UI.sheet('Learn', (close, body) => {
     const menu = () => body.replaceChildren(h('div', { class: 'act' },
       h('p', { class: 'lead' }, 'Your private skill path. It adapts to you. No grades, no timers, only progress.'),
+      wordsLine(G),
       h('div', { class: 'cards cats' }, Object.entries(SUBJECTS).map(([k, s]) => {
         const p = G.edu.progress(k);
         return h('button', { class: 'card', onclick: () => subject(k) }, h('span', { class: 'big-emoji' }, s.icon), h('b', {}, s.name),

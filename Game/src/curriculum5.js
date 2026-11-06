@@ -40,8 +40,8 @@ export const TOPUP_GEN = {
   'write.messages': [bank('write.messages', [
     ['Which message is best to cancel plans with a friend?', 'Hi Sam, I’m sorry, I can’t make it today. Can we try Saturday?', ['no', 'cant', 'nevermind'], 'Say sorry, explain briefly and suggest another time.'],
     ['Which message gives all the needed details?', 'Pick-up is at 3:30 at the library’s front door.', ['Pick me up later', 'Come get me', 'You know where'], 'Who, what, when, where.'],
-    ['Why reread a message before sending it?', 'To catch mistakes and check the tone', ['To waste time', 'It doesn’t matter', 'To delete it'], 'Rereading prevents misunderstandings.'],
-    ['Which emoji use is best in a message to your boss?', 'None or very few', ['Ten emojis', 'Only emojis', 'All caps with emojis'], 'Keep work messages professional.']])],
+    ['Why reread a message before sending it?', 'To catch mistakes and check the tone', ['To waste time', 'It doesn’t matter', 'To delete it'], 'Reading it again helps you catch mistakes.'],
+    ['Which emoji use is best in a message to your boss?', 'None or very few', ['Ten emojis', 'Only emojis', 'All caps with emojis'], 'Keep work messages polite and simple.']])],
   'write.resume': [bank('write.resume', [
     ['Which belongs at the top of a résumé?', 'Your name and how to contact you', ['Your favorite food', 'A joke', 'Your pet’s photo'], 'Employers need to reach you.'],
     ['Should a résumé include lies to look better?', 'No, always be truthful', ['Yes, a few', 'Only small ones', 'Everyone does'], 'Lies can cost you the job later.'],
@@ -73,7 +73,7 @@ export const TOPUP_GEN = {
     ['Choose the right word: “Is this ___ jacket?”', 'your', ['you’re'], 'Your shows it belongs to you.'],
     ['Choose the right word: “The dog wagged ___ tail.”', 'its', ['it’s'], 'Its = belongs to it. It’s = it is.']])],
   'write.commas': [bank('write.commas', [
-    ['Which is correct?', 'After lunch, we went to the park.', ['After lunch we, went to the park.', 'After, lunch we went to the park.'], 'Comma after an introductory phrase.']])],
+    ['Which is correct?', 'After lunch, we went to the park.', ['After lunch we, went to the park.', 'After, lunch we went to the park.'], 'Put a comma after an opening phrase.']])],
   'read.summarize': [bank('read.summarize', [
     ['What should a summary leave out?', 'Small, unimportant details', ['The main idea', 'The key events', 'Who it’s about'], 'Summaries keep the big ideas only.'],
     ['How long should a summary be compared with the original?', 'Much shorter', ['Longer', 'Exactly the same', 'Twice as long'], 'A summary condenses.']])],
@@ -193,6 +193,19 @@ export const TOPUP_GEN = {
     ['A study’s results could help a company sell more. What should readers check?', 'Who paid for the study', ['The font', 'The cover color', 'Nothing'], 'Funding can create bias.']])],
   'hl.medicine': [bank('hl.medicine', [
     ['What should you do if you feel sick after taking a medicine?', 'Tell a trusted adult right away', ['Take more', 'Hide it', 'Ignore it'], 'Side effects should be reported.']])],
+  'fin.taxes': [bank('fin.taxes', [
+    ['What are taxes used for?', 'Public services like roads, schools and fire departments', ['Nothing', 'Only parties', 'Your own savings'], 'Taxes pay for things everyone shares.'],
+    ['Sales tax is 8%. A shirt costs $25. How much is the tax?', '$2', ['$8', '$20', '$0.25'], '8% of $25 = 0.08 × 25 = $2.'],
+    ['Why is your take-home pay less than what you earned?', 'Taxes are taken out first', ['The bank keeps a tip', 'It’s a mistake', 'Your boss forgot'], 'Income tax is withheld from each paycheck.'],
+    ['What does insurance protect you from?', 'Big costs from accidents or illness', ['All bills', 'Taxes', 'Bad weather only'], 'You pay a little regularly to avoid a huge cost later.'],
+    ['A $40 item has 5% sales tax. What is the total?', '$42', ['$45', '$40', '$40.05'], '5% of $40 = $2, so $40 + $2 = $42.'],
+    ['Who files a tax return?', 'People who earn income, once a year', ['Only kids', 'Nobody', 'Only stores'], 'A tax return reports what you earned and paid.']])],
+  'read.compare': [bank('read.compare', [
+    ['Lease A: $600/month, pets OK. Lease B: $550/month, no pets. You have a cat. Which fits?', 'Lease A', ['Lease B', 'Neither', 'Both'], 'Compare the detail that matters most to you: pets.'],
+    ['Phone plan A: $25 for 5 GB. Plan B: $30 for unlimited. You use about 3 GB. Which is the better deal?', 'Plan A', ['Plan B', 'They’re the same', 'Neither'], 'Plan A covers what you use for less.'],
+    ['Store A sells 12 eggs for $3. Store B sells 6 eggs for $2. Which is cheaper per egg?', 'Store A', ['Store B', 'Same price'], 'A: $3 ÷ 12 = $0.25. B: $2 ÷ 6 ≈ $0.33.'],
+    ['Job A: $15/hour, 10 minutes away. Job B: $16/hour, 90 minutes away by bus. What else should you compare?', 'Travel time and bus fare', ['Only the pay', 'The logo', 'Nothing'], 'Line up every cost, including time.'],
+    ['Two bikes: $120 with a helmet, or $110 without. A helmet costs $20. Which is the better deal?', 'The $120 bike with a helmet', ['The $110 bike', 'Same deal'], '$110 + $20 = $130, which costs more than $120.']])],
   'tech.design': [bank('tech.design', [
     ['Why do good apps use big buttons on phones?', 'Fingers need large targets to tap', ['Big is always ugly', 'To slow users', 'No reason'], 'Design for how people really use devices.']])],
 };

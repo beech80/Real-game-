@@ -408,3 +408,8 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .activity .opt { min-height: 48px; }
 .activity.lv1 .lead { font-size: 19px; line-height: 1.35; }
 .activity.lv1 .opt { font-size: 18px; min-height: 54px; }
+
+/* tap-a-word: key lesson words are underlined; tapping shows a plain meaning */
+.gloss { display: inline; padding: 0; margin: 0; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline dotted rgba(233, 169, 58, .9); text-underline-offset: 3px; text-decoration-thickness: 2px; cursor: help; }
+.wordcard { background: rgba(233, 169, 58, .14); border: 1px solid rgba(233, 169, 58, .45); border-radius: 12px; padding: 8px 12px; margin: 6px 0; font-size: 15px; }
+.wordcard small { color: #ffd27a; }

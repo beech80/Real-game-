@@ -59,7 +59,7 @@ export const EXTRA_GEN = {
   'read.evidence': [bank('read.evidence', [
     ['Which sentence proves the bus is often late?', '“Riders waited 15 minutes past the schedule most mornings.”', ['“The bus is blue.”', '“Route 1 goes to Midtown.”', '“The driver waves hello.”'], 'Evidence directly supports the claim with facts about lateness.'],
     ['Which line shows Rosa trusts Nova?', '“Rosa handed Nova the store keys.”', ['“Rosa wears a green apron.”', '“Nova likes apples.”', '“The store opens at 7.”'], 'Giving someone keys is evidence of trust.'],
-    ['Which detail best supports “The park is popular”?', '“Hundreds of people visit every weekend.”', ['“The park has a fountain.”', '“It opened in 1990.”', '“Benches are green.”'], 'Numbers of visitors directly show popularity.'],
+    ['Which detail best supports “The park is popular”?', '“Hundreds of people visit every weekend.”', ['“The park has a fountain.”', '“It opened in 1990.”', '“Benches are green.”'], 'Counting visitors shows how popular it is.'],
     ['Claim: “Cooking at home saves money.” Which is the best evidence?', '“A home meal costs $3; the same meal out costs $12.”', ['“Cooking is fun.”', '“My kitchen is big.”', '“Restaurants have music.”'], 'Comparing real costs proves the claim; feelings don’t.'],
     ['Which sentence proves Jax wasn’t honest?', '“The ‘free’ sneakers came with a $50 fee.”', ['“Jax wore a cap.”', '“Jax talked fast.”', '“The sneakers were white.”'], 'A hidden fee directly contradicts his “free” claim.'],
     ['Which line proves the clinic is helping?', '“Flu cases dropped by half after free check-ups began.”', ['“The clinic is clean.”', '“Nurse Kim is kind.”', '“It opens at 8.”'], 'A measured drop in cases is evidence of results.']])],
@@ -133,7 +133,7 @@ export const EXTRA_GEN = {
     ['Which phone number is filled in correctly?', '555-123-4567', ['call me', '5551', 'phone'], 'Fill the exact format asked for.'],
     ['A box says “Signature”. What goes there?', 'Your name written in your own handwriting', ['Your email', 'Today’s date', 'Your age'], 'A signature is your name in your own writing, often cursive.'],
     ['A form asks “Availability”. What should you write?', 'The days and times you can work', ['Your favorite food', 'Your height', 'Your pet’s name'], 'Availability is when you are free.'],
-    ['Why fill forms neatly and completely?', 'So the reader understands and doesn’t reject it', ['It doesn’t matter', 'To use more ink', 'Forms are never read'], 'Missing or messy answers slow things down or get forms rejected.']])],
+    ['Why fill in every part of a form neatly?', 'So the reader understands and doesn’t reject it', ['It doesn’t matter', 'To use more ink', 'Forms are never read'], 'Missing or messy answers slow things down or get forms rejected.']])],
   'write.messages': [bank('write.messages', [
     ['Which message to your manager is best?', 'Hi Rosa, I’m sick today and can’t make my 9:00 shift. Sorry for the short notice. — Nova', ['not coming', 'sick lol', 'Rosa!!!'], 'Good messages say who, what, when, and stay polite.'],
     ['Which is the best thank-you message?', 'Thank you for helping me move on Saturday, Sam. I really appreciated it!', ['thx', 'ok', 'you helped'], 'Name the person, what they did, and how you feel.'],
@@ -314,7 +314,7 @@ export const EXTRA_GEN = {
   'think.consequence': [bank('think.consequence', [
     ['You stay up very late before work. What will likely happen?', 'You’ll be tired at work', ['You’ll get a raise', 'Nothing', 'You’ll sleep at work and be fine'], 'Choices lead to results: little sleep → tired.'],
     ['You spend your rent money on shoes. What could happen?', 'You may not be able to pay rent', ['Rent becomes free', 'The landlord gives you more shoes', 'Nothing changes'], 'Spending needed money now causes problems later.'],
-    ['You practise the register every day. What will likely happen?', 'You’ll get faster and make fewer mistakes', ['You’ll forget everything', 'You’ll be fired', 'Nothing'], 'Practice leads to improvement.'],
+    ['You practise the register every day. What will likely happen?', 'You’ll get faster and make fewer mistakes', ['You’ll forget everything', 'You’ll be fired', 'Nothing'], 'Practice makes you better.'],
     ['You forget to water your plants for two weeks. What happens?', 'They may wilt or die', ['They grow faster', 'They turn into trees', 'Nothing'], 'Plants need water; skipping it has a cost.'],
     ['You’re kind to a new coworker. What might happen later?', 'They may help you when you need it', ['They will be mean', 'Nothing ever', 'You will lose your job'], 'Kindness often comes back.'],
     ['You ignore a small leak under the sink. What could happen?', 'It could become a bigger, costlier problem', ['It fixes itself', 'It becomes juice', 'Nothing'], 'Small problems left alone can grow.'],

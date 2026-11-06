@@ -1,0 +1,141 @@
+// REAL — word helper. Key subject words get a plain meaning the learner can tap, so hard words become words they own.
+// Each entry: [level, forms (regex source, case-insensitive), meaning]. A word is underlined for lessons at or below
+// (its level + 1): early learners get help with "community", while teens aren't shown meanings of easy words.
+
+export const GLOSSARY = [
+  // level 1–2: early-reader words used in lessons
+  [1, 'communit(y|ies)', 'a group of people who live or work in the same place'],
+  [1, 'observ(e|ation|ations|ing)', 'to look carefully and notice details'],
+  [1, 'thermometers?', 'a tool that shows how hot or cold something is'],
+  [1, 'temperature', 'how hot or cold something is'],
+  [1, 'emergenc(y|ies)', 'a sudden, dangerous problem that needs help fast'],
+  [1, 'measurements?', 'a number that tells size, weight, time or amount'],
+  [1, 'electricity', 'energy that flows through wires to power things'],
+  [1, 'hazards?', 'something that could hurt you'],
+  [1, 'pollinat(e|ion|ors?)', 'carrying pollen between flowers so plants make seeds'],
+  [1, 'photosynthesis', 'how plants use sunlight to make their own food'],
+  [1, 'precipitation', 'rain, snow, sleet or hail falling from clouds'],
+  [1, 'binoculars', 'a tool you look through to see far-away things up close'],
+  [1, 'algorithms?', 'a list of steps to do something, in order'],
+  [1, 'receipts?', 'a paper that shows what you bought and paid'],
+  [1, 'patterns?', 'something that repeats or grows by a rule'],
+  [2, 'hypothes(is|es)', 'a smart guess you can test'],
+  [2, 'experiments?', 'a test to find out what happens'],
+  [2, 'variables?', 'the thing you change or measure in a test (or a named box in code)'],
+  [2, 'evaporat(e|es|ed|ion)', 'when liquid water turns into a gas (water vapor)'],
+  [2, 'condens(e|es|ed|ation)', 'when water vapor cools and turns back into drops'],
+  [2, 'continents?', 'one of Earth’s 7 giant areas of land'],
+  [2, 'equator', 'the pretend line around the middle of the Earth'],
+  [2, 'utilit(y|ies)', 'home services like power, water and heat'],
+  [2, 'antagonists?', 'the character who causes trouble for the hero'],
+  [2, 'adjectives?', 'a word that describes a noun (big, red, happy)'],
+  [2, 'adverbs?', 'a word that tells how something is done (quickly)'],
+  [2, 'nouns?', 'a word for a person, place or thing'],
+  [2, 'verbs?', 'an action word (run, eat, think)'],
+  [2, 'paragraphs?', 'a group of sentences about one idea'],
+  [2, 'empathy', 'understanding how someone else feels'],
+  [2, 'nutrition', 'the food your body needs to grow and stay healthy'],
+  [2, 'budgets?', 'a plan for how you will use your money'],
+  [2, 'deductions?', 'money taken out of your pay, like taxes'],
+  [2, 'gross pay', 'your pay before anything is taken out'],
+  [2, 'net pay', 'the pay you take home after deductions'],
+  [2, 'multiplication', 'adding the same number many times (3 × 4 = 4 + 4 + 4)'],
+  [2, 'timelines?', 'a line that shows events in the order they happened'],
+  [2, 'traditions?', 'things a group has done for a long time, like holidays'],
+  [2, 'cultures?', 'a group’s way of life: food, language, music, beliefs'],
+  [2, 'bullying', 'hurting someone on purpose again and again'],
+  [2, 'identity', 'the details that say who you are'],
+  [2, 'verification', 'a check to prove it’s really you'],
+  [2, 'interest', 'extra money paid for borrowing, or earned for saving'],
+  [2, 'average', 'a typical middle value: add them up, divide by how many'],
+  // level 3–4: middle-school words
+  [3, 'opportunity cost', 'the best thing you give up when you choose something else'],
+  [3, 'opportunit(y|ies)', 'a chance to do something good'],
+  [3, 'friction', 'the rubbing force that slows things and gives grip'],
+  [3, 'circuits?', 'a loop that electricity flows around'],
+  [3, 'insulators?', 'a material that slows heat or electricity'],
+  [3, 'conduct(s|or|ors)?', 'to let heat or electricity pass through'],
+  [3, 'orbits?', 'the path one object takes around another in space'],
+  [3, 'ecosystems?', 'living things and their surroundings, all connected'],
+  [3, 'producers?', 'living things that make their own food, like plants'],
+  [3, 'decomposers?', 'living things that break down dead plants and animals'],
+  [3, 'habitats?', 'the natural home of an animal or plant'],
+  [3, 'synonyms?', 'words that mean the same thing'],
+  [3, 'antonyms?', 'words that mean the opposite'],
+  [3, 'prefix(es)?', 'a word part added to the start, like un- or re-'],
+  [3, 'suffix(es)?', 'a word part added to the end, like -ful or -less'],
+  [3, 'context clues?', 'hints in nearby words that explain a hard word'],
+  [3, 'supply', 'how much of something is available'],
+  [3, 'demand', 'how much people want to buy something'],
+  [3, 'responsibilit(y|ies)', 'something you should do because others count on you'],
+  [3, 'constitution', 'the main set of rules for how a government works'],
+  [3, 'percent(age)?', 'out of 100: 25% means 25 out of every 100'],
+  [3, 'fractions?', 'a part of a whole, like ½ or ¾'],
+  [3, 'ratios?', 'a comparison of two amounts, like 2 cups to 1 cup'],
+  [3, 'perimeter', 'the distance all the way around a shape'],
+  [3, 'credit', 'borrowing money now and paying it back later'],
+  [3, 'debt', 'money you owe'],
+  [3, 'loops?', 'code that repeats steps'],
+  [3, 'digital footprint', 'the record of everything you do online'],
+  [4, 'deductibles?', 'the part of a cost you pay before insurance pays'],
+  [4, 'premiums?', 'what you pay regularly to keep insurance'],
+  [4, 'credit score', 'a number that shows how reliably you repay money'],
+  [4, 'phishing', 'a fake message that tries to steal your information'],
+  [4, 'primary sources?', 'something made at the time, by people who were there'],
+  [4, 'secondary sources?', 'something written later, about an event'],
+  [4, 'bias(ed)?', 'leaning toward one side, unfairly'],
+  [4, 'inference', 'figuring out what the text means but doesn’t say'],
+  [4, 'evidence', 'facts that show something is true'],
+  [4, 'simile', 'a comparison using “like” or “as”'],
+  [4, 'metaphors?', 'saying one thing is another to describe it'],
+  [4, 'personification', 'giving human actions to non-human things'],
+  [4, 'idioms?', 'a saying that means something different from its words'],
+  [4, 'median', 'the middle number when values are in order'],
+  [4, 'conditionals?', 'if-then rules that let a program decide'],
+  [4, 'debugging', 'finding and fixing mistakes in code'],
+  [4, 'prototypes?', 'an early model built to test an idea'],
+  [4, 'constraints?', 'limits like money, time, size or materials'],
+  [4, 'boundar(y|ies)', 'a limit you set for what you’re comfortable with'],
+  [4, 'tariffs?', 'a tax on goods from another country'],
+  [4, 'imports?', 'goods brought in from another country'],
+  [4, 'exports?', 'goods sent out to sell in another country'],
+  [4, 'democracy', 'government where people choose leaders by voting'],
+  [4, 'recommendations?', 'advice about what should happen next'],
+  [4, 'counterarguments?', 'the other side’s point, which you answer'],
+  // level 5–6: high-school and adult words
+  [5, 'diversif(y|ication|ied)', 'spreading money across different investments to lower risk'],
+  [5, 'index funds?', 'one investment that holds many companies at once'],
+  [5, 'compound interest', 'interest that also earns interest over time'],
+  [5, 'cash flow', 'when money actually comes in and goes out'],
+  [5, 'profit margins?', 'how much of each sale is profit, as a percent'],
+  [5, 'payroll', 'paying workers their wages'],
+  [5, 'vetoe?s?', 'when a leader rejects a bill'],
+  [5, 'petitions?', 'a request signed by many people asking for change'],
+  [5, 'correlation', 'two things changing together (not always one causing the other)'],
+  [5, 'sample size', 'how many people or things were studied'],
+  [5, 'privacy', 'keeping your personal information to yourself'],
+  [5, 'packets?', 'small pieces data is split into to travel online'],
+  [6, 'trade-offs?', 'giving up one thing to get another'],
+  [6, 'systems thinking', 'seeing how the parts of something affect each other'],
+  [6, 'feedback loops?', 'when a result feeds back and changes its cause'],
+];
+
+const ENTRIES = GLOSSARY.map(([lvl, forms, meaning]) => ({ lvl, meaning, re: new RegExp(`\\b(${forms})\\b`, 'i'), base: forms.replace(/\(.*?\)\??/g, '').replace(/[?\\]/g, '') }));
+const ALL = new RegExp(`\\b(${GLOSSARY.map((g) => g[1]).sort((a, b) => b.replace(/\(.*?\)\??/g, '').length - a.replace(/\(.*?\)\??/g, '').length).join('|')})\\b`, 'gi');   // longest first: “credit score” before “credit”
+
+/** the entry for a word or phrase as it appears in text, or null */
+export function lookup(word) { return ENTRIES.find((e) => e.re.test(word) && word.toLowerCase().match(e.re)[0].length === word.length) || null; }
+/** split text into plain strings and {word, entry} pieces for the words worth explaining at this skill level */
+export function splitWords(text, band = 1) {
+  const out = []; let last = 0; const t = String(text || ''); ALL.lastIndex = 0; let m;
+  while ((m = ALL.exec(t))) {
+    const e = lookup(m[0]);
+    if (!e || band > e.lvl + 1) continue;
+    if (m.index > last) out.push(t.slice(last, m.index));
+    out.push({ word: m[0], entry: e }); last = m.index + m[0].length;
+  }
+  if (last < t.length) out.push(t.slice(last));
+  return out;
+}
+/** words with this many syllables or more count as hard for early levels unless the glossary explains them */
+export const explained = (word) => !!lookup(word);

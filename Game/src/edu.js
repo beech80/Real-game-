@@ -50,7 +50,7 @@ const S = [
     'Four quarters make a dollar. Ten dimes make a dollar.'],
   ['fin.needs', 'finance', 1, 'Needs vs wants', 'Tell needs (required to live and work) from wants (nice to have).', [],
     'A need keeps you safe, healthy or able to work: food, housing, basic clothes. A want is extra.',
-    'Ask: “What happens if I don’t buy this?” If the answer is “nothing bad”, it is probably a want.'],
+    'Ask: “What if I don’t buy this?” If nothing bad happens, it is a want.'],
   ['think.observe', 'thinking', 1, 'Observing', 'Notice details in the world before deciding.', [],
     'Good decisions start with good information. Look around before you choose.',
     'Stop and look for signs, people and clues. What do they tell you?'],

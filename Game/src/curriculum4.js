@@ -43,7 +43,7 @@ export const EXTRA_GEN2 = {
   'sci.nutrition': [bank('sci.nutrition', [
     ['Which drink is healthiest most of the time?', 'Water', ['Soda', 'Energy drink', 'Sweet tea'], 'Water hydrates without added sugar.'],
     ['Which food has the most protein?', 'Beans', ['Lettuce', 'Apple', 'Candy'], 'Beans, eggs, fish and meat are protein foods.'],
-    ['Why eat fruits and vegetables?', 'They give vitamins, minerals and fiber', ['They’re only for decoration', 'They have no benefits', 'To get sleepy'], 'Colorful plants keep your body working.'],
+    ['Why eat fruits and vegetables?', 'They give vitamins, minerals and fiber', ['They just look nice', 'They have no benefits', 'To get sleepy'], 'Colorful plants keep your body working.'],
     ['Which breakfast gives lasting energy?', 'Oatmeal with fruit', ['A candy bar', 'A soda', 'Nothing'], 'Whole grains and fruit release energy slowly.'],
     ['What does a food label’s “serving size” tell you?', 'How much the nutrition numbers are for', ['The price', 'The expiry date', 'The brand'], 'Eat two servings, get double the numbers.'],
     ['Which is a whole grain?', 'Brown rice', ['White sugar', 'Candy', 'Soda'], 'Whole grains keep the fiber-rich outer part.']])],
@@ -80,7 +80,7 @@ export const EXTRA_GEN2 = {
     ['Why put leftovers in the fridge quickly?', 'Cold slows germ growth', ['To make them taste sweet', 'To heat them', 'No reason'], 'Germs grow fastest between 40°F and 140°F.'],
     ['Which material conducts heat best?', 'Metal', ['Wood', 'Plastic', 'Cloth'], 'Metals move heat quickly; that’s why pans are metal.'],
     ['Safe temperature for cooked ground beef is about…', '160°F', ['100°F', '120°F', '60°F'], 'Use a thermometer: ground beef 160°F, chicken 165°F.'],
-    ['Why does a dark shirt feel hotter in the sun?', 'Dark colors absorb more light and heat', ['Dark shirts are thicker', 'It’s imaginary', 'Light colors absorb more'], 'Light colors reflect more sunlight.']])],
+    ['Why does a dark shirt feel hotter in the sun?', 'Dark colors absorb more light and heat', ['Dark shirts are thicker', 'It’s make-believe', 'Light colors absorb more'], 'Light colors reflect more sunlight.']])],
   'sci.materials': [bank('sci.materials', [
     ['Which material is best for a window?', 'Glass, because light passes through', ['Wood', 'Brick', 'Cardboard'], 'Transparent materials let light in.'],
     ['Why are raincoats made of plastic-like fabric?', 'It is waterproof', ['It’s heavy', 'It’s warm only', 'It’s shiny'], 'Waterproof materials keep you dry.'],
@@ -202,7 +202,7 @@ export const EXTRA_GEN2 = {
     ['Which came first: cars or airplanes?', 'Cars', ['Airplanes', 'Same year'], 'Gas cars came in the 1880s; airplanes in 1903.'],
     ['On a timeline, which side usually shows earlier events?', 'The left', ['The right', 'The top', 'The middle'], 'Timelines read left (earlier) to right (later).']])],
   'soc.cultures': [bank('soc.cultures', [
-    ['Which is part of a culture?', 'Its traditional foods and music', ['The weather only', 'Mountains', 'The ocean'], 'Culture is what people create and share.'],
+    ['Which is part of a culture?', 'Its foods and music', ['The weather only', 'Mountains', 'The ocean'], 'Culture is what people create and share.'],
     ['Why learn about other cultures?', 'To understand and respect people', ['To make fun', 'To copy everything', 'No reason'], 'Understanding builds friendships.'],
     ['Many cultures share stories passed down by talking. These are called…', 'Oral traditions', ['Text messages', 'Laws', 'Maps'], 'Stories passed by voice keep history alive.'],
     ['A family speaks two languages at home. That makes them…', 'Bilingual', ['Silent', 'Foreign forever', 'Confused'], 'Many people around the world speak more than one language.']])],
@@ -222,7 +222,7 @@ export const EXTRA_GEN2 = {
   'soc.history': [bank('soc.history', [
     ['Who invented the telephone (1876)?', 'Alexander Graham Bell', ['Thomas Edison', 'The Wright brothers', 'Isaac Newton'], 'Bell made the first practical telephone call.'],
     ['What changed when electric light spread in the late 1800s?', 'People could work and read safely after dark', ['Nothing', 'The sun went out', 'Candles became illegal'], 'Electric light changed homes and factories.'],
-    ['The internet became widely used in the 1990s. One big change was…', 'People could share information instantly worldwide', ['Letters stopped forever', 'TV ended', 'No change'], 'It changed communication, work and learning.']])],
+    ['The internet became widely used in the 1990s. One big change was…', 'People could share information instantly worldwide', ['Letters stopped forever', 'TV ended', 'No change'], 'It changed how we talk, work and learn.']])],
   'soc.sources': [bank('soc.sources', [
     ['Is a photo taken at the 1969 Moon landing a primary or secondary source?', 'Primary', ['Secondary'], 'It was made at the time of the event.'],
     ['Is your history textbook primary or secondary?', 'Secondary', ['Primary'], 'It explains events later, using other sources.'],
@@ -281,10 +281,10 @@ export const EXTRA_GEN2 = {
     ['How can you be active on a rainy day?', 'Dance, stretch or do jumping jacks inside', ['You can’t', 'Only watch TV', 'Sleep'], 'Movement can happen anywhere.'],
     ['What is a good sign you’re exercising hard enough?', 'You breathe faster but can still talk', ['You can’t breathe at all', 'You feel nothing', 'You fall asleep'], 'Moderate effort raises breathing.']])],
   'hl.kindness': [bank('hl.kindness', [
-    ['How can you show empathy?', 'Imagine how the other person feels and listen', ['Laugh at them', 'Ignore them', 'Change the subject'], 'Empathy means understanding feelings.'],
+    ['How can you show empathy?', 'Imagine how the other person feels and listen', ['Laugh at them', 'Ignore them', 'Change the subject'], 'Empathy means knowing how others feel.'],
     ['Your friend is left out of a game. What can you do?', 'Invite them to join', ['Leave too', 'Laugh', 'Tell them to go away'], 'Including others is kind.'],
     ['Online, someone posts mean comments about a classmate. What should you do?', 'Don’t join in; report it and tell an adult', ['Like the comments', 'Add your own', 'Share it'], 'Cyberbullying is bullying too.'],
-    ['What’s a good way to fix it after hurting a friend?', 'Say sorry and mean it, then do better', ['Pretend nothing happened', 'Blame them', 'Never talk again'], 'A real apology repairs trust.'],
+    ['What’s a good way to fix it after hurting a friend?', 'Say sorry and mean it, then do better', ['Pretend nothing happened', 'Blame them', 'Never talk again'], 'Saying sorry and meaning it helps fix trust.'],
     ['Saying “thank you” and “please”…', 'Shows respect and kindness', ['Is old-fashioned', 'Doesn’t matter', 'Is rude'], 'Small manners make big differences.']])],
   'hl.firstaid': [bank('hl.firstaid', [
     ['Your nose is bleeding. What helps?', 'Lean forward and pinch the soft part of your nose', ['Lean far back', 'Lie flat', 'Blow hard'], 'Leaning forward stops swallowing blood.'],
@@ -365,7 +365,7 @@ export const EXTRA_GEN2 = {
     ['Which task is best done with a loop?', 'Watering 20 plants the same way', ['Saying hello once', 'Opening one door', 'Signing your name once'], 'Loops repeat the same steps.'],
     ['A loop that never stops is called…', 'An infinite loop', ['A short loop', 'A bug-free loop', 'A circle'], 'Infinite loops freeze programs.']])],
   'tech.search': [bank('tech.search', [
-    ['You need facts for a report on volcanoes. Which result is likely best?', 'A science museum or university page', ['A random comment', 'An ad for lava lamps', 'A joke site'], 'Prefer expert sources.'],
+    ['You need facts for a report on volcanoes. Which result is likely best?', 'A science museum or college page', ['A random comment', 'An ad for lava lamps', 'A joke site'], 'Prefer expert sources.'],
     ['Putting words in quotes, like “Brighter Park hours”, searches for…', 'That exact phrase', ['Any one of the words', 'Pictures only', 'Nothing'], 'Quotes keep the words together.'],
     ['The first result is an ad. What should you notice?', 'Ads are paid, not always the best answer', ['Ads are always correct', 'Ads are free facts', 'Nothing'], 'Look past sponsored results.'],
     ['You found an answer on one site. What next?', 'Check it on another trusted site', ['Stop searching', 'Copy it', 'Believe it forever'], 'Verify before using.'],

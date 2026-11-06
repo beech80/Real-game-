@@ -85,10 +85,35 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     await ev(() => window.__pr);
     R.teenAnswers.push([id, Q.q.slice(0, 70), await ev((sk) => window.REAL.game().edu.state(sk), id)]);
   }
+  // ---------------------------------------------------------------- words: tap an underlined word, it joins “Words I know”
+  await ev(() => { window.__pr = window.REAL.practice('sci.water'); }); await sleep(700); await clearCards();
+  await p.waitForSelector('#modal .modal .activity', { timeout: 20000 });
+  let gl = await (await top()).$('.gloss');
+  if (!gl) { const sh = await (await top()).$('button:text-is("Show a hint")'); if (sh) { await sh.click(); await sleep(300); } gl = await (await top()).$('.gloss'); }
+  R.wordUnderlined = !!gl;
+  if (gl) { R.wordTapped = (await gl.textContent()).trim(); await gl.click(); await sleep(400); R.wordMeaningShown = await (await top()).$eval('.wordcard', (e) => !e.hidden && e.textContent.length > 10).catch(() => false); await shot('kid_5_word_meaning'); }
+  R.wordsKnown = await ev(() => (window.REAL.state.words || []).length);
+  for (let i = 0; i < 3; i++) { const Q = await ev(() => window.__lastQ); const o = await (await top()).$(`.opt:text-is(${JSON.stringify(String(Q.a))})`); if (o) { await o.click(); await sleep(300); } const c = await (await top()).$('button.primary:text-is("Continue")'); if (c && await c.isVisible()) { await c.click(); break; } if (Q.type !== 'choice') break; }
+  await ev(() => window.__pr).catch(() => {});
+  // ---------------------------------------------------------------- growth: the same skill, new learner vs skilled learner
+  const { difficulty } = await import('../src/readlevel.js');
+  const sample = async (skill, st, n = 8) => {
+    await ev(([sk, s]) => { window.REAL.forgetRecent(); const E = window.REAL.game().edu; E.s.skills[sk] = { ...E.get(sk), st: s, ok: s * 2, n: s * 2 }; }, [skill, st]);
+    let t = 0;
+    for (let i = 0; i < n; i++) {
+      await ev((sk) => { window.__pr = window.REAL.practice(sk); }, skill); await sleep(250); await clearCards();
+      const Q = await ev(() => window.__lastQ); t += difficulty(Q);
+      await ev(() => { document.querySelectorAll('#modal .modal').forEach((m) => m.remove()); });   // close without answering (keeps the level fixed)
+      await ev((s) => { const E = window.REAL.game().edu; for (const k of Object.keys(E.s.skills)) if (k === window.__skillUnder) E.s.skills[k].st = s; }, st);
+    }
+    return t / n;
+  };
+  R.growth = {};
+  for (const sk of ['fin.paycheck', 'sci.water', 'math.rounding']) { await ev((k) => { window.__skillUnder = k; }, sk); R.growth[sk] = [+(await sample(sk, 0)).toFixed(2), +(await sample(sk, 3)).toFixed(2)]; }
   console.log(JSON.stringify(R, null, 1));
   const ok = R.kidHelpShownUpFront && R.kidReadAloudButton && R.kidQuestionFontPx >= 16 && R.kidTapTargetPx >= 44 && R.kidStillPlayingAfterMistake && R.kidStepBackOffered
     && R.kidWorkedAnswerShown && R.kidStepBackOpened === 'read.letters'
-    && R.teenBands.finance >= 4 && R.teenBands.math >= 4 && R.teenHintBehindButton && R.teenAnswers.every((a) => a[2] >= 1) && !errors.length;
+    && R.teenBands.finance >= 4 && R.teenBands.math >= 4 && R.teenHintBehindButton && R.teenAnswers.every((a) => a[2] >= 1) && R.wordUnderlined && R.wordMeaningShown && R.wordsKnown >= 1 && Object.values(R.growth).every(([a, b]) => b > a) && !errors.length;
   console.log('page errors', errors.slice(0, 3));
   console.log(ok ? 'LEARNERS PASSED' : 'LEARNERS FAILED');
   await b.close(); srv.close(); process.exit(ok ? 0 : 1);
