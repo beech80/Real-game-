@@ -167,7 +167,7 @@ export class Edu {
     const before = k.st;
     if (correct) {
       k.ok++;
-      if (hinted) { k.hints++; k.streak = Math.max(1, k.streak); if (k.st < 2) k.st = 2; }
+      if (hinted) { k.hints++; if (k.st < 2) k.st = 2; }   // helped answers count as practice, not toward Proficient
       else {
         k.streak++;
         if (!k.ctx.includes(ctx)) k.ctx.push(ctx);
@@ -182,7 +182,9 @@ export class Edu {
       k.streak = 0; k.miss = (k.miss || 0) + 1;
       if (err) { k.errs = k.errs || {}; k.errs[err] = (k.errs[err] || 0) + 1; }   // error patterns (private, on-device)
       k.needsAlt = true;       // next time, offer the alternate explanation
-      if (k.st >= 3) k.st = 2; // gentle: back to practice, never below
+      if (k.st === 4) { k.st = 5; k.reviewMiss = 0; }                    // one slip on a mastered skill: review it
+      else if (k.st === 5) { k.reviewMiss = (k.reviewMiss || 0) + 1; if (k.reviewMiss >= 2) k.st = 2; }
+      else if (k.st === 3) k.st = 2; // gentle: back to practice, never below
     }
     this.s.skills[id] = k;
     if (k.st !== before) { this._log(id, STATES[k.st]); this.hooks.onState && this.hooks.onState(SKILLS[id], k.st); }

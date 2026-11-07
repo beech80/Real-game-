@@ -167,7 +167,7 @@ export const TOPUP_GEN = {
     ['Why are tires made of rubber?', 'Rubber grips the road and absorbs bumps', ['Rubber is shiny', 'Rubber is heavy', 'Rubber is cheap only'], 'Choose materials for their properties.']])],
   'sci.forces': [bank('sci.forces', [
     ['A ball rolls farther on a smooth floor than on carpet. Why?', 'Carpet has more friction', ['Carpet has less gravity', 'The ball is tired', 'Smooth floors push balls'], 'Friction slows motion.'],
-    ['Why do you lean forward when pushing a heavy cart?', 'To push with more force', ['To look tired', 'It’s a rule', 'No reason'], 'Body position changes force.']])],
+    ['Why is it easier to push a loaded cart than to carry the load?', 'You don’t hold up its weight, and rolling wheels have little friction', ['The cart makes things lighter', 'Wheels add extra force', 'It isn’t easier'], 'The floor holds up the cart’s weight, and rolling wheels slide much less than dragging, so you only push against a little friction.']])],
   'sci.circuits': [bank('sci.circuits', [
     ['In a parallel circuit, if one bulb breaks…', 'The others stay lit', ['All go out', 'All get brighter', 'It explodes'], 'Parallel circuits have more than one path.'],
     ['Why should you never poke things into outlets?', 'You could get a dangerous shock', ['It breaks the TV', 'It’s fine', 'It charges you'], 'Outlets carry strong electricity.']])],

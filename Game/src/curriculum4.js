@@ -90,7 +90,7 @@ export const EXTRA_GEN2 = {
     ['Which material would you recycle in the paper bin?', 'Cardboard', ['Glass', 'Metal can', 'Plastic bottle'], 'Sorting by material lets each be reused.']])],
   'sci.forces': [bank('sci.forces', [
     ['What force pulls things toward Earth?', 'Gravity', ['Friction', 'Magnetism', 'Wind'], 'Gravity pulls objects down.'],
-    ['You push a box and it doesn’t move. Why?', 'Friction or its weight is stronger than your push', ['Forces don’t exist', 'Boxes can’t move', 'It’s magic'], 'A bigger push is needed to overcome resistance.'],
+    ['You push a heavy box and it doesn’t move. Why?', 'Friction from the floor pushes back exactly as hard as you push, so the forces are balanced', ['The box’s weight pushes back against you', 'There are no forces on a box that isn’t moving', 'Your push gets used up before it reaches the box'], 'Balanced forces mean no change in motion. Push harder than the most friction the floor can give, and the box starts to slide.'],
     ['Which is more stable?', 'A wide, low table', ['A tall, thin stool', 'A ball on a point', 'A pencil standing up'], 'A wide base and low weight resist tipping.'],
     ['When you kick a ball, what makes it stop eventually?', 'Friction and air resistance', ['Gravity only upward', 'Nothing', 'The ball gets tired'], 'Forces act against motion.'],
     ['Why do race cars have spoilers?', 'Air pushes down for more grip', ['For decoration', 'To slow them on straights only', 'To carry luggage'], 'Downforce increases tire grip.'],

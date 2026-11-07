@@ -292,11 +292,11 @@ export async function register(G) {
         const ok = Math.abs(v - total) < 0.005;
         G.edu.record(skill, ok, { ctx: 'register', hinted: hp.hinted() });
         if (ok) { G.sfx('good'); changeStep(); }
-        else { G.sfx('bad'); hp.box.hidden = false; hp.box.lastChild.textContent = G.edu.explain(skill); G.state.stats.mistakes++; UI.toast(coupon ? `Subtotal ${money(sub)}. Take 10% off: find 10% by moving the decimal one place.` : 'Add the prices on the receipt one at a time.', 'warn', 3600); reset(); }
+        else { G.sfx('bad'); hp.box.hidden = false; hp.box.lastChild.textContent = G.edu.explain(skill); G.state.stats.mistakes++; UI.toast(coupon ? `Subtotal ${money(sub)}. Take 10% off: find 10% by moving the decimal one place, round it to the nearest cent, then subtract.` : 'Add the prices on the receipt one at a time.', 'warn', 3600); reset(); }
       }, { decimals: !whole });
       body.replaceChildren(h('div', { class: 'act' }, list.cloneNode(true),
         coupon ? h('div', { class: 'coupon' }, '🏷️ Customer has a 10% OFF coupon') : null,
-        h('p', { class: 'lead' }, coupon ? 'Training mode: work out the total after the 10% coupon.' : 'Training mode: the register shows the prices. What is the total?'), hp.box, disp, pad, hp.btn));
+        h('p', { class: 'lead' }, coupon ? 'Training mode: work out the total after the 10% coupon (round the discount to the nearest cent).' : 'Training mode: the register shows the prices. What is the total?'), hp.box, disp, pad, hp.btn));
     };
     const changeStep = async () => {
       await teach(G, 'math.change', 'Rosa');
@@ -511,7 +511,7 @@ export const PRACTICE = {
   'math.multiply': () => { const a = ri(3, 9), b = pick([6, 8, 12, 15]); return { q: `${a} shifts × $${b * 4} per shift = ?`, a: '$' + a * b * 4, o: [a * b * 4, (a + 1) * b * 4, a * b * 4 + b, a + b * 4].map((v) => '$' + v) }; },
   'math.time': () => { const m = pick([15, 20, 35, 45]); return { q: `The bus leaves at 8:${String(m).padStart(2, '0')}. It's 8:00. How long do you have?`, a: `${m} minutes`, o: [m, m + 10, 60 - m, m - 5].map((v) => `${v} minutes`) }; },
   'math.fractions': () => ({ q: 'A pizza has 8 slices. You eat 1/4 of it. How many slices?', a: '2 slices', o: ['2 slices', '4 slices', '1 slice', '3 slices'] }),
-  'math.percent': () => { const p = pick([20, 40, 60, 80]); return { q: `A $${p} jacket is 25% off. Sale price?`, a: '$' + p * 0.75, o: [p * 0.75, p * 0.25, p - 25, p * 0.8].map((v) => '$' + v) }; },
+  'math.percent': () => { const p = pick([40, 48, 60, 80, 120]); return { q: `A $${p} jacket is 25% off. Sale price?`, a: '$' + p * 0.75, o: [p * 0.75, p * 0.25, p - 25, p * 0.8].map((v) => '$' + v), why: `25% = one quarter. $${p} ÷ 4 = $${p / 4} off, so $${p} − $${p / 4} = $${p * 0.75}.` }; },
   'read.signs': () => ({ q: 'A sign says “AISLE 3 — PASTA & RICE ←”. Where is the brown rice?', a: 'Aisle 3, to the left', o: ['Aisle 3, to the left', 'Aisle 1', 'Behind the counter'] }),
   'read.instructions': () => ({ q: '“1) Wash hands. 2) Put on gloves. 3) Slice bread.” What do you do right after washing your hands?', a: 'Put on gloves', o: ['Put on gloves', 'Slice bread', 'Wash again'] }),
   'read.main': () => ({ q: '“The park cleanup is Saturday at 9. Bring gloves. Snacks provided.” Main idea?', a: 'There is a park cleanup on Saturday', o: ['There is a park cleanup on Saturday', 'Snacks are free', 'You need gloves for everything'] }),

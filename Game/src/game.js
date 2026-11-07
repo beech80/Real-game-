@@ -325,7 +325,7 @@ export class Game {
     let c = await UI.say(J, 'Come on. It’s just forty dollars. You deserve it. Live a little.', ['Buy it', 'No, I’m saving my money', 'Why do you think it’s worth it?', 'Walk away'], { tone: 'jax' });
     this.edu.discover('think.opportunity');
     if (c === 2) {
-      s.stats.thoughtThrough = (s.stats.thoughtThrough || 0) + 1; this.edu.record('think.evaluate', true, { ctx: 'jax' });
+      s.stats.thoughtThrough = (s.stats.thoughtThrough || 0) + 1; this.edu.record('think.evaluate', true, { ctx: 'jax', hinted: true });
       await UI.say(J, 'First impressions. People hire people who look ready. Show up to your next interview in that sad jacket and see what happens.', null, { tone: 'jax' });
       const after = s.money - price, due = this.upcomingBills(7);
       c = await UI.sheet('Think it through', (close) => h('div', { class: 'act' },
@@ -344,7 +344,7 @@ export class Game {
       await UI.say(J, 'Now THAT’S a REAL. See? Was that so hard?', null, { tone: 'jax' });
       UI.toast(canCover ? 'You can still cover this week’s bills. A want, but an affordable one.' : `Careful: ${money(due)} in bills are due this week and you now have ${money(s.money)}.`, canCover ? 'info' : 'warn', 4500);
     } else if (c === 1) {
-      s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1; this.edu.record('think.opportunity', true, { ctx: 'jax' }); this.achieve('said_no');
+      s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1; this.edu.record('think.opportunity', true, { ctx: 'jax', hinted: true }); this.achieve('said_no');
       this.hooks.npcExpr('Jax', 'Surprised');
       await UI.say(J, 'Saving it? Boring. …But fine. Most people can’t say no to me.', null, { tone: 'jax' });
     } else {
@@ -369,11 +369,11 @@ export class Game {
       await UI.sheet('What happened', (close) => h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Taking it without paying cost you $25 anyway, plus a store ban and your good name.'),
         h('p', { class: 'tip' }, 'Mistakes don’t define you. The penalty is short, and you can rebuild trust by doing the right thing next time.'), h('button', { class: 'primary', onclick: () => close() }, 'I understand')), { icon: '⚖️', noClose: true });
     } else if (c === 1) {
-      s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1; this.edu.record('think.consequence', true, { ctx: 'jax' }); this.achieve('honest'); this.befriend('Jax', 0.5);
+      s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1; this.edu.record('think.consequence', true, { ctx: 'jax', hinted: true }); this.achieve('honest'); this.befriend('Jax', 0.5);
       this.hooks.npcExpr('Jax', 'Thinking');
       await UI.say(J, 'Relax. I was testing you. …Mostly.', null, { tone: 'jax' });
     } else if (c === 2) {
-      if (s.money >= 25) { this.spend(25, 'Thread & Co cap'); s.mood = Math.min(100, s.mood + 8); this.edu.record('think.consequence', true, { ctx: 'jax' }); await UI.say(J, 'Paying full price. Look at you, a model citizen.', null, { tone: 'jax' }); }
+      if (s.money >= 25) { this.spend(25, 'Thread & Co cap'); s.mood = Math.min(100, s.mood + 8); this.edu.record('think.consequence', true, { ctx: 'jax', hinted: true }); await UI.say(J, 'Paying full price. Look at you, a model citizen.', null, { tone: 'jax' }); }
       else await UI.say(J, 'With what money? Ha. Fine, forget it.', null, { tone: 'jax' });
     }
     s.flags.jaxSteal = true; s.flags.jaxStealDue = false; this.hooks.jaxLeave(); this.save();
@@ -386,7 +386,7 @@ export class Game {
     const c = await UI.say(J, 'Two incomes beat one. Just saying.', ['Thanks, Jax. I’ll check it out.', 'What’s the catch?', 'Why are you helping me?'], { tone: 'jax' });
     if (c === 1) await UI.say(J, 'No catch. Even I give good advice sometimes. Don’t tell anyone.', null, { tone: 'jax' });
     if (c === 2) await UI.say(J, 'Because watching you start from nothing is… weirdly interesting. Don’t make it weird.', null, { tone: 'jax' });
-    s.flags.baristaTip = true; s.flags.jax3 = true; s.flags.jax3due = false; this.befriend('Jax', 1); this.edu.record('think.evaluate', true, { ctx: 'jax' }); this.save();
+    s.flags.baristaTip = true; s.flags.jax3 = true; s.flags.jax3due = false; this.befriend('Jax', 1); this.edu.record('think.evaluate', true, { ctx: 'jax', hinted: true }); this.save();
     this.hooks.jaxLeave();
   }
 

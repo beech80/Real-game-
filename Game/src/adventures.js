@@ -149,7 +149,7 @@ export function installAdventures(Game) {
     if (t.off > 5) notes.push(st.off < 0.6 ? 'You lost time on the grass. Stiffer suspension keeps you steady off the road.' : 'You went off the track a few times. Stay inside the curbs.');
     if (t.dirtSlow > 3 && st.off < 0.7) notes.push('The dirt section slowed you down. A rally suspension (or truck body) helps on loose ground.');
     if (!notes.length) notes.push(res.place === 1 ? 'Clean driving. Your setup suits this track.' : 'Good clean race. More engine power would help on the straights.');
-    this.edu.record('sci.friction', t.slide < 4, { ctx: 'race' }); this.edu.record('sci.method', true, { ctx: 'race' });
+    this.edu.record('sci.friction', t.slide < 4, { ctx: 'race' }); this.edu.discover('sci.method');
     await UI.say(who, notes.join(' '));
   };
 }
@@ -477,7 +477,7 @@ export function installAdventureHelpers(Game) {
           list, h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => { p.pop(); show(); } }, 'Undo'), h('button', { class: 'ghost sm', onclick: () => { p.length = 0; show(); } }, 'Clear'), h('button', { class: 'primary sm', onclick: () => p.length && close([...p]) }, '▶ Run')));
       }, { icon: '🤖', noClose: true, cls: 'wide' });
       const res = await this.hooks.robotRun(lv, s.builds.robot, prog);
-      this.edu.record('think.problem', res.ok, { ctx: 'robots' }); this.edu.record('sci.design', true, { ctx: 'robots' });
+      this.edu.record('think.problem', res.ok, { ctx: 'robots' }); this.edu.discover('sci.design');
       if (res.ok) {
         const bonus = res.steps <= res.par ? 'Efficient program, too!' : `It works! The lab record is ${res.par} commands. Can you beat it?`;
         await UI.say(who, `Success! ${bonus} Energy left: ${res.energyLeft}.`); this.achieve('robot'); return true;

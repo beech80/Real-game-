@@ -129,7 +129,7 @@ export function installExpansion(Game) {
         h('div', { class: 'bill' }, h('div', {}, h('b', {}, '♛ The Club'), h('small', {}, s.flags.invited && !s.ending ? 'You have been invited.' : s.ending ? 'You’ve made your decision. The city is your home.' : 'Members and invited guests only.')),
           s.flags.invited && !s.ending ? h('button', { class: 'primary sm', onclick: () => close('club') }, 'Ride') : h('span', { class: 'amt' }, '—'))),
       h('p', { class: 'tip' }, v ? `You own a ${v.name.toLowerCase()}: no bus fare.` : 'Buses run every 20 minutes from 6:00 AM to 11:40 PM. A bus pass costs less than a car, but a car can save time.')), { icon: '🚌' });
-    this.edu.record('read.signs', true, { ctx: 'bus' });
+    this.edu.discover('read.signs');   // seeing the map introduces the skill; credit comes from answering questions
     if (!go) return;
     if (!v) { if (s.money < 2) { UI.toast('The fare is $2. You don’t have enough.', 'warn'); return; } this.spend(2, 'Bus fare'); }
     if (go === 'club') { await this.hooks.goToClub(); return; }
@@ -201,7 +201,7 @@ export function installExpansion(Game) {
     else {
       this.spend(200, `${B.name}: down payment`); const owed = r2((need - 200) * 1.1);
       s.bills.push({ id: 'bizloan1', name: 'Business loan payment', amount: r2(owed / 20), due: s.day + 7, paid: false, recur: r2(owed / 20), period: 7, left: 19 });
-      this.edu.record('fin.credit', true, { ctx: 'business' });
+      this.edu.discover('fin.credit');
       s.bizLoan = owed;
     }
     const name = await UI.sheet('Name your business', (close) => h('div', { class: 'opts' }, [`${s.name}’s ${B.name}`, `REAL ${B.name}`, `Fresh Start ${B.name}`, `${['Sunrise', 'Corner', 'Main St'][ri(0, 2)]} ${B.name}`].map((n) => h('button', { class: 'opt', onclick: () => close(n) }, n))), { icon: '✏️', noClose: true });
