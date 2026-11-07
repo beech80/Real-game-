@@ -29,6 +29,7 @@
     <div class="title-actions">
       <button id="btn-new" class="primary xl">New game</button>
       <button id="btn-continue" class="ghost xl" hidden>Continue<small></small></button>
+      <button id="btn-readtome" class="ghost readtome" aria-pressed="false">🔊 Read to me: <b>Off</b></button>
       <p class="hand">Start with almost nothing. Build something that’s yours.</p>
     </div>
   </section>
@@ -70,7 +71,7 @@
       <canvas id="minimap" width="240" height="240"></canvas>
       <button id="btn-phone" class="phone-btn" aria-label="Open phone">📱</button>
     </div>
-    <div id="objective" class="objective glass" hidden><span class="crown">♛</span><span id="obj-text"></span><b id="obj-dist"></b></div>
+    <div id="objective" class="objective glass" hidden><span class="crown">♛</span><span id="obj-text"></span><b id="obj-dist"></b><button id="obj-say" class="say-btn" aria-label="Read my goal to me">🔊</button></div>
     <div id="taskpanel" class="taskpanel glass" hidden></div>
     <div id="joy-base" class="joy-base"><div id="joy-knob" class="joy-knob"></div></div>
     <button id="btn-sprint" class="sprint-btn" aria-label="Toggle run">RUN</button>

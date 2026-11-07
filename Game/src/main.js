@@ -20,6 +20,7 @@ import { buildInterior, BUILDING_ROOMS, ROOM } from './interiors.js';
 import { MapView } from './mapview.js';
 import { installEvents } from './events.js';
 import { scatterFlora, updateLook } from './lookfx.js';
+import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
 import { PetCourse, RobotArena } from './arenas.js';
@@ -48,6 +49,15 @@ engine.onContextLost = () => { try { game && game.save(); } catch (e) {} fatal('
 const audio = new Audio();
 setSfx((n) => audio.play(n));
 UI.init();
+initReadAlong(() => game && game.state);
+// 🔊 on the goal bar, and the "Read to me" switch on the title screen
+document.getElementById('obj-say').onclick = (e) => { e.stopPropagation(); readEls([document.getElementById('obj-text')]); };
+{ const b = document.getElementById('btn-readtome'); const show = () => { b.querySelector('b').textContent = readToMe() ? 'On' : 'Off'; b.setAttribute('aria-pressed', readToMe()); b.classList.toggle('primary', readToMe()); b.classList.toggle('ghost', !readToMe()); };
+  b.onclick = () => { setReadToMe(!readToMe()); show(); if (readToMe()) sayText('Okay! I will read everything to you. You can also tap any word to hear it.'); }; show(); }
+// press and hold any button to hear what it says (for players who can't read it yet)
+{ let t = null, held = false; document.addEventListener('pointerdown', (e) => { const b = e.target.closest && e.target.closest('button'); if (!b || b.closest('#btn-sprint, #btn-interact, .joy, #joystick')) return; held = false; clearTimeout(t); t = setTimeout(() => { const txt = (b.getAttribute('aria-label') || b.innerText || '').trim(); if (txt) { held = true; sayText(txt); } }, 600); }, true);
+  const cancel = () => clearTimeout(t); document.addEventListener('pointerup', cancel, true); document.addEventListener('pointercancel', cancel, true); document.addEventListener('pointermove', (e) => { if (Math.abs(e.movementX) + Math.abs(e.movementY) > 6) cancel(); }, true);
+  document.addEventListener('click', (e) => { if (held && e.target.closest && e.target.closest('button')) { held = false; e.stopPropagation(); e.preventDefault(); } }, true); }
 UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.ask({ prompt: q }); if (!said) return null; UI.toast(`Heard “${said}” — checking…`, 'info', 1600); const i = await Brain.pick(q, choices, said); if (i == null) UI.toast(`I heard “${said}”. Which answer did you mean? Tap it, or say it again.`, 'info', 4200); return i; } };
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
@@ -999,6 +1009,7 @@ window.REAL = {
   pathClear: (pts, r = 0.22) => { let done = 0, total = 0; for (let i = 1; i < pts.length; i++) total += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
     let p = { x: pts[0][0], y: pts[0][1] }; for (let i = 1; i < pts.length; i++) { const [tx, ty] = pts[i]; for (let k = 0; k < 4000; k++) { const dx = tx - p.x, dy = ty - p.y, d = Math.hypot(dx, dy); if (d < 0.05) break; const st = Math.min(0.05, d), q = { x: p.x + dx / d * st, y: p.y + dy / d * st }; coll.resolve(q, r); const moved = Math.hypot(q.x - p.x, q.y - p.y); done += Math.max(0, (dx * (q.x - p.x) + dy * (q.y - p.y)) / d); p = q; if (moved < 0.002) return +(done / total).toFixed(2); } } return +Math.min(1, done / total).toFixed(2); },
   camCheck: () => { const t = fcam.target.clone(), c = camera.position.clone(), dir = t.clone().sub(c), len = dir.length(); camRay.set(c, dir.normalize()); camRay.near = 0.05; camRay.far = Math.max(0.06, len - 0.35); const hit = camRay.intersectObjects(camBlockers(), false)[0]; camRay.near = 0.25; const n = t.project(camera); return { dist: +len.toFixed(2), blocked: !!hit, onScreen: Math.abs(n.x) < 1 && Math.abs(n.y) < 1 && n.z < 1, where: game.state.location }; },
+  say: (who, text, choices) => UI.say(who, text, choices),
   teleportXY(x, y) { player.pos = { x, y }; player.apply(); },
   npcPos: (n) => npcs[n] && !npcs[n].hidden && { ...npcs[n].pos },
   wildSign: (i) => ({ ...W.wild.signs[i] }), club: () => ({ ...CLUB }),

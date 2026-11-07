@@ -501,7 +501,7 @@ export function openPhone(G) {
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
+      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -582,12 +582,13 @@ export function openPhone(G) {
             ta, h('div', { class: 'row' }, h('button', { class: 'primary sm', onclick: save }, 'Save note'), h('button', { class: 'ghost sm', onclick: copy }, 'Copy all'), h('button', { class: 'ghost sm', onclick: share }, 'Share')),
             list, h('button', { class: 'ghost sm', onclick: () => { if (confirm('Delete all notes?')) { try { localStorage.removeItem(KEY); } catch (e) {} draw(); } } }, 'Clear notes'));
         },
+        Words: () => A.myWords(G),
         Settings: () => h('div', { class: 'act' },
           h('div', { class: 'row' }, h('span', {}, 'Graphics'), ...['low', 'medium', 'high'].map((q) => h('button', { class: G.hooks.quality() === q ? 'primary sm' : 'ghost sm', onclick: () => { G.hooks.setQuality(q); open('Settings'); } }, q))),
           h('div', { class: 'row' }, h('span', {}, 'Time'), ...[[1, 'Normal'], [3, 'Fast']].map(([v, n]) => h('button', { class: (s.timeScale || 1) === v ? 'primary sm' : 'ghost sm', onclick: () => { s.timeScale = v; open('Settings'); } }, n))),
           h('div', { class: 'tier-h' }, 'Accessibility'),
           ...[['smart', 'Smart character replies', true]].map(([k, n]) => { s.settings = s.settings || {}; const on = s.settings[k] !== false; return h('div', { class: 'row' }, h('span', {}, n), h('button', { class: on ? 'primary sm' : 'ghost sm', onclick: () => { s.settings[k] = !on; G.hooks.applyA11y(s.settings); G.save(); open('Settings'); } }, on ? 'On' : 'Off')); }),
-          ...[['large', 'Bigger text'], ['contrast', 'High contrast'], ['readAloud', 'Read questions aloud'], ['calm', 'Reduce motion']].map(([k, n]) => { s.settings = s.settings || {}; return h('div', { class: 'row' }, h('span', {}, n), h('button', { class: s.settings[k] ? 'primary sm' : 'ghost sm', onclick: () => { s.settings[k] = !s.settings[k]; G.hooks.applyA11y(s.settings); G.save(); open('Settings'); } }, s.settings[k] ? 'On' : 'Off')); }),
+          ...[['large', 'Bigger text'], ['contrast', 'High contrast'], ['readAloud', 'Read to me (all text)'], ['calm', 'Reduce motion']].map(([k, n]) => { s.settings = s.settings || {}; return h('div', { class: 'row' }, h('span', {}, n), h('button', { class: s.settings[k] ? 'primary sm' : 'ghost sm', onclick: () => { s.settings[k] = !s.settings[k]; G.hooks.applyA11y(s.settings); G.save(); open('Settings'); } }, s.settings[k] ? 'On' : 'Off')); }),
           h('div', { class: 'row' }, h('span', {}, 'Live neighbors'), h('button', { class: (s.settings || {}).noNeighbors ? 'ghost sm' : 'primary sm', onclick: () => { s.settings = s.settings || {}; s.settings.noNeighbors = !s.settings.noNeighbors; G.save(); open('Settings'); } }, (s.settings || {}).noNeighbors ? 'Off' : 'On')),
           h('button', { class: 'ghost', onclick: () => open('Grown-ups') }, '👪 For grown-ups: privacy & progress'),
           h('div', { class: 'row' }, h('span', {}, 'Sound'), h('button', { class: 'ghost sm', onclick: (e) => { e.currentTarget.textContent = G.hooks.toggleSound() ? 'On' : 'Off'; } }, G.hooks.soundOn() ? 'On' : 'Off')),

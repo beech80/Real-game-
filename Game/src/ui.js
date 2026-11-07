@@ -1,3 +1,4 @@
+import { speakerBtn, autoRead, readEls, stopReading, readToMe } from './readalong.js';
 // REAL — UI: tiny DOM helper, HUD, dialogue, modal sheets, toasts, minimap, captions.
 export function h(tag, attrs = {}, ...kids) {
   const el = document.createElement(tag);
@@ -48,7 +49,11 @@ export const UI = {
   objective(text, dist) {
     const E = this.els;
     E.obj.hidden = !text;
-    if (text) { E.objText.textContent = text; E.objDist.textContent = dist !== undefined && dist !== null ? `${Math.round(dist)} m` : ''; }
+    if (text) {
+      if (text !== this._objLast) { this._objLast = text; E.objText.textContent = text; if (!this.els.dialog.hidden || this.anySheet()) this._objPending = true; else autoRead(() => [E.objText]); }
+      else if (this._objPending && this.els.dialog.hidden && !this.anySheet()) { this._objPending = false; autoRead(() => [E.objText]); }
+      E.objDist.textContent = dist !== undefined && dist !== null ? `${Math.round(dist)} m` : '';
+    }
   },
   taskPanel(title, rows, earn) {
     const E = this.els;
@@ -77,17 +82,22 @@ export const UI = {
       D.className = 'dialog ' + (opts.tone || '');
       const body = h('div', { class: 'd-text' });
       const letters = ['A', 'B', 'C', 'D'];
-      const list = choices ? h('div', { class: 'd-choices' }, choices.map((c, i) => h('button', { class: 'd-choice', onclick: () => { click(); D.hidden = true; res(i); } }, h('span', { class: 'd-key' }, letters[i]), c))) : null;
-      const next = !choices ? h('button', { class: 'd-next', onclick: () => { click(); D.hidden = true; res(); } }, 'Continue ›') : null;
+      const done = (v) => { click(); stopReading(); D.hidden = true; res(v); };
+      const list = choices ? h('div', { class: 'd-choices' }, choices.map((c, i) => h('button', { class: 'd-choice', onclick: () => done(i) }, h('span', { class: 'd-key' }, letters[i]), h('span', { class: 'd-ctext' }, c)))) : null;
+      const next = !choices ? h('button', { class: 'd-next', onclick: () => done() }, 'Continue ›') : null;
+      const finishType = () => { cancelAnimationFrame(this._tw); body.textContent = text; body.dataset.typing = '0'; };
+      const readAll = () => { finishType(); return [body, ...(list ? [...list.querySelectorAll('.d-ctext')] : [])]; };
+      const spk = speakerBtn(readAll);
       const voice = this.voiceHooks;
       const mic = null;   // dialog choices are tapped; speaking out loud is only for speaking practice
-      fill(D, h('div', { class: 'd-name' }, opts.crown !== false ? h('span', { class: 'crown' }, '♛') : null, speaker), body, list, mic, next);
+      fill(D, h('div', { class: 'd-name' }, opts.crown !== false ? h('span', { class: 'crown' }, '♛') : null, speaker), h('div', { class: 'd-say' }, spk), body, list, mic, next);
       if (voice && !opts.silent) voice.speak(text, speaker);
       // typewriter
       let i = 0; const full = text;
-      const tick = () => { i += 2; body.textContent = full.slice(0, i); if (i < full.length) this._tw = requestAnimationFrame(tick); };
-      cancelAnimationFrame(this._tw); tick();
-      body.onclick = () => { cancelAnimationFrame(this._tw); body.textContent = full; };
+      const tick = () => { i += 2; body.textContent = full.slice(0, i); if (i < full.length) this._tw = requestAnimationFrame(tick); else body.dataset.typing = '0'; };
+      cancelAnimationFrame(this._tw); body.dataset.typing = '1';
+      if (readToMe()) { finishType(); autoRead(readAll); } else tick();
+      body.onclick = () => { if (body.dataset.typing === '1') finishType(); };
     });
   },
   /** Modal sheet. build(close) returns content element. Resolves with close(value). */
@@ -99,7 +109,8 @@ export const UI = {
       host.append(layer);
       const close = (v) => { layer.remove(); res(v); };
       const head = h('div', { class: 'sh-head' }, h('div', { class: 'sh-title' }, opts.icon ? h('span', { class: 'sh-icon' }, opts.icon) : null, title),
-        opts.noClose ? null : h('button', { class: 'sh-x', 'aria-label': 'Close', onclick: () => { click(); close(undefined); } }, '✕'));
+        speakerBtn(() => [...body.querySelectorAll('.lead, .tip:not([hidden]), .helpbox:not([hidden]), .whybox:not([hidden]), .msg p, .doc-l, .learn-card p, .readable')].filter((e) => !e.closest('[hidden]')).slice(0, 12), 'Read this page to me'),
+        opts.noClose ? null : h('button', { class: 'sh-x', 'aria-label': 'Close', onclick: () => { click(); stopReading(); close(undefined); } }, '✕'));
       const body = h('div', { class: 'sh-body' });
       const card = h('div', { class: 'sheet ' + (opts.cls || '') }, head, body);
       layer.append(card);
@@ -111,8 +122,8 @@ export const UI = {
     const C = this.els.caption;
     C.hidden = false;
     for (const l of lines) {
-      C.replaceChildren(h('div', { class: 'cap-line' }, l));
-      await wait(hold);
+      const line = h('div', { class: 'cap-line' }, l); C.replaceChildren(line);
+      if (readToMe()) { await Promise.all([readEls([line]), wait(hold)]); } else await wait(hold);
     }
     C.hidden = true;
   },

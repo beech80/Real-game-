@@ -5,6 +5,7 @@ import { h, UI, money, wait } from './ui.js';
 import { SKILLS, SUBJECTS, STATES } from './edu.js';
 import { runActivity } from './learnkit.js';
 import { lookup as lookupWord } from './glossary.js';
+import { wordCard, wordPractice, say as sayWord } from './readalong.js';
 
 // automated playtests only (navigator.webdriver): expose the expected keypad answer so a test bot can play like a person
 const forBot = (k, v) => { try { if (navigator.webdriver) window[k] = v; } catch (e) {} };
@@ -528,9 +529,19 @@ export const PRACTICE = {
 /** “Words I know”: every lesson word the learner has tapped and learned. Tap to see them with their meanings. */
 function wordsLine(G) {
   const words = G.state.words || [];
-  if (!words.length) return h('p', { class: 'tip' }, '📖 Tip: tap an underlined word in any lesson to learn what it means.');
-  return h('button', { class: 'ghost sm', onclick: () => UI.sheet('Words I know', () => h('div', { class: 'act' }, h('p', { class: 'lead' }, `You’ve learned ${words.length} new word${words.length === 1 ? '' : 's'}.`),
-    h('div', { class: 'wordlist' }, words.map((w) => { const e = lookupWord(w); return h('p', {}, h('b', {}, w), e ? ` — ${e.meaning}` : ''); }))), { icon: '📖' }) }, `📖 Words I know: ${words.length}`);
+  if (!words.length) return h('p', { class: 'tip' }, '📖 Tip: tap any word to hear it and sound it out. Underlined words also show what they mean.');
+  return h('button', { class: 'ghost sm', onclick: () => UI.sheet('My Words', () => myWords(G), { icon: '📖' }) }, `📖 My Words: ${words.length}`);
+}
+/** My Words: every word the player tapped (hear it, sound it out, meaning) and a listening game to practise reading them. */
+export function myWords(G) {
+  const words = (G.state.words || []).slice().reverse();
+  const box = h('div', { class: 'act' });
+  const list = () => box.replaceChildren(
+    h('p', { class: 'lead' }, words.length ? `You have ${words.length} word${words.length === 1 ? '' : 's'}. Tap one to hear it and sound it out.` : 'Tap any word in the game to hear it. It will be saved here.'),
+    h('button', { class: 'primary', onclick: () => box.replaceChildren(h('button', { class: 'ghost sm', onclick: list }, '‹ My Words'), wordPractice(Math.min(3, G.edu.band('reading')))) }, '🎧 Word game: listen and find'),
+    h('div', { class: 'wordchips' }, words.map((w) => { const e = lookupWord(w); return h('button', { class: 'wchip', onclick: () => wordCard(w) }, h('b', {}, w), e ? h('small', {}, e.meaning) : null); })));
+  list();
+  return box;
 }
 export function learn(G) {
   return UI.sheet('Learn', (close, body) => {

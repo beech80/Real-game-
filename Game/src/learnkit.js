@@ -8,13 +8,12 @@ import { Voice } from './voice.js';
 import { GEN } from './curriculum.js';
 import { splitWords } from './glossary.js';
 import { difficulty } from './readlevel.js';
+import { say } from './readalong.js';
 
 const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
 const fmt = (Q, v) => `${Q.prefix || ''}${Q.decimals ? Number(v).toFixed(2) : v}${Q.suffix ? ' ' + Q.suffix : ''}`;
 
-export function speak(text) {
-  try { if (!('speechSynthesis' in window)) return false; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.rate = 0.9; speechSynthesis.speak(u); return true; } catch (e) { return false; }
-}
+export function speak(text) { return say(text); }
 function visual(v) {
   if (!v) return null;
   if (v instanceof Node) return v;
