@@ -36,7 +36,8 @@ export function reportData(G) {
   return { v: 1, n: (s.school && s.school.nick) || s.name || 'Student', c: (s.school && s.school.cls) || '', d: s.day, ll: G.life().level,
     m: Math.round((s.stats.playSecs || 0) / 60), l: s.stats.lessons || 0, w: (s.words || []).length,
     k: IDS.map((id) => Math.min(4, G.edu.state(id))).join(''), t: new Date().toISOString().slice(0, 10),
-    a: s.assign ? { n: s.assign.n, pre: s.assign.pre && s.assign.pre.right, post: s.assign.post && s.assign.post.right, q: s.assign.q } : undefined };
+    a: s.assign ? { n: s.assign.n, pre: s.assign.pre && s.assign.pre.right, post: s.assign.post && s.assign.post.right, q: s.assign.q, pd: s.assign.pre && s.assign.pre.date, qd: s.assign.post && s.assign.post.date, ks: s.assign.k.map((id) => [id, (s.assign.pre && s.assign.pre.by && s.assign.pre.by[id]) || 0, (s.assign.post && s.assign.post.by && s.assign.post.by[id]) || 0]) } : undefined,
+    id: (s.school && s.school.sid) || (s.school = { ...(s.school || {}), sid: Math.random().toString(36).slice(2, 8) }).sid };
 }
 // a checksum makes casual edits to a report code visible on the teacher's dashboard (it is not cryptographic security)
 const sum = (t) => { let h1 = 0x811c9dc5; for (const c of 'REAL·report·' + t) { h1 ^= c.charCodeAt(0); h1 = Math.imul(h1, 16777619) >>> 0; } return h1.toString(36); };
@@ -99,7 +100,7 @@ const saveClass = (list) => { try { localStorage.setItem(TKEY, JSON.stringify(li
 export function addCodes(text) {
   const found = (String(text).match(/REAL1-[A-Za-z0-9_-]+/g) || []).map(parseCode).filter(Boolean);
   const list = loadClass();
-  for (const d of found) { const i = list.findIndex((x) => x.n === d.n && x.c === d.c); if (i >= 0) { if ((list[i].t || '') <= (d.t || '')) list[i] = d; } else list.push(d); }
+  for (const d of found) { const i = list.findIndex((x) => (x.id && d.id ? x.id === d.id : x.n === d.n && x.c === d.c)); if (i >= 0) { if ((list[i].t || '') <= (d.t || '')) list[i] = d; } else list.push(d); }
   saveClass(list); return found.length;
 }
 export function teacherDashboard() {
@@ -142,8 +143,8 @@ export function teacherDashboard() {
   }, { icon: '👩‍🏫', cls: 'wide' });
 }
 function toCSV(list) {
-  const head = ['nickname', 'class', 'report_date', 'game_day', 'life_level', 'minutes', 'lessons', 'words', ...Object.values(SUBJECTS).map((s) => s.name + ' proficient'), ...IDS];
-  const rows = list.map((d) => { const st = skillStates(d); return [d.n, d.c, d.t, d.d, d.ll, d.m, d.l, d.w, ...subjectRows(st).map((r) => r.proficient), ...IDS.map((id) => ST[st[id]])]; });
+  const head = ['nickname', 'class', 'report_date', 'game_day', 'life_level', 'minutes', 'lessons', 'words', 'assignment', 'pre_check', 'post_check', 'out_of', ...Object.values(SUBJECTS).map((s) => s.name + ' proficient'), ...IDS];
+  const rows = list.map((d) => { const st = skillStates(d); return [d.n, d.c, d.t, d.d, d.ll, d.m, d.l, d.w, d.a ? d.a.n : '', d.a ? d.a.pre ?? '' : '', d.a ? d.a.post ?? '' : '', d.a ? d.a.q : '', ...subjectRows(st).map((r) => r.proficient), ...IDS.map((id) => ST[st[id]])]; });
   return [head, ...rows].map((r) => r.map((v) => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
 }
 
@@ -176,21 +177,21 @@ export function schoolSettings(G, reopen) {
 export const assignCode = (a) => 'REALA1-' + b64(JSON.stringify(a));
 export function parseAssign(t) { try { const m = String(t).trim().match(/REALA1-([A-Za-z0-9_-]+)/); if (!m) return null; const a = JSON.parse(unb64(m[1])); return a && Array.isArray(a.k) && a.k.every((id) => SKILLS[id]) ? a : null; } catch (e) { return null; } }
 export function assignFromLink() { const m = (location.hash + '&' + location.search).match(/[#?&]assign=(REALA1-[A-Za-z0-9_-]+)/); return m ? parseAssign(m[1]) : null; }
-export function setAssignment(G, a) { const s = G.state; s.assign = { ...a, day: s.day, pre: null, post: null }; G.save(); }
+export function setAssignment(G, a) { const s = G.state; if (s.assign && s.assign.n === a.n && JSON.stringify(s.assign.k) === JSON.stringify(a.k)) return; s.assign = { ...a, day: s.day, pre: null, post: null, practice: {} }; G.save(); }   // same assignment again: keep progress
 /** builder for teachers: pick a subject and stage, tick skills, name it */
 export function assignmentBuilder() {
   return UI.sheet('New assignment', (close, body) => {
     let subj = 'math', band = 2; const chosen = new Set();
     const name = h('input', { class: 'writebox', maxlength: 40, placeholder: 'Assignment name (e.g. Unit 3: Making change)' });
     const draw = () => body.replaceChildren(h('div', { class: 'act' },
-      h('p', { class: 'tip' }, 'Pick the skills to practise. Students take a 5-question pre-check, practise each skill, then a post-check.'), name,
+      h('p', { class: 'tip' }, 'Pick the skills to practise. Students take a pre-check (2 questions per skill, one try, no hints), practise each skill, then a post-check at the same difficulty.'), name,
       h('div', { class: 'row wrap' }, Object.entries(SUBJECTS).map(([k, sb]) => h('button', { class: k === subj ? 'primary sm' : 'ghost sm', onclick: () => { subj = k; draw(); } }, `${sb.icon} ${sb.name}`))),
       h('div', { class: 'row wrap' }, Object.entries(GRADES).map(([b, g]) => h('button', { class: +b === band ? 'primary sm' : 'ghost sm', onclick: () => { band = +b; draw(); } }, `Grades ${g}`))),
       h('div', { class: 'rskills' }, IDS.filter((id) => SKILLS[id].subj === subj && Math.abs(SKILLS[id].band - band) <= 1).map((id) => h('label', { class: 'rskill pickrow' },
         h('input', { type: 'checkbox', checked: chosen.has(id) || null, onchange: (e) => { if (e.target.checked) chosen.add(id); else chosen.delete(id); } }), h('b', {}, SKILLS[id].name), h('small', {}, `${SKILLS[id].objective} · grades ${GRADES[SKILLS[id].band]} · ${(STANDARDS[id] || []).slice(0, 2).join(', ')}`)))),
       h('button', { class: 'primary', onclick: () => {
         if (!chosen.size) return UI.toast('Pick at least one skill.', 'warn');
-        const a = { v: 1, n: name.value.trim() || `${SUBJECTS[subj].name} practice`, k: [...chosen].slice(0, 8), q: 5 }, code = assignCode(a);
+        const k = [...chosen].slice(0, 8), a = { v: 1, n: name.value.trim() || `${SUBJECTS[subj].name} practice`, k, q: Math.min(16, Math.max(6, k.length * 2)) }, code = assignCode(a);
         body.replaceChildren(h('div', { class: 'act' }, h('p', { class: 'lead' }, `“${a.n}” is ready`), h('p', { class: 'tip' }, 'Give students this code (they enter it in 📱 Settings › For grown-ups › School), or add it to the game link.'),
           h('textarea', { class: 'writebox codebox', rows: 3, readonly: true }, code),
           h('p', { class: 'tip' }, 'Link: add ', h('b', {}, '#assign=' + code.slice(0, 18) + '…'), ' to the end of the game link.'),
@@ -203,13 +204,13 @@ export function assignmentBuilder() {
 export function assignmentView(G, run, reopen) {
   const s = G.state, A = s.assign;
   if (!A) return h('div', { class: 'act' }, h('p', { class: 'lead' }, 'No assignment yet.'), h('p', { class: 'tip' }, 'If your teacher gave you an assignment code, enter it in Settings › For grown-ups › School.'));
-  const st = (id) => Math.min(4, G.edu.state(id)), practised = A.k.filter((id) => st(id) >= 2).length;
+  const st = (id) => Math.min(4, G.edu.state(id)), pr = A.practice || {}, practised = A.k.filter((id) => (pr[id] || 0) >= 2).length;   // 2 right answers in practice after the pre-check
   const step = (n, label, done, btn) => h('div', { class: 'bill' + (done ? ' paid' : '') }, h('div', {}, h('b', {}, `${n}. ${label}`), done ? h('small', {}, done) : null), btn || h('span', { class: 'ok' }, '✓'));
   return h('div', { class: 'act' }, h('p', { class: 'lead' }, A.n),
-    step(1, 'Pre-check: 5 questions, no hints', A.pre && `${A.pre.right} of ${A.pre.n} right`, A.pre ? null : h('button', { class: 'primary sm', onclick: () => run('pre') }, 'Start')),
+    step(1, `Pre-check: ${A.q || 5} questions, one try each, no hints`, A.pre && `${A.pre.right} of ${A.pre.n} right`, A.pre ? null : h('button', { class: 'primary sm', onclick: () => run('pre') }, 'Start')),
     step(2, `Practise each skill (${practised}/${A.k.length})`, practised === A.k.length && 'All practised', null),
-    h('div', { class: 'rskills' }, A.k.map((id) => h('div', { class: 'rskill st' + st(id) }, h('b', {}, SKILLS[id].name), h('span', { class: 'rst' }, ST[st(id)]), h('button', { class: 'ghost sm', disabled: !A.pre || null, onclick: () => run('skill', id) }, 'Practise')))),
-    step(3, 'Post-check: 5 new questions', A.post && `${A.post.right} of ${A.post.n} right${A.pre ? ` (pre-check ${A.pre.right})` : ''}`, A.post ? null : h('button', { class: 'primary sm', disabled: !(A.pre && practised === A.k.length) || null, onclick: () => run('post') }, A.pre && practised === A.k.length ? 'Start' : 'Practise first')),
+    h('div', { class: 'rskills' }, A.k.map((id) => h('div', { class: 'rskill st' + st(id) }, h('b', {}, SKILLS[id].name), h('span', { class: 'rst' }, `${Math.min(2, pr[id] || 0)}/2 practised`), h('button', { class: 'ghost sm', disabled: !A.pre || null, onclick: () => run('skill', id) }, 'Practise')))),
+    step(3, `Post-check: ${A.q || 5} new questions, same difficulty`, A.post && `${A.post.right} of ${A.post.n} right${A.pre ? ` (pre-check ${A.pre.right})` : ''}`, A.post ? null : h('button', { class: 'primary sm', disabled: !(A.pre && practised === A.k.length) || null, onclick: () => run('post') }, A.pre && practised === A.k.length ? 'Start' : 'Practise first')),
     A.post ? h('p', { class: 'tip' }, A.post.right > A.pre.right ? `You grew by ${A.post.right - A.pre.right}! 🌱` : 'Keep practising: every try builds the skill.') : null,
     h('button', { class: 'ghost sm', onclick: () => UI.sheet('Progress report', () => reportView(G), { icon: '📋' }) }, '📋 Report code for your teacher'));
 }

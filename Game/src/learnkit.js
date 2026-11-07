@@ -73,7 +73,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       if (fits.length) pool = fits; else for (let k = 0; k < 10 && pool.every((p) => p.band && Math.abs(p.band - lb) > 1); k++) { const n = gen(); if (n && n.skill === Q.skill && (!n.band || Math.abs(n.band - lb) <= 1)) pool = [n]; }
       if (pool.length > 1) {
         pool.sort((a, b) => difficulty(a) - difficulty(b));
-        const at = st <= 1 ? 0 : st === 2 ? 0.5 : 1;   // new → easiest, practising → middle, proficient+ → hardest
+        const at = ctx === 'check' ? 0.5 : st <= 1 ? 0 : st === 2 ? 0.5 : 1;   // new → easiest, practising → middle, proficient+ → hardest; checks always middle
         Q = pool[Math.round(at * (pool.length - 1))];
       }
       seen.push(key(Q)); if (seen.length > 6) seen.shift();
@@ -83,9 +83,9 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
   const id = Q.skill, sk = SKILLS[id] || { name: '', subj: 'thinking' };
   if (!Q.why && sk.explain) Q.why = sk.explain;   // every item ends with a worked explanation
   G.edu.discover(id);
-  G.state.stats.lessons = (G.state.stats.lessons || 0) + 1;
+  if (ctx !== 'check') G.state.stats.lessons = (G.state.stats.lessons || 0) + 1;
   const settings = G.state.settings || {};
-  let tries = 0;
+  let tries = 0, usedExample = false; const CHECK = ctx === 'check';
   return UI.sheet(title, (close) => {
     const hp = helpFor(G, id);
     const why = h('div', { class: 'whybox', hidden: true });
@@ -93,7 +93,8 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     const finish = (ok) => { if (body) body.querySelectorAll('button').forEach((b) => { if (!b.classList.contains('right')) b.disabled = true; }); why.hidden = false; why.replaceChildren(h('b', {}, ok ? '✓ ' : '💡 '), ...wordful(G, Q.why || (ok ? 'Nice work.' : ''), sk.band || 1, hp.card)); done.hidden = false; done.onclick = () => close({ ok: tries === 1 && ok }); if (settings.readAloud && Q.why) speak(Q.why); };
     const attempt = (ok, err) => {
       tries++;
-      G.edu.record(id, ok, { ctx, hinted: hp.hinted() || tries > 1, err });
+      if (CHECK) { G.sfx(ok ? 'good' : 'bad'); finish(ok); return ok; }   // pre/post check: one try, no help, not counted as practice
+      G.edu.record(id, ok, { ctx, hinted: hp.hinted() || tries > 1 || usedExample, err });
       if (ok) { G.sfx('good'); finish(true); return true; }
       G.sfx('bad'); G.state.stats.mistakes = (G.state.stats.mistakes || 0) + 1; hp.show();
       const pre = G.edu.struggling(id);
@@ -105,14 +106,14 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       if (tries >= 3 && Q.why) finish(false);   // after a few tries, show the worked solution and move on; mistakes teach
       return false;
     };
-    const hint2 = h('p', { class: 'tip', hidden: true });
+    const hint2 = h('p', { class: 'tip', hidden: true }), wwBox = h('p', { class: 'tip readable wwbox', hidden: true });
     const head = [h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj] ? SUBJECTS[sk.subj].icon + ' ' + SUBJECTS[sk.subj].name : ''} · ${sk.name || ''}`),
       visual(Q.v), Q.cursive ? h('div', { class: 'cursive-note' }, ...Q.cursive.map((l) => h('div', {}, l))) : null,
       h('div', { class: 'qrow' }, h('p', { class: 'lead' }, ...wordful(G, Q.q, sk.band || 1, hp.card)), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
     let body;
     if (Q.type === 'choice') {
       const optsShown = shuffle([...new Set(Q.o)]);
-      body = h('div', { class: 'opts' + (Q.decode ? ' decode' : '') }, optsShown.map((o) => h('button', { class: 'opt', 'data-noread': Q.decode ? '1' : null, onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; if (Q.whyWrong && Q.whyWrong[o]) { hint2.hidden = false; hint2.textContent = '💡 ' + Q.whyWrong[o]; } } else e.currentTarget.classList.add('right'); } }, o)));
+      body = h('div', { class: 'opts' + (Q.decode ? ' decode' : '') }, optsShown.map((o) => h('button', { class: 'opt', 'data-noread': Q.decode ? '1' : null, onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; if (Q.whyWrong && Q.whyWrong[o] && !CHECK) { wwBox.hidden = false; wwBox.textContent = '💡 ' + Q.whyWrong[o]; } } else e.currentTarget.classList.add('right'); } }, o)));
     } else if (Q.type === 'number') {
       let val = '';
       const disp = h('div', { class: 'keypad-disp' }, fmt(Q, 0));
@@ -144,7 +145,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     } else if (Q.type === 'write') {
       const ta = h('textarea', { class: 'writebox', rows: 4, placeholder: 'Write here…', maxlength: 600 });
       const fb = h('ul', { class: 'rubric' }); let revised = false;
-      body = h('div', {}, ta, fb, h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => { ta.value = Q.model; } }, 'See an example'),
+      body = h('div', {}, ta, fb, h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => { ta.value = Q.model; usedExample = true; } }, 'See an example'),
         h('button', { class: 'primary sm', onclick: () => {
           if (!done.hidden) return;
           const t = ta.value.trim(), words = t.split(/\s+/).filter(Boolean).length;
@@ -180,6 +181,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       Q.why = Q.why || 'Cursive letters join with smooth upward swings. Neat comes before fast.';
     }
     if (settings.readAloud || Voice.enabled() && Q.say) setTimeout(() => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q), 250);   // decoding items: only the instruction is read, never the word to decode
-    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') }, ...head.filter(Boolean), hp.card, hp.box, body, hint2, why, h('div', { class: 'row' }, hp.btn), done);
+    if (CHECK) { hp.box.hidden = true; hp.btn.hidden = true; }
+    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') + (CHECK ? ' check' : '') }, CHECK ? h('p', { class: 'tip' }, '📋 Check: one try, no hints. Just do your best.') : null, ...head.filter(Boolean), hp.card, hp.box, body, wwBox, hint2, why, h('div', { class: 'row' }, hp.btn), done);
   }, { icon, noClose: true });
 }

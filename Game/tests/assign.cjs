@@ -46,7 +46,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const phoneApp = async (name) => { if (!(await p.isVisible('#modal .phone'))) { await p.click('#btn-phone'); await sleep(700); } await p.click(`.app:has-text("${name}")`); await sleep(600); };
   await phoneApp('Settings'); await p.click('button:has-text("For grown-ups")'); await sleep(600);
   await p.fill('input[placeholder^="Assignment code"]', code); await p.click('.school-set button:has-text("Add")'); await sleep(600);
-  const A = await ev(() => window.REAL.state.assign); console.log('student assignment:', JSON.stringify(A && { n: A.n, k: A.k }));
+  const A = await ev(() => window.REAL.state.assign); console.log('student assignment:', JSON.stringify(A && { n: A.n, k: A.k, q: A.q }));
   if (!A || A.k.length !== 2) fail('assignment code did not add the assignment');
   // answer every activity correctly (or wrong on purpose for the pre-check)
   const answerAll = async (wrong, max = 12) => { for (let i = 0; i < max; i++) { await sleep(500);
@@ -60,9 +60,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   } };
   await phoneApp('Assignment'); await p.click('button:has-text("Start")'); await answerAll(true, 30);
   const pre = await ev(() => window.REAL.state.assign.pre); console.log('pre-check:', JSON.stringify(pre));
-  if (!pre || pre.n !== 5) fail('pre-check did not record 5 questions');
+  if (!pre || pre.n !== A.q) fail(`pre-check did not record ${A.q} questions`);
   // practise each skill until practised
-  for (const id of A.k) for (let r = 0; r < 3; r++) { await ev((s) => { window.__pr = window.REAL.practice(s); }, id); await answerAll(false, 8); }
+  for (const [i, id] of A.k.entries()) for (let r = 0; r < 3; r++) { await phoneApp('Assignment'); await p.click(`.rskill >> nth=${i} >> button:has-text("Practise")`); await answerAll(false, 8); }
   await phoneApp('Assignment'); await p.screenshot({ path: path.join(OUT, 'assign_student.png'), timeout: 180000 });
   await p.click('.bill:has-text("Post-check") button'); await answerAll(false, 30);
   const post = await ev(() => window.REAL.state.assign.post); console.log('post-check:', JSON.stringify(post));
@@ -75,7 +75,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await t.fill('.modal textarea.writebox', rcode); await t.click('button:has-text("Add reports")'); await sleep(600);
   const cell = await t.$eval('.tdash .trow td:nth-child(6)', (e) => e.textContent).catch(() => '');
   console.log('dashboard pre → post:', cell);
-  if (!new RegExp(`${pre.right} → ${post.right}`).test(cell)) fail('dashboard does not show pre → post');
+  if (!cell.includes(`${pre.right} → ${post.right}`)) fail('dashboard does not show pre → post');
   await t.screenshot({ path: path.join(OUT, 'assign_dashboard.png'), timeout: 180000 });
   if (errors.length) fail('page errors: ' + errors.slice(0, 3).join(' | '));
   console.log(bad.length ? 'ASSIGN FAILED' : 'ASSIGN PASSED');

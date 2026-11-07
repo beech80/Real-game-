@@ -610,10 +610,11 @@ export function openPhone(G) {
         Words: () => A.myWords(G),
         Assignment: () => assignmentView(G, async (what, id) => {
           const As = s.assign; close();
-          if (what === 'skill') { await runActivity(G, () => ({ skill: id, ...A.PRACTICE[id]() }), 'assignment', As.n, '📋'); return; }
-          let right = 0; const n = As.q || 5;
-          for (let i = 0; i < n; i++) { const id2 = As.k[i % As.k.length]; const r = await runActivity(G, () => ({ skill: id2, ...A.PRACTICE[id2]() }), 'check', `${what === 'pre' ? 'Pre' : 'Post'}-check · ${i + 1} of ${n}`, '📋'); if (r === undefined) return; if (r && r.ok) right++; }
-          As[what] = { right, n, day: s.day }; G.save();
+          if (what === 'skill') { const r = await runActivity(G, () => ({ skill: id, ...A.PRACTICE[id]() }), 'assignment', As.n, '📋'); if (r && r.ok && As.pre) { As.practice = As.practice || {}; As.practice[id] = (As.practice[id] || 0) + 1; G.save(); } return; }
+          if (As[what]) return;   // each check is taken once
+          let right = 0; const n = As.q || 5, by = {};
+          for (let i = 0; i < n; i++) { const id2 = As.k[i % As.k.length]; const r = await runActivity(G, () => ({ skill: id2, ...A.PRACTICE[id2]() }), 'check', `${what === 'pre' ? 'Pre' : 'Post'}-check · ${i + 1} of ${n}`, '📋'); if (r === undefined) return; if (r && r.ok) { right++; by[id2] = (by[id2] || 0) + 1; } }
+          As[what] = { right, n, day: s.day, by, date: new Date().toISOString().slice(0, 10) }; G.save();
           UI.toast(what === 'pre' ? `Pre-check: ${right} of ${n}. Now practise each skill.` : `Post-check: ${right} of ${n} (pre-check ${As.pre ? As.pre.right : '–'}).`, 'good', 3600);
         }, () => open('Assignment')),
         Settings: () => h('div', { class: 'act' },
