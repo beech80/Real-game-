@@ -44,7 +44,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await p.waitForSelector('#loading', { state: 'hidden', timeout: 180000 }).catch(() => {});
   await ev(() => window.REAL.devJump('hired')); await sleep(1200);
   await ev(() => { for (let i = 0; i < 20 && !document.querySelector('#dialog').hidden; i++) { const x = document.querySelector('#dialog .d-next, #dialog .d-choice'); if (x) x.click(); } window.REAL.state.quest = 'free'; });
-  const phoneApp = async (name) => { if (!(await p.isVisible('#modal .phone'))) { await p.click('#btn-phone'); await sleep(700); } await p.click(`.app:has-text("${name}")`); await sleep(600); };
+  const phoneApp = async (name) => { if (!(await p.isVisible('#modal .phone'))) { for (let i = 0; i < 4 && await p.isVisible('#modal .modal'); i++) { await p.$eval('#modal .modal:last-child .sh-x', (e) => e.click()).catch(() => {}); await sleep(500); } await p.click('#btn-phone'); await sleep(900); } await p.click(`.app:has-text("${name}")`); await sleep(600); };
   await phoneApp('Settings'); await p.click('button:has-text("For grown-ups")'); await sleep(600);
   await p.fill('input[placeholder^="Assignment code"]', code); await p.click('.school-set button:has-text("Add")'); await sleep(600);
   const A = await ev(() => window.REAL.state.assign); console.log('student assignment:', JSON.stringify(A && { n: A.n, k: A.k, q: A.q }));
