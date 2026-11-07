@@ -478,3 +478,7 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .rskill .rst { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: rgba(255, 255, 255, .1); }
 .rskill.st3 .rst { background: #2f8f5a; } .rskill.st4 .rst { background: var(--gold); color: #1a1420; }
 .school-set input.writebox { width: 100%; margin: 4px 0; min-height: 44px; }
+/* K–2 visuals: a big picture, an analog clock */
+.bigpic { font-size: clamp(44px, 13vw, 72px); text-align: center; line-height: 1.15; margin: 6px 0 4px; letter-spacing: .04em; word-break: break-word; }
+.clockwrap { display: flex; justify-content: center; margin: 6px 0; }
+.opts.decode .opt { font-size: 24px; font-weight: 700; }

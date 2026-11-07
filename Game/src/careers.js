@@ -4,7 +4,7 @@ import { h, UI, money, wait } from './ui.js';
 import { paystub, PRACTICE, teach } from './activities.js';
 import { runActivity } from './learnkit.js';
 import { speakTask, SPEAK_TASKS } from './voice.js';
-import { GEN } from './curriculum.js';
+import { GEN, K2_REPLACE } from './curriculum.js';
 
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -104,6 +104,7 @@ for (const [sk, gens] of Object.entries(GEN)) gens.forEach((g, i) => { T[`${sk}#
 export const BY_SKILL = {};
 for (const [k, g] of Object.entries(T)) { try { const sk = g().skill; (BY_SKILL[sk] = BY_SKILL[sk] || []).push(g); } catch (e) {} }
 for (const [sk, gens] of Object.entries(BY_SKILL)) { const old = PRACTICE[sk]; PRACTICE[sk] = () => pick(old ? gens.concat([() => ({ skill: sk, ...old() })]) : gens)(); }
+for (const sk of Object.keys(K2_REPLACE)) PRACTICE[sk] = () => pick(GEN[sk])();   // K–2 skills practise only the reviewed bank
 export const genFor = (sk) => (BY_SKILL[sk] ? pick(BY_SKILL[sk]) : null);
 
 // ------------------------------------------------------------------------------------------- careers → workplace + tasks

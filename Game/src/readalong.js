@@ -82,43 +82,78 @@ export function autoRead(getEls) { if (readToMe() && canSpeak()) setTimeout(() =
 // ------------------------------------------------------------------------------------------- sounding words out
 const DIGRAPH = /^(ch|sh|th|ph|wh|ck|ng|qu|gh|kn|wr)/;
 /** Split a word into speakable parts, roughly by syllable (phonics rules: VC|CV, V|CV, consonant-le, silent e). */
+// common early words whose syllables don't follow the simple rules (closed first syllable, vowel-vowel splits…)
+const SYL = { seven: 'sev·en', camel: 'cam·el', lemon: 'lem·on', river: 'riv·er', visit: 'vis·it', planet: 'plan·et', mother: 'moth·er', father: 'fa·ther', brother: 'broth·er', money: 'mon·ey',
+  family: 'fam·i·ly', animal: 'an·i·mal', wagon: 'wag·on', robin: 'rob·in', cabin: 'cab·in', limit: 'lim·it', woman: 'wom·an', present: 'pres·ent', salad: 'sal·ad', never: 'nev·er', ever: 'ev·er',
+  very: 'ver·y', many: 'man·y', every: 'ev·er·y', water: 'wa·ter', over: 'o·ver', open: 'o·pen', paper: 'pa·per', tiger: 'ti·ger', baby: 'ba·by', lady: 'la·dy', pony: 'po·ny', music: 'mu·sic',
+  lion: 'li·on', giant: 'gi·ant', quiet: 'qui·et', diet: 'di·et', poem: 'po·em', create: 'cre·ate', idea: 'i·de·a', radio: 'ra·di·o', video: 'vid·e·o', piano: 'pi·an·o', nickel: 'nick·el',
+  pocket: 'pock·et', jacket: 'jack·et', rocket: 'rock·et', chicken: 'chick·en', hexagon: 'hex·a·gon', taxi: 'tax·i', exit: 'ex·it', oven: 'ov·en', cover: 'cov·er', shiver: 'shiv·er',
+  dragon: 'drag·on', melon: 'mel·on', habit: 'hab·it', panic: 'pan·ic', finish: 'fin·ish', punish: 'pun·ish', city: 'cit·y', body: 'bod·y', study: 'stud·y', busy: 'bus·y', minute: 'min·ute',
+  people: 'peo·ple', because: 'be·cause', little: 'lit·tle', table: 'ta·ble', apple: 'ap·ple', purple: 'pur·ple', banana: 'ba·nan·a', elephant: 'el·e·phant', butterfly: 'but·ter·fly',
+  community: 'com·mu·ni·ty', apartment: 'a·part·ment', inventory: 'in·ven·to·ry', groceries: 'gro·cer·ies', customer: 'cus·tom·er', manager: 'man·a·ger', interest: 'in·ter·est', computer: 'com·put·er' };
+/** Split a word into speakable parts, roughly by syllable (phonics rules: VC|CV, V|CV, consonant-le, silent e, suffixes). */
 export function chunks(word) {
   const w = word.toLowerCase().replace(/[^a-z']/g, '');
+  if (SYL[w]) return SYL[w].split('·');
+  // peel common suffixes so the base splits cleanly: jump·ing, box·es (but “jumped” stays one part)
+  const suf = w.match(/^(.{3,}?)(ing|es|ful|less|ness|ly)$/);
+  if (suf && /[aeiouy]/.test(suf[1]) && !(suf[2] === 'es' && !/(s|x|z|sh|ch)$/.test(suf[1]))) {
+    const base = chunks(suf[1]); return [...base, suf[2]];
+  }
+  if (/[td]ed$/.test(w) && w.length > 4) return [...chunks(w.slice(0, -2)), 'ed'];   // want·ed
+  if (/[^aeiouy]ed$/.test(w) && !/[td]ed$/.test(w)) { const b = w.slice(0, -2); const base = chunks(b); base[base.length - 1] += 'ed'; return base; }   // -ed is not its own syllable: jumped, asked
   if (w.length <= 3) return [w];
   const isV = (c, i) => /[aeiou]/.test(c) || (c === 'y' && i > 0);
   const out = []; let cur = '';
   for (let i = 0; i < w.length; i++) {
     cur += w[i];
-    const c = w[i], n1 = w[i + 1], n2 = w[i + 2], n3 = w[i + 3];
+    const c = w[i], n1 = w[i + 1];
     if (!n1 || !isV(c, i) || isV(n1, i + 1)) continue;
     const rest = w.slice(i + 1);
     const cle = rest.match(/^([^aeiouy]?)[^aeiouy]le$/); if (cle && !/^(ck)/.test(rest)) { cur += cle[1]; i += cle[1].length; out.push(cur); cur = ''; continue; }   // “ta·ble”, “lit·tle”
     if (/^[^aeiouy]{1,2}(e|es)$/.test(rest) || /^(e|es)$/.test(rest)) continue;   // silent e: “make”, “prac·tice”
-    // consonants until next vowel
     let j = i + 1; while (j < w.length && !isV(w[j], j)) j++;
     if (j >= w.length) continue;                                                 // no more vowels: keep the rest
     const cons = w.slice(i + 1, j);
-    if (cons.length === 1) { out.push(cur); cur = ''; }                           // V|CV  “ba·by”
+    if (cons === 'x' || cons === 'ck') { cur += cons; i += cons.length; out.push(cur); cur = ''; }   // x and ck stay with the vowel before: tax·i, pock·et
+    else if (cons.length === 1) { out.push(cur); cur = ''; }                      // V|CV  “ba·by”
     else if (DIGRAPH.test(cons) && cons.length === 2) { out.push(cur); cur = ''; } // keep “sh”, “th” together
     else { const keep = cons.length >= 3 ? cons.length - (/(bl|br|cl|cr|dr|fl|fr|gl|gr|pl|pr|sc|sk|sl|sm|sn|sp|st|sw|tr|tw|ch|sh|th)$/.test(cons) ? 2 : 1) : 1;
       cur += cons.slice(0, keep); i += keep; out.push(cur); cur = ''; }                    // VC|CV  “bas·ket”
   }
   if (cur) out.push(cur);
-  // merge a dangling part with no vowel into its neighbour
   return out.reduce((a, p) => { if (a.length && !/[aeiouy]/.test(p)) a[a.length - 1] += p; else a.push(p); return a; }, []);
 }
+/** Split a one-syllable word into its sounds (graphemes): sh·i·p, r·ai·n, c·a·ke. */
+export function sounds(word) {
+  const w = word.toLowerCase().replace(/[^a-z]/g, '');
+  const out = []; let i = 0;
+  const TEAMS = ['tch', 'igh', 'dge', 'sh', 'ch', 'th', 'wh', 'ph', 'ck', 'ng', 'qu', 'ai', 'ay', 'ee', 'ea', 'oa', 'oo', 'ow', 'ou', 'oi', 'oy', 'ar', 'or', 'er', 'ir', 'ur', 'ew', 'aw', 'au', 'll', 'ss', 'ff', 'zz'];
+  while (i < w.length) {
+    const t = TEAMS.find((x) => w.startsWith(x, i));
+    if (t) { out.push(t); i += t.length; continue; }
+    if (w[i] === 'e' && i === w.length - 1 && out.length > 1) { out[out.length - 1] += 'e'; i++; continue; }   // silent e rides on the consonant: c·a·ke
+    out.push(w[i]); i++;
+  }
+  return out;
+}
+// how to make the device voice say a single sound (not the letter's name)
+const SOUND = { a: 'ah', e: 'eh', i: 'ih', o: 'aw', u: 'uh', b: 'buh', c: 'kuh', d: 'duh', f: 'fff', g: 'guh', h: 'huh', j: 'juh', k: 'kuh', l: 'lll', m: 'mmm', n: 'nnn', p: 'puh', q: 'kwuh', r: 'rrr',
+  s: 'sss', t: 'tuh', v: 'vvv', w: 'wuh', x: 'ks', y: 'yuh', z: 'zzz', sh: 'shh', ch: 'chuh', th: 'thh', wh: 'wuh', ph: 'fff', ck: 'kuh', ng: 'ng', qu: 'kwuh', tch: 'chuh', dge: 'juh', igh: 'eye',
+  ai: 'ay', ay: 'ay', ee: 'ee', ea: 'ee', oa: 'oh', oo: 'oo', ow: 'oh', ou: 'ow', oi: 'oy', oy: 'oy', ar: 'ar', or: 'or', er: 'er', ir: 'er', ur: 'er', ew: 'oo', aw: 'aw', au: 'aw', ll: 'lll', ss: 'sss', ff: 'fff', zz: 'zzz' };
+const sayPart = (p) => SOUND[p] || (/[^aeiou]e$/.test(p) && SOUND[p.slice(0, -1)]) || p.replace(/y$/, 'ee').replace(/le$/, 'ul');
 
 /** The word card: big word, hear it, sound it out part by part, meaning, saved to My Words. */
 export function wordCard(rawWord) {
   const word = String(rawWord).replace(/^[^A-Za-z']+|[^A-Za-z']+$/g, '');
   if (!word || !/[a-z]/i.test(word)) return;
   document.querySelectorAll('.wcard-wrap').forEach((x) => x.remove());
-  const parts = chunks(word), e = lookup(word);
+  const one = chunks(word).length === 1, parts = one && word.length <= 6 ? sounds(word) : chunks(word), e = lookup(word);   // one syllable: sound by sound (sh·i·p); longer: by syllable
   const s = getState(); if (s) { const words = s.words || (s.words = []); const lw = word.toLowerCase(); if (!words.includes(lw) && lw.length > 2) words.push(lw); }
   const partEls = parts.map((p) => h('span', { class: 'wc-part' }, p));
   const big = h('div', { class: 'wc-word', style: { fontSize: `min(${word.length > 9 ? 38 : word.length > 6 ? 48 : 64}px, ${Math.floor(150 / Math.max(4, word.length + parts.length))}vw)` } }, ...partEls.flatMap((p, i) => i ? [h('i', { class: 'wc-dot' }, '·'), p] : [p]));
   const sound = async () => {
-    for (const [i, p] of parts.entries()) { partEls.forEach((x) => x.classList.remove('lit')); partEls[i].classList.add('lit'); await sayAsync(p, { rate: 0.6 }); await sleep(180); }
+    for (const [i, p] of parts.entries()) { partEls.forEach((x) => x.classList.remove('lit')); partEls[i].classList.add('lit'); await sayAsync(one ? sayPart(p) : p.replace(/y$/, 'ee'), { rate: 0.6 }); await sleep(one ? 260 : 180); }
     partEls.forEach((x) => x.classList.add('lit')); await sayAsync(word, { rate: 0.75 }); partEls.forEach((x) => x.classList.remove('lit'));
   };
   const wrap = h('div', { class: 'wcard-wrap', onclick: (ev) => { if (ev.target === wrap) close(); } },
@@ -126,7 +161,8 @@ export function wordCard(rawWord) {
       big,
       h('div', { class: 'row wc-btns' },
         h('button', { class: 'primary', onclick: () => say(word, { rate: 0.75 }) }, '🔊 Say it'),
-        parts.length > 1 ? h('button', { class: 'ghost', onclick: sound }, '🧩 Sound it out') : h('button', { class: 'ghost', onclick: () => say(word.split('').join(', ') + '. ' + word, { rate: 0.7 }) }, '🔤 Spell it')),
+        parts.length > 1 ? h('button', { class: 'ghost', onclick: sound }, '🧩 Sound it out') : null,
+        h('button', { class: 'ghost sm', onclick: () => say(word.toUpperCase().split('').join(', ') + '. ' + word, { rate: 0.7 }) }, '🔤 Spell it')),
       e ? h('p', { class: 'wc-mean' }, h('b', {}, 'Means: '), e.meaning, ' ', h('button', { class: 'say-btn', onclick: () => say(`${word} means ${e.meaning}`) }, '🔊')) : null,
       h('p', { class: 'wc-note' }, '📖 Saved to My Words'),
       h('button', { class: 'ghost sm', onclick: () => close() }, 'Close')));
@@ -171,7 +207,7 @@ function installTaps() {
 const SIGHT = [
   ['the', 'and', 'you', 'can', 'see', 'go', 'is', 'it', 'my', 'we', 'he', 'she', 'to', 'up', 'look', 'like', 'come', 'here', 'play', 'said'],
   ['what', 'want', 'were', 'they', 'there', 'this', 'that', 'with', 'have', 'from', 'work', 'money', 'store', 'food', 'home', 'help', 'friend', 'school', 'pay', 'save'],
-  ['because', 'people', 'about', 'could', 'would', 'should', 'answer', 'question', 'change', 'number', 'bank', 'budget', 'price', 'job', 'shift', 'paycheck', 'bill', 'rent', 'healthy', 'learn'],
+  ['because', 'people', 'about', 'could', 'would', 'should', 'answer', 'again', 'every', 'their', 'once', 'water', 'where', 'many', 'some', 'friend', 'there', 'thought', 'write', 'learn'],
 ];
 /** Listen-and-find: hear a word, tap the one that matches. Grows from sight words to the player's own words. */
 export function wordPractice(level = 1) {
@@ -181,18 +217,18 @@ export function wordPractice(level = 1) {
   let score = 0, round = 0;
   const box = h('div', { class: 'act wp' });
   const next = () => {
-    if (round >= 8) { box.replaceChildren(h('p', { class: 'lead' }, `You found ${score} of 8 words!`), h('button', { class: 'primary', onclick: () => { round = 0; score = 0; next(); } }, 'Play again')); say(`You found ${score} of 8 words!`); return; }
+    if (round >= 8) { box.replaceChildren(h('p', { class: 'lead' }, `You found ${score} of 8 words on the first try!`), h('button', { class: 'primary', onclick: () => { round = 0; score = 0; next(); } }, 'Play again')); say(`You found ${score} of 8 words on the first try!`); return; }
     round++;
     const target = pool[Math.floor(Math.random() * pool.length)];
     const near = pool.filter((w) => w !== target).sort((a, b) => (Math.abs(a.length - target.length) + (a[0] === target[0] ? -2 : 0)) - (Math.abs(b.length - target.length) + (b[0] === target[0] ? -2 : 0)) || Math.random() - 0.5).slice(0, 6);
     const opts = [target, ...near.sort(() => Math.random() - 0.5).slice(0, 2)].sort(() => Math.random() - 0.5);
-    const hear = () => say(target, { rate: 0.75 });
+    const hear = () => say(target, { rate: 0.75 }); let missed = false;
     box.replaceChildren(
       h('p', { class: 'lead' }, `Word ${round} of 8: listen, then tap the word you hear.`),
       h('button', { class: 'primary big-say', onclick: hear }, '🔊 Hear the word'),
       h('div', { class: 'opts' }, opts.map((o) => h('button', { class: 'opt wp-opt', onclick: (e) => {
-        if (o === target) { score++; e.currentTarget.classList.add('right'); say('Yes! ' + target); setTimeout(next, 1100); }
-        else { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; say(`That says ${o}. Listen again.`); setTimeout(hear, 1400); }
+        if (o === target) { if (!missed) score++; e.currentTarget.classList.add('right'); say('Yes! ' + target); setTimeout(next, 1100); }
+        else { missed = true; e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; say(`That says ${o}. Listen again.`); setTimeout(hear, 1400); }
       } }, o))));
     setTimeout(hear, 300);
   };

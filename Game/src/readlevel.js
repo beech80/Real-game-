@@ -26,6 +26,7 @@ export function readText(Q) {
   return parts.filter(Boolean).join('. ');
 }
 export function difficulty(Q) {
+  if (typeof Q.diff === 'number') return Q.diff * 3;   // hand-levelled items (K–2 banks)
   const t = readText(Q);
   const nums = (String(Q.q).match(/\d[\d,.]*/g) || []).map((n) => parseFloat(n.replace(/,/g, ''))).filter(Number.isFinite);
   const big = nums.length ? Math.log10(1 + Math.max(...nums.map(Math.abs))) : 0;

@@ -12,7 +12,7 @@ export const FRAMEWORKS = {
 export const STANDARDS = {
   // ---- reading
   'read.letters': ['CCSS.ELA-LITERACY.RF.K.1', 'CCSS.ELA-LITERACY.RF.K.3'], 'read.phonics': ['CCSS.ELA-LITERACY.RF.1.3', 'CCSS.ELA-LITERACY.RF.2.3'],
-  'read.sentences': ['CCSS.ELA-LITERACY.RF.1.4'], 'read.signs': ['CCSS.ELA-LITERACY.RF.K.3.C', 'CCSS.ELA-LITERACY.RI.K.7'], 'read.vocab': ['CCSS.ELA-LITERACY.L.1.4', 'CCSS.ELA-LITERACY.RF.1.3.G'],
+  'read.sentences': ['CCSS.ELA-LITERACY.RF.1.4', 'CCSS.ELA-LITERACY.RF.1.3'], 'read.sounds': ['CCSS.ELA-LITERACY.RF.K.2', 'CCSS.ELA-LITERACY.RF.1.2'], 'read.signs': ['CCSS.ELA-LITERACY.RF.K.3.C', 'CCSS.ELA-LITERACY.RI.K.7'], 'read.vocab': ['CCSS.ELA-LITERACY.L.1.4', 'CCSS.ELA-LITERACY.RF.1.3.G'],
   'read.instructions': ['CCSS.ELA-LITERACY.RI.2.3'], 'read.main': ['CCSS.ELA-LITERACY.RI.2.2'], 'read.paragraph': ['CCSS.ELA-LITERACY.RI.2.1', 'CCSS.ELA-LITERACY.RI.3.2'],
   'read.story': ['CCSS.ELA-LITERACY.RL.2.5', 'CCSS.ELA-LITERACY.RL.3.3'], 'read.documents': ['CCSS.ELA-LITERACY.RI.4.7'], 'read.multistep': ['CCSS.ELA-LITERACY.RI.4.3'],
   'read.inference': ['CCSS.ELA-LITERACY.RL.4.1', 'CCSS.ELA-LITERACY.RI.4.1'], 'read.compare': ['CCSS.ELA-LITERACY.RI.5.6', 'CCSS.ELA-LITERACY.RI.4.9'],
@@ -36,10 +36,10 @@ export const STANDARDS = {
   // ---- math
   'math.numbers': ['CCSS.MATH.CONTENT.K.CC.A.3', 'CCSS.MATH.CONTENT.K.CC.B.4'], 'math.count': ['CCSS.MATH.CONTENT.K.CC.A.1', 'CCSS.MATH.CONTENT.1.NBT.A.1'],
   'math.add': ['CCSS.MATH.CONTENT.1.OA.A.1', 'CCSS.MATH.CONTENT.2.OA.B.2'], 'math.sub': ['CCSS.MATH.CONTENT.1.OA.A.1', 'CCSS.MATH.CONTENT.2.NBT.B.5'],
-  'math.shapes': ['CCSS.MATH.CONTENT.K.G.A.2', 'CCSS.MATH.CONTENT.1.G.A.1'], 'math.patterns': ['CCSS.MATH.CONTENT.3.OA.D.9'],
-  'math.place': ['CCSS.MATH.CONTENT.2.NBT.A.1'], 'math.decimals': ['CCSS.MATH.CONTENT.2.MD.C.8', 'CCSS.MATH.CONTENT.4.NF.C.6'], 'math.change': ['CCSS.MATH.CONTENT.2.MD.C.8'],
+  'math.shapes': ['CCSS.MATH.CONTENT.K.G.A.2', 'CCSS.MATH.CONTENT.1.G.A.1'], 'math.patterns': ['CCSS.MATH.CONTENT.K.CC.A.2', 'CCSS.MATH.CONTENT.3.OA.D.9'],
+  'math.place': ['CCSS.MATH.CONTENT.1.NBT.B.2', 'CCSS.MATH.CONTENT.2.NBT.A.1', 'CCSS.MATH.CONTENT.2.NBT.A.4'], 'math.decimals': ['CCSS.MATH.CONTENT.2.MD.C.8', 'CCSS.MATH.CONTENT.4.NF.C.6'], 'math.change': ['CCSS.MATH.CONTENT.2.MD.C.8'],
   'math.multiply': ['CCSS.MATH.CONTENT.3.OA.A.1', 'CCSS.MATH.CONTENT.3.OA.C.7'], 'math.divide': ['CCSS.MATH.CONTENT.3.OA.A.2', 'CCSS.MATH.CONTENT.3.OA.B.6'],
-  'math.time': ['CCSS.MATH.CONTENT.2.MD.C.7', 'CCSS.MATH.CONTENT.3.MD.A.1'], 'math.rounding': ['CCSS.MATH.CONTENT.3.NBT.A.1'],
+  'math.time': ['CCSS.MATH.CONTENT.1.MD.B.3', 'CCSS.MATH.CONTENT.2.MD.C.7'], 'math.rounding': ['CCSS.MATH.CONTENT.3.NBT.A.1'],
   'math.fractions': ['CCSS.MATH.CONTENT.4.NF.B.3', 'CCSS.MATH.CONTENT.5.NF.A.1'], 'math.percent': ['CCSS.MATH.CONTENT.6.RP.A.3.C'], 'math.ratio': ['CCSS.MATH.CONTENT.6.RP.A.3'],
   'math.measure': ['CCSS.MATH.CONTENT.4.MD.A.1', 'CCSS.MATH.CONTENT.5.MD.A.1'], 'math.geometry': ['CCSS.MATH.CONTENT.4.MD.A.3', 'CCSS.MATH.CONTENT.5.MD.C.5'], 'math.graphs': ['CCSS.MATH.CONTENT.3.MD.B.3', 'CCSS.MATH.CONTENT.5.G.A.2'],
   'math.algebra': ['CCSS.MATH.CONTENT.6.EE.B.7', 'CCSS.MATH.CONTENT.7.EE.B.4'], 'math.prealgebra': ['CCSS.MATH.CONTENT.6.EE.A.2', 'CCSS.MATH.CONTENT.7.EE.A.1'],

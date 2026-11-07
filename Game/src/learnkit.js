@@ -14,9 +14,22 @@ const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[
 const fmt = (Q, v) => `${Q.prefix || ''}${Q.decimals ? Number(v).toFixed(2) : v}${Q.suffix ? ' ' + Q.suffix : ''}`;
 
 export function speak(text) { return say(text); }
+function clockSVG(hh, mm) {
+  const NS = 'http://www.w3.org/2000/svg', el = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  const svg = el('svg', { viewBox: '0 0 120 120', width: 150, height: 150, class: 'clock', role: 'img', 'aria-label': 'clock' });
+  svg.append(el('circle', { cx: 60, cy: 60, r: 56, fill: '#fffaf0', stroke: '#1c2148', 'stroke-width': 4 }));
+  for (let i = 1; i <= 12; i++) { const a = i / 12 * 2 * Math.PI; const t = el('text', { x: 60 + 44 * Math.sin(a), y: 60 - 44 * Math.cos(a) + 5, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 700, fill: '#1c2148' }); t.textContent = i; svg.append(t); }
+  for (let i = 0; i < 60; i++) { const a = i / 60 * 2 * Math.PI, r0 = i % 5 ? 52 : 49; svg.append(el('line', { x1: 60 + r0 * Math.sin(a), y1: 60 - r0 * Math.cos(a), x2: 60 + 55 * Math.sin(a), y2: 60 - 55 * Math.cos(a), stroke: '#1c2148', 'stroke-width': i % 5 ? 1 : 2 })); }
+  const hand = (ang, len, w, c) => svg.append(el('line', { x1: 60, y1: 60, x2: 60 + len * Math.sin(ang), y2: 60 - len * Math.cos(ang), stroke: c, 'stroke-width': w, 'stroke-linecap': 'round' }));
+  hand(((hh % 12) + mm / 60) / 12 * 2 * Math.PI, 28, 6, '#1c2148'); hand(mm / 60 * 2 * Math.PI, 42, 4, '#d2552f');
+  svg.append(el('circle', { cx: 60, cy: 60, r: 4, fill: '#1c2148' }));
+  return h('div', { class: 'clockwrap' }, svg);
+}
 function visual(v) {
   if (!v) return null;
   if (v instanceof Node) return v;
+  if (v.big) return h('div', { class: 'bigpic', 'aria-hidden': 'true' }, v.big);
+  if (v.clock) return clockSVG(v.clock[0], v.clock[1]);
   if (v.row) return h('div', { class: 'row2' }, ...v.row.map(visual));
   return h('div', { class: 'doc' }, v.title ? h('div', { class: 'doc-h' }, v.title) : null, ...(v.lines || []).map((l) => h('div', { class: 'doc-l' }, l)));
 }
@@ -64,6 +77,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
   } catch (e) { console.warn('activity', e); return Promise.resolve({ ok: true }); }
   Q.type = Q.type || 'choice'; window.__lastQ = Q;
   const id = Q.skill, sk = SKILLS[id] || { name: '', subj: 'thinking' };
+  if (!Q.why && sk.explain) Q.why = sk.explain;   // every item ends with a worked explanation
   G.edu.discover(id);
   G.state.stats.lessons = (G.state.stats.lessons || 0) + 1;
   const settings = G.state.settings || {};
@@ -90,11 +104,11 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     const hint2 = h('p', { class: 'tip', hidden: true });
     const head = [h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj] ? SUBJECTS[sk.subj].icon + ' ' + SUBJECTS[sk.subj].name : ''} · ${sk.name || ''}`),
       visual(Q.v), Q.cursive ? h('div', { class: 'cursive-note' }, ...Q.cursive.map((l) => h('div', {}, l))) : null,
-      h('div', { class: 'qrow' }, h('p', { class: 'lead' }, ...wordful(G, Q.q, sk.band || 1, hp.card)), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak((Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
+      h('div', { class: 'qrow' }, h('p', { class: 'lead' }, ...wordful(G, Q.q, sk.band || 1, hp.card)), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
     let body;
     if (Q.type === 'choice') {
       const optsShown = shuffle([...new Set(Q.o)]);
-      body = h('div', { class: 'opts' }, optsShown.map((o) => h('button', { class: 'opt', onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; } else e.currentTarget.classList.add('right'); } }, o)));
+      body = h('div', { class: 'opts' + (Q.decode ? ' decode' : '') }, optsShown.map((o) => h('button', { class: 'opt', 'data-noread': Q.decode ? '1' : null, onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; } else e.currentTarget.classList.add('right'); } }, o)));
     } else if (Q.type === 'number') {
       let val = '';
       const disp = h('div', { class: 'keypad-disp' }, fmt(Q, 0));
@@ -159,7 +173,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       body = h('div', {}, pad, typeAlt);
       Q.why = Q.why || 'Cursive letters join with smooth upward swings. Neat comes before fast.';
     }
-    if (settings.readAloud || Voice.enabled() && Q.say) setTimeout(() => speak((Q.say ? Q.say + '. ' : '') + Q.q), 250);
+    if (settings.readAloud || Voice.enabled() && Q.say) setTimeout(() => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q), 250);   // decoding items: only the instruction is read, never the word to decode
     return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') }, ...head.filter(Boolean), hp.card, hp.box, body, hint2, why, h('div', { class: 'row' }, hp.btn), done);
   }, { icon, noClose: true });
 }
