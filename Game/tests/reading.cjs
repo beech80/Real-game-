@@ -96,6 +96,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   // press and hold a button to hear it
   await clearSaid();
   const bb = await p.$eval('.sh-x', (e) => { const r = e.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; });
+  await ev(() => { window.__allowHold = true; });
   await p.mouse.move(bb[0], bb[1]); await p.mouse.down(); await sleep(2600); await p.mouse.up(); await sleep(300);
   if (!(await said()).some((t) => /close/i.test(t))) fail('press-and-hold did not read the button');
   if (!(await p.isVisible('.sh-x'))) fail('press-and-hold also pressed the button');
