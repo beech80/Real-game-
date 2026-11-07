@@ -65,6 +65,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
   Q.type = Q.type || 'choice'; window.__lastQ = Q;
   const id = Q.skill, sk = SKILLS[id] || { name: '', subj: 'thinking' };
   G.edu.discover(id);
+  G.state.stats.lessons = (G.state.stats.lessons || 0) + 1;
   const settings = G.state.settings || {};
   let tries = 0;
   return UI.sheet(title, (close) => {

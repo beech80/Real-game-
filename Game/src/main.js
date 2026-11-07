@@ -20,6 +20,7 @@ import { buildInterior, BUILDING_ROOMS, ROOM } from './interiors.js';
 import { MapView } from './mapview.js';
 import { installEvents } from './events.js';
 import { scatterFlora, updateLook } from './lookfx.js';
+import { schoolFromLink, enableSchool, teacherDashboard } from './school.js';
 import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
@@ -169,6 +170,7 @@ function title() {
   T.hidden = false;
   $('#btn-continue').hidden = !save;
   if (save) $('#btn-continue').querySelector('small').textContent = `${save.name} · Day ${save.day} · ${money(save.money)}`;
+  $('#btn-teacher').onclick = () => { audio.play('click'); teacherDashboard(); };
   $('#btn-new').onclick = () => { audio.start(); audio.play('click'); T.hidden = true; creator(); };
   $('#btn-continue').onclick = () => { audio.start(); audio.play('click'); T.hidden = true; startGame(save, false); };
 }
@@ -255,7 +257,8 @@ async function startGameInner(state, isNew) {
     DISTRICTS, HOMES, VEHICLES, PET_TYPES, WORK, CAREERS, COURSES,
     peers: () => (game.state.settings && game.state.settings.noNeighbors ? null : neighbors && neighbors.room ? neighbors.count : null), emote: (i) => { if (neighbors) neighbors.emote(i); player.ch.oneShot && player.ch.oneShot('Wave'); UI.toast(['👋', '🎉', '👍', '💡'][i], 'info', 1200); },
   });
-  neighbors = new Neighbors(scene); neighbors.connect();
+  { const sc = schoolFromLink(); if (sc && !(state.school && state.school.on)) enableSchool(game, sc); }   // #school=CLASS in the link
+  neighbors = new Neighbors(scene); if (!(state.settings && state.settings.noNeighbors)) neighbors.connect();
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
   $('#btn-sprint').onclick = (e) => { input.sprintLatch = !input.sprintLatch; e.currentTarget.classList.toggle('on', input.sprintLatch); };
@@ -906,6 +909,7 @@ function loop(now) {
   if (adapted) UI.toast(`Graphics set to ${adapted} for smoother play (change in 📱 Settings)`, 'info', 3500);
   const s = game.state;
   const playing = mode === 'play' && !busy();
+  if (mode === 'play') s.stats.playSecs = (s.stats.playSecs || 0) + Math.min(dt, 1);
   if (playing) game.tick(dt / 360 * (s.timeScale || 1));   // 1 real minute ≈ 10 game minutes
   const apt = s.location === 'apartment', club = s.location === 'club' && !!W.club, DD = W.d[s.location], IR = curRoom();
   const gfn = DD ? (x, y) => districtHeight(x, y, DD.def) : apt || club || IR ? () => 0 : groundAt;
