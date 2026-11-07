@@ -130,7 +130,7 @@ let p;
     if ((await S(() => window.REAL.state.pet.fed)) !== (await S(() => window.REAL.state.day))) fail('feeding the pet did not work');
     await p.click('#btn-phone'); await sleep(700); await pickIn('Home'); await pickIn('Play'); await sleep(600);
     if (!((await S(() => window.REAL.state.pet.bond)) > pet.bond)) fail('playing with the pet did not raise the bond');
-    await ev(() => document.querySelectorAll('#modal .modal').forEach((m) => m.remove()));
+    for (let k = 0; k < 6 && await vis('#modal .modal'); k++) { await ev(() => { const x = [...document.querySelectorAll('#modal .modal')].pop().querySelector('.sh-x'); if (x) x.click(); }); await sleep(400); }
     await ev(() => window.REAL.game().hooks.exitApartment()); await sleep(2500); await play([], 20);
   }
 
@@ -149,7 +149,7 @@ let p;
   await p.click('#btn-phone'); await sleep(700); await pickIn('Business'); await sleep(500);
   await pickIn('plan'); await sleep(500); await play([], 10);
   for (let k = 0; k < 6; k++) { const a = await S(() => window.__planAns); if (!a || !(await vis('.sheet .opt'))) break; await ev((t) => { const b = [...document.querySelectorAll('#modal .modal:last-child .opt')].find((x) => x.textContent === t); if (b) b.click(); }, a); await sleep(700); }
-  await ev(() => document.querySelectorAll('#modal .modal').forEach((m) => m.remove()));
+  for (let k = 0; k < 6 && await vis('#modal .modal'); k++) { await ev(() => { const x = [...document.querySelectorAll('#modal .modal')].pop().querySelector('.sh-x'); if (x) x.click(); }); await sleep(400); }
   console.log('  plan written:', await S(() => !!window.REAL.state.achievements.plan));
   if (!(await S(() => window.REAL.state.achievements.plan))) fail('could not write a business plan in the Business app');
   await usePlace('opportunity', 'sbc'); await pickIn('Small Business Center'); await sleep(500);
