@@ -520,14 +520,14 @@ export const PRACTICE = {
   'read.main': () => ({ q: '“The park cleanup is Saturday at 9. Bring gloves. Snacks provided.” Main idea?', a: 'There is a park cleanup on Saturday', o: ['There is a park cleanup on Saturday', 'Snacks are free', 'You need gloves for everything'] }),
   'read.documents': () => ({ q: 'Lease: “Rent is due on the 1st. A $25 fee applies after the 5th.” You pay on the 4th. Fee?', a: 'No fee', o: ['No fee', '$25 fee', '$5 fee'] }),
   'write.sentences': () => ({ q: 'Which is a complete, correct sentence?', a: 'Their apartment is near the park.', o: ['Their apartment is near the park.', 'there apartment near park', 'Near the park, their.'] }),
-  'write.professional': () => ({ q: 'Best way to start a message to your manager?', a: 'Hello Rosa, I wanted to ask about Saturday’s shift.', o: ['Hello Rosa, I wanted to ask about Saturday’s shift.', 'yo whats up', 'SATURDAY???'] }),
+  'write.professional': () => ({ q: 'Best way to start a message to your manager?', a: 'Hello Rosa, I wanted to ask about Saturday’s shift.', o: ['Hello Rosa, I wanted to ask about Saturday’s shift.', 'yo rosa whats up with saturday', 'SATURDAY??? Need to talk!!!', 'Hey, so about that Saturday shift thing I have'] }),
   'fin.needs': () => ({ q: 'Which is a need?', a: 'Groceries for the week', o: ['Groceries for the week', 'A second pair of sneakers', 'Concert tickets'] }),
   'fin.budget': () => ({ q: 'You earn $200 this week. Using 50/30/20, how much goes to savings?', a: '$40', o: ['$40', '$100', '$60', '$20'] }),
-  'fin.bills': () => ({ q: 'Your phone bill is due Day 5. When is the safest day to pay?', a: 'On or before Day 5', o: ['On or before Day 5', 'Day 7', 'Whenever'] }),
-  'fin.credit': () => ({ q: 'What is interest on a credit card?', a: 'Extra money you pay for borrowing', o: ['Extra money you pay for borrowing', 'A free bonus', 'Your credit limit'] }),
+  'fin.bills': () => ({ q: 'Your phone bill is due Day 5. When is the safest day to pay?', a: 'On or before Day 5', o: ['On or before Day 5', 'On Day 7', 'Whenever you can', 'After Day 5'] }),
+  'fin.credit': () => ({ q: 'What is interest on a credit card?', a: 'Extra money you pay for borrowing', o: ['Extra money you pay for borrowing', 'A free bonus for using the card', 'The most you are allowed to spend', 'A fee for opening a new card'] }),
   'think.compare': () => ({ q: 'Diner burger $11.50 (1 meal) vs. rice & beans $2.89 (4 meals). Which costs less per meal?', a: 'Rice & beans', o: ['Rice & beans', 'The burger', 'They’re the same'] }),
   'think.evaluate': () => ({ q: 'An ad says “9 out of 10 people love Star Bites!” What should you ask first?', a: 'Who asked them, and how many people?', o: ['Who asked them, and how many people?', 'What color is the box?', 'Nothing, it must be true'] }),
-  'think.opportunity': () => ({ q: 'If you spend $40 on a hoodie, what is the opportunity cost?', a: 'Whatever else that $40 could have paid for', o: ['Whatever else that $40 could have paid for', 'Nothing', 'The hoodie'] }),
+  'think.opportunity': () => ({ q: 'If you spend $40 on a hoodie, what is the opportunity cost?', a: 'Whatever else that $40 could have paid for', o: ['Whatever else that $40 could have paid for', 'Nothing, since you wanted the hoodie', 'The hoodie itself and its $40 price', 'The $40 plus the tax you paid'] }),
 };
 /** “Words I know”: every lesson word the learner has tapped and learned. Tap to see them with their meanings. */
 function wordsLine(G) {

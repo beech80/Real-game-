@@ -275,7 +275,7 @@ export const MORE_GEN = {
   'read.story': [() => { const story = pick([
     { t: ['Pip the puppy lived on a farm.', 'One stormy night, Pip got lost in the corn field.', 'Pip followed the barn light and found her way home.'], q: 'What is the problem in the story?', a: 'Pip got lost in the corn field', o: ['Pip lived on a farm', 'Pip found her way home', 'The barn had a light'] },
     { t: ['Maya opened a lemonade stand in Brighter Park.', 'On the first hot day, she ran out of cups.', 'Her neighbor brought more cups and they sold out by noon.'], q: 'What is the setting?', a: 'Brighter Park on a hot day', o: ['A snowy mountain', 'Maya’s kitchen at night', 'A school bus'] },
-    { t: ['Leo the turtle wanted to win the race.', 'He was slower than everyone.', 'He kept going steadily and crossed the line first when the others stopped to rest.'], q: 'How is the problem solved?', a: 'Leo kept going steadily', o: ['Leo took a nap', 'Leo quit', 'Leo flew'] }]);
+    { t: ['Leo the turtle wanted to win the race.', 'He was slower than everyone.', 'He kept going steadily and crossed the line first when the others stopped to rest.'], q: 'How is the problem solved?', a: 'Leo kept going steadily', o: ['Leo took a long nap', 'Leo stopped to rest', 'Leo got a ride'] }]);
     return ch('read.story', story.q, story.a, story.o, 'Characters are who. The setting is where and when. The problem is what goes wrong. The solution is how it gets fixed.', doc('STORY', story.t)); }],
   'read.wordparts': [bank('read.wordparts', [
     ['What does “unhappy” mean?', 'Not happy', ['Very happy', 'Happy again', 'Full of happy'], 'The prefix un- means not: un + happy = not happy.'],
