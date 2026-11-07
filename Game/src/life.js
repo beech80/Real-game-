@@ -12,7 +12,10 @@ const cap = (v) => Math.max(0, Math.min(10, Math.round(v * 10) / 10));
 export function lifeScores(s, edu) {
   const st = s.stats, f = s.flags;
   const paidOnTime = s.bills.filter((b) => b.paid && !b.lateFee).length + (st.billsOnTime || 0);
-  const savings = s.money;
+  // net worth: everything you have minus everything you owe (saving or investing never lowers it)
+  const P = s.portfolio || {}, owe = s.bills.filter((b) => !b.paid).reduce((a, b) => a + b.amount, 0) + ((s.biz && s.biz.loan) || 0);
+  const equity = s.home === 'owned' && s.mortgage ? 120000 - s.mortgage.bal : 0;   // what you'd keep if you sold the home
+  const savings = s.money + (s.savings || 0) + (P.safe || 0) + (P.mixed || 0) + (P.risky || 0) + equity - owe;
   const friends = Object.values(s.friends || {}).reduce((a, v) => a + v, 0);
   return {
     // tuned with a full natural playthrough (tests/playthrough.cjs): each area should grow over one to two weeks of play
@@ -21,7 +24,7 @@ export function lifeScores(s, edu) {
     financial: cap(paidOnTime * 0.8 + (savings >= 100 ? 1 : 0) + (savings >= 300 ? 1.5 : 0) + (savings >= 500 ? 1.5 : 0) - (st.lateFees || 0) + (st.budgetsPlanned || 0) * 0.3),
     health: cap((st.mealsCooked || 0) * 0.5 + (st.workouts || 0) * 0.5 + (st.goodNights || 0) * 0.4 + (st.mealsEaten || 0) * 0.15),
     decisions: cap((st.wiseChoices || 0) * 1.5 + (st.thoughtThrough || 0) * 1 + Object.keys(edu.s.skills || {}).filter((id) => /^think\./.test(id) && edu.state(id) >= 3).length * 0.6),   // critical-thinking skills count too
-    independence: cap((f.housed ? 2 : 0) + (f.hired ? 2 : 0) + (st.rentPaidSelf || 0) * 2 + Math.min(4, (st.daysIndependent || 0) * 0.5) + (s.vehicle ? 1 : 0) + ({ loft: 1, heights: 2, owned: 3 }[s.home] || 0)),
+    independence: cap((f.housed ? 2 : 0) + (f.hired ? 2 : 0) + (st.rentPaidSelf || 0) * 2 + Math.min(4, (st.daysIndependent || 0) * 0.5) + (s.vehicle && !s.bills.some((b) => /^(veh|repair)/.test(b.id) && b.lateFee) ? 0.5 : 0) + (s.home && s.home !== 'starter' && !s.bills.some((b) => /^rent/.test(b.id) && b.lateFee) ? 1.5 : 0)),
     relationships: cap(friends * 0.35 + (s.pet ? s.pet.bond * 0.3 : 0)),
     reputation: cap((st.perfectShifts || 0) * 1.2 + (st.shifts || 0) * 0.4 - (st.thefts || 0) * 3),
     entrepreneurship: cap((st.businessSteps || 0) * 2 + (s.biz ? 1 + s.biz.days * 0.3 + Math.max(0, s.biz.profit) / 250 + s.biz.staff.length : 0)),

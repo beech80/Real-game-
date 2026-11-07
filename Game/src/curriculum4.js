@@ -229,7 +229,7 @@ export const EXTRA_GEN2 = {
     ['Why might two primary sources disagree?', 'People saw the event from different points of view', ['One must be fake', 'History doesn’t happen', 'They never disagree'], 'Perspective shapes what people record.'],
     ['Which is the best way to understand a historical event?', 'Compare several sources', ['Read one website', 'Guess', 'Ask one friend'], 'Multiple sources give a fuller picture.']])],
   'soc.civics': [bank('soc.civics', [
-    ['Who can vote in U.S. national elections?', 'Citizens 18 and older who are registered', ['Anyone of any age', 'Only mayors', 'Only people with cars'], 'Voting rules require citizenship, age 18+ and registration.'],
+    ['Who can vote in U.S. national elections?', 'U.S. citizens 18 and older who are registered (North Dakota has no registration)', ['Anyone of any age', 'Only mayors', 'Only people who own a home'], 'You must be a citizen and 18 by Election Day, and register in every state except North Dakota. Some states let 17-year-olds pre-register.'],
     ['What is a “candidate”?', 'A person running for office', ['A voter', 'A ballot box', 'A law'], 'Candidates ask for your vote.'],
     ['What is a veto?', 'When a leader rejects a bill', ['A type of vote count', 'A new law', 'A party'], 'Lawmakers can sometimes override a veto.'],
     ['How can citizens tell lawmakers what they think?', 'Write, call, or speak at public meetings', ['They can’t', 'Only by shouting', 'Only through Jax'], 'Lawmakers represent the people.'],
@@ -242,7 +242,7 @@ export const EXTRA_GEN2 = {
     ['What is a “supply chain”?', 'All the steps that bring a product from raw materials to you', ['A bike chain', 'A store line', 'A necklace'], 'Farms, factories, ships, trucks and stores form a chain.']])],
   'soc.policy': [bank('soc.policy', [
     ['A city raises taxes to fix roads. Who benefits?', 'Drivers, bus riders and businesses using the roads', ['Nobody', 'Only the mayor', 'Only tourists'], 'Name who gains and who pays.'],
-    ['What is a public good?', 'Something everyone can use, like streetlights or parks', ['A private car', 'A phone', 'A secret'], 'Public goods are often paid for with taxes.'],
+    ['What is a public good?', 'Something one person’s use doesn’t use up, and no one can easily be kept from, like streetlights or national defense', ['A private car', 'A phone you bought', 'Any item sold in a store'], 'Streetlights light the street for everyone at once, and you can’t charge each person who walks by. So governments usually pay for them with taxes.'],
     ['Why do governments hold public hearings?', 'To hear from people affected by a decision', ['To waste time', 'To hide decisions', 'For music'], 'Listening improves decisions.'],
     ['A policy helps one neighborhood but raises costs for another. What is fair?', 'Weigh both and look for ways to reduce harm', ['Ignore the second', 'Cancel everything', 'Flip a coin'], 'Good policy considers everyone.'],
     ['What evidence would show a new bus policy worked?', 'More riders and shorter waits after it started', ['A nice logo', 'One happy tweet', 'The mayor says so'], 'Measure results against goals.']])],
@@ -357,7 +357,7 @@ export const EXTRA_GEN2 = {
     ['Is it OK to use your real photo as a game avatar with strangers?', 'Better to use a cartoon avatar', ['Yes, always', 'Only with your address', 'Only at night'], 'Protect your identity online.']])],
   'tech.passwords': [bank('tech.passwords', [
     ['Which is the weakest password?', '123456', ['Blue!Tiger_Runs7', 'Pizza-Moon-88!', 'Rain#Drop#Lake4'], 'Short, common passwords are guessed in seconds.'],
-    ['What is two-step verification?', 'A second check, like a code texted to you', ['Typing your password twice', 'Two passwords on paper', 'Logging in twice a day'], 'It stops thieves even if they know your password.'],
+    ['What is two-step verification?', 'A second check, like a code texted to you', ['Typing your password twice', 'Two passwords on paper', 'Logging in twice a day'], 'It makes it much harder for thieves to get in, even if they know your password. Never share the code with anyone.'],
     ['Where is a bad place to keep passwords?', 'On a sticky note on your screen', ['In a password manager', 'Memorized', 'With a parent'], 'Visible passwords can be seen by anyone.'],
     ['A website asks you to create a password using your birthday. Why is that weak?', 'Birthdays are easy to find or guess', ['Birthdays are too long', 'It’s strong', 'Websites ban it'], 'Avoid personal info in passwords.'],
     ['How often should you change a password that might have leaked?', 'Right away', ['Never', 'Once every 10 years', 'Only if you forget it'], 'Change leaked passwords immediately.']])],
@@ -390,7 +390,7 @@ export const EXTRA_GEN2 = {
     ['A quiz asks your pet’s name and your first school. Why be careful?', 'Those are common security-question answers', ['Quizzes are always safe', 'It’s just fun', 'They need it'], 'Scammers use quizzes to guess passwords.']])],
   'tech.internet': [bank('tech.internet', [
     ['What is a web browser?', 'An app for viewing websites', ['A search engine only', 'A cable', 'A virus'], 'Chrome, Safari and Firefox are browsers.'],
-    ['What does “https” at the start of a web address mean?', 'The connection is encrypted (more secure)', ['The site is free', 'The site is fast', 'Nothing'], 'The “s” means secure.'],
+    ['What does “https” at the start of a web address mean?', 'The connection is encrypted, but the site could still be a scam', ['The site is honest and safe to pay', 'The site is free', 'The site is fast'], 'The “s” means your data is scrambled on the way. It does not prove who runs the site: scam sites use https too.'],
     ['What is the “cloud”?', 'Data stored on servers you reach over the internet', ['Rain clouds', 'Your phone only', 'A printer'], 'Cloud storage lives on remote computers.'],
     ['What is a router?', 'A device that directs internet traffic in your home', ['A map app', 'A keyboard', 'A charger'], 'It connects your devices to the internet.'],
     ['What is an IP address?', 'A number that identifies a device on a network', ['A home address', 'A password', 'An email'], 'Like a mailing address for computers.']])],

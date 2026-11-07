@@ -161,7 +161,7 @@ export const TOPUP_GEN = {
     ['Why do wheelchair ramps zig-zag?', 'A longer path makes the slope gentler', ['To look nice', 'To be faster', 'No reason'], 'Longer ramps need less force.']])],
   'sci.heat': [bank('sci.heat', [
     ['Why does a metal spoon in hot soup get hot?', 'Metal conducts heat', ['Soup is magic', 'Spoons make heat', 'It doesn’t'], 'Heat moves through conductors.'],
-    ['Steam can burn you because…', 'It’s hotter than boiling water', ['It’s cold', 'It’s just air', 'It isn’t dangerous'], 'Steam carries a lot of heat.']])],
+    ['Why can steam burn worse than boiling water at the same temperature?', 'When steam touches skin it turns back into water and releases extra heat', ['Steam is always much hotter than 100 °C', 'Steam is made of fire', 'It can’t: steam is harmless'], 'Turning water into steam takes lots of energy. When steam condenses on your skin, it gives that energy back as heat.']])],
   'sci.materials': [bank('sci.materials', [
     ['Which is the best material for a rope?', 'Strong, flexible fibers like nylon', ['Glass', 'Clay', 'Paper'], 'Ropes must bend and hold weight.'],
     ['Why are tires made of rubber?', 'Rubber grips the road and absorbs bumps', ['Rubber is shiny', 'Rubber is heavy', 'Rubber is cheap only'], 'Choose materials for their properties.']])],
@@ -199,7 +199,7 @@ export const TOPUP_GEN = {
     ['Why is your take-home pay less than what you earned?', 'Taxes are taken out first', ['The bank keeps a tip', 'It’s a mistake', 'Your boss forgot'], 'Income tax is withheld from each paycheck.'],
     ['What does insurance protect you from?', 'Big costs from accidents or illness', ['All bills', 'Taxes', 'Bad weather only'], 'You pay a little regularly to avoid a huge cost later.'],
     ['A $40 item has 5% sales tax. What is the total?', '$42', ['$45', '$40', '$40.05'], '5% of $40 = $2, so $40 + $2 = $42.'],
-    ['Who files a tax return?', 'People who earn income, once a year', ['Only kids', 'Nobody', 'Only stores'], 'A tax return reports what you earned and paid.']])],
+    ['You earned $3,000 at a summer job and tax was taken from each paycheck. Why might you file a tax return even if you don’t have to?', 'To get back tax that was withheld but not owed (a refund)', ['Filing makes you owe more', 'Only adults over 25 can file', 'Tax returns are only for businesses'], 'Under a certain income you may not have to file, but if tax was withheld, filing is how you get your refund.']])],
   'read.compare': [bank('read.compare', [
     ['Lease A: $600/month, pets OK. Lease B: $550/month, no pets. You have a cat. Which fits?', 'Lease A', ['Lease B', 'Neither', 'Both'], 'Compare the detail that matters most to you: pets.'],
     ['Phone plan A: $25 for 5 GB. Plan B: $30 for unlimited. You use about 3 GB. Which is the better deal?', 'Plan A', ['Plan B', 'They’re the same', 'Neither'], 'Plan A covers what you use for less.'],
