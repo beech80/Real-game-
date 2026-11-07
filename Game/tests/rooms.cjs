@@ -33,7 +33,7 @@ let step = 0, p;
         let el = ch[0];
         if (choiceText) for (const c of ch) if ((await c.textContent()).includes(choiceText)) el = c;
         await el.click();
-      } else { await p.click('#dialog .d-text'); await p.click('#dialog .d-next'); }
+      } else { await p.$eval('#dialog .d-text', (e) => e.click()); await p.click('#dialog .d-next'); }
     }
   };
   const waitIdle = async (ms = 60000) => { await p.waitForFunction(() => document.querySelector('#caption').hidden && document.querySelector('#dialog').hidden, null, { timeout: ms }); };
@@ -50,7 +50,7 @@ let step = 0, p;
       if (await vis('#dialog')) {
         const ch = await p.$$('#dialog .d-choice');
         if (ch.length) { let el = ch[0]; if (opts.choice) for (const c of ch) if ((await c.textContent()).includes(opts.choice)) el = c; await el.click(); }
-        else { await p.click('#dialog .d-text').catch(() => {}); await p.click('#dialog .d-next').catch(() => {}); }
+        else { await p.$eval('#dialog .d-text', (e) => e.click()).catch(() => {}); await p.click('#dialog .d-next').catch(() => {}); }
         idle = 0; continue;
       }
       const tops = await p.$$('#modal .modal'); const top = tops[tops.length - 1];

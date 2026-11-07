@@ -30,7 +30,7 @@ let p;
       if (await vis('#dialog')) {
         const ch = await p.$$('#dialog .d-choice');
         if (ch.length) { let el = ch[0]; if (want) for (const c of ch) { const t = await c.textContent(); if (want.some((w) => t.includes(w))) { el = c; break; } } await el.click(); }
-        else { await p.click('#dialog .d-text').catch(() => {}); await p.click('#dialog .d-next').catch(() => {}); }
+        else { await p.$eval('#dialog .d-text', (e) => e.click()).catch(() => {}); await p.click('#dialog .d-next').catch(() => {}); }
         idle = 0; continue;
       }
       const tops = await p.$$('#modal .modal'); const top = tops[tops.length - 1];

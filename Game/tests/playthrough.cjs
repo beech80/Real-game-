@@ -58,7 +58,7 @@ let seed = 7; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483
         const texts = await Promise.all(ch.map((c) => c.textContent()));
         let i = 0; const rebuild = texts.findIndex((t) => /Rebuild/.test(t)); if (rebuild >= 0) i = rebuild; else if (rand() < 0.25) i = Math.floor(rand() * ch.length);
         T.dialog += 6; await ch[i].click().catch(() => {});
-      } else { T.dialog += 3.5; await p.click('#dialog .d-text').catch(() => {}); await p.click('#dialog .d-next').catch(() => {}); }
+      } else { T.dialog += 3.5; await p.$eval('#dialog .d-text', (e) => e.click()).catch(() => {}); await p.click('#dialog .d-next').catch(() => {}); }
       await sleep(250); return true;
     }
     const m = await top(); if (!m) return false;

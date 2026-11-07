@@ -33,7 +33,7 @@ let step = 0, p;
         let el = ch[0];
         if (choiceText) for (const c of ch) if ((await c.textContent()).includes(choiceText)) el = c;
         await el.click();
-      } else { await p.click('#dialog .d-text'); await p.click('#dialog .d-next'); }
+      } else { await p.$eval('#dialog .d-text', (e) => e.click()); await p.click('#dialog .d-next'); }
     }
   };
   const waitIdle = async (ms = 60000) => { await p.waitForFunction(() => document.querySelector('#caption').hidden && document.querySelector('#dialog').hidden, null, { timeout: ms }); };
@@ -53,7 +53,7 @@ let step = 0, p;
       if (await vis('#dialog')) {
         const ch = await p.$$('#dialog .d-choice');
         if (ch.length) { let el = ch[0]; if (want) for (const c of ch) { const t = await c.textContent(); if (want.some((w) => t.includes(w))) { el = c; break; } } await el.click(); }
-        else { await p.click('#dialog .d-text').catch(() => {}); await p.click('#dialog .d-next').catch(() => {}); }
+        else { await p.$eval('#dialog .d-text', (e) => e.click()).catch(() => {}); await p.click('#dialog .d-next').catch(() => {}); }
         idle = 0; continue;
       }
       const tops = await p.$$('#modal .modal'); const top = tops[tops.length - 1];
@@ -109,7 +109,7 @@ let step = 0, p;
   console.log('build', await S(() => JSON.stringify(window.REAL.state.builds.car)), 'race stage', await S(() => window.REAL.state.adv.race.stage));
   // race: screenshot mid-race
   await ev(() => { window.__t = window.REAL.game().advTalk('race'); });
-  for (let k = 0; k < 400; k++) { await sleep(300); if (await ev(() => window.REAL.mini())) break; if (await vis('#dialog')) { const ch = await p.$$('#dialog .d-choice'); if (ch.length) { let el = ch[0]; for (const c of ch) if (/Race the|Race as is/.test(await c.textContent())) el = c; await el.click(); } else { await p.click('#dialog .d-text').catch(() => {}); await p.click('#dialog .d-next').catch(() => {}); } } }
+  for (let k = 0; k < 400; k++) { await sleep(300); if (await ev(() => window.REAL.mini())) break; if (await vis('#dialog')) { const ch = await p.$$('#dialog .d-choice'); if (ch.length) { let el = ch[0]; for (const c of ch) if (/Race the|Race as is/.test(await c.textContent())) el = c; await el.click(); } else { await p.$eval('#dialog .d-text', (e) => e.click()).catch(() => {}); await p.click('#dialog .d-next').catch(() => {}); } } }
   await sleep(9000); await shot('race_running'); console.log('race state', await S(() => JSON.stringify(window.REAL.raceState())));
   await play(['Race as is'], 300); await ev(() => window.__t);
   console.log('after race: stage', await S(() => window.REAL.state.adv.race.stage), 'best', await S(() => window.REAL.state.adv.race.best), 'money', await S(() => window.REAL.state.money));

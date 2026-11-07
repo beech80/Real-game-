@@ -20,7 +20,7 @@ let step = 0;
   const shot = async (n) => { step++; await p.screenshot({ path: path.join(OUT, `${process.env.DEVICE ? 'p' : ''}story_${String(step).padStart(2, '0')}_${n}.png`), timeout: 120000 }); console.log('✓', n); };
   const ev = (f, a) => p.evaluate(f, a);
   const interact = async (key, where) => { await ev(([k, w]) => window.REAL.teleport(k, w), [key, where || 'district']); await sleep(700); await p.click('#btn-interact', { timeout: 45000 }); await sleep(500); };
-  const nextDialog = async (choice) => { for (let i = 0; i < 8; i++) { if (await p.isHidden('#dialog')) return; const c = await p.$$('#dialog .d-choice'); if (c.length) { await c[choice ?? 0].click(); } else { await p.click('#dialog .d-text'); await p.click('#dialog .d-next'); } await sleep(400); } };
+  const nextDialog = async (choice) => { for (let i = 0; i < 8; i++) { if (await p.isHidden('#dialog')) return; const c = await p.$$('#dialog .d-choice'); if (c.length) { await c[choice ?? 0].click(); } else { await p.$eval('#dialog .d-text', (e) => e.click()); await p.click('#dialog .d-next'); } await sleep(400); } };
 
   await p.goto(`http://localhost:${srv.address().port}/index.html`);
   await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });

@@ -34,7 +34,7 @@ let step = 0, p;
         let el = ch[0];
         if (choiceText) for (const c of ch) if ((await c.textContent()).includes(choiceText)) el = c;
         await el.click();
-      } else { await p.click('#dialog .d-text'); await p.click('#dialog .d-next'); }
+      } else { await p.$eval('#dialog .d-text', (e) => e.click()); await p.click('#dialog .d-next'); }
     }
   };
   const waitIdle = async (ms = 60000) => { await p.waitForFunction(() => document.querySelector('#caption').hidden && document.querySelector('#dialog').hidden, null, { timeout: ms }); };
