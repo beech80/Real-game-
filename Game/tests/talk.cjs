@@ -55,7 +55,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await p.screenshot({ path: path.join(OUT, 'talk_reason.png'), timeout: 180000 });
   for (let i = 0; i < 4 && await p.isVisible('#modal .modal'); i++) { await p.$eval('#modal .modal:last-child .sh-x', (e) => e.click()).catch(() => {}); await sleep(600); }
   // 3) the Talk log keeps the line; choosing a word finds it
-  await p.click('#btn-phone'); await sleep(1200);
+  await ev(() => { if (document.activeElement) document.activeElement.blur(); }); await p.keyboard.press('KeyP'); await sleep(1500);
   if (!(await p.isVisible('#modal .phone'))) fail('phone did not open');
   await p.$$eval('#modal .app', (els) => { const a = els.find((e) => /Talks/.test(e.textContent)); if (a) a.click(); });
   await sleep(1000);
