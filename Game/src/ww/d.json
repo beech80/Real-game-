@@ -1,0 +1,1733 @@
+{
+ "You see smoke coming from under a door. What do you do first?": {
+  "Open the door to look inside": "Fire may be just past that door. Heat and smoke can rush out at you.",
+  "Hide in a closet and wait": "Fire can reach you there. No one will know where you are.",
+  "Go back and get your toys": "Toys can be got again, but you can't. Do not go back in."
+ },
+ "🔪 How should you pass scissors or a knife?": {
+  "Point first, held out": "A sharp tip held out could stab your friend.",
+  "Toss it to the person": "A tossed blade can cut a hand. It could hit a foot.",
+  "Hand it over open": "Open blades can cut the hand that takes them."
+ },
+ "🧴 You find an unlabeled bottle. What should you do?": {
+  "Smell it to find out what it is": "Some smells can make you sick, so don't sniff it.",
+  "Taste a tiny drop to check": "Even a tiny taste of some things can hurt you.",
+  "Mix it with soap and water": "Mixing things can make a gas that hurts you."
+ },
+ "🚨 What does a fire alarm mean?": {
+  "Hide under your desk until it stops": "A desk keeps you in the place with the fire.",
+  "Finish your work, then go outside": "Work can wait. Every second counts when there's a fire.",
+  "Take the elevator down to get out": "Fire can stop a lift and trap you inside."
+ },
+ "🔥 The pan catches fire on the stove. What is safest?": {
+  "Throw water on it right away": "Water can make hot oil jump and spread the fire.",
+  "Carry the pan outside fast": "The fire can spill on you as you run.",
+  "Blow on it to put it out": "Air feeds a fire, so it may grow bigger."
+ },
+ "🦺 Why do builders wear hard hats?": {
+  "To look like a team at work": "Looks don't keep a head safe on a job site.",
+  "To keep their heads warm": "A hard hat is not for warmth. Think of what might fall.",
+  "To hold their pens and tools": "A hard hat is not for tools. Think about what it guards."
+ },
+ "🔌 What should you never do with a plug?": {
+  "Hold it by the plug": "Hold the plug to pull it out. That is safe.",
+  "Unplug it when done": "That is a smart, safe thing to do. The question asks what NOT to do.",
+  "Keep it dry": "Dry is safe. Think of what makes plugs risky."
+ },
+ "In a science activity, why do we wear goggles?": {
+  "To help us see better in a dark room": "Goggles don't light up a dark room. Think of what can fly up.",
+  "So we look more like real scientists": "Goggles are not for looks. They have a real job.",
+  "Only on days when the sun is bright": "We wear them on all lab days, sun or not."
+ },
+ "You spill water on the floor during an experiment. What should you do?": {
+  "Leave it, since water dries by itself": "A wet floor is slick. You or a friend could fall.",
+  "Keep working and step around it": "Others may not see it. They could slip and fall.",
+  "Hide it with paper so no one sees": "Paper hides the spill but the floor is still slick."
+ },
+ "Should you taste or smell things in a science lab?": {
+  "Yes, tasting is how we test things": "Tasting can make you sick. Scientists test in safe ways.",
+  "Yes, smell everything up close": "Some smells can hurt your nose or make you sick.",
+  "Smell it close up if it looks safe": "Looks can fool you. Things that look safe can still harm you."
+ },
+ "Why do we tie back long hair near a flame?": {
+  "So we can see the flame": "You can see the flame just fine. The risk is your hair.",
+  "It makes the flame bigger": "Your hair does not change how big the flame is.",
+  "It keeps your hair clean": "Clean hair is not the point. Think about the flame."
+ },
+ "Your puppy is tired and slow at practice. What does it most likely need?": {
+  "More running": "A tired pup needs to stop, not run more.",
+  "A bigger collar": "A collar won't help a pup that is worn out.",
+  "Louder commands": "Loud words won't give a tired pup more pep."
+ },
+ "🐰 Which food is best for a rabbit?": {
+  "Chocolate and cookies": "Chocolate can make a rabbit sick. Cookies are too sweet.",
+  "Candy and cake": "Sweets are bad for a rabbit's teeth and belly.",
+  "Chips and crackers": "Salty snacks are not good food for a rabbit."
+ },
+ "A pet is hiding and won’t eat for days. What should you do?": {
+  "Ignore it": "A pet that hides and won't eat may be sick. It needs help.",
+  "Give it candy": "Candy is bad for pets. It won't fix what is wrong.",
+  "Yell at it": "Yelling scares a pet. It does not help it get well."
+ },
+ "🐶 Your dog is panting hard on a hot day. What does it need?": {
+  "A long run outside": "Running in the heat could make it too hot.",
+  "A warm sweater": "A sweater will make a hot dog even hotter.",
+  "A big meal right now": "Food won't help it cool off right now."
+ },
+ "🐱 A cat needs…": {
+  "Toys and a bed, and that is all": "A bed and toys are nice. But a cat needs more.",
+  "Food once a week": "A cat must eat each day, not once a week.",
+  "Milk and a big yard": "Milk can upset a cat's belly. A yard is not enough."
+ },
+ "🐟 Where does a fish need to live?": {
+  "In a dry box": "A fish can't breathe out of water.",
+  "In a tree": "Fish don't live in trees. They need to swim.",
+  "In sand": "A fish can't swim or breathe in sand."
+ },
+ "Why do pets need exercise?": {
+  "To make them sleep all day": "Rest is good. But that is not why pets run.",
+  "To make them get dirty": "Getting dirty is not the goal of play.",
+  "To help them grow fur": "Running does not make fur grow."
+ },
+ "What do all animals need to live?": {
+  "Only food and a warm bed": "Animals need more than that, like air and water.",
+  "Food and water, but not air": "All animals need air to breathe.",
+  "Just sunlight, like plants": "Plants use sunlight to make food. Animals must eat food."
+ },
+ "Why do some birds fly south when winter is coming?": {
+  "To find a new place to sleep": "Birds can sleep in lots of places. Think of what winter takes away.",
+  "Because their feathers fall off": "Birds keep their feathers when they fly south.",
+  "To get away from the rain": "Rain comes in the south too. Think of food and cold."
+ },
+ "A snowshoe hare has brown fur in summer and white fur in winter. How does this help it?": {
+  "It helps it run faster in the snow": "Fur color doesn't change how fast its legs move.",
+  "It changes color because it is cold": "Cold is not the reason. Think of who might be hunting it.",
+  "White fur keeps it warm, that is all": "White fur does not keep it warmer than brown fur."
+ },
+ "Which animal is a mammal?": {
+  "A shark": "A shark is a fish. It breathes with gills.",
+  "A frog": "A frog is an amphibian. It starts life in water as a tadpole.",
+  "A lizard": "A lizard is a reptile with dry scales."
+ },
+ "You find muddy paw prints leading to the back door. What is an observation (not a guess)?": {
+  "A dog came in and took the cake": "That is a guess. You did not see a dog take the cake.",
+  "The cat walked in from the yard": "That is a guess. You did not see a cat walk in.",
+  "Someone let a pet in this morning": "That is a guess. You did not see who let a pet in."
+ },
+ "Which is an observation?": {
+  "The tree is sad": "Trees don't feel sad. That is a guess, not what you see.",
+  "Someone hurt the tree": "That is a guess. You can't see that someone hurt it.",
+  "Trees hate fall": "Trees don't hate things. That is not something you can see."
+ },
+ "Which senses can you use to observe?": {
+  "Only your eyes, to see what is there": "Eyes are one sense, but you have more than that.",
+  "Only your hands, to touch each thing": "Hands are one sense, but you have more than that.",
+  "Guessing what it might be like inside": "A guess is not a sense. Senses are how you take things in."
+ },
+ "You see wet foot marks by the door. What do you know for sure?": {
+  "A big dog came in from outside": "You did not see a dog. That is a guess.",
+  "Sam spilled a cup of water": "You did not see Sam spill. That is a guess.",
+  "It is raining hard outside": "You did not look outside. Rain is just a guess."
+ },
+ "What tool helps you observe tiny things?": {
+  "A hammer and a nail": "A hammer and nail build things. They don't help you see.",
+  "A spoon from the kitchen": "A spoon is for food. It does not make things look big.",
+  "A whistle on a string": "A whistle makes a sound. It does not help you see."
+ },
+ "Why write down what you see?": {
+  "So you can make up new things": "Notes should tell what you saw, not made-up things.",
+  "So you can skip looking again": "You may need to look again to check.",
+  "So you can show your friends": "Showing friends is fun, but notes help you keep track."
+ },
+ "Which one uses a number to tell what you saw?": {
+  "The plant grew a lot": "\"A lot\" does not tell how much with a number.",
+  "The plant looks nice": "\"Looks nice\" tells how you feel, not a number.",
+  "The plant is happy": "Plants don't feel happy. There is no number here."
+ },
+ "Which is the best way to observe a bird without scaring it?": {
+  "Run up close to get a good look": "Running up will scare the bird away.",
+  "Call out to it so it looks at you": "A loud call will make the bird fly off.",
+  "Toss some food right at it": "Tossing things at a bird can scare it off."
+ },
+ "Which tool measures how heavy something is?": {
+  "A ruler": "A ruler tells how long something is.",
+  "A thermometer": "A thermometer tells how hot or cold it is.",
+  "A clock": "A clock tells the time."
+ },
+ "What tool helps you see tiny things?": {
+  "A ruler": "A ruler tells how long something is.",
+  "A thermometer": "A thermometer tells how hot or cold it is.",
+  "A clock": "A clock tells the time."
+ },
+ "Why do scientists write down their observations?": {
+  "So the notebook looks full and neat": "A full book is not the goal. Notes help you keep track.",
+  "Because writing makes the test work": "Writing does not change how a test turns out.",
+  "Only so the teacher can grade it": "Grades are not the main reason. Scientists use notes to look back."
+ },
+ "You want to know if new tires make your car faster. What is the fair test?": {
+  "Change tires and engine together": "If you change two things, you can't tell which one made it fast.",
+  "Race on different tracks": "A new track could change the speed too. That's not fair.",
+  "Ask a friend which is faster": "A friend's guess is not a test. You need to measure."
+ },
+ "You test whether plants grow better with music. What must stay the same?": {
+  "Nothing": "If nothing stays the same, you can't tell what caused the change.",
+  "Only the music": "The music is the thing you change on purpose.",
+  "Everything should change": "If all things change, you can't tell what made a plant grow."
+ },
+ "Your result didn’t match your hypothesis. What now?": {
+  "Change the numbers so they match": "Changing numbers is not honest, and it hides what you learned.",
+  "Leave out that result from the report": "Every result counts. Leaving one out hides the truth.",
+  "Decide the test was a waste of time": "A surprise result still teaches you something."
+ },
+ "Why repeat an experiment several times?": {
+  "To waste time": "Repeat tests have a real job. They help you trust your results.",
+  "Once is always enough": "One try can be a fluke. Results can change by chance.",
+  "To change the answer": "Repeating does not change the answer. It checks it."
+ },
+ "You test 3 paper airplanes. Which is the fair test?": {
+  "Throw them in different rooms": "Rooms can have different air and space. That's not fair.",
+  "Use different people": "Each person throws in a different way. That's not fair.",
+  "Throw one indoors and one outdoors": "Wind outdoors could push one plane. That's not fair."
+ },
+ "What is a hypothesis?": {
+  "The final answer to a question": "The answer comes at the end, after the test.",
+  "A fact you read in a book": "A fact from a book is already known. It is not a guess to test.",
+  "A number you measure in a test": "A number you measure is data, not a guess.",
+  "The final answer to the question": "The answer comes at the end, after the test.",
+  "A list of the materials you need": "A list of things you need is the materials list.",
+  "A fact that has already been proven": "A proven fact is not a guess you still need to test."
+ },
+ "What is a conclusion?": {
+  "The first step you do when you start a test": "The first step is the question, not the conclusion.",
+  "A guess you make before you begin testing": "A guess before you start is called a hypothesis.",
+  "The list of materials you used in the test": "A list of what you used is the materials list."
+ },
+ "In a plant-and-light test, what is the variable you change?": {
+  "The plant type": "The plant type should stay the same in a fair test.",
+  "The water": "The water should stay the same so it doesn't change the result.",
+  "The pot size": "Pot size should stay the same in a fair test."
+ },
+ "You test which paper towel soaks up the most water. What must stay the same?": {
+  "The kind of towel you are testing": "The towel kind is what you change on purpose.",
+  "Nothing, as long as you test them all": "If nothing stays the same, the test is not fair.",
+  "Only the color of the cups you use": "Cup color does not matter much. Think about what could change the result."
+ },
+ "You test a plant food on one plant and it grows. Why should you test more plants?": {
+  "One plant is enough if it grew a lot": "One plant might grow well by luck, not from the food.",
+  "To use up the rest of the plant food": "Using up food is not a reason to test.",
+  "More plants make the plant food stronger": "More plants don't change how strong the food is."
+ },
+ "What is a variable in an experiment?": {
+  "The final answer you get": "The answer you get is the result.",
+  "A rule you must follow": "A rule you follow is a step or a safety rule.",
+  "A tool you use to measure": "A tool you use to measure is just a tool."
+ },
+ "Which lunch is most balanced?": {
+  "Chips, soda and a cookie": "These are full of salt, sugar and fat. They lack the good stuff.",
+  "Three big cookies": "Cookies are mostly sugar. You need more kinds of food.",
+  "A candy bar and juice": "Candy and juice are mostly sugar. They lack protein and fiber."
+ },
+ "Which breakfast gives lasting energy?": {
+  "A candy bar and juice": "Sugar gives a quick burst, then you feel tired fast.",
+  "A can of soda": "Soda is mostly sugar. It gives no lasting energy.",
+  "A big sweet donut": "A donut is sweet and quick. The energy fades fast."
+ },
+ "Which is a whole grain?": {
+  "White sugar": "Sugar is not a grain at all.",
+  "Candy": "Candy is mostly sugar, not grain.",
+  "Soda": "Soda is a drink with sugar, not a grain."
+ },
+ "Which drink is healthiest most of the time?": {
+  "Soda": "Soda has lots of sugar. It is not best for most days.",
+  "Energy drink": "Energy drinks have sugar and caffeine. They are not for kids.",
+  "Sweet tea": "Sweet tea has lots of added sugar."
+ },
+ "Which food has the most protein?": {
+  "Lettuce": "Lettuce has lots of water but very little protein.",
+  "Apple": "An apple has fiber and sugar, but little protein.",
+  "Candy": "Candy is mostly sugar, with almost no protein.",
+  "Apple juice": "Apple juice is mostly sugar and water."
+ },
+ "Why eat fruits and vegetables?": {
+  "They look nice on the plate": "They do look nice, but they also help your body.",
+  "They have more sugar than candy": "Candy has lots more sugar. Fruits have good stuff too.",
+  "They help you feel sleepy": "These foods don't make you sleepy. They help your body."
+ },
+ "What does a food label’s “serving size” tell you?": {
+  "How much the food costs": "Price is on the store tag, not the serving size.",
+  "When the food will go bad": "The date on the box tells when food goes bad.",
+  "How many people it feeds": "It does not tell how many people. It's about the amount."
+ },
+ "Why is breakfast helpful?": {
+  "It’s not": "Breakfast really can help your body and brain.",
+  "It makes you sleepy forever": "Breakfast does not make you sleepy. It gives you fuel.",
+  "Only on weekends": "Breakfast helps every day, not just on weekends."
+ },
+ "Which snack has the least added sugar?": {
+  "A candy bar": "Candy bars are full of added sugar.",
+  "A soda": "Soda has lots of added sugar.",
+  "A frosted donut": "Frosting adds lots of sugar to a donut."
+ },
+ "Why should half your plate be fruits and vegetables?": {
+  "They are the cheapest foods to buy": "Many are cheap, but cost is not the reason.",
+  "They have the most protein for muscles": "Beans and meat have more protein than most of these.",
+  "They have the most fat for energy": "Most fruits and vegetables have very little fat."
+ },
+ "A drink label says 40 grams of sugar. What is a healthier swap?": {
+  "A bigger soda": "A bigger soda gives you even more sugar.",
+  "Two of the same drink": "Two drinks means twice the sugar.",
+  "An energy drink": "Energy drinks are often full of sugar too."
+ },
+ "Why does your body need water?": {
+  "It gives your body most of its energy": "Water has no calories. Food gives you energy.",
+  "It only matters on hot summer days": "Your body needs water every day, not just when it's hot.",
+  "It is the main thing that builds bones": "Calcium builds bones. Water has other jobs."
+ },
+ "❤️ What does the heart do?": {
+  "Helps you see far": "Your eyes help you see.",
+  "Breaks down food": "Your stomach breaks down food.",
+  "Holds your body up": "Your bones hold your body up."
+ },
+ "🫁 What do the lungs do?": {
+  "Pump blood all around": "That is the heart's job.",
+  "Make your bones grow": "Bones grow from food and rest, not from lungs.",
+  "Help you think and learn": "Your brain helps you think and learn."
+ },
+ "What protects the body from germs on the outside?": {
+  "Hair only": "Hair covers just some spots. It can't block all germs.",
+  "Teeth": "Teeth help you chew. They do not cover your body.",
+  "Nails": "Nails guard the tips of your fingers, not your whole body."
+ },
+ "🦴 About how many bones does an adult have?": {
+  "6": "Way too few. Each hand has lots of bones.",
+  "20": "That is too few. Your hands alone have more than 20!",
+  "1,000": "That is too many. The number is much smaller."
+ },
+ "Where does food go to be broken down?": {
+  "The lungs and air tubes": "Lungs and air tubes are for breathing.",
+  "The heart and blood": "The heart and blood move things, but they don't break down food.",
+  "The brain and the nerves": "The brain and nerves send messages. They don't break down food."
+ },
+ "🧠 What controls the body and thinking?": {
+  "The stomach": "The stomach breaks down food.",
+  "The knee": "The knee is a joint that helps your leg bend.",
+  "The skin": "Skin covers and protects your body."
+ },
+ "What do muscles do?": {
+  "Pump air": "The lungs move air, with help from a muscle under them. But think bigger.",
+  "Think": "Your brain does the thinking.",
+  "Digest food": "The stomach and intestines digest food."
+ },
+ "What carries messages between your brain and body?": {
+  "Bones": "Bones hold you up. They don't send messages.",
+  "Hair": "Hair grows on skin. It can't carry messages.",
+  "Teeth": "Teeth help you chew food."
+ },
+ "Which organ pumps blood around your body?": {
+  "The lungs": "The lungs bring in air.",
+  "The stomach": "The stomach breaks down food.",
+  "The brain": "The brain is the control center. It does not pump."
+ },
+ "What do your lungs do?": {
+  "Break down the food you eat": "Your stomach and intestines break down food.",
+  "Pump blood to the whole body": "That is the heart's job.",
+  "Help you see and hear things": "Your eyes and ears help you see and hear."
+ },
+ "Why do bones and muscles work together?": {
+  "Bones move by themselves when you think": "Bones can't move on their own. They need something to pull them.",
+  "Muscles only keep your body warm": "Muscles do make heat, but they also have a bigger job.",
+  "Bones hold muscles still so they rest": "Bones don't hold muscles still. They work as a team to move."
+ },
+ "Your skin is…": {
+  "A cover that is not part of your body": "Your skin is part of you. It is alive and grows.",
+  "Only there to give you color": "Skin does give color, but it has a much bigger job.",
+  "A thin bone that covers you": "Skin is not bone. It is soft and stretchy."
+ },
+ "Your car slides wide on every corner. Which upgrade helps most?": {
+  "A louder horn": "A horn makes noise but doesn't help tires hold the road.",
+  "A brighter paint color": "Paint color does not change how a car grips the road.",
+  "A bigger engine": "More power can make sliding worse in turns."
+ },
+ "Why is it harder to stop on ice than on a dry road?": {
+  "Ice is heavier": "Ice is not heavier than a road. Think about how slick it is.",
+  "Cars are colder on ice": "Cold cars are not the reason. Think about the surface.",
+  "Roads are longer": "Road length doesn't change how fast you can stop."
+ },
+ "Why do cars slide more on wet roads?": {
+  "Water makes the cars heavier": "A little water adds almost no weight to a car. Think about what happens between the tire and the road.",
+  "Wet roads are bumpier to drive on": "Wet roads are not bumpier. The water makes the surface slick instead.",
+  "Water makes the tires get bigger": "Tires don't grow when wet. The water changes how well they hold the road."
+ },
+ "Which surface has the least friction?": {
+  "Carpet": "Carpet fibers catch and rub on things, so carpet has lots of friction.",
+  "Sandpaper": "Sandpaper is rough on purpose, so it has very high friction.",
+  "Grass": "Grass blades rub and tangle, so they slow things down a lot."
+ },
+ "Why do you rub your hands together when cold?": {
+  "To clean them": "Rubbing hands doesn't really clean them. Think about what you feel as you rub.",
+  "To make noise": "Any noise is just a side effect. Think about why your hands feel different after.",
+  "No reason": "There is a reason. Notice how your hands feel after you rub them fast."
+ },
+ "Oil on a bike chain…": {
+  "Adds friction so it grips better": "Oil does the opposite. It makes parts slide past each other more easily.",
+  "Makes the chain rust faster": "Oil actually helps protect metal from water, which slows rust.",
+  "Makes the bike stop sooner": "Brakes stop a bike. Oil on the chain doesn't make the bike stop faster."
+ },
+ "Why do sneakers have bumpy soles?": {
+  "To look cool and new": "Looks may matter to you, but the bumps have a real job: think about slipping.",
+  "To make them lighter": "Bumps don't make a shoe lighter. They change how the sole touches the ground.",
+  "To make them squeak": "Squeaks can happen, but they are not the reason. Think about grip."
+ },
+ "Why do people put sand on icy sidewalks?": {
+  "To melt the ice right away": "Sand does not melt ice. Salt is what people use for melting.",
+  "To add color to the sidewalk": "Sand is not spread for color. It has a safety job.",
+  "To make the ice more slippery": "Sand does the opposite. Think about how a rough surface feels under your shoe."
+ },
+ "Why do swimmers wear smooth swimsuits?": {
+  "More friction to swim faster": "More friction with water would slow a swimmer down, not speed them up.",
+  "To stay warm in cold water only": "Warmth is not the main goal. Smooth suits help a swimmer move through water.",
+  "Only to look good in the race": "Racers care about speed. Smooth suits have a real job in the water."
+ },
+ "Air resistance is a kind of…": {
+  "Gravity": "Gravity pulls things toward Earth. Air resistance pushes against motion through air.",
+  "Magnetism": "Magnetism is a pull or push from magnets. Air resistance comes from air rubbing on things.",
+  "Heat": "Heat is energy, not a force. Air resistance is a force that slows moving things."
+ },
+ "Why do shoes have bumpy bottoms?": {
+  "To make the shoes look cool": "Looks are not the reason. Think about what bumps do on a slick floor.",
+  "To make the shoes lighter to wear": "Bumps don't make shoes lighter. They change how the sole grips the ground.",
+  "To help you slide faster on floors": "Bumps do the opposite. They help you stop sliding."
+ },
+ "Which surface would a toy car roll farthest on?": {
+  "Thick carpet": "Thick carpet fibers rub on the wheels, so the car slows down fast.",
+  "Grass": "Grass is bumpy and soft, so it creates a lot of friction.",
+  "Sand": "Wheels sink into sand, which slows the car very quickly."
+ },
+ "Rub your hands together fast. Why do they get warm?": {
+  "Rubbing pulls heat out of the air": "Rubbing does not pull heat from the air. The heat comes from your hands' motion.",
+  "Your blood stops moving there": "Blood keeps flowing as you rub. The warmth comes from the rubbing itself.",
+  "Your skin gets thinner as you rub": "Your skin does not get thinner. The motion of rubbing makes the heat."
+ },
+ "Your robot’s battery dies halfway through the course. What could fix it?": {
+  "Paint it a new color so it looks faster": "Paint changes the look, not how much power the robot uses.",
+  "Make it heavier so it holds the track better": "More weight means the motors need more power, so the battery dies even sooner.",
+  "Add more motors so it can move faster": "More motors use more power, so the battery would run out faster."
+ },
+ "Turning off lights when you leave a room…": {
+  "Wastes energy": "Lights that are off use no power, so this does not waste energy.",
+  "Breaks the bulb": "Switching a bulb off does not break it.",
+  "Does nothing": "It does make a difference. A light left on keeps using power."
+ },
+ "Which is a renewable energy source?": {
+  "Coal": "Coal took millions of years to form, so once we burn it, it is gone.",
+  "Oil": "Oil forms over millions of years, so we use it up much faster than it forms.",
+  "Gasoline": "Gasoline is made from oil, which runs out and does not come back soon."
+ },
+ "Where does a phone get its energy?": {
+  "From the screen": "The screen uses energy to make light. It does not supply energy.",
+  "From the case": "The case only protects the phone. It holds no power.",
+  "From sound": "Sound is something a phone makes, not where it gets its power."
+ },
+ "What kind of energy does a moving car have?": {
+  "Heat energy only": "Cars do make heat, but that's not the only energy a moving car has.",
+  "Sound energy only": "A car makes sound, but that's not the main energy of its movement.",
+  "No energy at all": "Anything that moves has energy. A moving car has plenty."
+ },
+ "Where does food energy come from first?": {
+  "From the fridge": "A fridge only keeps food cold. It doesn't make the energy in food.",
+  "From the store": "A store sells food, but the energy was in the food long before.",
+  "From the soil": "Plants take in water and minerals from soil, but soil is not their energy source."
+ },
+ "A ball at the top of a hill has stored energy. What happens when it rolls down?": {
+  "The energy just disappears": "Energy never just vanishes. It changes into another form.",
+  "The ball gets heavier as it rolls": "The ball's mass stays the same as it rolls.",
+  "It gains more stored energy": "It loses stored energy as it goes down, since it gets lower."
+ },
+ "Why does a battery run down faster with the screen at full brightness?": {
+  "Brightness doesn’t use any power": "A screen needs power to make light, and brighter light takes more power.",
+  "Light makes batteries go bad": "Light from the screen does not damage the battery. The battery just has to give more power.",
+  "It doesn’t, the battery just ages": "Batteries do age, but screen brightness also changes how fast power drains."
+ },
+ "A solar panel turns sunlight into…": {
+  "Water": "Solar panels make no water. They turn light into another form of energy.",
+  "Wind": "Wind comes from air moving. A solar panel does not make air move.",
+  "Food": "Only plants turn sunlight into food. Solar panels do something else."
+ },
+ "Two identical carts roll at different speeds. Which has more motion (kinetic) energy?": {
+  "The slower cart": "The slower cart moves less, so it has less energy of motion.",
+  "They have the same": "They have the same mass, but not the same speed, so their energy differs.",
+  "The one that started first": "Which cart started first doesn't matter. What matters is how fast each moves now."
+ },
+ "A ball rolls down a ramp and stops on a carpet. Where did its motion energy go?": {
+  "It was used up and is now gone for good": "Energy is never destroyed. It changes into other forms.",
+  "It turned back into stored energy in the ball": "The ball is now at the bottom, so it can't have more stored energy from height.",
+  "The carpet destroyed it when the ball rolled on it": "Carpet can't destroy energy. Energy only changes from one form to another."
+ },
+ "What kind of energy does a moving bike have?": {
+  "Stored (potential) energy only": "A moving bike has energy because it is moving. Stored energy is not the only kind it has.",
+  "No energy until it stops": "A bike has energy while it moves, not just when it stops.",
+  "Sound energy only": "A bike makes a little sound, but that's not its main energy."
+ },
+ "A flashlight changes stored energy in its battery into…": {
+  "Nothing; the energy is used up": "Energy doesn't disappear. It changes into another form.",
+  "More stored energy": "The bulb gives energy off. It doesn't make new stored energy.",
+  "Sound energy only": "A flashlight is quiet. Its energy goes out in another form."
+ },
+ "Why is a ball at the top of a hill said to have stored energy?": {
+  "It is heavy, and heavy things store energy": "Weight matters, but the key idea is that the ball is high up and can fall.",
+  "It got energy from the cold air at the top": "Cold air does not give a ball energy.",
+  "All balls have the same stored energy": "Stored energy depends on how high and how heavy each ball is, so they differ."
+ },
+ "Which ramp makes it easiest to push a heavy cart onto a stage?": {
+  "A short, steep ramp": "A steep ramp needs a much bigger push for each step up.",
+  "No ramp at all": "Lifting straight up takes the most force of all.",
+  "A ramp made of ice": "Ice is slippery, so the cart could slide back down on you."
+ },
+ "An axe blade is which simple machine?": {
+  "A pulley": "A pulley uses a rope and wheel to lift things.",
+  "A wheel and axle": "A wheel and axle turns, like a doorknob. An axe doesn't spin.",
+  "A lever": "A lever pivots on a point, like a seesaw."
+ },
+ "Which simple machine is a seesaw?": {
+  "A pulley": "A pulley uses a rope over a wheel to lift things.",
+  "A wheel": "A wheel spins on an axle. A seesaw tips up and down instead.",
+  "A screw": "A screw is a ramp wrapped around a pole."
+ },
+ "A screw is really…": {
+  "A pulley with a rope": "A pulley uses a rope over a wheel. A screw has no rope.",
+  "A lever on a stand": "A lever pivots on a point. A screw turns instead.",
+  "A wedge with a flat tip": "A wedge splits things. A screw winds into things as it turns."
+ },
+ "Where should you push a lever to lift a heavy rock most easily?": {
+  "Right at the pivot": "Pushing right at the pivot won't move the rock at all.",
+  "Under the rock": "You push on the other end, not under the rock.",
+  "Anywhere": "Where you push matters a lot. Some spots make the job much easier."
+ },
+ "A flagpole uses which machine to raise the flag?": {
+  "A lever": "A lever pivots on a point, like a seesaw. A flag moves on a rope.",
+  "A wedge": "A wedge splits things apart, like an axe.",
+  "A ramp": "A ramp is a slope. A flag goes straight up a pole."
+ },
+ "Why is it easier to push a cart than carry its load?": {
+  "Carts are magic": "There's no magic. Think about what wheels do to friction.",
+  "The load gets lighter": "The load weighs the same. What changes is how you move it.",
+  "It isn’t easier": "It really is easier. Something about the wheels helps you."
+ },
+ "A doorknob is which simple machine?": {
+  "A wedge": "A wedge splits things, like an axe. A doorknob turns.",
+  "A pulley": "A pulley uses a rope. A doorknob has no rope.",
+  "A ramp": "A ramp is a slope. A doorknob spins instead."
+ },
+ "Why do wheelchair ramps zig-zag?": {
+  "To look nice from the street": "Looks are not the reason. Think about how steep a ramp can be.",
+  "To be faster than stairs": "Ramps are usually slower than stairs. The zig-zag has another purpose.",
+  "To fit more people at once": "The zig-zag is not for crowds. Think about how steep the path is."
+ },
+ "A ramp is a simple machine called…": {
+  "A lever": "A lever pivots on a point, like a seesaw.",
+  "A pulley": "A pulley uses a rope and a wheel.",
+  "A wheel and axle": "A wheel and axle turns, like a doorknob."
+ },
+ "Why is it easier to push a box up a ramp than lift it straight up?": {
+  "The box gets lighter on the ramp": "The box weighs the same on a ramp. The ramp spreads the work out.",
+  "The ramp adds extra energy to the box": "A ramp can't add energy. It changes how much force you need.",
+  "You push it a shorter distance": "You actually push the box a longer way on a ramp."
+ },
+ "A seesaw is an example of a…": {
+  "Pulley": "A pulley uses a rope over a wheel. A seesaw tips on a point.",
+  "Screw": "A screw is a ramp wrapped around a pole.",
+  "Wedge": "A wedge splits things apart, like an axe."
+ },
+ "The recipe says cook chicken to 165°F. Your thermometer reads 150°F. What now?": {
+  "Serve it now since it is close": "Close is not safe. Germs can still live at 150°F.",
+  "Let it cool down, then serve": "Cooling does not kill germs. The meat must get hot enough first.",
+  "Add more salt and serve it": "Salt does not kill the germs in undercooked meat."
+ },
+ "Why do pot handles often have plastic or wood?": {
+  "They look nice on the pot": "Looks are not the main reason. Think about touching a hot pot.",
+  "They make the pot heavier": "Weight is not the goal. Think about how your hand feels on the handle.",
+  "They heat up faster than metal": "These materials heat up slowly, not fast. That's why they are used."
+ },
+ "Why put leftovers in the fridge quickly?": {
+  "To make them taste sweet": "Cold does not make food sweet.",
+  "To heat them": "A fridge cools food. It doesn't heat it.",
+  "No reason": "There is a reason. Germs grow fast at room temperature."
+ },
+ "Which material conducts heat best?": {
+  "Wood": "Wood is an insulator. Heat moves through it slowly.",
+  "Plastic": "Plastic holds back heat, which is why it covers pot handles.",
+  "Cloth": "Cloth traps air, so it slows heat down."
+ },
+ "What happens to butter in a hot pan?": {
+  "It freezes": "A hot pan adds heat. Freezing needs cold.",
+  "It grows": "Butter does not grow. Heat changes its state.",
+  "Nothing": "Heat always changes butter. Watch what happens to a solid when it warms."
+ },
+ "Why does a dark shirt feel hotter in the sun?": {
+  "Dark shirts are thicker": "Thickness is not the reason. Color changes how much sunlight is taken in.",
+  "It’s make-believe": "It is real. You can feel the difference in the sun.",
+  "Light colors absorb more": "Light colors reflect more sunlight, so they stay cooler."
+ },
+ "Safe temperature for cooked ground beef is about…": {
+  "100°F": "That is too low. Germs in ground beef can survive at that heat.",
+  "120°F": "That is still too low to kill the germs in ground beef.",
+  "60°F": "That is about room temperature. The meat would be raw."
+ },
+ "Why does a metal spoon in hot soup get hot?": {
+  "Soup is magic": "There's no magic. Heat moves through some materials easily.",
+  "Spoons make heat": "Spoons don't make heat. The heat comes from the soup.",
+  "It doesn’t": "It really does. Touch a metal spoon left in hot soup and you'll feel it."
+ },
+ "Why can steam burn worse than boiling water at the same temperature?": {
+  "Steam is always much hotter than 100 °C, even at sea level": "At normal air pressure, steam and boiling water can both be at 100 °C.",
+  "Steam has tiny bits of fire in it that burn the skin": "Steam is water vapor, not fire.",
+  "It can’t: steam is harmless because it is only a gas": "Steam is very dangerous. It can cause bad burns."
+ },
+ "A metal spoon and a wooden spoon sat in the same room all night. Which is colder?": {
+  "The metal spoon, because metal is always colder": "Metal feels colder because it pulls heat from your hand faster. It is not truly colder.",
+  "The wooden spoon, because wood holds the cold": "Wood does not hold cold. It feels warmer because it moves heat slowly.",
+  "The metal spoon, because metal makes its own cold": "Metal can't make cold. It only moves heat away from your skin quickly."
+ },
+ "Which material lets heat pass through quickly?": {
+  "Wood": "Wood slows heat down. It is a poor conductor.",
+  "Wool": "Wool traps air, so heat moves through it slowly.",
+  "Plastic foam": "Foam is full of trapped air, which makes it an insulator."
+ },
+ "Why do pot handles often have plastic or wood on them?": {
+  "They look nicer than a metal handle": "Looks are not the main reason. Think about grabbing a hot pot.",
+  "They make the pot heavier so it won’t tip": "Weight is not the goal. These materials are chosen for how they handle heat.",
+  "They carry heat to the food faster": "These materials slow heat down. They don't speed it up."
+ },
+ "Heat always moves from…": {
+  "Cooler things to warmer things": "Heat never flows on its own from cool to warm. It goes the other way.",
+  "Low places up to high places": "Height does not decide which way heat moves. Temperature does.",
+  "Nowhere; heat stays put": "Heat does move. It flows whenever two things have different temperatures."
+ },
+ "You are building a park bench that stays outside in the rain. Which material is best?": {
+  "Cardboard painted to look like wood": "Cardboard soaks up water and falls apart in the rain.",
+  "Untreated wood that looks strong": "Untreated wood can rot when it gets wet over and over.",
+  "Thick paper glued into layers": "Paper soaks up water and breaks down outside."
+ },
+ "Why are raincoats made of plastic-like fabric?": {
+  "It’s heavy": "Weight is not the reason. Think about what rain does to cloth.",
+  "It’s warm only": "Warmth is not the main job of a raincoat.",
+  "It’s shiny": "Shine is not the point. Think about keeping water out."
+ },
+ "Which material would you recycle in the paper bin?": {
+  "Glass": "Glass goes in its own bin, not the paper bin.",
+  "Metal can": "A metal can goes with cans and metals, not paper.",
+  "Plastic bottle": "Plastic bottles go in the plastic bin."
+ },
+ "Which material is best for a window?": {
+  "Wood, since it is strong": "Wood is strong, but you can't see through it.",
+  "Brick, since it is hard": "Brick is hard, but it blocks all light.",
+  "Metal, since it lasts long": "Metal lasts long, but light can't pass through it."
+ },
+ "Which material is a good insulator for a winter jacket?": {
+  "Metal": "Metal moves heat fast, so it would pull warmth away from you.",
+  "Glass": "Glass is hard and breaks easily. It is not a good jacket.",
+  "Paper": "Paper tears and soaks up water. It won't keep you warm."
+ },
+ "Why are frying pans metal with plastic handles?": {
+  "Both of them conduct heat the same": "Metal and plastic do not conduct heat the same. Metal moves heat much faster.",
+  "Plastic handles come in more colors": "Color is not the reason. Think about grabbing a hot pan.",
+  "Plastic is stronger than the metal": "Plastic is not stronger than metal. It is chosen for another reason."
+ },
+ "Why are bridges often made of steel?": {
+  "Steel is soft": "Steel is not soft. It is very hard.",
+  "Steel is light as paper": "Steel is quite heavy, not light like paper.",
+  "Steel melts in sun": "Steel needs huge heat to melt. Sunlight is far too weak."
+ },
+ "Why are tires made of rubber?": {
+  "Rubber is shiny and looks new": "Shine has nothing to do with tires doing their job.",
+  "Rubber is heavy and stays put": "Weight is not the reason. Think about how a tire meets the road.",
+  "Rubber is the cheapest choice": "Cost is not the main reason. Rubber has useful properties."
+ },
+ "Which is the best material for a rope?": {
+  "Glass, since it is smooth": "Glass is smooth but snaps easily. It can't bend like a rope.",
+  "Clay, since it is heavy": "Clay is heavy, but it would crumble when pulled.",
+  "Paper, since it is light": "Paper is light, but it tears when pulled hard."
+ },
+ "Which material is best for a raincoat?": {
+  "Thick cotton, like a sweatshirt": "Cotton soaks up water, so you'd get wet.",
+  "Warm wool, like a winter hat": "Wool is warm, but rain soaks into it.",
+  "Thin paper that is light": "Paper falls apart when it gets wet."
+ },
+ "Why are windows made of glass?": {
+  "Glass is soft and bends without breaking": "Glass is hard and breaks if you bend it.",
+  "Glass keeps out light and lets in air": "Glass does the opposite. It lets light in and keeps air out.",
+  "Glass is the strongest material there is": "Glass is not the strongest. Steel is much stronger."
+ },
+ "Which property makes rubber good for bike tires?": {
+  "It is hard and never bends": "Rubber is not hard. It bends and squishes.",
+  "It is heavy and holds the bike down": "Weight is not the reason. Think about how a tire grips.",
+  "It melts easily on hot roads": "Rubber tires do not melt on hot roads. That would be bad for a tire."
+ },
+ "Your tall robot keeps tipping over on the ramp. What helps most?": {
+  "Make it taller so it reaches the top sooner": "A taller robot has a higher balance point, so it tips over more easily.",
+  "Put the battery on top to add more weight": "Weight up top makes the robot more top-heavy and likely to tip.",
+  "Use thinner legs so it weighs less overall": "Thin legs give a smaller base, so the robot tips over more easily."
+ },
+ "A heavier truck needs more…": {
+  "Fuel just to turn corners": "Turning doesn't need extra fuel because of weight alone. Think about starting and stopping.",
+  "Paint to keep from rusting": "Paint protects from rust no matter how heavy the truck is.",
+  "Wheels to go the same speed": "The number of wheels doesn't set the speed."
+ },
+ "What force pulls things toward Earth?": {
+  "Friction": "Friction slows things when surfaces rub. It doesn't pull things down.",
+  "Magnetism": "Magnets pull on some metals, not on everything.",
+  "Wind": "Wind pushes things sideways. It doesn't pull things down."
+ },
+ "Why do race cars have spoilers?": {
+  "For decoration": "Spoilers are not just for looks. They change how air pushes on the car.",
+  "To slow them on straights only": "Spoilers help on curves, not just straights. Think about grip.",
+  "To carry luggage": "A spoiler is a wing, not a place to carry bags."
+ },
+ "Which is more stable?": {
+  "A tall, thin stool": "A tall, thin stool has a high center and narrow base, so it tips easily.",
+  "A ball on a point": "A ball on a point rolls off with the smallest push.",
+  "A pencil standing up": "A pencil standing up falls over with the lightest touch."
+ },
+ "When you kick a ball, what makes it stop eventually?": {
+  "Gravity only upward": "Gravity pulls down, not up. It isn't what slows the ball along the ground.",
+  "Nothing": "Something does stop it. Think about what rubs on the ball.",
+  "The ball gets tired": "Balls don't get tired. Forces act on the ball to slow it."
+ },
+ "You push a heavy box and it doesn’t move. Why?": {
+  "The box’s weight pushes back against you": "Weight pulls down, not sideways against your push.",
+  "There are no forces on a box that isn’t moving": "Forces can act on a box that isn't moving. They just balance out.",
+  "Your push gets used up before it reaches the box": "Your push isn't used up. It does reach the box."
+ },
+ "A ball rolls farther on a smooth floor than on carpet. Why?": {
+  "Carpet has less gravity": "Gravity is the same on both. The surfaces are what differ.",
+  "The ball is tired": "Balls don't get tired. Think about the forces on it.",
+  "Smooth floors push balls": "Floors don't push balls forward. Think about what slows a ball."
+ },
+ "Why is it easier to push a loaded cart than to carry the load?": {
+  "The cart makes the things inside it weigh less than before": "A cart doesn't change the weight of what's inside.",
+  "The wheels add extra force to the load as you push it": "Wheels don't add force. They cut down on friction.",
+  "It isn’t really easier, it only feels that way to you": "It really is easier. The cart changes the forces you deal with."
+ },
+ "You push on a wall. What does the wall do?": {
+  "Nothing: walls can’t push": "Walls do push. When you push on something, it pushes back on you.",
+  "It pushes back harder": "The wall pushes back just as hard, not harder.",
+  "It pulls you toward it": "The wall pushes, it doesn't pull."
+ },
+ "A heavy ball and a light ball of the same size are dropped together. Which lands first?": {
+  "The heavy ball": "Without much air drag, heavy things don't fall faster. Gravity speeds up all objects equally.",
+  "The light ball": "A lighter ball doesn't fall faster when the size is the same.",
+  "It depends on who drops them": "Who drops them does not matter if they drop them the same way."
+ },
+ "You throw a ball straight up. At the very top, what force acts on it?": {
+  "The force of your throw": "Your throw stops pushing the moment the ball leaves your hand.",
+  "No forces at all": "There is still a force. Something pulls the ball back down.",
+  "An upward force that slowly runs out": "There's no upward force stored in the ball. It slows because of a downward pull."
+ },
+ "What force pulls things toward the ground?": {
+  "Friction": "Friction slows things when surfaces rub. It doesn't pull things down.",
+  "Magnetism": "Magnets pull on some metals, not on everything.",
+  "Wind": "Wind pushes things sideways. It doesn't pull things down."
+ },
+ "You kick a ball harder. What happens?": {
+  "It goes slower": "A harder kick gives more force, so the ball won't go slower.",
+  "Nothing changes": "More force changes how the ball moves.",
+  "It stops right away": "A bigger force won't make it stop right away."
+ },
+ "Which circuit will light the bulb?": {
+  "One wire from the battery to the bulb, with no wire back": "Electricity needs a full loop. With no wire back, it can't flow.",
+  "A complete loop, but with the switch open": "An open switch breaks the loop, so no electricity flows.",
+  "Both wires attached to the same end of the battery": "Both wires on one end make no path through the battery."
+ },
+ "A bulb touches just one wire from a battery. Does it light?": {
+  "Yes, the bulb uses up the electricity in the wire": "A bulb doesn't use up electricity in a wire. It needs a full path.",
+  "Only if the battery is new": "New or old, the battery can't push charge without a full loop.",
+  "Yes, if the wire is copper": "Copper carries electricity well, but it still needs a full loop."
+ },
+ "What is the “load” in a circuit?": {
+  "The battery that gives the power": "The battery is the power source, not the load.",
+  "The switch that turns it on and off": "The switch opens and closes the circuit. It isn't the load.",
+  "The wire that carries the power": "Wires carry electricity, but they don't use it up."
+ },
+ "A bulb won’t light. The wire has a gap. Why?": {
+  "The bulb is too bright": "Brightness isn't the problem. The gap is.",
+  "Batteries hate bulbs": "Batteries don't have feelings. The issue is the gap.",
+  "Wires don’t matter": "Wires matter a lot. They carry electricity around the loop."
+ },
+ "What does a switch do?": {
+  "Makes electricity": "A switch can't make electricity. The battery is the source.",
+  "Stores power": "A battery stores power. A switch only controls the path.",
+  "Cools the wires": "A switch doesn't cool anything. It controls whether charge can flow."
+ },
+ "Why are wires covered in plastic?": {
+  "To give the wires color only": "Color helps tell wires apart, but the plastic has a safety job too.",
+  "To make the wires heavier": "Plastic is not there to add weight. Think about touching a live wire.",
+  "To help them carry more power": "Plastic doesn't help wires carry more. It blocks electricity from escaping."
+ },
+ "Which material lets electricity flow?": {
+  "Rubber": "Rubber is an insulator. It blocks electricity, which is why it covers wires.",
+  "Plastic": "Plastic is an insulator. It stops electricity from flowing through it.",
+  "Wood": "Dry wood is an insulator, so electricity doesn't flow through it well."
+ },
+ "Two bulbs in series: one breaks. What happens?": {
+  "The other gets brighter": "In series there is only one path. A break stops current through every bulb.",
+  "Nothing": "Something does change. A break in a series loop stops the current.",
+  "Both get brighter": "With the loop broken, no current flows, so nothing can get brighter."
+ },
+ "Why should you never poke things into outlets?": {
+  "It could break the TV": "The danger is to your body, not to the TV.",
+  "It is fine if you are fast": "Speed doesn't protect you. A shock can happen in an instant.",
+  "It could charge your phone": "Outlets don't charge phones that way. Poking them is just dangerous."
+ },
+ "In a parallel circuit, if one bulb breaks…": {
+  "All go out": "In parallel, each bulb has its own path, so one break doesn't stop the rest.",
+  "All get brighter": "The other bulbs keep their own paths, so they don't get brighter.",
+  "It explodes": "A broken bulb just stops glowing. Its path is simply cut."
+ },
+ "A switch is “open.” What happens to the bulb?": {
+  "It gets brighter because more current flows": "An open switch stops current, so the bulb can't get brighter.",
+  "It stays on until the battery runs out": "With the circuit broken, no current reaches the bulb at all.",
+  "It goes dim but stays a little lit": "An open switch stops all current, not just some."
+ },
+ "A runner at the race feels dizzy and very hot. What is the best first step?": {
+  "Tell them to keep running so they finish the race": "Running more in the heat could make them much sicker.",
+  "Give them an energy drink and let them rest alone": "Energy drinks don't cool the body, and a sick runner shouldn't be left alone.",
+  "Have them lie in the sun until they feel better": "Lying in the sun adds more heat. They need to cool down."
+ },
+ "Someone is choking and can’t speak. What do you do?": {
+  "Give them a glass of water to drink": "Water can't get past a blocked airway and could make it worse.",
+  "Wait a minute and see if it passes": "Choking can't wait. Someone who can't breathe needs help right now.",
+  "Tell them to lie down and rest": "Lying down won't clear a blocked airway."
+ },
+ "Why should you drink water during hot activities?": {
+  "To make your body heavier": "Gaining weight is not the goal. Think about what sweat takes out of you.",
+  "Because water cools the air": "Drinking water doesn't cool the air. It helps your body.",
+  "To help your muscles grow": "Water does help muscles, but the main reason here is what you lose in sweat."
+ },
+ "A normal body temperature is about…": {
+  "80°F": "That is far too low. A body that cold would be in danger.",
+  "110°F": "That is far too high. That would be a dangerous fever.",
+  "50°F": "That is much too cold for a living person."
+ },
+ "Why check your heart rate after exercise?": {
+  "To count how many steps you took": "Heart rate counts beats, not steps.",
+  "To see how much water you need": "Heart rate doesn't measure how much water you need.",
+  "To find out how tall you are": "Heart rate has nothing to do with height."
+ },
+ "A cut is red, swollen and hot after two days. This may be…": {
+  "A sign it is healing well": "Healing cuts get less red and less swollen over time, not more.",
+  "Just a normal bruise": "A bruise is under the skin and not usually hot and swollen at a cut.",
+  "Nothing to worry about yet": "Red, hot and swollen after days are warning signs to take seriously."
+ },
+ "What is a good reason to see a doctor for a cough?": {
+  "It started this morning after you woke up": "A cough that just started is usually not a reason to see a doctor yet.",
+  "You coughed once or twice after laughing": "A cough or two after laughing is normal.",
+  "You want to stay home and rest for a day": "Wanting a rest day is not a medical reason. Think about warning signs."
+ },
+ "Why wash hands before touching a wound?": {
+  "To make it heal slower": "Clean hands help a wound heal, not slow it.",
+  "No reason": "There is a reason. Your hands carry germs.",
+  "To make it hurt": "Clean hands don't make it hurt. They protect the wound."
+ },
+ "Why should you take an antibiotic exactly as your doctor says?": {
+  "So none of the medicine goes to waste": "Saving medicine is not the main reason. Think about the germs.",
+  "So you can stop as soon as you feel better": "Stopping early can leave some germs alive, and they can come back stronger.",
+  "Taking extra pills makes it work faster": "Extra pills don't work faster and can be harmful."
+ },
+ "Antibiotics work against…": {
+  "Every kind of illness, including colds": "Antibiotics only work on one kind of germ. Colds are caused by viruses.",
+  "Viruses, like colds and the flu": "Antibiotics don't kill viruses. That's why they don't help a cold.",
+  "Pain from any kind of injury": "Antibiotics fight germs. They don't treat pain from injuries."
+ },
+ "Why do we get vaccines?": {
+  "To cure a cold or flu that we already have": "Vaccines work before you get sick. They don't cure an illness you already have.",
+  "To kill all the germs living in our bodies": "Your body needs many helpful germs. Vaccines target one specific germ.",
+  "To give the body extra vitamins and energy": "Vaccines don't provide vitamins. They prepare your body's defenses."
+ },
+ "What is one way germs spread?": {
+  "Sitting in the sun at recess": "Sunlight doesn't spread germs from person to person.",
+  "Drinking a glass of clean water": "Clean water doesn't carry germs to others.",
+  "Wearing a warm hat outside": "A warm hat doesn't spread germs."
+ },
+ "What are “constraints” in design?": {
+  "Decorations that make it look nice": "Decorations are about looks. Constraints are the limits a design must stay within.",
+  "Extra features to add later": "Extra features are wishes, not the limits you must work inside.",
+  "The people who will buy it": "The buyers are the users or customers, not the constraints."
+ },
+ "Your bridge model collapses in the test. What should engineers do?": {
+  "Give up and pick another project": "Failure is useful data. Engineers learn from it instead of quitting.",
+  "Build the same design and test again": "Testing the same design again will likely fail in the same way.",
+  "Hide the test so no one sees it": "Hiding results means no one learns, and the problem stays."
+ },
+ "What is a prototype?": {
+  "The final product to sell": "The final product comes later, after prototypes are tested and improved.",
+  "A drawing of the idea only": "A drawing is a sketch. A prototype is something built that you can test.",
+  "A list of the parts needed": "A parts list is a materials list, not a model."
+ },
+ "How do engineers decide which design is best?": {
+  "Pick the one that looks the nicest": "Looks matter less than whether the design meets its goals.",
+  "Flip a coin to choose one fairly": "A coin flip ignores which design actually works best.",
+  "Pick the one that was built first": "Being built first says nothing about how well a design works."
+ },
+ "Why sketch ideas before building?": {
+  "Sketches are required by law": "Sketches are not required by law. They are useful for other reasons.",
+  "To waste time": "Sketching saves time by catching problems before you build.",
+  "Building is never needed": "Building is needed eventually. Sketching comes before it."
+ },
+ "What is a “trade-off” in design?": {
+  "An upgrade that costs nothing": "Something that costs nothing has no downside, so it isn't a trade-off.",
+  "A part that broke in testing": "A broken part is a test failure, not a trade-off.",
+  "A sale on parts and tools": "A sale is about price, not about giving up one feature for another."
+ },
+ "Your paper bridge sags with 10 coins. What is the best next step?": {
+  "Start over with a totally new design": "Starting over throws away what you learned. Small changes help you find the fix.",
+  "Add more coins to see when it breaks": "Adding coins tells you the limit but doesn't make the bridge stronger.",
+  "Change the paper, tape and shape all at once": "If you change everything at once, you won't know which change helped."
+ },
+ "What are “constraints” in an engineering project?": {
+  "The final design the team picks": "The final design is the result, not the limits on the project.",
+  "The steps for building the model": "Building steps are the procedure, not the limits.",
+  "Rules you can skip if time runs out": "Constraints can't be skipped. They are real limits the design must meet."
+ },
+ "Two designs both work. How should a team choose?": {
+  "Pick the one that looks the most finished": "Looking finished doesn't mean a design meets the goals better.",
+  "Choose the one that was built first": "The order they were built doesn't show which is better.",
+  "Choose whichever one the leader drew": "The leader's drawing isn't a fair test of which design meets the goals."
+ },
+ "Why do engineers build a model before the real thing?": {
+  "Models are toys": "Models may look like toys, but engineers use them to test ideas.",
+  "To waste time": "Models save time by finding problems early.",
+  "Models are required by law": "Models are not required by law. They are chosen because they are useful."
+ },
+ "Litter in Brighter Park’s pond kills the small fish. What else is likely to happen?": {
+  "Nothing else changes in the pond": "In a food web, losing one living thing affects others that depend on it.",
+  "The pond gets cleaner on its own": "Litter stays until people remove it. The pond won't clean itself quickly.",
+  "More small fish soon come to live there": "More litter makes the pond worse for fish, not better."
+ },
+ "If bees disappeared, what would happen to many plants?": {
+  "Nothing, wind would do the same work": "Many plants need bees to move pollen. Wind can't do that job for most of them.",
+  "They would grow bigger and faster": "Without pollinators, plants make fewer seeds, not bigger growth.",
+  "They would move to new places": "Plants can't just move. They stay rooted where they grow."
+ },
+ "Cutting down a forest could…": {
+  "Make room for more animals": "Removing trees takes away food and shelter, so fewer animals can live there.",
+  "Change nothing for animals": "Animals that live in forests depend on the trees. Things would change a lot.",
+  "Make the soil hold more water": "Tree roots help soil hold water. Without them, soil can wash away."
+ },
+ "What is a food chain?": {
+  "A list of foods people buy": "A shopping list is about people, not who eats whom in nature.",
+  "A group of stores with one name": "A store chain is a business idea, not a science term.",
+  "Animals that live in one place": "Animals living in one place make a community or habitat."
+ },
+ "Why are decomposers like worms important?": {
+  "They eat living trees and kill them before they grow": "Decomposers mostly eat dead things, not living trees.",
+  "They make soil harder so roots stay in one place": "Decomposers make soil richer and looser, not harder.",
+  "They aren’t important, since plants do the same job": "Plants make food from sunlight. They can't break down dead things."
+ },
+ "Which is a producer in an ecosystem?": {
+  "A fox": "A fox eats other animals, so it is a consumer.",
+  "A hawk": "A hawk hunts other animals, so it is a consumer.",
+  "A mushroom eating dead leaves": "A mushroom breaking down dead leaves is a decomposer."
+ },
+ "How can people help ecosystems?": {
+  "Remove weeds and all wild plants": "Wild plants are part of the habitat. Removing them hurts ecosystems.",
+  "Feed wild animals human snacks": "Human snacks can make wild animals sick and depend on people.",
+  "Bring new animals from far away": "New animals can become invasive and harm the local species."
+ },
+ "What is a habitat?": {
+  "A habit that animals have": "A habit is something you do often. It sounds similar but means something else.",
+  "A zoo where animals live": "A zoo is built by people, not a natural home.",
+  "A house that people build": "A house is a human building, not a natural home."
+ },
+ "Wolves return to a park and eat more deer. What might happen to plants?": {
+  "Plants disappear": "With fewer deer eating them, plants have a better chance to grow.",
+  "Nothing": "Fewer deer eat fewer plants, so plants don't disappear.",
+  "Plants turn into deer": "Something does change. Deer eat plants, so fewer deer affects plants."
+ },
+ "Foxes are removed from a meadow. What happens first to rabbits, then to grass?": {
+  "Rabbits and grass both increase": "More rabbits would eat more grass, so both can't go up.",
+  "Rabbits decrease, then grass decreases": "Without foxes, fewer rabbits get eaten, so rabbits go up.",
+  "Grass increases first, then rabbits": "Removing foxes affects rabbits first, since foxes eat rabbits."
+ },
+ "What is the difference between weather and climate?": {
+  "They mean the same thing, just over different places": "They are different. One is about time, not place.",
+  "Climate is only about rain; weather is about heat": "Both include rain and heat. The difference is about time span.",
+  "Weather is the pattern over years; climate is today’s": "That is backwards. Think about which one is about today."
+ },
+ "A fish fossil is found on top of a mountain. What does that tell you?": {
+  "Fish used to climb mountains": "Fish can't climb mountains. Think about how the land itself might have changed.",
+  "Someone left it there": "Fossils form inside rock layers over a long time. They weren't just left there.",
+  "Fossils grow inside rocks": "Fossils don't grow. They form when remains are buried and turn to stone."
+ },
+ "A river carries sand and rock downstream. What is this called?": {
+  "Evaporation": "Evaporation is water turning into vapor, not moving rock.",
+  "Photosynthesis": "Photosynthesis is how plants make food from light.",
+  "Condensation": "Condensation is vapor turning back into liquid water."
+ },
+ "In a food chain, what does a decomposer do?": {
+  "Hunts and eats other living animals": "Hunting other animals is what predators do.",
+  "Makes its own food from sunlight": "Making food from sunlight is what producers like plants do.",
+  "Eats only plants that are still growing": "Eating living plants is what herbivores do."
+ },
+ "Where does the energy in a food chain start?": {
+  "The biggest animal": "Big animals get energy by eating other things. They are not the start.",
+  "The soil": "Soil gives plants water and minerals, not the energy.",
+  "Water": "Water is needed for life, but it doesn't supply the energy."
+ },
+ "Plants given 0, 10 and 20 mL of water daily grew 1, 5 and 9 cm. What pattern do you see?": {
+  "Water had no effect": "Growth changed as water changed, so water did have an effect.",
+  "Less water, more growth": "The plants with less water grew less, not more.",
+  "The plants all grew the same": "The plants grew 1, 5 and 9 cm. Those are different amounts."
+ },
+ "Why should a graph have labels and units on its axes?": {
+  "To fill the empty space around it": "Labels aren't filler. They tell readers what the data means.",
+  "Labels only matter for bar graphs": "All graphs need labels, not just bar graphs.",
+  "So the graph looks neat and complete": "Neat is nice, but labels are needed so readers understand the data."
+ },
+ "Plants in the community garden keep drying out. Which invention starts from the real need?": {
+  "A robot that dances when the plants are watered": "Dancing doesn't solve the dry soil. It ignores the real need.",
+  "A louder bell that rings once a day at noon": "A bell at noon doesn't check whether the soil is actually dry.",
+  "A shiny new watering can painted in gold": "A fancy can still needs someone to remember to water."
+ },
+ "Why do inventors build many versions?": {
+  "Rules say they must build ten": "There is no rule about ten. Each version is built to learn something.",
+  "They forget how the first one worked": "Inventors keep notes. They build new versions to improve, not because they forget.",
+  "Each version is cheaper to make": "New versions often cost more at first. Cost isn't the main reason."
+ },
+ "What is the best starting point for an invention?": {
+  "A cool gadget idea with no use": "A gadget with no use doesn't help anyone. Inventions solve something.",
+  "Copying a toy": "Copying isn't inventing. Inventions bring something new.",
+  "Random parts": "Random parts can spark ideas, but they're not a strong starting point."
+ },
+ "How can you protect an invention you created?": {
+  "A recipe": "A recipe is instructions for cooking, not legal protection.",
+  "A receipt": "A receipt proves you bought something. It doesn't protect an idea.",
+  "A ticket": "A ticket lets you into an event. It doesn't protect an invention."
+ },
+ "Which invention combined a phone, camera and computer?": {
+  "The bicycle": "A bicycle is for riding. It has no phone or camera.",
+  "The kettle": "A kettle heats water. It isn't a phone or computer.",
+  "The pencil": "A pencil is for writing. It has no electronics."
+ },
+ "Velcro was inspired by…": {
+  "A spaceship on the Moon": "Velcro came from nature, not space travel.",
+  "A zipper on a coat": "A zipper is a different fastener. Velcro's idea came from nature.",
+  "A sticky tape roll": "Tape uses glue. Velcro uses tiny hooks and loops."
+ },
+ "What does “iterate” mean in invention?": {
+  "Give up on a design after the first test": "Iterating means keeping going, not giving up.",
+  "Copy the design that someone else made": "Copying someone else's design isn't iterating.",
+  "Build the design once and sell it as is": "Building once with no changes is the opposite of iterating."
+ },
+ "Many inventions start by asking…": {
+  "“What’s the coolest gadget?”": "Cool gadgets can be fun, but useful inventions start with a need.",
+  "“How can I be famous?”": "Fame isn't the goal. Good inventions focus on others' needs.",
+  "“What’s easiest?”": "Easy isn't the point. Inventions start with what people need."
+ },
+ "A new invention helps people but uses a lot of energy. What should the inventor think about?": {
+  "Only how much money it will make": "Money matters, but ignoring energy costs could cause harm.",
+  "Nothing; helping people is all that matters": "Benefits matter, but costs like energy use also matter.",
+  "Only how quickly it can be sold": "Speed of sales ignores the energy cost the question mentions."
+ },
+ "Why do inventors study failed designs?": {
+  "To copy those designs exactly": "Copying a failed design repeats its mistakes.",
+  "To prove that the idea can’t work": "One failure doesn't prove an idea can't work. It shows what to fix.",
+  "To find someone to blame for them": "Blame doesn't help. Failures are studied to learn and improve."
+ },
+ "Which shows innovation?": {
+  "Doing things the same way forever": "Doing things the same way forever is the opposite of innovation.",
+  "Throwing away broken tools": "Throwing tools away isn't a new idea. Fixing or reusing might be.",
+  "Copying homework": "Copying homework isn't new, and it isn't honest."
+ },
+ "In your body, which systems work together when you run?": {
+  "Only your toes and feet": "Toes and feet help, but running needs much more of your body.",
+  "Only your stomach": "Your stomach isn't the main system used to run.",
+  "Only your ears and eyes": "Ears and eyes help you sense, but they don't move you or bring oxygen."
+ },
+ "A city’s power goes out. What else is affected?": {
+  "Nothing else at all": "Lots of things need electricity, so a power outage affects much more.",
+  "Only the lamps in homes": "Lamps go out, but many other things lose power too.",
+  "Only TVs and radios": "TVs and radios are only a small part of what needs power."
+ },
+ "What is a feedback loop?": {
+  "A loop of road that goes around a city": "A road loop is a ring road, not a feedback loop.",
+  "A drawing of a circle with arrows on it": "Arrows in a circle can draw a feedback loop, but that's just a picture of one.",
+  "A song that plays over and over again": "A repeating song is a loop of sound, not a cause and effect."
+ },
+ "In a car, if the engine overheats…": {
+  "It goes faster and smoother": "Overheating harms an engine. It doesn't help it run better.",
+  "Nothing happens to the car": "An overheated engine can have serious problems.",
+  "It uses less fuel than before": "Overheating usually wastes energy, so it doesn't save fuel."
+ },
+ "A traffic jam on one road makes others busier. This shows…": {
+  "Roads are independent": "The roads affect each other, so they are not independent.",
+  "Cars are slow": "Cars can be slow, but the point is how roads affect each other.",
+  "Nothing": "Something is shown. One part of a system affects other parts."
+ },
+ "What does an ecosystem, a city and a car have in common?": {
+  "They’re all alive": "A car and a city aren't alive.",
+  "They’re all made of metal": "An ecosystem isn't made of metal.",
+  "Nothing": "They do have something in common. Think about how each is built of parts."
+ },
+ "In the human body, which systems work together to deliver oxygen?": {
+  "The bones and the hair on your head": "Bones and hair don't carry oxygen around your body.",
+  "The skin and the nails on your hands": "Skin and nails protect you, but they don't deliver oxygen.",
+  "The teeth and the tongue in your mouth": "Teeth and tongue help you eat and speak, not deliver oxygen."
+ },
+ "In a car, which parts work together as a system?": {
+  "Only the radio and speakers": "The radio and speakers aren't needed for the car to move.",
+  "The paint and the seat covers": "Paint and seat covers don't help the car run.",
+  "The license plate and cup holders": "License plates and cup holders are not working parts that move the car."
+ },
+ "If too many deer live in a forest, the plants are eaten and then deer starve. This shows…": {
+  "Deer can live without eating plants": "Deer need plants for food. That's why they starve when plants run out.",
+  "A forest can feed any number of deer": "A forest has limits. It can only feed so many deer.",
+  "Deer and plants are not connected": "The deer starve when plants are gone, which shows they are connected."
+ },
+ "The human body’s digestive and circulatory systems work together. How?": {
+  "The stomach pumps blood while the heart breaks down food": "The heart pumps blood, and the stomach helps digest food, not the other way around.",
+  "Blood digests food in the stomach and then stores it": "Blood doesn't digest food. It carries nutrients after digestion.",
+  "They work apart, and each system does its own job": "They work together. One system passes nutrients to the other."
+ },
+ "What happens to a system if one key part fails?": {
+  "Nothing changes, since parts work alone": "Parts in a system depend on each other, so a failure spreads.",
+  "The system always keeps running the same": "A system with a broken key part usually can't run the same.",
+  "Only that one part is affected": "Other parts depend on the failed part, so they are affected too."
+ },
+ "Your invention failed one safety test, but the competition is tomorrow. What is responsible?": {
+  "Hide the failed test so the team can still compete": "Hiding a safety failure could put people in danger.",
+  "Change the test numbers so they look like a pass": "Faking numbers is dishonest and hides a real safety problem.",
+  "Show it anyway and blame a teammate if it breaks": "Showing an unsafe design risks harm, and blaming others isn't fair."
+ },
+ "Why share scientific data openly?": {
+  "To show off": "Sharing is not about showing off. It lets others check the work.",
+  "It’s required to hide it": "Hiding data is not required. Open data helps science grow.",
+  "No reason": "There is a reason. Others can check and build on shared results."
+ },
+ "Why test medicines carefully before selling them?": {
+  "To slow down new companies": "Testing protects people. It isn't meant to slow companies down.",
+  "Because it is fun for scientists": "Fun is not the reason. Testing checks for safety.",
+  "It isn’t needed if the idea is good": "Good ideas can still have dangerous side effects, so testing is needed."
+ },
+ "A scientist’s results don’t support their idea. What is honest?": {
+  "Change the data": "Changing data is dishonest and misleads others.",
+  "Hide the study": "Hiding a study keeps useful results from others.",
+  "Blame the equipment": "Blaming the equipment without proof avoids the real results."
+ },
+ "Who should be thought about when designing new technology?": {
+  "Only the person who invents it": "Many people besides the inventor can be affected.",
+  "Only the people who can pay": "People who can't pay can still be affected by a technology.",
+  "Only the people who use it most": "Others besides the main users can be helped or harmed."
+ },
+ "An app collects users’ locations without asking. What’s the problem?": {
+  "Nothing, if the app is free": "Being free doesn't make it okay to collect data without asking.",
+  "It makes the app run faster": "Speed has nothing to do with the problem here.",
+  "It is needed for apps to work": "Apps can ask for permission. Collecting data secretly isn't required."
+ },
+ "A study’s results could help a company sell more. What should readers check?": {
+  "The font": "The font doesn't tell you about bias in the results.",
+  "The cover color": "The cover color doesn't show whether the study is fair.",
+  "Nothing": "Readers should check for possible bias when money is involved."
+ },
+ "Why do scientists get permission before studying people?": {
+  "It makes the study go faster": "Asking permission doesn't speed things up. It respects people.",
+  "It is not really needed": "It is needed. People must agree to take part.",
+  "It makes the study more fun": "Fun isn't the reason. It's about people's rights."
+ },
+ "Why must scientists get permission before testing on people?": {
+  "It makes the study finish faster": "Permission doesn't speed up a study. It protects the people in it.",
+  "So the results come out the way they hope": "Permission isn't about getting the results scientists want.",
+  "So more people sign up to be tested": "The goal isn't more people. It's about people choosing with full knowledge."
+ },
+ "A scientist’s results don’t match their hypothesis. What should they do?": {
+  "Change the numbers to match the guess": "Changing numbers is dishonest and hides what really happened.",
+  "Leave out the results that don’t fit": "Leaving out results hides the truth and misleads others.",
+  "Run it again until it matches": "Repeating until it matches is biased. Results should be reported as they are."
+ },
+ "Why should scientists share their data?": {
+  "So they can get more famous and win prizes": "Fame isn't the reason. Sharing lets others check the work.",
+  "So no one else has to do any experiments": "Others still do experiments. Sharing helps them test and build on results.",
+  "Because the law says all data must be public": "Not all data must be public by law. Sharing is a good science practice."
+ },
+ "A new chemical kills pests but may harm bees. What is a responsible step?": {
+  "Use it everywhere now and check bees later": "Waiting until later could cause harm to bees before anyone knows.",
+  "Sell it, but only to farms far from towns": "Bees fly far, and harm to them matters anywhere.",
+  "Keep the bee results private until it sells": "Hiding results keeps people from making safe choices."
+ },
+ "In which season do many trees lose their leaves?": {
+  "Summer": "In summer, trees are full of green leaves.",
+  "Spring": "In spring, trees grow new leaves.",
+  "They never do": "Many trees do lose leaves each year."
+ },
+ "It is snowing and 25°F outside. What should you wear?": {
+  "Shorts and sandals": "Shorts and sandals will let you get too cold.",
+  "A swimsuit": "A swimsuit is for hot days, not snow.",
+  "A T-shirt only": "A T-shirt is too thin for snow."
+ },
+ "Dark clouds and thunder are coming. What is safest?": {
+  "Stand under a tall tree": "Tall trees can get hit by lightning.",
+  "Go swimming": "Water and lightning are a bad mix.",
+  "Fly a kite": "A kite in a storm can draw lightning."
+ },
+ "What tool tells how hot or cold it is?": {
+  "A ruler": "A ruler tells how long things are.",
+  "A scale": "A scale tells how heavy things are.",
+  "A compass": "A compass shows which way is north."
+ },
+ "☀️ Which season is usually the hottest?": {
+  "Winter": "Winter is the cold time of year.",
+  "Spring": "Spring is warm, but not the hottest.",
+  "Fall": "Fall gets cooler as the days go by."
+ },
+ "🌬️ What tool shows wind direction?": {
+  "A thermometer outside": "A thermometer tells how hot it is. It can't show wind.",
+  "A rain gauge on a post": "A rain gauge tells how much rain fell.",
+  "A long ruler in the yard": "A ruler tells how long things are."
+ },
+ "What is a forecast?": {
+  "Yesterday’s weather": "A forecast is about what comes next, not the past.",
+  "A kind of cloud": "Clouds have names, but a forecast is not a cloud.",
+  "A storm": "A storm is a kind of weather. It is not a guess."
+ },
+ "🌧️ What falls from clouds?": {
+  "Sand and dust": "Sand and dust blow in the wind. They don't fall from clouds.",
+  "Leaves and twigs": "Leaves and twigs fall from trees, not clouds.",
+  "Small rocks": "Rocks don't come from clouds."
+ },
+ "What tool measures temperature?": {
+  "A ruler": "A ruler tells how long things are.",
+  "A scale": "A scale tells how heavy things are.",
+  "A compass": "A compass shows which way is north."
+ },
+ "What season comes after winter?": {
+  "Summer": "Summer comes later, after the next one.",
+  "Fall": "Fall comes after summer.",
+  "Winter again": "Winter does not come twice in a row."
+ },
+ "Dark clouds are moving in and the wind is picking up. What will probably happen?": {
+  "It will get very sunny": "Dark clouds block the sun. They don't bring sun.",
+  "The air will get calm": "Wind that picks up is a sign of change.",
+  "It will turn hot and dry": "Dark clouds hold wet air, not hot, dry air."
+ },
+ "Why do we wear lighter clothes in summer?": {
+  "Light clothes make the sun shine less": "Clothes can't change how bright the sun is.",
+  "Dark heavy clothes keep heat out best": "Dark clothes soak up heat, so they make you warm.",
+  "So our skin can get a tan faster": "A tan is not the goal. Sun can hurt your skin."
+ },
+ "What do plants need to make their own food?": {
+  "Food that they take in from the soil": "Plants make their own food. They don't eat food from soil.",
+  "Darkness, water and cold air": "Plants need light to make food, not dark.",
+  "Bugs and worms from the ground": "Plants don't eat bugs to make food. Most need just a few things."
+ },
+ "What part of a plant takes in water from the soil?": {
+  "The flowers": "Flowers help make seeds. They don't drink from the soil.",
+  "The leaves": "Leaves make food. They are up high, not in the soil.",
+  "The fruit": "Fruit holds seeds. It does not pull up water.",
+  "The flower": "A flower helps make seeds. It is not in the soil."
+ },
+ "Where does most of the material in a growing tree come from?": {
+  "Mostly from the soil it grows in": "Soil gives a bit. But a tree weighs far more than that.",
+  "Mostly from the sunlight it gets": "Light gives the tree energy. But a tree is not built from light.",
+  "From the plant food people add": "Plant food helps a bit. It is just a small part."
+ },
+ "🌱 What do leaves do?": {
+  "Hold the plant in the ground": "That is what roots do.",
+  "Drink water from the soil": "Roots drink from the soil, not leaves.",
+  "Catch and eat small bugs": "Most leaves don't eat bugs. They have a different job."
+ },
+ "🌸 Why do flowers have bright colors?": {
+  "To scare away hungry birds": "Bright colors don't scare birds. They draw some things in.",
+  "To keep the plant warm": "Color does not keep a plant warm.",
+  "To make the plant taste good": "Most flowers are not food. Color helps in a new way."
+ },
+ "A plant in a dark closet turns pale. Why?": {
+  "It got too much light": "A dark closet has no light at all.",
+  "It is cold in the closet": "Cold is not why. Think of what the closet is missing.",
+  "It needs more food": "Plants make their own food. They need one thing to do it."
+ },
+ "What do plants release that we breathe?": {
+  "Smoke": "Plants don't make smoke. Smoke comes from fire.",
+  "Carbon only": "Plants take in carbon, in a gas. They don't give off just carbon.",
+  "Sugar": "Plants keep the sugar they make. We don't breathe sugar."
+ },
+ "Which part becomes the fruit?": {
+  "The root": "A root grows down in the soil. It does not turn into fruit.",
+  "The stem": "A stem holds the plant up. It does not turn into fruit.",
+  "The leaf": "A leaf makes food. It does not turn into fruit."
+ },
+ "What is the right order of a plant’s life cycle?": {
+  "Flower, sprout, seed, plant": "A plant does not start as a flower. It starts small.",
+  "Sprout, seed, flower, plant": "A sprout comes from a seed. So the seed is first.",
+  "Seed, flower, sprout, plant": "A plant must sprout and grow before it can bloom."
+ },
+ "A plant in a dark closet turns yellow. Why?": {
+  "It is too cold in the closet": "Cold is not the reason. Think of what a closet lacks.",
+  "It needs more water to drink": "Water is not the problem. Think about the dark.",
+  "It wants a bigger pot to grow": "Pot size is not the reason. Think about the dark."
+ },
+ "What do leaves do for a plant?": {
+  "Hold the plant in the ground": "That is what roots do.",
+  "Make seeds only": "Leaves do not make seeds. Flowers help with that.",
+  "Nothing": "Leaves have a big job for the plant."
+ },
+ "At what temperature does water freeze?": {
+  "212°F (100°C)": "That is when water boils, not freezes.",
+  "70°F (21°C)": "That is about room temperature. Water stays a liquid there.",
+  "100°F (38°C)": "That is a hot day. Ice would melt at that temperature."
+ },
+ "An ice pop melts in the sun. It changed from…": {
+  "Liquid to gas": "It did not turn into a gas. It became a puddle.",
+  "Gas to solid": "The pop started frozen, not as a gas.",
+  "Liquid to solid": "That is freezing, the opposite of melting."
+ },
+ "When water boils, what are the big bubbles made of?": {
+  "Air": "The bubbles are not air from outside. They come from the water itself.",
+  "Oxygen and hydrogen gas": "Boiling doesn't split water into those gases. The water just changes state.",
+  "Heat": "Heat is energy, not a gas. It can't make up a bubble."
+ },
+ "You dissolve 10 g of sugar in 100 g of water. What is the total mass?": {
+  "100 g: the sugar disappeared": "The sugar did not vanish. It broke into tiny bits you can't see.",
+  "More than 110 g": "Mixing can't add extra mass. You only have what you put in.",
+  "10 g": "That is just the sugar. The water is still there too."
+ },
+ "Which is a liquid?": {
+  "A rock": "A rock is a solid. It keeps its shape.",
+  "Steam": "Steam is a gas. It spreads out in the air.",
+  "An ice cube": "An ice cube is a solid. It holds its shape."
+ },
+ "An ice cube melts in your hand. What changed?": {
+  "It went from gas to solid": "It did not start as a gas. Ice is a solid.",
+  "It became a new material": "It is still the same stuff, just a new state.",
+  "Nothing changed": "Something did change. It went from hard to runny."
+ },
+ "What happens to water when it boils?": {
+  "It is gone and no longer exists": "It is not gone. It turns into a gas in the air.",
+  "It changes into a new material": "It is still the same stuff, just in a new state.",
+  "It gets thick and heavy": "Boiling does not make it thick. It spreads out as a gas."
+ },
+ "A puddle and an ice cube are both made of…": {
+  "Glass": "Glass is clear, but a puddle is not made of glass.",
+  "Air": "Air is a gas. A puddle and ice cube are not gas.",
+  "Two different materials": "They look different, but they are the same stuff in two states."
+ },
+ "Why does a balloon get bigger when you blow air in?": {
+  "Air turns solid and fills it up": "Air stays a gas inside a balloon. It does not turn solid.",
+  "The rubber grows when it gets wet": "Your breath is not what makes it big. Rubber does not grow when wet.",
+  "Warm breath makes the rubber grow": "Warm air helps a bit, but more air inside is the main reason."
+ },
+ "Which is a gas?": {
+  "A rock on the ground": "A rock is a solid. It keeps its shape.",
+  "A glass of milk": "Milk is a liquid. It pours and takes the cup's shape.",
+  "A wooden pencil": "A pencil is a solid. It keeps its shape."
+ },
+ "Does the amount of water change when ice melts?": {
+  "Yes, some of the water disappears": "When ice melts, none of it vanishes. It just changes state.",
+  "Yes, there is twice as much water": "Melting does not make more water. The amount stays the same.",
+  "Yes, ice turns into less water": "The amount stays the same. Only the state changes."
+ },
+ "Water droplets form on a cold glass. This is…": {
+  "Evaporation": "Evaporation is when liquid water turns into a gas.",
+  "Melting": "Melting is when a solid turns into a liquid.",
+  "Precipitation": "Precipitation is water falling from clouds, like rain."
+ },
+ "A puddle on a parking lot disappears on a sunny day. Where did the water go?": {
+  "It turned into rocks": "Water can't turn into rocks.",
+  "The sun destroyed it": "The sun can't destroy water. It gives heat that changes it.",
+  "It soaked into the pavement": "Pavement is hard. Most water doesn't sink into it."
+ },
+ "☁️ What are clouds made of?": {
+  "Cotton and soft fluff": "Clouds are not made of cotton. They are made of water.",
+  "Smoke from far-off fires": "Smoke can look like a cloud, but clouds form from water.",
+  "Dust and sand from the ground": "Dust helps drops form, but clouds are not mostly dust."
+ },
+ "Where does most of Earth’s water sit?": {
+  "In clouds": "Clouds hold only a tiny part of Earth's water.",
+  "In rivers": "Rivers hold very little water compared to the whole Earth.",
+  "In ice cubes": "Ice cubes are tiny. Most of Earth's water is somewhere much bigger."
+ },
+ "Why is saving water important?": {
+  "Water never runs out": "Fresh water can run short in many places.",
+  "It isn’t": "It is important. People, plants and animals all need fresh water.",
+  "To make puddles": "Puddles are not the point. We save water so there is enough."
+ },
+ "What powers the water cycle?": {
+  "The Moon": "The Moon pulls on tides, but it does not power the water cycle.",
+  "Wind only": "Wind helps, but it is not the main power source.",
+  "Fish": "Fish live in water. They don't move it through the cycle."
+ },
+ "Rain soaking into the ground becomes…": {
+  "Clouds instantly": "Water in the ground does not jump straight up into clouds.",
+  "Salt": "Rain does not turn into salt.",
+  "Rock": "Rain does not turn into rock. It moves through the soil."
+ },
+ "Drops of water form on the outside of a cold can of juice. Where did the water come from?": {
+  "It leaked out through tiny holes in the can": "Cans don't leak through the outside like that. The drops come from somewhere else.",
+  "It came from the juice soaking through the can": "Juice can't soak through a metal can.",
+  "The cold of the can made brand-new water": "Cold can't make new water. It only changes water that was already there."
+ },
+ "What is it called when water falls from clouds as rain or snow?": {
+  "Evaporation": "Evaporation is when water turns into a gas and rises.",
+  "Condensation": "Condensation is when water vapor turns into drops, like clouds forming.",
+  "Collection": "Collection is when water gathers in lakes and oceans."
+ },
+ "Put the water cycle in order.": {
+  "Precipitation, evaporation, collection, condensation": "The cycle doesn't start with rain. Water must rise first.",
+  "Evaporation, precipitation, condensation, collection": "Clouds must form before rain can fall.",
+  "Condensation, evaporation, collection, precipitation": "Water must rise as a gas before it can turn into clouds."
+ },
+ "Wet clothes dry faster on a sunny, windy day. Why?": {
+  "The sun soaks the water deeper in": "The sun does not push water deeper. It helps water leave.",
+  "Wind blows the water to the inside": "Wind does not push water inside. It carries it away.",
+  "Clothes dry the same every day": "Clothes dry at different speeds depending on the weather."
+ },
+ "Why does the Moon shine?": {
+  "It is on fire": "The Moon is not on fire. It is cold rock.",
+  "It has lightbulbs": "The Moon has no lightbulbs. It is just rock.",
+  "It makes its own light": "The Moon doesn't make its own light. It glows for another reason."
+ },
+ "What is the Sun?": {
+  "A planet": "Planets go around the Sun. The Sun makes its own light.",
+  "A moon": "A moon goes around a planet. The Sun doesn't.",
+  "A comet": "A comet is ice and dust with a tail. The Sun is much bigger."
+ },
+ "How long does Earth take to travel around the Sun?": {
+  "About one day (24 hours)": "One day is how long Earth takes to spin once.",
+  "About one month (30 days)": "One month is about how long the Moon takes to go around Earth.",
+  "About one week (7 days)": "A week is a human calendar unit, not one trip around the Sun."
+ },
+ "Why do we have day and night?": {
+  "The Sun turns off at night": "The Sun never turns off. It always shines.",
+  "The Moon blocks the Sun every night": "The Moon does not block the Sun every night.",
+  "Clouds cover the Sun": "Clouds can't block all sunlight every night."
+ },
+ "About how long does the Moon take to circle Earth?": {
+  "A day": "A day is how long Earth takes to spin once.",
+  "A year": "A year is how long Earth takes to go around the Sun.",
+  "An hour": "An hour is much too short for the Moon to go around Earth."
+ },
+ "Why is it summer in some places and winter in others at the same time?": {
+  "The Sun moves": "The Sun does not move around to make seasons.",
+  "The Moon blocks heat": "The Moon does not block heat from the Sun.",
+  "Random": "Seasons are not random. They come in a regular pattern."
+ },
+ "🌙 Why does the Moon look different through the month?": {
+  "The Moon grows and shrinks each week": "The Moon stays the same size. Only how much we see changes.",
+  "Clouds cover a different part each night": "Clouds don't make the Moon's shape change in a pattern.",
+  "Earth’s shadow covers a bit more each day": "Earth's shadow only falls on the Moon during an eclipse."
+ },
+ "What keeps the Moon orbiting Earth?": {
+  "Wind": "There is no wind in space to push the Moon.",
+  "Magnets": "The Moon is not held by magnets.",
+  "Strings": "There are no strings in space. A force pulls the Moon."
+ },
+ "What does the Moon do?": {
+  "It travels around Mars": "The Moon goes around Earth, not Mars. Mars has its own moons.",
+  "It stays still": "The Moon is always moving. It never stays still.",
+  "It makes its own light": "The Moon doesn't make light. It shines with light from the Sun."
+ },
+ "The Sun is a…": {
+  "Planet": "The Sun is not a planet. Planets go around it.",
+  "Moon": "The Sun is not a moon. Moons go around planets.",
+  "Cloud": "The Sun is not a cloud. Clouds are made of water."
+ },
+ "Why do the stars seem to come out at night?": {
+  "Stars only start to shine when it gets dark": "Stars shine all the time, day and night.",
+  "Stars move closer to Earth at night": "Stars don't move closer at night. They stay very far away.",
+  "The Moon gives them light to shine with": "Stars make their own light. The Moon doesn't give them light."
+ },
+ "Which is the largest planet?": {
+  "Earth": "Earth is pretty small compared to the gas giants.",
+  "Mars": "Mars is smaller than Earth.",
+  "Mercury": "Mercury is the smallest planet."
+ },
+ "Which planet is called the Red Planet?": {
+  "Venus": "Venus is covered in yellowish clouds.",
+  "Saturn": "Saturn is known for its rings, not for being red.",
+  "Neptune": "Neptune is a blue planet."
+ },
+ "Which planet is closest to the Sun?": {
+  "Venus": "Venus is the second planet from the Sun.",
+  "Earth": "Earth is the third planet from the Sun.",
+  "Neptune": "Neptune is the farthest planet from the Sun.",
+  "Mars": "Mars is the fourth planet from the Sun."
+ },
+ "Which planet has the most famous rings?": {
+  "Mars": "Mars has no rings.",
+  "Earth": "Earth has no rings.",
+  "Mercury": "Mercury has no rings."
+ },
+ "How many planets are in our solar system?": {
+  "5": "That is too few. There are more planets.",
+  "9": "There used to be 9, but Pluto is now called a dwarf planet.",
+  "12": "That is too many. Some count dwarf planets, but they don't count as planets."
+ },
+ "Which planet do we live on?": {
+  "Mars": "Mars is our neighbor, but no people live there.",
+  "Venus": "Venus is too hot for people to live on.",
+  "Jupiter": "Jupiter is a gas giant with no solid ground."
+ },
+ "Which planet is the hottest?": {
+  "Mercury": "Mercury is closest to the Sun, but it has no thick air to trap heat.",
+  "Mars": "Mars is farther from the Sun and is very cold.",
+  "Neptune": "Neptune is the farthest planet, so it is very cold."
+ },
+ "Which planet is farthest from the Sun?": {
+  "Saturn": "Saturn is far, but two planets lie beyond it.",
+  "Uranus": "Uranus is far, but one planet lies beyond it.",
+  "Mars": "Mars is the fourth planet, still fairly close to the Sun."
+ },
+ "Why does the Moon’s shape seem to change?": {
+  "Earth’s shadow covers a different part each night": "Earth's shadow only covers the Moon during a lunar eclipse.",
+  "Clouds in space hide part of it as it moves": "There are no clouds in space to hide the Moon.",
+  "The Moon grows and shrinks a bit as it orbits": "The Moon stays the same size. Only how much we see changes."
+ },
+ "Why is it warmer in summer where you live?": {
+  "Earth is much closer to the Sun during the summer months": "Earth's distance from the Sun changes very little, and it's actually closest in January.",
+  "The Sun burns hotter in summer and cooler in winter": "The Sun shines about the same all year. The difference is on Earth.",
+  "Summer clouds trap heat and block the cold winds": "Clouds don't cause summer. Think about how sunlight hits Earth."
+ },
+ "Why can Earth support life when Mars can’t (for now)?": {
+  "Earth is bigger than every other planet": "Earth is not the biggest planet. Jupiter is much bigger.",
+  "Mars is too close to the Sun and too hot": "Mars is farther from the Sun than Earth, and it is very cold.",
+  "Mars has no gravity, so nothing stays": "Mars does have gravity, though less than Earth's."
+ },
+ "What keeps the planets in orbit around the Sun?": {
+  "Wind": "There is no wind in space to push planets around.",
+  "Magnets on the planets": "Planets are not held by magnets.",
+  "Nothing; they float": "Planets don't just float. A force pulls them toward the Sun."
+ },
+ "A north pole and a south pole are brought close. They…": {
+  "Push apart (repel)": "Opposite poles do the opposite of pushing apart.",
+  "Stop being magnets": "Magnets stay magnets when they come close.",
+  "Do nothing at all": "Magnets near each other always push or pull."
+ },
+ "You push the north pole of one magnet toward the north pole of another. What happens?": {
+  "They stick together": "Like poles do the opposite of sticking together.",
+  "Nothing": "Something does happen. You can feel a force.",
+  "They melt": "Magnets don't melt when they come close."
+ },
+ "Which will a magnet pick up?": {
+  "A wooden pencil": "Wood is not magnetic. Magnets don't pull it.",
+  "A plastic cup": "Plastic is not magnetic.",
+  "A paper towel": "Paper is not magnetic."
+ },
+ "Where is a bar magnet strongest?": {
+  "In the middle": "The middle of a bar magnet is its weakest part.",
+  "Equally everywhere": "Magnet strength is not even. Some parts are stronger.",
+  "Nowhere": "A magnet is strong in some places. That's how it picks things up."
+ },
+ "Fridge magnets stick because the door is…": {
+  "Made of wood": "Wood is not magnetic. A magnet would fall off.",
+  "Cold": "Cold doesn't make a magnet stick.",
+  "Painted": "Paint isn't magnetic. It's what is under the paint."
+ },
+ "How does a compass work?": {
+  "It uses GPS from space to find north": "A compass doesn't need GPS. It works with no signal at all.",
+  "The wind turns the needle to point north": "Wind doesn't turn the needle. It works indoors too.",
+  "A small battery spins the needle around": "Most compasses have no battery. The needle moves on its own."
+ },
+ "Will a magnet pick up a coin made of copper?": {
+  "Yes, always": "Magnets only pull on certain metals, like iron.",
+  "Only on Tuesdays": "Magnets don't work on some days and not others.",
+  "Only big coins": "Size doesn't matter. The kind of metal matters."
+ },
+ "What can pass through paper and still pull a paper clip?": {
+  "Light only": "Light can't pull a paper clip.",
+  "Glue": "Glue sticks things together, but it can't pass through paper.",
+  "Sound": "Sound can't pull a paper clip."
+ },
+ "Which object will a magnet pick up?": {
+  "A plastic spoon": "Plastic is not magnetic.",
+  "A wooden block": "Wood is not magnetic.",
+  "A paper clip made of plastic": "A plastic clip is still plastic, so a magnet won't pull it."
+ },
+ "Two north poles of magnets are pushed together. What happens?": {
+  "They stick together": "Like poles push apart, not stick together.",
+  "Nothing": "Something does happen. You can feel a push.",
+  "They become one magnet": "Magnets stay separate. They don't combine into one."
+ },
+ "Can a magnet work through a sheet of paper?": {
+  "No, paper always blocks magnets": "Paper doesn't block a magnet's pull. Magnet force goes through it.",
+  "Only through metal, not paper": "Magnet force can pass through many things, not just metal.",
+  "Only if the paper is wet first": "Wet or dry, magnets work through paper."
+ },
+ "Where is a magnet’s pull strongest?": {
+  "In the middle": "The middle of a bar magnet is its weakest part.",
+  "It’s the same everywhere": "The pull is not even all over. Some parts are stronger.",
+  "Only on the sides": "The sides are weaker than other parts of a magnet."
+ },
+ "A mirror works because light…": {
+  "Is absorbed by it": "A mirror doesn't soak up light. If it did, it would look dark.",
+  "Turns into sound": "Light doesn't turn into sound.",
+  "Goes around it": "Light doesn't go around a mirror. You'd see through it if it did."
+ },
+ "What makes sound?": {
+  "Colors": "Colors are about light. They don't make sound.",
+  "Magnets": "Magnets push and pull. They don't make sound on their own.",
+  "Shadows": "Shadows are areas with less light. They are silent.",
+  "Light": "Light is not what makes sound. Sound needs shaking motion.",
+  "Color": "Color is part of light, not sound.",
+  "Cold": "Cold is about temperature. It doesn't make sound."
+ },
+ "Why do you see lightning before you hear thunder?": {
+  "Sound travels faster than light": "Sound is much slower than light. That's why the order happens.",
+  "Thunder happens after lightning ends": "Thunder and lightning happen at the same moment.",
+  "Your eyes work faster than ears": "Your eyes and ears work about as fast. The difference is how fast each signal travels.",
+  "Thunder happens a little after lightning": "Thunder and lightning happen at the same moment. The delay comes from travel speed.",
+  "Sound travels much faster than light": "Sound is much slower than light.",
+  "Your eyes work faster than your ears": "Your eyes and ears work about as fast. The difference is in the travel."
+ },
+ "Why do shadows form?": {
+  "Light bends around everything": "Light doesn't bend around everything. It travels in straight lines.",
+  "Objects make darkness": "Objects don't make darkness. Shadows form for another reason.",
+  "The ground is dark": "The ground is not dark by itself. Shadows move with objects."
+ },
+ "Which travels faster: sound through air or light?": {
+  "Sound": "Sound is much slower. Think about a storm: you see the flash first.",
+  "They’re equal": "They are not equal. One is much, much faster."
+ },
+ "What is an echo?": {
+  "A new sound made by a wall": "A wall doesn't make a new sound. The sound comes from you.",
+  "Light bouncing off a wall": "That is a reflection of light, not an echo.",
+  "Sound getting louder in air": "An echo is not louder sound. It is sound that returns."
+ },
+ "Why can’t sound travel in space?": {
+  "It is too cold for sound up there": "Sound needs something to travel through. Cold isn't the problem.",
+  "It is too bright for sound to go": "Brightness has nothing to do with whether sound travels.",
+  "The Sun’s noise covers all sounds": "The Sun's noise can't reach us either. Space is silent."
+ },
+ "A drum makes a sound when…": {
+  "It gets warm": "Warmth doesn't make sound. A drum needs to move.",
+  "It is painted": "Paint doesn't make sound.",
+  "It is quiet": "A drum makes sound when hit, not when it is quiet."
+ },
+ "A big drum makes a lower sound than a small drum. Why?": {
+  "Big drums are louder, and loud sounds are low": "Loudness and pitch are different. A big drum can be soft and still low.",
+  "Small drums vibrate more slowly than big ones": "Small drums vibrate faster, which makes a higher pitch.",
+  "Pitch depends only on how hard you hit it": "Hitting harder changes loudness. Pitch depends on size."
+ },
+ "Why can you see a shadow behind you on a sunny day?": {
+  "Shadows are made of dark air": "Shadows are not made of dark air.",
+  "Shadows are a reflection of you": "A shadow is not a reflection. A mirror shows reflections.",
+  "Light goes through you": "Light doesn't go through you. That's why a shadow forms."
+ },
+ "A guitar string is plucked harder. What changes?": {
+  "The sound gets higher": "How hard you pluck changes loudness, not pitch.",
+  "The string gets longer": "Plucking doesn't stretch a string longer.",
+  "Nothing": "Something does change. You can hear the difference."
+ },
+ "What happens to sound in space where there is no air?": {
+  "It gets louder": "Sound can't get louder without air. It needs something to travel through.",
+  "It travels faster": "Sound can't travel at all without air.",
+  "It turns into light": "Sound doesn't turn into light."
+ },
+ "What does the nucleus of a cell do?": {
+  "Makes food for the cell from sunlight": "Chloroplasts make food from sunlight, not the nucleus.",
+  "Forms the outer skin of the cell": "The membrane is the outer layer of the cell, not the nucleus.",
+  "Stores extra water and waste": "Vacuoles store water and waste, not the nucleus."
+ },
+ "Which part do plant cells have that animal cells don’t?": {
+  "A nucleus and a membrane": "Both plant and animal cells have a nucleus and a membrane.",
+  "A cell membrane only": "Animal cells have a membrane too.",
+  "Mitochondria and a nucleus": "Both kinds of cells have mitochondria and a nucleus."
+ },
+ "What are all living things made of?": {
+  "Plastic": "Plastic is made by people. It is not alive.",
+  "Rocks": "Rocks are not alive.",
+  "Only water": "Living things have lots of water, but they are not only water."
+ },
+ "Which living thing is made of just one cell?": {
+  "A tree": "A tree is made of many, many cells.",
+  "A dog": "A dog is made of trillions of cells.",
+  "A person": "A person is made of trillions of cells."
+ },
+ "What do you need to see most cells?": {
+  "A telescope": "A telescope shows faraway things, not tiny things.",
+  "Sunglasses": "Sunglasses make light dimmer, not things bigger.",
+  "A ruler": "A ruler measures length. It can't make things look bigger."
+ },
+ "Why do cuts heal?": {
+  "Bandages grow new skin": "Bandages protect a cut, but they don't make skin.",
+  "Blood dries into new skin": "Blood forms a scab, but new skin comes from the body.",
+  "Old cells grow bigger": "Cells don't just get bigger. New ones are made."
+ },
+ "What is the thin outer layer of every cell called?": {
+  "The wall of bricks": "Cells are not made of bricks.",
+  "The shell": "A shell is a hard outer case, like on a snail.",
+  "The skin": "Skin is an organ made of many cells. It is not a layer of one cell."
+ },
+ "Cells that work together form…": {
+  "Bones only": "Bones are just one kind of tissue.",
+  "Blood cells": "Blood cells are just one kind of cell.",
+  "One big cell": "Cells working together stay as many cells, not one big cell."
+ },
+ "Two black-furred dogs have a puppy with brown fur. How is that possible?": {
+  "The puppy’s fur changed color from the food it ate": "Food doesn't change fur color genes.",
+  "One parent must have had brown fur when it was young": "Fur color usually stays the same from puppyhood.",
+  "It isn’t possible, so the puppy must be from other dogs": "It is possible. Genes can be hidden in a parent."
+ },
+ "What is the basic unit of all living things?": {
+  "The atom": "An atom is not alive. Living things are made of larger units.",
+  "The organ": "An organ is made of many smaller parts.",
+  "The bone": "A bone is an organ made of many smaller parts."
+ },
+ "What does the cell membrane do?": {
+  "Makes food for the cell from sunlight": "Chloroplasts make food from sunlight, not the membrane.",
+  "Stores all of the cell’s DNA": "The nucleus holds DNA, not the membrane.",
+  "Gives the cell its stiff, hard shape": "A cell wall makes plant cells stiff. The membrane is soft."
+ },
+ "Why do plant cells have a cell wall but animal cells don’t?": {
+  "Animal cells are too small to hold a wall": "Animal cells are not too small. Some are bigger than plant cells.",
+  "Plant cells need walls to make sugar": "Chloroplasts make sugar, not walls.",
+  "Walls keep all water out of plant cells": "Walls let water in. They don't keep it out."
+ },
+ "Which is a sign that a chemical reaction happened?": {
+  "The object moved to a new place": "Moving changes where something is, not what it is made of.",
+  "It got wet or dried out": "Getting wet or drying is a physical change.",
+  "It was cut into small pieces": "Cutting changes size and shape. It is a physical change."
+ },
+ "Baking a cake is…": {
+  "Just a mixture": "A cake is not just mixed. Heat changes its ingredients into something new.",
+  "Melting only": "Melting is a physical change. Baking does more than melt.",
+  "No change": "There is definitely a change. Raw batter turns into cake."
+ },
+ "Mixing salt into water makes…": {
+  "A new chemical": "Salt in water keeps being salt. It can be gotten back by evaporating.",
+  "Ice": "Ice forms when water freezes, not when salt is mixed in.",
+  "Gas": "Mixing salt into water doesn't make a gas."
+ },
+ "Why does an iron nail rust outside?": {
+  "It gets cold at night": "Cold alone doesn't cause rust. Rust is a chemical change.",
+  "Rain is a kind of paint": "Rain is water, not paint.",
+  "Nails get old and soft": "Nails don't get soft. Rust is a chemical change."
+ },
+ "How can you separate sand from water?": {
+  "Freeze it solid": "Freezing turns the water to ice, but the sand stays trapped in it.",
+  "Shake it hard": "Shaking just mixes them more.",
+  "Stir it with a spoon": "Stirring just mixes them more."
+ },
+ "You mix sand and water. Is it a mixture or a new substance?": {
+  "A new substance: the sand dissolves": "Sand does not dissolve in water. It settles to the bottom.",
+  "A new substance: it becomes mud": "Mud is still sand and water mixed together.",
+  "Neither: sand and water can’t mix": "Sand and water can be mixed, just not dissolved."
+ },
+ "Baking soda and vinegar fizz in a sealed bag, and it puffs up. What made the bag puff?": {
+  "The bag got warm and stretched out": "Warmth isn't enough to puff a sealed bag. Something new was formed.",
+  "Air from outside leaked into the bag": "The bag is sealed, so outside air can't get in.",
+  "The liquid expanded and filled the bag": "Liquids barely expand. A gas was made."
+ },
+ "How can you separate salt from salt water?": {
+  "Pull the salt out with a magnet": "Salt is not magnetic.",
+  "Pour it through a paper filter": "Salt dissolves, so it passes through a filter with the water.",
+  "Freeze it so the salt sinks out": "Freezing doesn't make the salt sink out."
+ },
+ "Rust forming on a bike is a…": {
+  "Physical change": "Rust is a new substance, so it's more than a physical change.",
+  "Change of state": "A change of state is like melting or freezing. Rust is different.",
+  "Mixture": "Rust is a new substance, not a mix of things that can be separated."
+ },
+ "Cutting paper is a…": {
+  "Chemical change": "Cut paper is still paper. Nothing new is made.",
+  "New substance": "The pieces are still the same substance.",
+  "Reaction": "A reaction makes a new substance. Cutting doesn't."
+ }
+}

@@ -30,6 +30,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const code = await t.$eval('.modal:last-child .codebox', (e) => e.value);
   console.log('assignment code:', code.slice(0, 40) + '…');
   if (!/^REALA1-/.test(code)) fail('no assignment code');
+  await t.goto('about:blank');   // the teacher page keeps drawing the city; park it so the student page gets the machine (its saved data stays)
   // ---- student
   const ctx = await b.newContext({ ...devices['iPhone 13'], deviceScaleFactor: 1 });
   const p = await ctx.newPage(); p.on('pageerror', (e) => errors.push(e.message));
@@ -71,7 +72,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const rep = await ev(() => { const G = window.REAL.game(); return null; });
   await phoneApp('Settings'); await p.click('button:has-text("For grown-ups")'); await sleep(500); await p.click('button:has-text("Progress report")'); await sleep(700);
   const rcode = await p.$eval('.codebox', (e) => e.value);
-  await t.click('.modal:last-child button:has-text("Done")').catch(() => {}); await sleep(300);
+  await ctx.close();
+  await t.goto(url, { timeout: 240000, waitUntil: 'domcontentloaded' }); await t.waitForFunction(() => window.REAL && window.REAL.mode === 'title', null, { timeout: 180000 });
+  await t.click('#btn-teacher'); await sleep(800);
   await t.fill('.modal textarea.writebox', rcode); await t.click('button:has-text("Add reports")'); await sleep(600);
   const cell = await t.$eval('.tdash .trow td:nth-child(6)', (e) => e.textContent).catch(() => '');
   console.log('dashboard pre → post:', cell);

@@ -1,0 +1,893 @@
+{
+ "Cereal A: $4 for 16 oz. Cereal B: $7 for 32 oz. Which is the better deal?": {
+  "Cereal A": "Cereal A has the lower price tag, but it works out to about 25¢ an ounce. Find the price per ounce of the other box too.",
+  "They cost the same per ounce": "Double the ounces does not cost double the price here. Divide each price by its ounces and compare."
+ },
+ "Cereal A: $5 for 12 oz. Cereal B: $9 for 24 oz. Which is the better deal?": {
+  "Cereal A": "Cereal A has the lower price tag, but it works out to about 41.7¢ an ounce. Find the price per ounce of the other box too.",
+  "They cost the same per ounce": "Double the ounces does not cost double the price here. Divide each price by its ounces and compare."
+ },
+ "Cereal A: $3 for 12 oz. Cereal B: $5 for 24 oz. Which is the better deal?": {
+  "Cereal A": "Cereal A has the lower price tag, but it works out to about 25¢ an ounce. Find the price per ounce of the other box too.",
+  "They cost the same per ounce": "Double the ounces does not cost double the price here. Divide each price by its ounces and compare."
+ },
+ "Cereal A: $3 for 16 oz. Cereal B: $5 for 32 oz. Which is the better deal?": {
+  "Cereal A": "Cereal A has the lower price tag, but it works out to about 18.8¢ an ounce. Find the price per ounce of the other box too.",
+  "They cost the same per ounce": "Double the ounces does not cost double the price here. Divide each price by its ounces and compare."
+ },
+ "Cereal A: $4 for 12 oz. Cereal B: $7 for 24 oz. Which is the better deal?": {
+  "Cereal A": "Cereal A has the lower price tag, but it works out to about 33.3¢ an ounce. Find the price per ounce of the other box too.",
+  "They cost the same per ounce": "Double the ounces does not cost double the price here. Divide each price by its ounces and compare."
+ },
+ "Cereal A: $5 for 16 oz. Cereal B: $9 for 32 oz. Which is the better deal?": {
+  "Cereal A": "Cereal A has the lower price tag, but it works out to about 31.3¢ an ounce. Find the price per ounce of the other box too.",
+  "They cost the same per ounce": "Double the ounces does not cost double the price here. Divide each price by its ounces and compare."
+ },
+ "Juice A: $3 for 1 bottle. Juice B: $5 for 2 bottles. Which costs less per bottle?": {
+  "Juice A": "Juice A has the lower price tag, but the other one gives you two bottles. Split $5 between 2 bottles and compare.",
+  "They cost the same": "$5 for 2 bottles is not the same as $3 for each bottle. Divide $5 by 2 and compare.",
+  "You can’t tell": "You have each price and the bottle count, which is all you need. Divide each price by its bottles."
+ },
+ "Which is 3,200,000 in scientific notation?": {
+  "32 × 10⁵": "That does equal 3,200,000, but 32 is bigger than 10. The front number must be at least 1 and less than 10.",
+  "3.2 × 10⁵": "That is only 320,000. Count again how many places the decimal point moves.",
+  "0.32 × 10⁷": "That does equal 3,200,000, but 0.32 is less than 1. The front number must be at least 1 and less than 10."
+ },
+ "The forecast says 30% chance of rain. What is the chance it stays dry?": {
+  "30%": "That is the chance of rain itself. The question asks about staying dry.",
+  "50%": "The forecast is not a coin toss. Rain and dry together make 100%, so use the 30% rain chance.",
+  "0%": "A 30% chance of rain still leaves room for a dry day. Take the rain chance away from 100%."
+ },
+ "The forecast says 60% chance of rain. What is the chance it stays dry?": {
+  "60%": "That is the chance of rain itself. The question asks about staying dry.",
+  "50%": "The forecast is not a coin toss. Rain and dry together make 100%, so use the 60% rain chance.",
+  "0%": "A 60% chance of rain still leaves room for a dry day. Take the rain chance away from 100%."
+ },
+ "The forecast says 80% chance of rain. What is the chance it stays dry?": {
+  "80%": "That is the chance of rain itself. The question asks about staying dry.",
+  "50%": "The forecast is not a coin toss. Rain and dry together make 100%, so use the 80% rain chance.",
+  "0%": "A 80% chance of rain still leaves room for a dry day. Take the rain chance away from 100%."
+ },
+ "The forecast says 20% chance of rain. What is the chance it stays dry?": {
+  "20%": "That is the chance of rain itself. The question asks about staying dry.",
+  "50%": "The forecast is not a coin toss. Rain and dry together make 100%, so use the 20% rain chance.",
+  "0%": "A 20% chance of rain still leaves room for a dry day. Take the rain chance away from 100%."
+ },
+ "Which survey gives the most trustworthy picture of what customers want?": {
+  "5 of your friends": "Five people is a tiny sample, and friends may just tell you what you want to hear.",
+  "300 people who already love your cart": "That is a big group, but they are all fans, so their views lean one way. A fair sample picks customers at random.",
+  "Just you": "One person, especially the owner, cannot show what many different customers want."
+ },
+ "Ice cream sales and sunburns both rise in summer. Does ice cream cause sunburn?": {
+  "Yes, because both go up together": "Two things rising together does not prove one causes the other. Look for a third thing that could drive both.",
+  "Only on hot, sunny weekends": "The day of the week has nothing to do with it. Ask what else rises in summer that could drive both numbers.",
+  "No, ice cream prevents sunburn": "Nothing in the data shows ice cream protects skin. Both numbers simply rise in the same season."
+ },
+ "Which sample size gives more reliable results?": {
+  "5 friends": "Five people is a very small sample, and friends often think alike.",
+  "1 person": "One person cannot speak for a whole group; their answer could be unusual.",
+  "10 people in one room": "Ten people is still small, and people in one room may share the same views or situation."
+ },
+ "A survey asked only gym members if people like exercise. What is the problem?": {
+  "The sample is too random": "Gym members are not random at all; they were chosen from a group that already exercises.",
+  "Nothing": "There is a real problem: gym members are likely to enjoy exercise, so the results lean one way.",
+  "Surveys can’t use questions": "Surveys are made of questions, so that is not the issue. Think about who was asked."
+ },
+ "Using the rule of 72, about how many years for $1000 to double at 9% a year?": {
+  "About 9 years": "That just turns the interest rate into years. Divide 72 by the rate instead.",
+  "About 63 years": "That subtracts 9 from 72. The rule of 72 divides 72 by the rate.",
+  "About 16 years": "That is about how long it takes to double twice. Divide 72 by the rate for one doubling."
+ },
+ "Using the rule of 72, about how many years for $5000 to double at 9% a year?": {
+  "About 9 years": "That just turns the interest rate into years. Divide 72 by the rate instead.",
+  "About 63 years": "That subtracts 9 from 72. The rule of 72 divides 72 by the rate.",
+  "About 16 years": "That is about how long it takes to double twice. Divide 72 by the rate for one doubling."
+ },
+ "Using the rule of 72, about how many years for $5000 to double at 6% a year?": {
+  "About 6 years": "That just turns the interest rate into years. Divide 72 by the rate instead.",
+  "About 66 years": "That subtracts 6 from 72. The rule of 72 divides 72 by the rate.",
+  "About 24 years": "That is about how long it takes to double twice. Divide 72 by the rate for one doubling."
+ },
+ "Using the rule of 72, about how many years for $1000 to double at 8% a year?": {
+  "About 8 years": "That just turns the interest rate into years. Divide 72 by the rate instead.",
+  "About 64 years": "That subtracts 8 from 72. The rule of 72 divides 72 by the rate.",
+  "About 18 years": "That is about how long it takes to double twice. Divide 72 by the rate for one doubling."
+ },
+ "Using the rule of 72, about how many years for $5000 to double at 8% a year?": {
+  "About 8 years": "That just turns the interest rate into years. Divide 72 by the rate instead.",
+  "About 64 years": "That subtracts 8 from 72. The rule of 72 divides 72 by the rate.",
+  "About 18 years": "That is about how long it takes to double twice. Divide 72 by the rate for one doubling."
+ },
+ "Using the rule of 72, about how many years for $1000 to double at 6% a year?": {
+  "About 6 years": "That just turns the interest rate into years. Divide 72 by the rate instead.",
+  "About 66 years": "That subtracts 6 from 72. The rule of 72 divides 72 by the rate.",
+  "About 24 years": "That is about how long it takes to double twice. Divide 72 by the rate for one doubling."
+ },
+ "Price vs expected cups: $3.00 → 60 · $3.50 → 50 · $4.00 → 42 · $5.00 → 30. Which price earns the most revenue?": {
+  "$3.50": "At $3.50 you get $3.50 × 50 = $175. The higher price loses enough cups to bring in less, so compare all four totals.",
+  "$4.00": "At $4.00 you get $4.00 × 42 = $168. The higher price loses enough cups to bring in less, so compare all four totals.",
+  "$5.00": "At $5.00 you get $5.00 × 30 = $150. The highest price sells the fewest cups, so compare all four totals."
+ },
+ "Each cup costs you $1.5 to make. Which price earns the most profit?": {
+  "$6": "At $6 the profit is (6 − 1.5) × 70 = $315. More profit per cup does not help if you sell far fewer cups.",
+  "$7": "At $7 the profit is (7 − 1.5) × 45 = $247.50. Each cup earns more, but you sell less than half as many as at the lowest price."
+ },
+ "Each cup costs you $1 to make. Which price earns the most profit?": {
+  "$2": "At $2 you sell the most cups, but each earns only $1, so profit is just $100. Work out profit at each price.",
+  "$4": "At $4 the profit is (4 − 1) × 45 = $135. Each cup earns more, but sales drop a lot, so compare it with the other prices."
+ },
+ "Each cup costs you $2 to make. Which price earns the most profit?": {
+  "$6": "At $6 the profit is (6 − 2) × 70 = $280. More profit per cup does not help if you sell far fewer cups.",
+  "$7": "At $7 the profit is (7 − 2) × 45 = $225. Each cup earns more, but you sell less than half as many as at the lowest price."
+ },
+ "🐷 You get $10. Save $2. How much can you spend?": {
+  "$12": "You added the $2. Saving takes money away from what you spend.",
+  "$2": "That is the part you save. How much is left to spend?",
+  "$10": "That is all of it. Take away the $2 you save."
+ },
+ "What is a good saving habit?": {
+  "Save only once a year": "Once a year is not much. Small bits saved more often add up.",
+  "Spend first, save never": "If you never save, you will have none for later.",
+  "Hide it and forget": "Lost money can’t help you. Save it where you can keep track."
+ },
+ "Where is money safest for saving?": {
+  "Under a rock": "A rock can’t keep money safe. Rain or a person could take it.",
+  "In your pocket on the bus": "Money in a pocket can fall out or get lost.",
+  "Lent to Jax": "Jax may not pay it back. Lent money is not safe."
+ },
+ "Why save some money?": {
+  "To lose it": "Saving keeps money. It does not lose it.",
+  "Because it’s heavy": "Weight is not the point. Think of what you may need later.",
+  "No reason": "There is a good reason. Think of things you may want or need later."
+ },
+ "You save $5 a week. How much after 4 weeks?": {
+  "$9": "You added 5 and 4. You save 5 each week, four times.",
+  "$5": "That is just one week. Count all 4 weeks.",
+  "$40": "That is 8 weeks of saving. Count just 4 weeks."
+ },
+ "What is a savings goal?": {
+  "A goal in a soccer game": "That is a sports goal. This goal is about money.",
+  "A bill you must pay soon": "A bill is money you owe. A goal is money you mean to keep.",
+  "Money you borrow from a bank": "Borrowed money must be paid back. That is not saving."
+ },
+ "Where is a safe place to keep savings?": {
+  "In your coat pocket all day": "Coins can fall out of a pocket and get lost.",
+  "Loose in your school backpack": "Loose cash in a bag can get lost or taken.",
+  "With someone you just met": "A new person may not give it back."
+ },
+ "Why save some of your birthday money?": {
+  "So it disappears": "Saved money stays with you. It does not go away.",
+  "So you can’t use it": "You can use saved money. You just use it later.",
+  "Because saving is only for grown-ups": "Kids can save too. Saving is for all ages."
+ },
+ "You owe $300 on a card at 25% interest and $300 on a loan at 8%. You have $100 extra. Where should it go?": {
+  "The 8% loan": "The 8% loan grows more slowly. Extra money does the most good on the debt that grows fastest.",
+  "Split it evenly": "Splitting sends half your money to the slower-growing debt. Check which rate costs you more.",
+  "Spend it instead": "Both debts keep growing while you spend. Paying debt down saves you interest."
+ },
+ "A $2,000 credit card balance charges 24% a year (2% each month, added monthly). You pay nothing for 12 months. About how much do you owe?": {
+  "$2,480": "That adds 24% just once. Interest is added every month, so you also pay interest on interest.",
+  "$2,000": "That is what you started with. An unpaid balance grows with interest every month.",
+  "$4,000": "That doubles the balance, which would take 100% interest. Grow the balance by 2% each month for 12 months."
+ },
+ "A $2,000 credit card balance charges 18% a year (1.5% each month, added monthly). You pay nothing for 12 months. About how much do you owe?": {
+  "$2,360": "That adds 18% just once. Interest is added every month, so you also pay interest on interest.",
+  "$2,000": "That is what you started with. An unpaid balance grows with interest every month.",
+  "$4,000": "That doubles the balance, which would take 100% interest. Grow the balance by 1.5% each month for 12 months."
+ },
+ "A $1,000 credit card balance charges 18% a year (1.5% each month, added monthly). You pay nothing for 12 months. About how much do you owe?": {
+  "$1,180": "That adds 18% just once. Interest is added every month, so you also pay interest on interest.",
+  "$1,000": "That is what you started with. An unpaid balance grows with interest every month.",
+  "$2,000": "That doubles the balance, which would take 100% interest. Grow the balance by 1.5% each month for 12 months."
+ },
+ "A $1,000 credit card balance charges 24% a year (2% each month, added monthly). You pay nothing for 12 months. About how much do you owe?": {
+  "$1,240": "That adds 24% just once. Interest is added every month, so you also pay interest on interest.",
+  "$1,000": "That is what you started with. An unpaid balance grows with interest every month.",
+  "$2,000": "That doubles the balance, which would take 100% interest. Grow the balance by 2% each month for 12 months."
+ },
+ "A $500 credit card balance charges 24% a year (2% each month, added monthly). You pay nothing for 12 months. About how much do you owe?": {
+  "$620": "That adds 24% just once. Interest is added every month, so you also pay interest on interest.",
+  "$500": "That is what you started with. An unpaid balance grows with interest every month.",
+  "$1,000": "That doubles the balance, which would take 100% interest. Grow the balance by 2% each month for 12 months."
+ },
+ "A $500 credit card balance charges 18% a year (1.5% each month, added monthly). You pay nothing for 12 months. About how much do you owe?": {
+  "$590": "That adds 18% just once. Interest is added every month, so you also pay interest on interest.",
+  "$500": "That is what you started with. An unpaid balance grows with interest every month.",
+  "$1,000": "That doubles the balance, which would take 100% interest. Grow the balance by 1.5% each month for 12 months."
+ },
+ "Why avoid “buy now, pay later” for wants?": {
+  "It is always free of any fees": "Many of these plans charge late fees or interest if you miss a payment.",
+  "It helps your credit score grow": "These plans often do not build credit, and missed payments can hurt it.",
+  "It lets you save money faster": "Buying now on credit is spending, not saving. You still owe the full price."
+ },
+ "What is a sign debt is becoming a problem?": {
+  "Paying bills on the due date": "Paying on time is a healthy habit, not a warning sign.",
+  "Paying the full balance": "Paying in full means you owe nothing more, which is a good sign.",
+  "Saving a little each month": "Saving a little each month shows money is under control."
+ },
+ "You have two debts: 5% and 22% interest. Extra money should go to…": {
+  "The 5% debt first": "The 5% debt grows more slowly. Extra money saves more on the debt that grows faster.",
+  "Neither": "Leaving the extra money unused lets both debts keep growing. Pick the one that costs you more.",
+  "A new loan": "A new loan adds more debt and more interest. Use the money on what you already owe."
+ },
+ "You owe $500 on a card and can pay $25 or $100 this month. Which saves the most money?": {
+  "Paying $25": "A smaller payment leaves a bigger balance for interest to grow on.",
+  "Paying nothing": "Paying nothing leaves the full $500 growing interest, and it can add a late fee.",
+  "They cost the same": "Interest is charged on what is left, and the two payments leave different balances."
+ },
+ "What does it mean to “pay the minimum” on a credit card?": {
+  "Pay the whole balance so you owe nothing more": "That is paying in full. The minimum is much smaller than the whole balance.",
+  "Skip this month’s payment with no fee at all": "Skipping a payment usually brings a late fee. The minimum is a payment you still must make.",
+  "Pay a small part and the rest is forgiven": "Nothing is forgiven. The unpaid part stays on your card and keeps building interest."
+ },
+ "Loan A: $10,000 at 6% APR for 36 months ($304/month). Loan B: $10,000 at 9% APR for 60 months ($208/month). Which costs less in total?": {
+  "Loan B, because the monthly payment is lower": "Loan B’s payment is lower, but you pay it for 60 months. Multiply each payment by its number of months.",
+  "They cost the same": "Both borrow $10,000, but the rates and lengths are different. Multiply each payment by its months.",
+  "You can’t tell without the car price": "Both loans are for $10,000, so the car price does not matter. Compare the total of all payments."
+ },
+ "What does APR mean on a loan?": {
+  "The monthly payment you make on the loan": "APR is a yearly percent, not a dollar amount you pay each month.",
+  "The total number of months the loan lasts": "That is the loan’s length, or term. APR is a percent that shows cost.",
+  "The interest rate before any fees are added": "APR goes further than the plain interest rate; it also counts most fees."
+ },
+ "Which habit builds a good credit score?": {
+  "Opening lots of new cards at once": "Many new cards at once can look risky to lenders and pull your score down for a while.",
+  "Maxing out your credit limit": "Using your whole limit makes you look stretched thin, which hurts your score.",
+  "Missing payments now and then": "Even a few missed payments can hurt your score for years."
+ },
+ "Which helps your credit score most?": {
+  "Opening lots of new cards": "Many new cards at once can look risky to lenders and pull your score down for a while.",
+  "Missing payments": "Missed payments hurt your score and stay on your report for years.",
+  "Maxing out cards": "Using your whole limit makes you look stretched thin, which hurts your score."
+ },
+ "How long does it take to build good credit?": {
+  "About one day once you open a card": "A new card has no history yet. Lenders want to see a record over time.",
+  "One month if you spend a lot": "Spending a lot does not build credit fast. What counts is a long record of paying as agreed.",
+  "It can’t be built, you are born with it": "Nobody is born with a credit score. It starts when you begin borrowing and paying back."
+ },
+ "Who can look at your credit report?": {
+  "Anyone at all who asks the credit company for it": "The law limits who can see it. Others need a legal reason, like a loan you applied for.",
+  "Nobody, not even you, can ever see your report": "The law gives you the right to check your own report.",
+  "Only your bank and your close family members": "Family members can’t see it just by asking. Lenders and some others need a legal reason."
+ },
+ "Why does a good credit score matter?": {
+  "It is just a number for the bank": "That number changes what lenders and landlords offer you, so it matters to you, not just the bank.",
+  "It makes your rent go higher": "A good score tends to help when renting; it does not push your rent up.",
+  "It lowers how much you get paid": "Your credit score does not set your pay."
+ },
+ "Checking your own credit report…": {
+  "Lowers it a lot": "Checking your own report is a soft check, which is not counted against you.",
+  "Is illegal": "The law gives you the right to see your report; it is not against any rule.",
+  "Costs your house": "Looking at your own report can’t take your home. It just shows your history."
+ },
+ "Which hurts a credit score?": {
+  "Paying on time": "On-time payments help your score; they are the biggest good factor.",
+  "Keeping balances low": "Low balances show you do not lean too hard on credit, which helps.",
+  "Having a long history": "A long history gives lenders more proof you are reliable, which helps."
+ },
+ "Using $900 of a $1,000 limit is…": {
+  "Perfect, since you paid nothing over": "Staying under the limit is not enough. Using 90% of it looks risky to lenders.",
+  "Not allowed by most banks": "Banks let you use up to your limit. The issue is how it looks on your score.",
+  "Good, since it shows you use it": "Using some credit is fine, but 90% is far above the usual 30% guideline."
+ },
+ "What has the biggest effect on a credit score?": {
+  "Your age": "Credit scores do not use your age.",
+  "Your favorite store": "Where you like to shop is not part of your score.",
+  "Your height": "Your height has nothing to do with your credit."
+ },
+ "Using a lot of your credit limit can…": {
+  "Raise your score a lot": "High use makes you look stretched thin, so it tends to work against your score.",
+  "Have no effect": "How much of your limit you use is a big part of your score.",
+  "Erase your debt": "Using more credit adds debt; it never erases it."
+ },
+ "Why might a landlord check your credit score?": {
+  "To find out how much money you earn each week": "A credit report does not show your pay. Landlords ask for pay stubs for that.",
+  "To check if you have ever been in trouble at school": "School records are not part of a credit report.",
+  "To see how many bank accounts your family has": "Your report is about your own borrowing, not your family’s bank accounts."
+ },
+ "Opening many new credit cards at once can…": {
+  "Raise your score right away": "Each new card brings a hard check and lowers your average account age, which tends to pull a score down.",
+  "Have no effect on your score": "Each new card brings a hard check, and many at once can look risky.",
+  "Pay off the debt you owe": "A new card is more credit, not a payment. Your old debt stays."
+ },
+ "A higher deductible usually means…": {
+  "A higher premium": "It works the other way: you take on more of the risk yourself, so the insurer asks for less.",
+  "No coverage": "You still have coverage; you just pay more before it kicks in.",
+  "Free repairs": "A higher deductible means you pay more of a repair, not less."
+ },
+ "A premium is…": {
+  "Money insurance pays to you": "That is a claim payment. A premium flows the other way.",
+  "A fine for driving too fast": "That is a speeding ticket. A premium is about insurance.",
+  "A kind of new car with extras": "In insurance, a premium is not a car at all; it is a cost."
+ },
+ "A deductible of $500 means…": {
+  "Insurance pays you $500 a month": "A deductible is something you pay, not money you receive.",
+  "You never pay": "A deductible is a cost that falls on you when you make a claim.",
+  "The car costs $500": "The deductible is not the car’s price. It is about who pays when there is a claim."
+ },
+ "Why have insurance?": {
+  "To make money each year it’s paid": "In most years insurance costs more than you get back. Its job is protection, not profit.",
+  "Because it is the law for every home": "Some insurance, like car insurance, is required in most states, but it is not a law for every home.",
+  "So you can stop saving any money": "Insurance does not replace savings. You still need money for deductibles and smaller costs."
+ },
+ "What is a premium?": {
+  "What you pay at each doctor visit": "That is a copay. A premium is paid whether or not you visit.",
+  "The money the insurance pays you": "That is a claim payment. A premium is money you pay.",
+  "A bonus for being healthy": "A premium is not a reward. It is a regular cost of the plan."
+ },
+ "Plan A: low premium, $3,000 deductible. Plan B: higher premium, $500 deductible. Who might choose Plan B?": {
+  "Someone who almost never needs to see a doctor": "A healthy person may pay less overall with the low premium, since they rarely reach the deductible.",
+  "Anyone, because Plan B always costs less overall": "Plan B’s higher premium can cost more in total if you rarely use care.",
+  "Someone who wants the lowest monthly payment": "Plan B has the higher monthly premium, so it does not fit that goal."
+ },
+ "Your car breaks down. Where should repair money come from?": {
+  "A high-interest loan": "That loan adds costly interest on top of the repair bill.",
+  "Rent money": "Using rent money creates a new problem: you could fall behind on housing.",
+  "Skipping food": "Food is a need. Going without it is not a safe way to pay for a repair."
+ },
+ "How big should an emergency fund be?": {
+  "About one week of your usual spending money": "One week of spending won’t cover a big repair or a lost job.",
+  "Whatever is left over after buying your wants": "Leftovers may be zero. An emergency fund needs a planned target.",
+  "You only need one if you own a car or home": "Anyone can face surprises, like a medical bill or a lost job."
+ },
+ "Your job matches 100% of your 401(k) savings, up to 4% of your pay. You earn $40,000. If you save 4%, how much does your employer add?": {
+  "$0": "The match is real money. When you save 4%, your employer adds money too.",
+  "$400": "That is 1% of $40,000. Find 4% of $40,000, then apply the 100% match.",
+  "$16,000": "That is 40% of $40,000. Check where the decimal point goes in 4%."
+ },
+ "Rule of 72: at 8% a year, about how long until money doubles?": {
+  "About 8 years": "That is just the interest rate turned into years. Divide 72 by the rate instead.",
+  "About 72 years": "That is just the 72 from the rule. You still need to divide it by the rate.",
+  "About 2 years": "Money at 8% grows slowly; 2 years would be far too fast. Divide 72 by 8."
+ },
+ "What is the FAFSA?": {
+  "A test colleges use to decide who gets in": "That sounds like the SAT or ACT. The FAFSA is about paying for college, not getting in.",
+  "A loan from a private bank for school costs": "The FAFSA is a form, not a loan, and it comes from the government, not a bank.",
+  "A scholarship you win by writing an essay": "The FAFSA is a form you fill out, not a contest you win."
+ },
+ "Prices rise 3% a year (inflation). Your savings earn 1% a year. What happens to what your money can buy?": {
+  "It grows 1% a year": "Your dollars grow 1%, but prices grow faster. Subtract inflation from your interest.",
+  "It stays the same": "Prices rise 3% while savings rise 1%, so they do not balance out.",
+  "It grows 4% a year": "That adds inflation to your interest. Inflation eats away at growth, so subtract it."
+ },
+ "A text says: “HEIGHTS BANK: your account is locked! Reply with your PIN in 10 minutes.” What do you do?": {
+  "Reply with your PIN so the account gets unlocked": "Real banks never ask for your PIN by text. Rushing you is a scam trick.",
+  "Click the link in the text to unlock the account": "Links in surprise texts often lead to fake sites that steal your info.",
+  "Text back and ask them to prove they are the bank": "A scammer can fake any proof, and replying shows them your number is active."
+ },
+ "You see a charge you didn’t make. What first?": {
+  "Ignore it if it’s small": "Scammers often test a card with a small charge before a big one.",
+  "Wait to see if it goes away": "Waiting gives a thief more time, and you may have less protection if you report late.",
+  "Post about it online": "Posting does not stop the charges, and it can share private info."
+ },
+ "A “friend” online asks for gift card codes to help them. What should you do?": {
+  "Send the codes fast, since a friend needs help": "Gift card requests are a common scam, and the account may be fake or hacked.",
+  "Send half the codes to be safe, then wait": "Half the codes is still money a scammer can spend right away.",
+  "Ask them to send their address first, then send": "An address is easy to fake. It does not prove who they are."
+ },
+ "How should you protect your card PIN?": {
+  "Tell your best friend": "Even a friend could lose or share it. Your PIN is only for you.",
+  "Write it on the card": "If the card is lost, anyone who finds it has the PIN too.",
+  "Post it online": "Anyone in the world could see it and use your card."
+ },
+ "A text says “Your bank account is locked — click this link and enter your PIN.” What is it?": {
+  "A real bank message": "Real banks never ask for your PIN by text or through a link.",
+  "A prize": "Nothing here offers a prize; it is trying to get your PIN.",
+  "A bill": "A bill asks for a payment, not your PIN."
+ },
+ "Which website is safer for paying?": {
+  "A link in a pop-up ad": "Pop-up ads can lead to fake stores. Type the address yourself.",
+  "A site with spelling mistakes in its name": "Misspelled names are a classic trick to copy a real store.",
+  "A link a stranger texted you": "Links from strangers can lead to fake sites that steal card numbers."
+ },
+ "Someone calls saying you won a prize but must pay a $50 fee first. This is…": {
+  "A real prize": "Real prizes don’t make you pay a fee to collect them.",
+  "A tax": "Taxes go to the government, not to a surprise caller with a prize.",
+  "A gift": "A gift costs you nothing. This one asks you for $50."
+ },
+ "Which is a red flag?": {
+  "A receipt": "A receipt is a normal record of a sale.",
+  "A clear company name": "A clear name is a normal sign of a real business.",
+  "Time to think": "Real businesses give you time to decide; that is not a warning sign."
+ },
+ "Someone opened a credit card in your name. What should you do first?": {
+  "Wait a month and see if the problem goes away": "Waiting lets the thief run up more charges. Act fast.",
+  "Pay the bill so it doesn’t hurt your credit score": "You don’t owe for charges you didn’t make. Report them so they can be removed.",
+  "Post about it online to warn your friends first": "Posting won’t stop the thief. Report it to the right places first."
+ },
+ "A buyer says they sent you $500 by mistake on a payment app for a $50 item and asks you to send back $450. What should you do?": {
+  "Send back the $450 right away, since that is only fair to them": "Their payment can be reversed later, so you would lose the $450 you sent.",
+  "Keep the whole $500, since they are the one who made the mistake": "The $500 may vanish when the payment reverses, and keeping money sent by mistake is not right either.",
+  "Send the $450 back from a different account so yours stays safe": "Using another account does not help; the $450 is still gone if their payment reverses."
+ },
+ "A caller says they are from your bank and asks for your PIN. What should you do?": {
+  "Give the PIN, since they know your name and bank": "Scammers can find your name and bank easily. Real banks never ask for your PIN.",
+  "Ask them to call back later and then give the PIN": "Waiting does not make it safe. A real bank will never need your PIN.",
+  "Give only the first two digits of your PIN": "Part of your PIN still helps a thief guess the rest."
+ },
+ "A website offers a brand-new phone for $20. What is most likely true?": {
+  "It is a great deal": "A new phone for $20 is far below what phones cost. That is a warning sign.",
+  "Phones cost $20": "New phones usually cost hundreds of dollars.",
+  "You should pay now": "Rushing to pay is what scammers want. Check the seller first."
+ },
+ "A fund grew 30% last year. What does that tell you about next year?": {
+  "It will probably grow about 30% again next year": "Past results don’t predict future returns. A great year can be followed by a bad one.",
+  "It has proven it is safe, so it cannot lose money": "One good year proves nothing about safety. Any fund can lose value.",
+  "It is likely to slow down and grow about 15%": "There is no rule that growth halves. Past results tell you nothing certain about next year."
+ },
+ "What should you have before investing?": {
+  "A new car to drive to a better job": "A car doesn’t prepare you for investing. You need a cushion for surprises first.",
+  "A loan to give you more money to invest": "Borrowing to invest adds debt and risk; losses would still have to be paid back.",
+  "Nothing, since it is best to start right away": "Starting early helps, but without savings for emergencies you might have to sell at a loss."
+ },
+ "An index fund holds…": {
+  "Just one big company": "One company is a single stock. An index fund holds a whole group.",
+  "Only cash in a bank": "That describes a savings account. Index funds hold investments like stocks.",
+  "Gold and silver only": "That would be a metals fund. Index funds track a market of companies."
+ },
+ "What is a stock?": {
+  "A loan you give to a friend or bank": "Lending money is more like a bond or a bank deposit; a stock works differently.",
+  "A fee the bank charges each month": "Bank fees are costs, not something you invest in.",
+  "A promise that a company will pay you": "Stocks promise nothing; their value can rise or fall."
+ },
+ "Which investment usually has the highest risk?": {
+  "A savings account": "Savings accounts are insured and very safe, so their risk is low.",
+  "A government bond": "Government bonds are among the safest investments, with steady interest.",
+  "Cash under a mattress": "Cash can be lost or lose value to inflation, but it does not swing up and down the way a new company can."
+ },
+ "Someone promises “guaranteed 50% returns.” What should you think?": {
+  "Invest everything": "Real investments can’t guarantee 50%. Putting everything in risks losing it all.",
+  "Borrow to invest": "Borrowing for a likely scam means you could lose the money and still owe the loan.",
+  "Tell everyone": "Spreading the offer could pull friends into the same trap. Be suspicious first."
+ },
+ "Why invest for long periods?": {
+  "Prices only go up if you wait long enough": "Some investments never recover. Long periods help, but nothing is guaranteed.",
+  "You can’t lose money if you hold it a year": "One year is short; prices can drop and stay low for longer.",
+  "It is the fastest way to get rich quickly": "Long-term investing is slow by design. Its strength is time, not speed."
+ },
+ "What is a bond?": {
+  "A piece of a company you own a share of": "That describes a stock, which is ownership. A bond is a different kind of deal.",
+  "A fee a bank charges to keep your savings": "A bond is something you invest in, not a fee you pay.",
+  "A tax you pay on money you have invested": "Taxes on investments are separate. A bond is something you buy."
+ },
+ "Why do investors keep money invested for many years?": {
+  "Stock prices never go down if you wait a few months": "Prices can stay down for years, not just months.",
+  "The bank locks the money so it can’t be taken out": "Most investments can be sold at any time; nothing forces you to stay in.",
+  "Short-term investing is against the rules for most people": "Short-term trading is allowed. People stay invested by choice, for a reason."
+ },
+ "What is an index fund?": {
+  "A single stock picked by an expert to beat the market": "An index fund does not pick one stock or try to beat the market.",
+  "A bank loan with a low rate for buying shares": "That is borrowing, not a fund. An index fund is an investment you own.",
+  "A savings account that pays a fixed rate each year": "Index funds rise and fall with the market; they don’t pay a fixed rate."
+ },
+ "Why do young investors often choose more stocks than bonds?": {
+  "Stocks never lose value over a year": "Stocks can drop a lot in a single year.",
+  "Bonds are only sold to older people": "Anyone can buy bonds; age is not a rule.",
+  "Stocks pay a fixed amount every month": "Stocks don’t pay a set amount; their value and dividends can change."
+ },
+ "A drink sells for $4 and costs $1.25 to make. What is the profit margin?": {
+  "31%": "That is the cost as a share of the price. Margin uses the profit, not the cost.",
+  "28%": "That is not what profit ÷ price gives. Subtract the cost from the price, then divide by the price.",
+  "100%": "100% would mean the drink costs nothing to make. Take the $1.25 cost out first."
+ },
+ "A drink sells for $5 and costs $1.00 to make. What is the profit margin?": {
+  "20%": "That is the cost as a share of the price. Margin uses the profit, not the cost.",
+  "40%": "That is not what profit ÷ price gives. Subtract the cost from the price, then divide by the price.",
+  "100%": "100% would mean the drink costs nothing to make. Take the $1.00 cost out first."
+ },
+ "A drink sells for $4 and costs $1.00 to make. What is the profit margin?": {
+  "25%": "That is the cost as a share of the price. Margin uses the profit, not the cost.",
+  "30%": "That is not what profit ÷ price gives. Subtract the cost from the price, then divide by the price.",
+  "100%": "100% would mean the drink costs nothing to make. Take the $1.00 cost out first."
+ },
+ "A drink sells for $5 and costs $1.25 to make. What is the profit margin?": {
+  "25%": "That is the cost as a share of the price. Margin uses the profit, not the cost.",
+  "38%": "That is not what profit ÷ price gives. Subtract the cost from the price, then divide by the price.",
+  "100%": "100% would mean the drink costs nothing to make. Take the $1.25 cost out first."
+ },
+ "Which has a better margin: profit $2 on a $4 item, or $3 on a $12 item?": {
+  "$3 on $12 (25%)": "Bigger dollars are not a bigger margin. 3 ÷ 12 is only 25%; compare it with the other item.",
+  "They’re equal": "Divide each profit by its price: 2 ÷ 4 and 3 ÷ 12 give different percents.",
+  "Neither has a margin": "Any item that makes a profit has a margin: profit divided by price."
+ },
+ "When is the best time to open a second location?": {
+  "Right after your first great week, while customers are excited": "One great week is not a trend. Wait for sales to stay steady over months.",
+  "When a friend says it is a great idea and offers to help out": "Support is nice, but the decision should rest on sales and cash flow numbers.",
+  "When the first store is struggling and needs new customers": "A second store adds costs, which would make a struggling business weaker."
+ },
+ "Expanding too fast can cause…": {
+  "More free time": "Growing usually means more work, not less.",
+  "Guaranteed profit": "Nothing in business is guaranteed, and new places often lose money at first.",
+  "Lower costs automatically": "Expanding adds rent, staff and supplies, so costs rise before any savings show up."
+ },
+ "Before hiring for a new location, check…": {
+  "What colors the workers like best": "Color choices do not decide whether a location can pay its bills.",
+  "What the weather is like there": "Weather may affect business a little, but it is not the key money check.",
+  "That the new place has free parking": "Parking helps, but it does not tell you if the place will earn enough."
+ },
+ "Why keep cash reserves while expanding?": {
+  "Because banks always require it for every loan": "Banks do not always require it. The real reason is protecting your own business.",
+  "Because it makes the business look rich and safe": "Cash reserves are for real needs, not for appearances.",
+  "To pay for a big opening party at the new place": "A party is a one-time cost. Reserves are meant for a longer stretch."
+ },
+ "When is a good time to open a second location?": {
+  "Right after opening, while people are excited about it": "Early excitement can fade before the numbers settle.",
+  "When the first store is losing money and needs help": "A second store adds costs and can drag a struggling business down further.",
+  "When you can borrow a lot of money at a good rate": "Cheap loans still have to be paid back, even if the new store struggles."
+ },
+ "Your business sells out daily. What does that suggest?": {
+  "You should close the shop and rest": "Selling out is a good sign, not a reason to close.",
+  "You should raise prices ten times": "Ten times higher would drive most customers away. A small change might make sense, but not that.",
+  "Nothing, since selling out is luck": "Selling out once could be luck, but selling out every day suggests a pattern."
+ },
+ "Which is a lower-risk way to grow?": {
+  "A 10-year lease right away": "A long lease locks you into rent even if the new spot fails.",
+  "Buying a building with all your savings": "That puts all your savings at risk on one untested spot.",
+  "Borrowing the max": "Big debt means big payments, even if sales are slow."
+ },
+ "What should you test before expanding?": {
+  "What paint color the new shop should be": "Paint is easy to change; it won’t tell you if people will buy.",
+  "Whether your logo looks good on a sign": "A nice sign does not tell you whether sales will come.",
+  "How far the new place is from your home": "Your drive matters to you, but it does not test sales in the new area."
+ },
+ "Before opening a second location, what should a business check?": {
+  "Whether the owner likes the new neighborhood and its shops": "Liking an area does not mean it will bring enough customers.",
+  "Whether the new building is bigger and newer than the first": "A nicer building can mean higher costs, not more sales.",
+  "Whether friends and family think a second store is a good idea": "Opinions from loved ones are not data on profit or demand."
+ },
+ "Why can expanding too fast hurt a business?": {
+  "It always helps": "Growth adds costs and debt, which can outrun sales.",
+  "More stores always mean more profit": "Each new store can lose money, especially at first.",
+  "Customers dislike growth": "Most customers don’t mind growth. The danger is on the money side."
+ },
+ "A food truck owner wants a second truck. What number matters most?": {
+  "The truck’s color": "Color won’t tell you whether a second truck will pay off.",
+  "How many friends like it": "Friends’ opinions don’t show how much money a truck makes.",
+  "The owner’s age": "Age does not decide whether a truck earns money."
+ },
+ "Why might a business rent before buying a new space?": {
+  "Renting is always free": "Renting costs money too, though it usually means less commitment than buying.",
+  "Buying is not allowed": "Businesses can buy space. Renting is a choice, not a rule.",
+  "To spend more": "Renting usually needs less money up front, not more."
+ },
+ "You expect $1,200 in sales next month, but a rainy month could mean $800. Your costs are $900. What should your plan do?": {
+  "Assume the best case and spend it now": "If the rainy month comes, $800 won’t cover $900 in costs.",
+  "Ignore the rain": "The rain could push sales below your costs, so plan for it.",
+  "Cancel everything": "Even the bad case is only $100 short, which a small cushion can cover."
+ },
+ "Which data makes a better forecast?": {
+  "One good day": "A single day may be unusual. Patterns need more data.",
+  "A guess": "A guess has no data behind it.",
+  "A friend’s opinion": "An opinion is not based on your actual sales."
+ },
+ "Why make a best-case and worst-case forecast?": {
+  "To confuse investors": "Showing a range helps investors; it does not confuse them.",
+  "Forecasts are always exact": "Forecasts are rarely exact, which is why ranges help.",
+  "For fun": "Forecasts are planning tools with a real purpose."
+ },
+ "Which is the most diversified way to invest $1,000 (simulated)?": {
+  "Put it all in one big, well-known company": "Even big companies can drop, and one stock means one point of failure.",
+  "Put it all in a new coin that is rising fast": "One fast-rising asset can fall just as fast, and you would have nothing else.",
+  "Split it between two companies in the same field": "Two companies in one field often fall together when that field struggles."
+ },
+ "A 30-year-old and a 70-year-old investor. Who can usually take more stock risk?": {
+  "The 70-year-old": "A 70-year-old has fewer years to recover from a drop, so less risk usually fits.",
+  "Both equally": "Age changes how long you have to recover from losses.",
+  "Neither ever": "Stocks can make sense at many ages; the amount of risk is what changes."
+ },
+ "What does diversification mean?": {
+  "Putting all your money into one stock": "That is the opposite of spreading risk; one bad stock could sink you.",
+  "Keeping all of your money in cash": "All in cash is still one place; it does not mix different types.",
+  "Moving money from stock to stock fast": "That is frequent trading. It changes what you hold but still keeps you in one place at a time."
+ },
+ "“Don’t put all your eggs in one basket” means…": {
+  "Buy more eggs": "The saying is not really about eggs. It is a picture of how to handle risk.",
+  "Hide your money": "Hiding money does not protect it from one big loss.",
+  "Never invest": "The saying is about how to invest, not whether to."
+ },
+ "Does diversification guarantee you won’t lose money?": {
+  "Yes, as long as you own several things": "Several things can all fall at once, like in a market crash.",
+  "It doubles your money over time": "Diversifying does not promise any return; it manages risk.",
+  "It stops you from paying any taxes": "Diversifying has no effect on whether you owe taxes."
+ },
+ "Your only investment is your employer’s stock. What’s the risk?": {
+  "None, since you know the company well from the inside": "Knowing a company well does not protect you if it hits hard times.",
+  "You get paid twice, once in pay and once from stock": "Both your paycheck and your savings would then depend on the same company.",
+  "It is guaranteed, since the company pays your wages": "Paying wages does not guarantee the stock price."
+ },
+ "Which portfolio is more diversified?": {
+  "All in one company": "One company is one basket; if it fails, everything drops.",
+  "All in one friend’s business": "A single small business is very risky and not spread out.",
+  "All in lottery tickets": "Lottery tickets usually lose money, and it is all one kind of bet."
+ },
+ "Which spreads risk across many companies at once?": {
+  "One stock": "A single stock is just one company.",
+  "A single bond": "One bond is a loan to just one borrower.",
+  "A gold coin": "Gold is one asset, not shares of many companies."
+ },
+ "Why not put all your savings in one company’s stock?": {
+  "One company’s stock always grows more slowly": "One stock can grow fast or slow; speed is not the issue.",
+  "You can only buy a few shares of one company": "You can buy as many shares as you can afford.",
+  "It costs more in fees to own just one stock": "Fees are not the main problem; the danger is relying on one company."
+ },
+ "Which portfolio is most diversified?": {
+  "Ten stocks, all from the same tech industry": "Ten stocks in one industry can all fall together.",
+  "One large company that has done well for years": "Past success does not protect one company from a downturn.",
+  "All of it in cash in one savings account": "Cash alone is safe, but it does not mix different kinds of investments."
+ },
+ "What does “don’t put all your eggs in one basket” mean for investing?": {
+  "Put all your money in the safest stock": "Putting it all in one stock is the one basket the saying warns about.",
+  "Buy more of whatever is rising right now": "Chasing what is rising piles more eggs into one basket.",
+  "Keep all your savings in cash, not stocks": "All in cash is still one basket."
+ },
+ "Bonds and stocks often move differently. Why hold both?": {
+  "They always rise together, so gains are doubled": "They often move differently, which is the point of holding both.",
+  "Bonds never lose value, so they cover any loss": "Bonds can lose value too, especially when interest rates rise.",
+  "Holding both is required for retirement accounts": "Holding both is a choice to smooth out swings; no rule says you must."
+ },
+ "A can of soup is shaped like a…": {
+  "Sphere": "A sphere is round like a ball. A can has flat ends.",
+  "Cube": "A cube has square sides. A can is round.",
+  "Pyramid": "A pyramid comes to a point. A can does not."
+ },
+ "A dice is shaped like a…": {
+  "Cone": "A cone has a point. A dice has flat square sides.",
+  "Sphere": "A sphere is round like a ball. A dice has corners.",
+  "Cylinder": "A cylinder can roll on its round side. A dice has flat sides."
+ },
+ "Which 3D shape is a ball?": {
+  "Cube": "A cube has flat sides and corners. A ball has none.",
+  "Cone": "A cone has a point. A ball is round all over.",
+  "Cylinder": "A cylinder has flat ends. A ball has no flat parts."
+ },
+ "How many sides does a triangle have?": {
+  "4": "Four sides make a box shape. Count the sides again.",
+  "5": "That is too many. Count each side one time.",
+  "6": "That is too many. Count each side one time."
+ },
+ "How many corners does a square have?": {
+  "0": "A circle has no corners. A square has some. Count them.",
+  "3": "Three corners make a triangle. Count the square’s corners.",
+  "5": "That is one too many. Count each corner one time."
+ },
+ "Which shape has no corners?": {
+  "A square": "A square has 4 corners.",
+  "A triangle": "A triangle has 3 corners.",
+  "A rectangle": "A rectangle has 4 corners."
+ },
+ "How are a square and a rectangle alike?": {
+  "Both have 4 sides that are all the same": "A square’s sides are all the same. A rectangle’s may not be.",
+  "Both have 3 sides and 3 corners": "Three sides make a triangle. Count these sides again.",
+  "Both are round with no corners": "Round with no corners is a circle. These shapes have corners."
+ },
+ "Coffee cups sold this week. Which day sold the most?": {
+  "Mon": "Look at the bars again; another day’s bar reaches higher than Mon’s.",
+  "Wed": "Look at the bars again; another day’s bar reaches higher than Wed’s.",
+  "Thu": "Look at the bars again; another day’s bar reaches higher than Thu’s."
+ },
+ "Which number is smallest?": {
+  "0": "Zero is bigger than any negative number.",
+  "3": "3 is positive, so it is bigger than every negative number here.",
+  "−2": "−2 is close to zero. Numbers farther left on the number line are smaller."
+ },
+ "Which is warmer?": {
+  "−10°F": "−10°F is colder than one of the other choices. Look for the temperature closest to zero.",
+  "−15°F": "−15°F is far below zero. Look for the temperature closest to zero.",
+  "−20°F": "−20°F is the coldest choice here. Look for the temperature closest to zero."
+ },
+ "🍎 Is food a need or a want?": {
+  "A want": "You can’t live without food. That makes it more than a want."
+ },
+ "🎮 Is a new video game a need or a want?": {
+  "A need": "You can live without a game. It is just for fun."
+ },
+ "You have $20. Which should you buy first?": {
+  "A toy": "A toy is fun, but food comes first.",
+  "Concert ticket": "A show is a treat. Pay for what you must have first.",
+  "Candy": "Candy is a treat, not a meal. Get what you must have first."
+ },
+ "Which is a need?": {
+  "A new video game": "A game is fun, but you can live without it.",
+  "A bag of candy": "Candy is a treat. You can live without it.",
+  "A toy race car": "A toy is for fun. You can live without it."
+ },
+ "Which is a want?": {
+  "Food": "You need food to live.",
+  "Water": "You need water to live.",
+  "A place to live": "You need a home to stay safe."
+ },
+ "You have $10. You need lunch ($6) and want a comic ($5). What should you do first?": {
+  "Buy the comic first, then get lunch": "The comic costs $5. Then you have just $5, and lunch is $6.",
+  "Spend it all on two comics today": "Two comics cost $10. Then there is no money for lunch.",
+  "Borrow money so you can get both": "Borrowed money must be paid back. Spend on what you must have first."
+ },
+ "Why can something be a need for one person and a want for another?": {
+  "Needs are the same for all people": "Some needs change. A car is a must for some, not all.",
+  "Wants always cost less money": "Some wants cost a lot. Cost does not make a need.",
+  "Some people just like to shop": "Liking to shop does not change what you need."
+ },
+ "Which is a need for most families?": {
+  "A second TV": "A second TV is nice, but not a must.",
+  "A trip to a theme park": "A trip is fun, but you can live without it.",
+  "A new game": "A game is fun, but you can live without it."
+ },
+ "Your family needs food for dinner. You also want a toy. Which comes first?": {
+  "The toy": "A toy is a want. It can wait.",
+  "Both, even if there isn’t enough money": "You can’t buy both without the money. Pick what you must have.",
+  "Neither": "Your family needs to eat. Pick one."
+ },
+ "Medicine from the doctor when you are sick is a…": {
+  "Want": "Medicine helps you get well. You can’t skip it.",
+  "Toy": "Medicine is not for play. It helps you get well.",
+  "Treat": "A treat is just for fun. Medicine helps you heal."
+ },
+ "What helps you never miss a due date?": {
+  "Hiding the bills": "Hidden bills are easy to forget and pay late.",
+  "Paying when you remember": "Memory can slip. A system works even on busy days.",
+  "Throwing them away": "The bill is still due even if it is gone, so you would likely miss the date."
+ },
+ "A bill says “Minimum due $25, balance $200.” If you pay only $25, what happens?": {
+  "The whole bill is paid in full": "$25 is only part of the $200, so most of it is still owed.",
+  "The bank forgets the rest of it": "The unpaid $175 stays on your account.",
+  "You get $175 back next month": "You still owe $175; nothing comes back to you."
+ },
+ "Which bill should you pay first if money is tight?": {
+  "A streaming service": "Streaming is a want you can pause. Essentials come first.",
+  "Concert tickets": "Tickets are a want. Pay for essentials first.",
+  "A new game": "A game is a want. Pay for essentials first."
+ },
+ "Which is the smarter way to use a credit card?": {
+  "Pay only the minimum forever": "Minimum payments leave a balance that keeps growing interest.",
+  "Max it out": "Using your whole limit hurts your credit and piles up interest.",
+  "Never check it": "Not checking means you could miss fraud or due dates."
+ },
+ "What is interest on a loan?": {
+  "A fee for opening a bank account": "That is an account fee. Interest on a loan is about borrowing.",
+  "Money the bank pays you back": "That is interest on savings. On a loan, the money flows the other way.",
+  "A tax that you pay each year": "Taxes go to the government. Interest goes to the lender."
+ },
+ "Why can credit card debt grow fast?": {
+  "The card company forgets the balance": "Card companies track every dollar you owe.",
+  "The interest rate drops each month": "Card rates don’t drop on their own; they often stay high.",
+  "Late fees only happen one time": "Late fees can happen every month you pay late."
+ },
+ "Why is net pay less than gross pay?": {
+  "The bank keeps some as a fee": "The bank does not take part of your pay. Look at what comes out first.",
+  "It is a mistake by your boss": "It is not a mistake. Some money comes out on purpose.",
+  "Your tips are not counted in": "Tips are not the reason. Some money is taken out for the government."
+ },
+ "What is “gross pay”?": {
+  "Pay after taxes come out": "That is net pay. Gross pay is the bigger number.",
+  "Your tips and nothing else": "Tips are only one part of pay.",
+  "The money in your savings": "Savings is money you kept. Gross pay is about your job."
+ },
+ "You earned $3,000 at a summer job and tax was taken from each paycheck. Why might you file a tax return even if you don’t have to?": {
+  "Filing a return always makes you owe more tax": "Filing just works out your real tax; it does not add more.",
+  "Only adults over age 25 can file a return": "Anyone with income can file, even teens.",
+  "Tax returns are only meant for businesses": "People file returns too, not just businesses."
+ },
+ "Why is your take-home pay less than what you earned?": {
+  "The bank keeps a tip": "Banks don’t take tips from your pay.",
+  "It’s a mistake": "It happens on purpose with every paycheck.",
+  "Your boss forgot": "Your boss didn’t forget. Part of your pay is held back on purpose."
+ },
+ "What does insurance protect you from?": {
+  "All of your bills each month": "Insurance does not pay regular bills like rent or food.",
+  "Paying any taxes you owe": "Insurance has nothing to do with taxes.",
+  "Bad weather only": "Some plans cover storms, but insurance covers much more than weather."
+ },
+ "What are taxes used for?": {
+  "Nothing, the money just gets saved by the bank": "Tax money goes to the government, not a bank, and it gets spent.",
+  "Parties, trips and gifts for elected leaders": "Taxes are not meant for leaders’ fun.",
+  "Your own savings account for when you retire": "Taxes are not your personal savings. They pay for things people share."
+ },
+ "Sales tax is 8%. A shirt costs $25. How much is the tax?": {
+  "$8": "That is just the 8 from 8%. Find 8% of $25.",
+  "$20": "That is 80% of $25. Check where the decimal point goes in 8%.",
+  "$0.25": "That is only 1% of $25. You need 8%."
+ },
+ "A $40 item has 5% sales tax. What is the total?": {
+  "$45": "That adds 5 dollars, not 5%. Find 5% of $40 first.",
+  "$40": "That forgets the tax. Add 5% of $40.",
+  "$40.05": "That adds only 5 cents. 5% of $40 is more than that."
+ },
+ "What is a W-4?": {
+  "A form showing your total pay and taxes for the year": "That is the W-2, which comes after the year ends.",
+  "The check the government sends with your refund": "A refund check comes later. The W-4 is a form you fill out.",
+  "A form you fill out to open a new bank account": "Bank forms are separate. The W-4 is about a job."
+ },
+ "Your pay stub shows Social Security and Medicare taken out. What are these together called?": {
+  "Income tax refund": "A refund is money back. These are taken out of every paycheck.",
+  "Union dues": "Union dues go to a union, not to Social Security.",
+  "Sales tax": "Sales tax is paid when you buy things, not taken from pay."
+ },
+ "A raise moves part of your income into the 22% bracket. What happens to your tax?": {
+  "All your income is now taxed at 22%": "Brackets don’t work that way. Each slice of income keeps its own rate.",
+  "You take home less money than before the raise": "Brackets never make a raise shrink your take-home pay.",
+  "Your tax goes down": "Earning more adds tax on the extra; your tax does not fall."
+ },
+ "1/4 + 1/2 = ?": {
+  "2/6": "That adds the tops and the bottoms. Make the bottoms match first.",
+  "2/4": "That adds the tops but keeps one bottom. Rewrite 1/2 with a bottom of 4 first.",
+  "1/6": "That adds just the bottoms. Make the bottoms match, then add the tops."
+ },
+ "Which fraction is equal to 1/2?": {
+  "2/3": "2/3 is more than half, because 2 is more than half of 3.",
+  "1/3": "1/3 is less than half, because 1 is less than half of 3.",
+  "3/5": "3 is more than half of 5, so 3/5 is a bit more than half."
+ },
+ "Which is bigger: 1/8 or 1/4 of the same pizza?": {
+  "1/8, because 8 is bigger": "A bigger bottom number means more slices, so each slice is smaller.",
+  "They are the same": "Cutting a pizza into 8 makes smaller pieces than cutting it into 4.",
+  "You can’t tell": "It is the same pizza, so you can compare the slice sizes."
+ },
+ "A recipe for 4 people uses 1/4 cup of milk. How much for 8 people?": {
+  "1/8 cup": "That halves the milk. 8 people need more milk, not less.",
+  "5/4 cup": "That adds 4 to the top. Twice the people means twice the milk.",
+  "1/4 cup": "That is the amount for 4 people. 8 people need more."
+ },
+ "A recipe for 4 people uses 3/8 cup of milk. How much for 8 people?": {
+  "3/16 cup": "That halves the milk. 8 people need more milk, not less.",
+  "7/8 cup": "That adds 4 to the top. Twice the people means twice the milk.",
+  "3/8 cup": "That is the amount for 4 people. 8 people need more."
+ },
+ "A recipe for 4 people uses 1/3 cup of milk. How much for 8 people?": {
+  "1/6 cup": "That halves the milk. 8 people need more milk, not less.",
+  "5/3 cup": "That adds 4 to the top. Twice the people means twice the milk.",
+  "1/3 cup": "That is the amount for 4 people. 8 people need more."
+ },
+ "A recipe for 4 people uses 2/5 cup of milk. How much for 8 people?": {
+  "2/10 cup": "That halves the milk. 8 people need more milk, not less.",
+  "6/5 cup": "That adds 4 to the top. Twice the people means twice the milk.",
+  "2/5 cup": "That is the amount for 4 people. 8 people need more."
+ },
+ "A recipe for 4 people uses 1/8 cup of milk. How much for 8 people?": {
+  "1/16 cup": "That halves the milk. 8 people need more milk, not less.",
+  "5/8 cup": "That adds 4 to the top. Twice the people means twice the milk.",
+  "1/8 cup": "That is the amount for 4 people. 8 people need more."
+ },
+ "Which coin is worth 1¢?": {
+  "🪙 nickel": "A nickel is worth 5¢, not 1¢.",
+  "🪙 dime": "A dime is worth 10¢, not 1¢.",
+  "🪙 quarter": "A quarter is worth 25¢, not 1¢."
+ },
+ "Which coin is worth 25¢?": {
+  "🪙 penny": "A penny is worth 1¢, not 25¢.",
+  "🪙 nickel": "A nickel is worth 5¢, not 25¢.",
+  "🪙 dime": "A dime is worth 10¢, not 25¢."
+ },
+ "Which coin is worth 5¢?": {
+  "🪙 penny": "A penny is worth 1¢, not 5¢.",
+  "🪙 dime": "A dime is worth 10¢, not 5¢.",
+  "🪙 quarter": "A quarter is worth 25¢, not 5¢."
+ },
+ "Which coin is worth 10¢?": {
+  "🪙 penny": "A penny is worth 1¢, not 10¢.",
+  "🪙 nickel": "A nickel is worth 5¢, not 10¢.",
+  "🪙 quarter": "A quarter is worth 25¢, not 10¢."
+ },
+ "Which is more money: 4 dimes or 2 quarters?": {
+  "4 dimes": "4 dimes make 40¢. Now count the other pile.",
+  "They are the same": "Count the cents in each pile. The two piles do not match."
+ },
+ "Which is more money: 3 dimes or 2 quarters?": {
+  "3 dimes": "3 dimes make 30¢. Now count the other pile.",
+  "They are the same": "Count the cents in each pile. The two piles do not match."
+ },
+ "Which is more money: 2 dimes or 2 quarters?": {
+  "2 dimes": "2 dimes make 20¢. Now count the other pile.",
+  "They are the same": "Count the cents in each pile. The two piles do not match."
+ },
+ "Which is more money: 3 dimes or 1 quarter?": {
+  "1 quarter": "1 quarter is 25¢. Now count the other pile.",
+  "They are the same": "Count the cents in each pile. The two piles do not match."
+ },
+ "Which is more money: 2 dimes or 1 quarter?": {
+  "2 dimes": "2 dimes make 20¢. Now count the other pile.",
+  "They are the same": "Count the cents in each pile. The two piles do not match."
+ },
+ "Which is more money: 4 dimes or 1 quarter?": {
+  "1 quarter": "1 quarter is 25¢. Now count the other pile.",
+  "They are the same": "Count the cents in each pile. The two piles do not match."
+ }
+}

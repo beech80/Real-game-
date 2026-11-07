@@ -498,3 +498,18 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .kbd-ready :focus-visible { outline: 3px solid var(--gold, #e9a93a); outline-offset: 3px; border-radius: 10px; }
 .kbd-hint { font-size: 12px; color: rgba(255,255,255,.6); }
 .pickrow { cursor: pointer; grid-template-columns: auto 1fr auto; align-items: center; } .pickrow input { width: 22px; height: 22px; } .row.wrap { flex-wrap: wrap; gap: 6px; }
+/* why-not reasons, said by the person you were talking to */
+.wwbox { border-left: 4px solid var(--gold); background: rgba(233,169,58,.12); padding: 10px 12px; border-radius: 10px; font-size: 17px; line-height: 1.45; }
+.wwbox .ww-who { color: var(--gold); margin-right: 4px; }
+/* word card: the whole sentence the word came from */
+.wc-sent { margin: 12px 0 4px; padding: 10px 12px; background: rgba(0,0,0,.18); border-radius: 12px; }
+.wc-sline { font-size: 18px; line-height: 1.5; margin: 0 0 8px; }
+.wc-hit, .talk-t b { background: rgba(233,169,58,.35); border-radius: 4px; padding: 0 2px; }
+/* Talk log */
+.talklog .chips { gap: 6px; margin: 8px 0 10px; }
+.talklog .chip { font-size: 15px; padding: 6px 11px; border: 0; color: inherit; cursor: pointer; min-height: 34px; }
+.talk-list { display: flex; flex-direction: column; gap: 10px; }
+.talk-line { background: rgba(255,255,255,.06); border-radius: 12px; padding: 10px 12px; }
+.talk-line.me { background: rgba(47,91,210,.18); margin-left: 24px; }
+.talk-who small { color: var(--muted); }
+.talk-t { font-size: 17px; line-height: 1.5; margin: 4px 0 6px; }

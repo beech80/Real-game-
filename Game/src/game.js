@@ -3,7 +3,7 @@ import { UI, h, money, clock, wait } from './ui.js';
 import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
-import { markWords } from './readalong.js';
+import { markWords, talkLog } from './readalong.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
 import { lifeLevel, LIFE_CATS, CAREERS, TIER_NAMES, careerStatus, setSkillNames, ACHIEVEMENTS, INVITE_LEVEL, INVITE_MIN_DAY } from './life.js';
 setSkillNames(SKILLS);
@@ -225,15 +225,17 @@ export class Game {
   async housing() {
     const s = this.state, O = 'Mr. Okafor · Community Center';
     await UI.say(O, 'Welcome to the Starting District. You look like you walked a long way. Let’s get you sorted out: somewhere to sleep, and a way to earn.');
-    const c = await UI.say(O, 'Where are you staying tonight?', ['Nowhere. I just got here.', 'I used to be in The Club.']);
-    if (c === 1) await UI.say(O, 'The Club, huh? Doesn’t matter here. Here, everybody starts somewhere. Most people start right where you are.');
+    const c = await UI.say(O, 'Where are you staying tonight?', ['I don’t have a place yet. I just got here.', 'I lived at The Club until today. Now I have nothing.', 'Could you help me find somewhere to stay?']);
+    await UI.say(O, ['Thanks for being honest. That’s the first step. Let’s fix it together.', 'The Club, huh? That doesn’t matter here. Everybody starts somewhere, and most people start right where you are.', 'That’s exactly what I’m here for. Asking for help is smart, not weak.'][c] || 'Let’s get you sorted out.');
     await UI.say(O, 'The Fresh Start program covers your first week in a starter unit at The Starter Apartments, Unit 3B. After that, rent is $300 a week, and Fresh Start pays half of it for your first four weeks, so you pay $150. It’s modest, but it’s yours to keep up.');
     await UI.say(O, 'I also checked your basic bank account. Everything linked to The Club is gone, but there’s a remaining balance of $100. And here’s a basic phone. It’s not fancy, but it works.');
     s.flags.housed = true; s.flags.phone = true; this.achieve('first_home'); this.befriend('Okafor', 2);
     this.earn(100, 'Remaining balance (basic account)');
     s.bills = [{ id: 'phone1', name: 'Phone plan', amount: 25, due: s.day + 4, paid: false }, { id: 'rent1', name: 'Rent — The Starter Apartments (week 2)', amount: 150, due: s.day + 6, paid: false }, { id: 'util1', name: 'Utilities', amount: 20, due: s.day + 6, paid: false }];
     s.messages.unshift({ from: 'The Starter Apartments', text: 'Welcome to Unit 3B! Your first week is covered by Fresh Start. Rent ($300/week, $150 with your Fresh Start subsidy for 4 weeks) is due every 7 days starting Day ' + (s.day + 6) + '.', day: s.day, read: false });
-    await UI.say(O, '$100 won’t last long. Before you spend any of it, let’s make sure you know what you need, and what can wait.');
+    const r = await UI.say(s.name, '…', ['Thank you, Mr. Okafor. I’ll use it wisely.', 'Only $100? That won’t last very long.', 'What should I spend it on first?'], { crown: false, player: true });
+    if (r === 0) this.befriend('Okafor', 1);
+    await UI.say(O, ['You’re welcome. Using it wisely means paying for what you need before what you want. Let’s practice that right now.', 'You’re right, it won’t. That’s why every dollar needs a plan. Let’s make one together.', 'Great question. Needs come first: food, your phone, rent. Wants can wait. Let’s sort them out.'][r] || 'Before you spend any of it, let’s make sure you know what you need, and what can wait.');
     await A.needsWants(this);
     await A.firstBudget(this);
     await UI.say(O, 'Good. Last thing: you’ll need income. Fresh Mart, across Fresh Ave, is hiring. Talk to Rosa, the manager. Tell her I sent you.');
@@ -387,6 +389,9 @@ export class Game {
     } else if (c === 2) {
       if (s.money >= 25) { this.spend(25, 'Thread & Co cap'); s.mood = Math.min(100, s.mood + 8); this.edu.record('think.consequence', true, { ctx: 'jax', hinted: true }); await UI.say(J, 'Paying full price. Look at you, a model citizen.', null, { tone: 'jax' }); }
       else await UI.say(J, 'With what money? Ha. Fine, forget it.', null, { tone: 'jax' });
+    } else {
+      s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1; this.edu.record('think.consequence', true, { ctx: 'jax', hinted: true });
+      await UI.say(J, 'Walking away, huh? …Smart. Nothing good happens when you stay near trouble.', null, { tone: 'jax' });
     }
     s.flags.jaxSteal = true; s.flags.jaxStealDue = false; this.hooks.jaxLeave(); this.save();
   }
@@ -520,7 +525,7 @@ export function openPhone(G) {
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
+      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Talks', '🗨️', '#7a4fd2'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -608,6 +613,7 @@ export function openPhone(G) {
             list, h('button', { class: 'ghost sm', onclick: () => { if (confirm('Delete all notes?')) { try { localStorage.removeItem(KEY); } catch (e) {} draw(); } } }, 'Clear notes'));
         },
         Words: () => A.myWords(G),
+        Talks: () => talkLog(),
         Assignment: () => assignmentView(G, async (what, id) => {
           const As = s.assign; close();
           if (what === 'skill') { const r = await runActivity(G, () => ({ skill: id, ...A.PRACTICE[id]() }), 'assignment', As.n, '📋'); if (r && r.ok && As.pre) { As.practice = As.practice || {}; As.practice[id] = (As.practice[id] || 0) + 1; G.save(); } return; }

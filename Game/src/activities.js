@@ -146,20 +146,27 @@ export function jobApplication(G) {
 export async function interview(G) {
   const R = 'Rosa · Manager';
   const qs = [
-    ['A customer says they were charged twice. What do you do?', ['Listen, check the receipt, and fix it or get help', 'Tell them it’s not my problem', 'Ignore them and keep scanning'], 0, 'think.consequence'],
-    ['Your shift starts at 9:00. The bus is late and you’ll arrive at 9:10. What’s best?', ['Message the manager before 9:00 to let them know', 'Show up and say nothing', 'Skip the shift'], 0, 'think.consequence'],
-    ['Why do you want this job?', ['To earn my own money and learn real skills', 'My old life ended and I have to', 'Honestly, I don’t'], 0, 'think.compare'],
+    ['A customer says they were charged twice. What do you do?', ['Listen, check the receipt, and fix it or get help', 'Tell them it’s not my problem', 'Ignore them and keep scanning'], 0, 'think.consequence',
+      ['When you work the register, the customer’s problem is your problem. Brushing them off loses a customer, and they tell their friends.', 'Ignoring someone makes them angrier, and the double charge is still there. Problems don’t fix themselves.'],
+      'A good worker listens, checks the facts, and fixes it or asks for help.'],
+    ['Your shift starts at 9:00. The bus is late and you’ll arrive at 9:10. What’s best?', ['Message the manager before 9:00 to let them know', 'Show up and say nothing', 'Skip the shift'], 0, 'think.consequence',
+      ['If you say nothing, I don’t know if you’re coming. I can’t plan the shift. A quick message builds trust.', 'Skipping a whole shift because you’re 10 minutes late leaves the team short. Late and honest beats missing.'],
+      'Telling your manager early lets them plan. That’s what reliable people do.'],
+    ['Why do you want this job?', ['To earn my own money and learn real skills', 'My old life ended and I have to', 'Honestly, I don’t'], 0, 'think.compare',
+      ['That may be true, but it’s about your past. Tell me what you want to build. Bosses hire people who look ahead.', 'Honesty is good, but a manager wants to hear why you’d show up and try. Find one real reason.'],
+      'Connecting the job to your goals shows you’ll stick with it.'],
   ];
   await UI.say(R, `Thanks for applying, ${G.state.name}. I don’t care where you come from. I care whether you show up and do the work. A few questions.`);
   let good = 0;
-  for (const [q, opts, ans, skill] of qs) {
+  for (const [q, opts, ans, skill, whyNot, whyYes] of qs) {
     G.edu.discover(skill);
     const order = shuffle(opts.map((o, i) => [o, i]));
     const c = await UI.say(R, q, order.map((x) => x[0]));
     const ok = order[c][1] === ans;
     G.edu.record(skill, ok, { ctx: 'interview' });
     if (ok) good++;
-    await UI.say(R, ok ? pick(['Good answer.', 'That’s what I like to hear.', 'Exactly.']) : 'Hmm. Think about how that would go for the customer, or for the team.');
+    if (ok) await UI.say(R, pick(['Good answer. ', 'That’s what I like to hear. ', 'Exactly. ']) + whyYes);
+    else { const wi = order[c][1] - 1; await UI.say(R, 'Hmm, not quite. ' + whyNot[wi]); await UI.say(R, 'The best answer: “' + opts[ans] + '.” ' + whyYes); }
   }
   await UI.say(R, good >= 2 ? 'You’re hired. Cashier, $15 an hour, four-hour shifts. Clock in at the time clock in the back room when you’re ready.' : 'You’ve got a lot to learn, but so did I. You’re hired. We’ll train you. Clock in at the back when you’re ready.');
   return true;

@@ -82,7 +82,9 @@ export const UI = {
       D.className = 'dialog ' + (opts.tone || ''); D.setAttribute('role', 'dialog'); D.setAttribute('aria-live', 'polite'); D.setAttribute('aria-label', speaker);
       const body = h('div', { class: 'd-text' });
       const letters = ['A', 'B', 'C', 'D'];
-      const done = (v) => { click(); stopReading(); D.hidden = true; res(v); };
+      if (!opts.player && text && text !== '…') this.lastSpeaker = { name: speaker, t: Date.now() };
+      if (this.onLine && text && text !== '…') this.onLine(speaker, text);
+      const done = (v) => { click(); stopReading(); D.hidden = true; if (choices && v !== undefined && this.onLine) this.onLine('You', choices[v]); res(v); };
       const list = choices ? h('div', { class: 'd-choices' }, choices.map((c, i) => h('button', { class: 'd-choice', onclick: () => done(i) }, h('span', { class: 'd-key' }, letters[i]), h('span', { class: 'd-ctext' }, c)))) : null;
       const next = !choices ? h('button', { class: 'd-next', onclick: () => done() }, 'Continue ›') : null;
       const finishType = () => { cancelAnimationFrame(this._tw); if (body.dataset.typing !== '0') { body.textContent = text; body.dataset.typing = '0'; markWords(body); } };

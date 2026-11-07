@@ -1,0 +1,1805 @@
+{
+ "Which sentence has the right capital letters and end marks?": {
+  "rosa opens the store at 7:00 on monday": "This one has no capitals. Names and the first word need them.",
+  "Rosa Opens The Store At 7:00 On Monday.": "Only the first word and names get capitals. Small words like “the” do not.",
+  "rosa opens the store at 7:00 on Monday?": "This one tells, it does not ask. And “rosa” needs a capital."
+ },
+ "Which ending mark fits? “What time is it__”": {
+  ".": "A dot ends a telling sentence. This one asks a thing.",
+  "!": "This mark shows a strong feel. Look: this one asks a thing."
+ },
+ "Which is correct?": {
+  "we visited brighter park on saturday.": "The first word and the names need capitals here.",
+  "We visited brighter Park on saturday.": "Look at “brighter” and “saturday.” Both are part of names.",
+  "We Visited Brighter Park On Saturday.": "Small words like “on” do not get capitals."
+ },
+ "Which needs a capital letter?": {
+  "apple (a kind of fruit)": "“Apple” is a kind of thing, not a name.",
+  "dog (a kind of pet)": "“Dog” is a kind of pet, not a name.",
+  "table (a thing at home)": "“Table” is a kind of thing, not a name."
+ },
+ "Which day is written correctly?": {
+  "monday": "Days start with a big letter. This one has none.",
+  "MONday": "Only the first letter of a day is big.",
+  "mondaY": "The big letter goes first, not at the end."
+ },
+ "Which word should always be a capital?": {
+  "the (at the start of a word)": "“The” gets a capital only at the start of a sentence.",
+  "and (in the middle)": "“And” in the middle stays small.",
+  "is (after a name)": "“Is” stays small, even after a name."
+ },
+ "Which ending mark fits? “Watch out, a car__”": {
+  "?": "This mark asks a thing. Here you warn a friend.",
+  ",": "A comma does not end a sentence. This is a warning."
+ },
+ "Which word always needs a capital letter?": {
+  "me": "“Me” is small in the middle of a sentence.",
+  "my": "“My” is small in the middle of a sentence.",
+  "you": "“You” is small in the middle of a sentence."
+ },
+ "Which sentence is an asking sentence with the right mark?": {
+  "Where is my hat.": "This one asks, so a dot does not fit at the end.",
+  "where is my hat?": "Look at the first word. It needs a capital.",
+  "Where is my hat!": "This one asks a thing. It is not a shout."
+ },
+ "Which message is clearest?": {
+  "Can we meet up sometime later this week?": "It does not say where or when to meet.",
+  "Want to meet at that place, same time?": "“That place” does not name a spot, so your friend may guess wrong.",
+  "u free friday? library maybe? idk": "It is hard to read and does not give a set time."
+ },
+ "Which message to your manager is best?": {
+  "hey rosa, not coming in today, sorry, something came up. — nova": "It says “something came up” but not why or which shift. It also needs capitals.",
+  "Sick today, so I can’t come in. Can someone cover for me? Thx": "It does not greet Rosa or say which shift you will miss.",
+  "Rosa!!! I can’t work today!!! So so sorry!!! Will explain later!!!": "All those marks sound upset. It does not say why or which shift."
+ },
+ "Which is the best thank-you message?": {
+  "Thanks for the help on Saturday, Sam. It went fine, I guess.": "“I guess” sounds like you did not care. Thanks should sound warm.",
+  "Hey Sam, you helped me move. See you around sometime soon.": "It never says thank you.",
+  "thx for helping me move sat!! u r the best lol see ya": "It is hard to read, and the slang is not right for a real thank-you."
+ },
+ "Which ending is most polite for a message to a teacher?": {
+  "bye": "“Bye” is too short and casual for a teacher.",
+  "k": "“K” can sound rude to an adult.",
+  "whatever": "“Whatever” sounds rude. It does not show respect."
+ },
+ "Why reread a message before sending it?": {
+  "To make the message longer": "Longer is not better. Reading it again is about finding problems.",
+  "It doesn’t matter, just send it": "It does matter, because you can’t take a sent message back.",
+  "To decide if you should delete it": "You read it again to fix it, not to throw it away."
+ },
+ "Which message gives all the needed details?": {
+  "Pick me up later, okay? Thanks!": "It does not say when or where to pick you up.",
+  "Come get me after school today.": "It gives no time and no place to meet.",
+  "You know where. See you then!": "“You know where” makes the reader guess the place."
+ },
+ "Which message is best to cancel plans with a friend?": {
+  "no sorry cant come today maybe another time": "It has no greeting and no capitals, so it sounds rushed.",
+  "Can’t make it. Something came up. Bye.": "It sounds cold, and it does not offer a new time.",
+  "nevermind about today, just forget it lol": "“Just forget it lol” sounds like you don’t care."
+ },
+ "Which emoji use is best in a message to your boss?": {
+  "Ten emojis": "Too many emojis can look silly in a work message.",
+  "Only emojis": "Your boss may not know what the emojis mean. Words are clearer.",
+  "All caps with emojis": "All caps looks like yelling, and emojis add to it."
+ },
+ "Which text to a teacher is most polite and clear?": {
+  "hey ms lee i was sick today whats the homework?? tell me": "It has no capitals, and “tell me” sounds bossy.",
+  "Ms. Lee, I was sick today. Send me the homework right now. Ava": "“Right now” sounds like an order, not a polite ask.",
+  "Hi Ms. Lee, I was sick today and I missed class. Thank you, Ava": "It is polite, but it never asks for the homework."
+ },
+ "What should go at the end of a message to an adult?": {
+  "A row of smiley faces": "Smiley faces don’t tell who sent it or say thanks.",
+  "Just the word “bye”": "“Bye” alone is too short. It does not show thanks.",
+  "Your phone number only": "A phone number alone does not say who you are or thank them."
+ },
+ "Why should you reread a message before sending it?": {
+  "To make it as long as you can": "Longer is not the goal. You want it clear.",
+  "To add capital letters to every word": "Capitals on every word are wrong. They go only at the start and on names.",
+  "To add lots of emojis to it": "Lots of emojis can make a message less clear."
+ },
+ "Which sentence does NOT belong in a paragraph about recycling?": {
+  "Recycling saves materials.": "This one is about recycling, so it fits.",
+  "Cans can become new cans.": "Cans turning into new cans is part of recycling.",
+  "Sort paper from plastic.": "Sorting paper and plastic is part of recycling."
+ },
+ "What is a topic sentence?": {
+  "The last sentence that ends the paragraph": "The last sentence wraps up. Look for the one that gives the main idea.",
+  "A question that starts every paragraph": "A paragraph does not have to start with a question.",
+  "The title written at the top of the page": "A title sits on top of the page. It is not part of a paragraph."
+ },
+ "Which is the best closing sentence for a paragraph about saving money?": {
+  "I like cats, and my cat likes to sleep a lot.": "Cats have nothing to do with saving money.",
+  "Money is green and comes in coins and bills.": "This tells what money looks like. It does not wrap up why to save.",
+  "The end. Thank you for reading my paragraph.": "A closing sentence should sum up the main idea, not just say “the end.”"
+ },
+ "Which transition word shows the next detail?": {
+  "Banana": "“Banana” is a thing, not a word that links ideas.",
+  "Never": "“Never” does not show that one more detail is coming.",
+  "Blue": "“Blue” is a color. It does not link ideas."
+ },
+ "How many details should support a topic sentence?": {
+  "Zero": "With no details, the main idea has no support.",
+  "Fifty": "Fifty details would be far too many for one paragraph.",
+  "Exactly one hundred": "One hundred is way too many. Your reader would get lost."
+ },
+ "Which sentence does NOT belong in a paragraph about dogs as pets?": {
+  "Dogs need daily walks.": "Walks are part of caring for a pet dog, so this fits.",
+  "Dogs can learn tricks.": "Tricks are about dogs as pets, so this fits.",
+  "Many dogs love to play fetch.": "Playing fetch is about pet dogs, so this fits."
+ },
+ "Which word helps connect ideas in a paragraph?": {
+  "Big": "“Big” tells about size. It does not link two ideas.",
+  "Run": "“Run” is an action word, not a linking word.",
+  "Happy": "“Happy” tells a feeling. It does not join sentences."
+ },
+ "What does a concluding sentence do?": {
+  "Starts a new topic for the next part": "A closing sentence ends the topic. It does not start a new one.",
+  "Asks the reader a question": "Asking a new question leaves the reader hanging.",
+  "Lists every detail again": "Listing every detail again is too much. A closing sums up."
+ },
+ "Which subject line is best for an email asking a client to confirm a photo shoot date?": {
+  "Hi, quick question about this weekend": "This does not say what the question is or give the date.",
+  "Important!!! Please read right away": "Lots of “!!!” does not tell the client what you need.",
+  "Photo shoot stuff and a few questions": "“Stuff” is vague. The client won’t know you need a date confirmed."
+ },
+ "Where should the main request go in an email?": {
+  "At the very end": "If the request comes last, a busy reader may miss it.",
+  "In the subject only": "Many people skim the subject. The request needs to be in the email too.",
+  "Nowhere": "Without a request, the reader won’t know what you need."
+ },
+ "Which subject line is best for a job application?": {
+  "Hi there, please read this today": "This does not say what job you want or who you are.",
+  "Job?? Please reply soon! — Nova": "“Job??” is vague, and the marks look rushed.",
+  "Hello from Nova Reyes :) Question": "A smiley and “Question” do not name the job."
+ },
+ "Which closing is professional?": {
+  "bye, talk soon, Nova": "“Bye, talk soon” is too casual for work, and it needs your full name.",
+  "Later!! — Nova": "“Later!!” is too casual for a work email.",
+  "k thanks — N": "“k thanks” and one letter look rushed and casual."
+ },
+ "Which greeting is best for an email to a business?": {
+  "yo": "“Yo” is slang. It is too casual for a business.",
+  "hey u": "“Hey u” is too casual and uses text spelling.",
+  "Sup": "“Sup” is slang and does not show respect."
+ },
+ "Before sending an important email, you should…": {
+  "Send it fast": "Sending fast can mean sending mistakes, or sending to the wrong person.",
+  "Add ten exclamation marks": "Lots of exclamation marks can look rude or careless.",
+  "Write in all caps": "All caps reads like yelling."
+ },
+ "What does “CC” on an email do?": {
+  "Deletes the email after reading": "CC does not delete anything. Think about who else gets it.",
+  "Marks the email as urgent": "There are other ways to mark an email as urgent. CC is about who else gets it.",
+  "Adds color to the email text": "CC has nothing to do with color. It is about who gets the email."
+ },
+ "Which greeting is best for an email to a new boss?": {
+  "Yo!": "“Yo!” is slang. It is too casual for a new boss.",
+  "Hey dude": "“Hey dude” is too casual for a work email.",
+  "sup": "“sup” is slang and has no capital letter."
+ },
+ "Your email asks two questions. How should you write them?": {
+  "As one long sentence joined with “and”": "One long sentence can hide the second question, so it may not get answered.",
+  "Only in the subject line, to save space": "A subject line is too short to hold both questions clearly.",
+  "In all capital letters so they stand out": "All caps reads like yelling. Breaking them apart works better."
+ },
+ "Why should you check who is in the “To” line before sending?": {
+  "So the email sends a little faster": "Checking the names does not change how fast it sends.",
+  "So you can add everyone you know": "Adding everyone you know could share private details with the wrong people.",
+  "So the subject line looks correct": "The subject line is a different part. The “To” line is about who gets it."
+ },
+ "When should you reply-all to an email?": {
+  "Every time, so no one feels left out": "Replying to everyone every time fills inboxes with messages they don’t need.",
+  "Whenever you want to thank the sender": "A thank-you usually goes just to the sender, not the whole list.",
+  "Only when the email came from a boss": "Who sent it does not matter as much as who needs your answer."
+ },
+ "Which résumé line is strongest?": {
+  "Worked at Fresh Mart as a cashier for one year": "This tells the job and how long, but not what you did well.",
+  "Did lots of different things at a busy store": "“Lots of different things” is vague. It shows no actions or results.",
+  "Cashier: helped customers and did the register": "This lists tasks, but has no numbers or results."
+ },
+ "What belongs in the skills section?": {
+  "My favorite movie and music": "Movies and music are fun, but they aren’t job skills.",
+  "My age and date of birth": "Your age and birth date aren’t skills, and you don’t need to share them.",
+  "My pet’s name and my hobbies": "Pets and hobbies are not abilities an employer is looking for."
+ },
+ "Which action word best starts a résumé line?": {
+  "Was": "“Was” is a weak word. It doesn’t show an action you took.",
+  "Did": "“Did” is vague. It doesn’t say what you actually did.",
+  "Had": "“Had” doesn’t show an action or a result."
+ },
+ "Which résumé line uses a number well?": {
+  "Trained some new people at work": "“Some new people” gives no number, so it’s hard to see how much you did.",
+  "Was very good at training others": "This brags but gives no number or proof.",
+  "Helped with training sometimes": "“Sometimes” is vague and has no number."
+ },
+ "Should a résumé include lies to look better?": {
+  "Yes, a few": "Even a few lies can be found out and cost you the job.",
+  "Only small ones": "Small lies can still be caught, and they hurt trust.",
+  "Everyone does": "Even if others did it, lying can cost you the job."
+ },
+ "Which résumé line is best for a babysitting job?": {
+  "Watched some kids for a while when I was free": "“Some kids” and “a while” are too vague to show experience.",
+  "Did babysitting on weekends for some families": "This does not say how many kids, what ages or how long.",
+  "Good with kids and fun to be around, very nice": "This gives opinions, not facts about what you did."
+ },
+ "Which belongs at the top of a résumé?": {
+  "Your favorite foods and hobbies": "Foods and hobbies don’t help an employer reach you.",
+  "A fun joke to get attention": "A joke at the top won’t help the employer contact you.",
+  "A photo of you and your pet": "Photos of pets don’t belong on a résumé, and they don’t give contact details."
+ },
+ "Which skill would you list for a cashier job?": {
+  "Playing video games well": "Gaming is a hobby. A cashier job doesn’t use it.",
+  "Drawing cartoon animals": "Drawing cartoons is not a skill a cashier needs.",
+  "Knowing lots of song lyrics": "Song lyrics won’t help with a cashier’s daily tasks."
+ },
+ "Why should a résumé be one page for a first job?": {
+  "The law says a résumé must be one page": "There is no law about résumé length. Think about the person reading it.",
+  "To save paper and printer ink": "Saving paper is nice, but that isn’t the main reason.",
+  "So you don’t have to list any skills": "You still list skills on a one-page résumé."
+ },
+ "Which email address is best for a résumé?": {
+  "A silly nickname with numbers": "A silly nickname can make you look less serious to an employer.",
+  "A gaming username": "A gaming name doesn’t look professional on a résumé.",
+  "A joke about pizza": "A joke address can make an employer take you less seriously."
+ },
+ "What goes at the top of a résumé?": {
+  "Your hobbies and favorite foods": "Hobbies and foods don’t tell an employer how to reach you.",
+  "A list of your best friends": "Your friends’ names don’t belong on a résumé.",
+  "The job you want most someday": "Your dream job doesn’t tell who you are or how to reach you."
+ },
+ "Which sentence belongs in the “recommendation” part of a report?": {
+  "Milk sold out three Saturdays in a row.": "This tells what happened. That makes it a finding, not what to do next.",
+  "Milk is white.": "This is a plain fact about milk. It does not suggest an action.",
+  "I like milk.": "This is an opinion. It doesn’t say what the store should do."
+ },
+ "Which is a recommendation?": {
+  "Bread sold out early.": "This tells what happened, so it is a finding.",
+  "Sales were high.": "This reports a result. It doesn’t say what to do next.",
+  "There were 5 days.": "This is a fact about the time span, not an action to take."
+ },
+ "What should a report include with each claim?": {
+  "Jokes, so readers stay interested": "Jokes don’t prove a claim is true.",
+  "Your own opinions about the topic": "Opinions alone don’t prove a claim. Readers want proof.",
+  "A picture to go with every claim": "A picture can help, but not every claim needs one. Each claim needs proof."
+ },
+ "Which is a finding?": {
+  "We should bake more bread each day.": "This says what to do next, so it’s a recommendation.",
+  "I like the bread more than the rolls.": "This is an opinion, not something you measured.",
+  "Bread is the tastiest thing we sell.": "“Tastiest” is an opinion, not a measured fact."
+ },
+ "Which title fits a report?": {
+  "Some Stuff About the Bread We Sold This Weekend": "“Some stuff” is vague. A report title should name its topic clearly.",
+  "Bread!!! The Best Weekend Ever at the Bakery": "Exclamation marks and “best ever” sound like an ad, not a report.",
+  "Hi, This Is My Report on What Happened": "This greets the reader but doesn’t say what the report covers."
+ },
+ "Which is the most objective sentence for a report?": {
+  "Sales were awesome!": "“Awesome” is a feeling word, not a measured fact.",
+  "I think sales were nice.": "“I think” shows an opinion. Reports need facts.",
+  "Sales felt good.": "“Felt good” is a feeling, not a number you can check."
+ },
+ "Why include a chart in a report?": {
+  "To fill space": "A chart should share information, not just take up room.",
+  "To decorate": "Charts can look nice, but their job is to show data.",
+  "Charts are required always": "Not every report needs a chart. Use one when it helps show the data."
+ },
+ "Which sentence belongs in the “findings” part of a report?": {
+  "We should hire more staff.": "This says what to do next. That’s a recommendation, not a finding.",
+  "I think March is a nice month.": "This is an opinion, not something the data shows.",
+  "Thank you for reading.": "This is a polite ending, not a finding."
+ },
+ "A report says “sales dropped” with no numbers. How could you improve it?": {
+  "Add stronger words, like “dropped a lot”": "“A lot” is still vague. Readers need real numbers.",
+  "Move the sentence to the very end": "Moving it doesn’t add the missing details.",
+  "Write “sales dropped” in bold letters": "Bold letters make it stand out, but it still has no numbers."
+ },
+ "Which reason is most persuasive for a longer lunch break?": {
+  "I really want a longer lunch, and so do my friends": "Wanting something isn’t proof that it will help.",
+  "Everyone at work says a longer lunch would be great": "What people say isn’t evidence. It has no facts to back it up.",
+  "Lunch is the most fun part of the day for most people": "Fun is an opinion. It doesn’t show a real benefit."
+ },
+ "Which is the most respectful way to disagree?": {
+  "You’re wrong, and here is why you are wrong…": "Calling someone wrong can make them stop listening.",
+  "That idea makes no sense to anyone at all.": "This insults the idea instead of explaining your view.",
+  "Whatever, you can think what you want, I guess.": "This gives up and sounds rude, so it doesn’t share your view."
+ },
+ "Which is a counterargument?": {
+  "Parks are green and have lots of trees for shade.": "This describes parks but doesn’t answer the other side.",
+  "I love parks, and so do most people in my town.": "This is your own opinion. It doesn’t name the other side’s point.",
+  "Vote now for the new park before it is too late!": "This is a call to act, not an answer to the other side."
+ },
+ "What should end a persuasive letter?": {
+  "A fun fact about the topic": "A fun fact doesn’t tell the reader what you want them to do.",
+  "A joke to end on a happy note": "A joke may be friendly, but it doesn’t ask for action.",
+  "A list of every point again": "Repeating every point is too long. End by asking for what you want."
+ },
+ "Who is the audience of a letter asking the mayor for a crosswalk?": {
+  "Your friend": "Your friend can’t build a crosswalk. Think about who the letter is to.",
+  "Yourself": "You are the writer, not the reader.",
+  "A pet": "A pet can’t read a letter or make decisions."
+ },
+ "Which opening grabs attention best?": {
+  "Hi, my name is Nova and I live here.": "This introduces you but doesn’t grab attention.",
+  "This is a letter about a crosswalk.": "This states the topic, but it isn’t striking.",
+  "I am writing to you about Oak Street.": "This is a plain start. A surprising fact would pull readers in more."
+ },
+ "Which is an emotional appeal used fairly?": {
+  "You’re a terrible person if you disagree.": "This insults the reader, so it isn’t fair.",
+  "Only fools say no.": "Calling people fools is an insult, not a fair appeal.",
+  "Do it or else.": "This is a threat. It pushes instead of inviting empathy."
+ },
+ "Which is the strongest reason to add a school garden?": {
+  "Gardens are nice to look at, and lots of other schools have one": "Looking nice and copying others are weak reasons.",
+  "Everyone I asked said they want one, so we should get one": "Following what others want isn’t a real benefit.",
+  "A garden would be fun, and it would make our school cooler": "“Fun” and “cooler” are opinions, not real benefits."
+ },
+ "What is a counterargument?": {
+  "The main reason you give for your side": "Your main reason supports your side. A counterargument comes from the other side.",
+  "A fact you repeat to make your point": "Repeating your own fact isn’t the other side’s view.",
+  "The sentence that wraps up your essay": "That is the conclusion, not a point from the other side."
+ },
+ "Which closing sentence is most persuasive?": {
+  "That is all I have to say about why a garden would be a good idea.": "This ends, but it doesn’t restate the main point or ask for action.",
+  "In conclusion, gardens are plants that grow in dirt outside.": "This defines gardens instead of persuading.",
+  "Maybe we could get a garden someday, but it is up to you.": "“Maybe” and “someday” sound weak. They don’t call for action."
+ },
+ "Which line belongs in the “benefit” part of a proposal?": {
+  "The cart would cost $350 to buy.": "This is a cost. It doesn’t show what the reader gains.",
+  "The park opens at 7 every morning.": "This is a fact about the park, not a benefit.",
+  "I already have a cart I could use.": "This tells what you have, not what the reader gains."
+ },
+ "Why include costs in a proposal?": {
+  "So the proposal looks longer and serious": "Costs aren’t there to make it look serious. They help the reader decide.",
+  "Costs don’t matter if the idea is good": "Costs always matter. The reader has to know what to spend.",
+  "To show how much money you have saved": "Costs show what the plan needs, not your savings."
+ },
+ "Which line is the “problem” in a proposal for a crosswalk?": {
+  "A crosswalk would cost about $2,000.": "This is a cost, not the problem.",
+  "The paint for the lines would be white.": "Paint color is a detail. It doesn’t explain why change is needed.",
+  "Workers could start the job on Monday.": "This is a timeline. It doesn’t say what is wrong now."
+ },
+ "Which benefit is strongest for a store manager?": {
+  "It would be fun for the staff": "Fun for staff may not matter much to a manager’s goals.",
+  "I really like this new plan": "Your liking it isn’t a benefit to the manager.",
+  "Other stores might try it too": "What other stores do doesn’t help this manager."
+ },
+ "Which timeline is clearest?": {
+  "Soon: buy supplies, then open the stand.": "“Soon” gives no date or week.",
+  "Later on, after we get ready, we open.": "“Later on” doesn’t say when anything will happen.",
+  "When ready, we will start and see.": "“When ready” is vague. It gives no dates."
+ },
+ "Which is a clear “next step” to end a proposal?": {
+  "Think about it and let me know.": "“Think about it” doesn’t ask for a specific action.",
+  "Maybe we can try this someday.": "“Someday” gives no date and sounds unsure.",
+  "Whatever works best for you.": "This doesn’t say what you want to happen."
+ },
+ "Who should a proposal be written for?": {
+  "Yourself, so you can explain what you want": "You already know what you want. The reader is the one who must agree.",
+  "Anyone who might read it someday": "“Anyone” is too broad. Write for the person who can say yes.",
+  "Your friends, so they can give you ideas": "Friends may give ideas, but they can’t approve the plan."
+ },
+ "What should a proposal include first?": {
+  "The price only": "Price matters, but readers first need to know why the idea matters.",
+  "A thank-you note": "A thank-you note is polite, but it doesn’t explain the idea.",
+  "Your favorite color": "Your favorite color doesn’t help the reader decide."
+ },
+ "Why include a budget in a proposal?": {
+  "To make the proposal look longer": "A budget isn’t there to add length.",
+  "To list what the team has bought": "A budget plans future costs. It isn’t a list of past buys.",
+  "So no one asks about the plan": "A budget answers money questions. People can still ask about the plan."
+ },
+ "Which line shows a measurable goal?": {
+  "Be the best café in town": "“The best” can’t be measured or checked.",
+  "Make our customers happy": "“Happy” is hard to measure without a number.",
+  "Serve lots of people soon": "“Lots” and “soon” give no number or date."
+ },
+ "Which sentence states a clear request in a proposal?": {
+  "We hope you will think about helping us recycle": "“Hope” doesn’t say how much or by when.",
+  "Recycling is good, so maybe we could do more of it": "“Maybe” is unsure, and there is no amount or date.",
+  "We need some money soon to start a recycling plan": "“Some money” and “soon” are too vague."
+ },
+ "Which sentence analyzes rather than just describes?": {
+  "Sales were higher on Tuesday than on Monday, and most of the sales were hot drinks.": "This compares days but doesn’t explain why sales were higher.",
+  "It rained on three days this week, and we sold a lot of coffee on each of those days.": "This gives facts but doesn’t explain a cause or what to do.",
+  "We sold 80 cups of coffee and 40 cups of tea during the rainy week, more than last week.": "These are numbers with no “because” or “which means.”"
+ },
+ "Which shows evidence in analysis?": {
+  "Sales were good this month at the shop.": "“Good” is vague. There are no numbers.",
+  "People seem to like the lower prices.": "“Seem to like” is a guess, not evidence.",
+  "The new price looks nice on the sign.": "This is about looks, not data."
+ },
+ "Which question does analytical writing answer?": {
+  "What color was it?": "Color is a describing detail. It doesn’t ask why.",
+  "Who is your friend?": "This is a personal question, not analysis.",
+  "What’s for lunch?": "This is everyday talk. It doesn’t ask why or how."
+ },
+ "Which sentence analyzes?": {
+  "The bus was late on Tuesday morning because of the weather.": "This gives a cause but not the effect it had.",
+  "Buses are big, and some of them are late on busy days.": "This describes buses. It doesn’t link a cause to an effect.",
+  "Thirty riders were on the bus, and it was a Tuesday.": "These are facts with no cause or effect."
+ },
+ "Which word helps connect evidence to a point?": {
+  "“Blue”": "“Blue” is a color, not a linking word.",
+  "“Sandwich”": "“Sandwich” is a thing. It doesn’t connect ideas.",
+  "“Hello”": "“Hello” is a greeting, not a link to evidence."
+ },
+ "Which sentence explains a cause?": {
+  "The bus is blue and has 40 seats.": "This describes the bus. It gives no cause.",
+  "Bus fares went up $1 last month.": "This is a fact, but it doesn’t say what it caused.",
+  "Many people ride the bus each day.": "This is a fact. It doesn’t explain a cause."
+ },
+ "What is the difference between describing and analyzing?": {
+  "They’re the same, just with different words": "They aren’t the same. One tells what, the other tells why.",
+  "Describing is longer and has more details": "Length isn’t the difference. Think about what or why.",
+  "Analyzing uses pictures and charts instead": "Both can use charts. The difference is in what they explain."
+ },
+ "Which sentence draws a conclusion from evidence?": {
+  "Soup is hot, so people like it on cold, rainy days.": "This is a general belief, not a conclusion drawn from data.",
+  "It rained four days this month, more than last month.": "This is a fact about weather, not a conclusion.",
+  "We sold 30 bowls of soup on Monday and 60 on Tuesday.": "These are numbers with no conclusion drawn from them."
+ },
+ "Which sentence explains WHY, not just WHAT?": {
+  "Attendance rose from 88% to 95% after the bus route changed in May.": "This tells what changed, but not why.",
+  "The bus route changed in May, and it now has two more stops.": "This describes the route. It doesn’t explain a cause.",
+  "Attendance is important, and every student should come to school.": "This is an opinion. It doesn’t explain why attendance rose."
+ },
+ "What makes an analysis stronger?": {
+  "More exclamation points": "Exclamation points add feeling, not proof.",
+  "Longer words": "Long words don’t make a claim more true.",
+  "Only opinions": "Opinions alone don’t prove anything."
+ },
+ "Which sentence analyzes a character?": {
+  "Ana returns the wallet to the man who lost it": "This tells what Ana does, but not what it shows about her.",
+  "Ana has brown hair and walks to school each day": "This describes her looks and habits, not her character.",
+  "The story has five pages and a happy ending": "This is about the story’s length, not a character."
+ },
+ "What words help show cause and effect in analysis?": {
+  "First, next, then, finally": "These words show order, not cause and effect.",
+  "Blue, tall, happy, bright": "These are describing words.",
+  "Once upon a time, the end": "These are story start and end phrases."
+ },
+ "Which sentence credits its source correctly?": {
+  "Flu cases fell 20% after the clinic started free check-ups.": "This states the fact but never says where it came from.",
+  "Everyone in town knows flu cases fell 20% after free check-ups.": "“Everyone knows” isn’t a source anyone can check.",
+  "I think flu cases fell a lot, maybe 20%, after the check-ups.": "“I think” and “maybe” show a guess, not a source."
+ },
+ "Why do writers cite sources?": {
+  "To make their writing look longer": "Citing isn’t about length. It’s about honesty.",
+  "Because it makes the work look fancy": "Citations aren’t for looks. They give credit.",
+  "So readers do not have to check facts": "Citing does the opposite. It helps readers check facts."
+ },
+ "Which is plagiarism?": {
+  "Quoting someone’s words with credit": "Quoting with credit is honest, so it isn’t plagiarism.",
+  "Summarizing an idea and giving credit": "Summarizing with credit is allowed.",
+  "Writing your own ideas in your own words": "Your own ideas in your own words are your own work."
+ },
+ "How should a research paper end?": {
+  "With a new topic": "A new topic at the end confuses readers.",
+  "With a joke": "A joke doesn’t tie the evidence together.",
+  "In the middle of a sentence": "Stopping mid-sentence leaves the paper unfinished."
+ },
+ "What is a quotation?": {
+  "Your own idea, written in your words": "Your own words aren’t a quotation.",
+  "A short summary of what a source said": "A summary uses your words. A quotation uses someone’s exact words.",
+  "A guess about what someone meant": "A guess isn’t someone’s exact words."
+ },
+ "Why use more than one source?": {
+  "To make the report longer": "More sources aren’t about length. They help check facts.",
+  "Because teachers say to use ten": "The number of sources isn’t about a rule. It’s about checking facts.",
+  "One good source is always enough": "Even good sources can be wrong or one-sided."
+ },
+ "Which is a good note from a source?": {
+  "clinic report, flu cases fell a lot": "This has no number and no year, so it’s hard to use later.",
+  "something about free check-ups helping": "This is too vague. It doesn’t give a fact or a source.",
+  "20% (I think it was about the flu)": "This has a number but no clear source or topic."
+ },
+ "Which is paraphrasing?": {
+  "Copying word for word without credit": "That is copying, not putting ideas in your own words.",
+  "Making up facts": "Making up facts is not using a source at all.",
+  "Ignoring sources": "Paraphrasing uses a source. Ignoring sources is the opposite."
+ },
+ "Why should you cite sources in a research paper?": {
+  "To make the paper look longer and more serious": "Citations aren’t there to add length. They show where facts came from.",
+  "Because teachers like to see long lists": "It isn’t about pleasing teachers. Readers need to know where facts came from.",
+  "So you don’t need to use your own words": "You still use your own words. Citing just gives credit for ideas you borrow."
+ },
+ "What is a research question?": {
+  "A list of facts you found while reading online": "A list of facts is what you find. The question is what guides your search.",
+  "The title on your report’s cover": "A title names the report. It isn’t the question you set out to answer.",
+  "A quiz you give readers at the end": "A quiz tests readers. A research question guides your own search."
+ },
+ "Which source is most useful for a report on bees?": {
+  "A cereal box with a cartoon bee on it": "A cereal box is made to sell cereal, not to teach about bees.",
+  "A comment someone posted on a video": "Anyone can post a comment, and it may not be accurate.",
+  "A blog post with no author or date": "With no author or date, you can’t tell if the facts are expert or current."
+ },
+ "Which belongs in the “risks” section?": {
+  "Coffee is hot, so we will use cups with lids.": "Hot coffee and lids is a small detail, not a real threat to the business.",
+  "We will sell coffee, tea and muffins in the park.": "This describes what you sell. It doesn’t name a risk.",
+  "Our name is Joe’s, after the owner, Joe Park.": "This explains the name. It isn’t a risk or a plan to handle one."
+ },
+ "Which belongs in the “market” section?": {
+  "Our logo is blue and has a coffee cup on it.": "The logo is about branding. It says nothing about who will buy or how many.",
+  "I have always loved coffee, ever since I was young.": "Your love of coffee is a personal story, not market information.",
+  "We plan to open soon, maybe early next spring.": "This is a vague timeline. It doesn’t describe customers."
+ },
+ "Why do lenders read the costs section closely?": {
+  "To see if the plan has a nice, clear font": "Lenders care about money, not the font.",
+  "To count how many pages the plan has": "Page count says nothing about whether the loan can be repaid.",
+  "To check that the plan has a good logo": "A logo doesn’t show whether the business can pay back a loan."
+ },
+ "Which is a startup cost?": {
+  "Monthly profit": "Profit is money you earn after opening, not a cost to get started.",
+  "A customer’s tip": "A tip is money coming in, not a cost.",
+  "Next year’s sales": "Next year’s sales are future income, not a cost before opening."
+ },
+ "Why include a competitor section?": {
+  "To praise rivals so you seem friendly": "Praising rivals doesn’t show why customers should pick you.",
+  "To copy what the rivals already do": "Copying rivals gives customers no reason to switch to you.",
+  "It’s not needed if your idea is good": "Even a good idea has competition, and readers want to know how you stand out."
+ },
+ "What is a “target customer”?": {
+  "Anyone at all who has money": "“Anyone” is too broad to guide your plan or ads.",
+  "The other shops that sell the same thing": "Those are competitors, not customers.",
+  "The landlord who rents you the space": "A landlord rents you space. They aren’t the people you sell to."
+ },
+ "What is a “target market” in a business plan?": {
+  "Every person who might see your ads": "Seeing an ad doesn’t make someone your customer. A target is a focused group.",
+  "The stores where you buy supplies": "Those are suppliers, not the people you sell to.",
+  "The other businesses you compete with": "Those are competitors, not customers."
+ },
+ "Why does a business plan include a competitor section?": {
+  "To list every company that sells anything": "Listing every company isn’t useful. The section is about your real rivals.",
+  "To prove there is no competition at all": "Almost every business has competition, so claiming none weakens the plan.",
+  "To copy the prices other businesses use": "Copying prices doesn’t show why customers would choose you."
+ },
+ "Which number shows if a business can survive?": {
+  "The number of colors in the logo": "Logo colors don’t affect whether the business earns enough.",
+  "How many friends like it": "Friends liking it doesn’t pay the bills.",
+  "The owner’s age": "The owner’s age doesn’t show whether money in beats money out."
+ },
+ "What is a startup cost?": {
+  "Money the business earns in its first month": "Earnings are money coming in, not a cost.",
+  "The monthly rent once the business is open": "Rent after opening is an ongoing cost, not a startup cost.",
+  "The price you charge for your first product": "That’s a price you charge, which brings money in."
+ },
+ "You argue the city should keep bus fares low. What strengthens your argument most?": {
+  "Repeat your main point several times so readers remember it": "Repeating a point doesn’t answer the strongest objection.",
+  "Say people who disagree just do not care about bus riders": "Insulting people who disagree weakens your credibility and answers nothing.",
+  "Leave out the cost concern so readers do not think about it": "Skipping the cost concern leaves your weakest spot open, and readers will notice."
+ },
+ "Which is a weak argument?": {
+  "“Accidents fell 30% after bike lanes were added.”": "This gives a real number, which is evidence.",
+  "“Two studies agree.”": "Two studies agreeing is solid support.",
+  "“The data shows a trend.”": "Data showing a trend is evidence, not a weak claim."
+ },
+ "Which is a claim?": {
+  "Bike lanes are painted.": "This is a fact about bike lanes, not a position to argue.",
+  "I rode a bike.": "This is a personal fact, not a position.",
+  "Bikes have pedals.": "This is a fact anyone would agree with, so there’s nothing to argue."
+ },
+ "What makes an argument strongest?": {
+  "Saying your point loudly and often": "Being loud doesn’t add evidence or answer the other side.",
+  "Repeating your best reason many times": "Repeating a reason doesn’t make it stronger or answer objections.",
+  "Showing the other side is not smart": "Insulting the other side doesn’t prove your point and can turn readers away."
+ },
+ "What is a rebuttal?": {
+  "The first sentence of an argument": "The first sentence usually states your claim, not a reply to the other side.",
+  "A quote from an expert you trust": "An expert quote can support you, but a rebuttal answers the opposing view.",
+  "The title at the top of the essay": "The title names the essay. It doesn’t respond to anyone."
+ },
+ "Which is the best evidence for “Schools should start later”?": {
+  "I hate getting up early in the morning": "This is a personal feeling, not evidence.",
+  "Everyone at school says it should": "Popularity isn’t proof. It doesn’t show later starts help.",
+  "It just feels right to most students": "A feeling isn’t evidence, even if many share it."
+ },
+ "Which ending is strongest for an argument?": {
+  "A fun fact the reader may not know": "A fun fact doesn’t remind readers of your claim or ask them to act.",
+  "A joke about the people who disagree": "Mocking the other side weakens your argument.",
+  "A new topic to think about next time": "A new topic at the end distracts from your claim."
+ },
+ "Which is a logical fallacy?": {
+  "“Data shows a 20% drop in crashes.”": "This cites data, which is sound reasoning.",
+  "“Two separate studies agree on this.”": "Separate studies agreeing is strong evidence, not a fallacy.",
+  "“The law says drivers must stop here.”": "Citing the law is a fact you can check, not faulty logic."
+ },
+ "Which claim is debatable (good for an argument)?": {
+  "Most schools start before 9 AM": "This is a fact you can check, so there’s nothing to debate.",
+  "Teens need sleep to stay healthy": "Most people already agree on this, so it isn’t debatable.",
+  "Some schools have changed start times": "This is a fact about what happened, not a position to argue."
+ },
+ "Which shows reasoning that connects evidence to a claim?": {
+  "Many teens say they feel tired and sleepy in their first class": "This is evidence, but it doesn’t explain how it supports a claim.",
+  "Later start times are a popular idea with most of the students": "Popularity isn’t reasoning. It doesn’t link evidence to the claim.",
+  "Grades matter a lot, so schools should think hard about start times": "This states that grades matter but doesn’t connect evidence to a result."
+ },
+ "What makes evidence relevant?": {
+  "It is long and full of details": "Length and detail don’t make evidence fit the claim.",
+  "It is surprising and gets attention": "Surprising evidence can still be off-topic.",
+  "It comes from a friend you trust": "Trusting a friend doesn’t mean the evidence supports the claim."
+ },
+ "Rosa says “Stock aisle 3, then aisle 1.” Which aisle first?": {
+  "Aisle 1": "Rosa said “then aisle 1,” so it comes second.",
+  "Aisle 2": "Rosa did not say aisle 2 at all."
+ },
+ "“Fold the paper. Then draw a line.” What do you do first?": {
+  "Draw the line": "“Then” means the line comes next, not first.",
+  "Cut the paper": "The steps do not say to cut.",
+  "Color it": "The steps do not say to color."
+ },
+ "A recipe says “preheat the oven” before mixing. Why?": {
+  "So you can bake two things at once": "Preheating is about getting the oven hot, not baking two things.",
+  "It does not matter when you do it": "It does matter. A cold oven will not cook the food right.",
+  "To clean the oven before you use it": "Preheating heats the oven. It does not clean it."
+ },
+ "Directions say “turn left at the second light.” You pass one light. What next?": {
+  "Turn left now at this light": "You passed one light. The steps say the second light.",
+  "Turn right at the next light": "The steps say left, not right.",
+  "Stop and wait at this light": "The steps do not say to stop here."
+ },
+ "“Walk 2 blocks north. Then walk 1 block east.” Which way first?": {
+  "East": "East is the second step. Look at what comes first.",
+  "South": "The steps do not say south.",
+  "West": "The steps do not say west."
+ },
+ "Your shift starts at 9:00. The walk to the stop is 5 min and the bus ride is 35 min. When should you leave home at the latest?": {
+  "8:30": "8:30 only counts the bus ride. Don’t forget the walk.",
+  "9:00": "Leaving at 9:00 means you get there long after your shift starts.",
+  "8:55": "8:55 leaves only 5 minutes. The trip takes much longer."
+ },
+ "Your shift starts at 9:00. The walk to the stop is 10 min and the bus ride is 35 min. When should you leave home at the latest?": {
+  "8:25": "8:25 counts the ride but not the 10-minute walk.",
+  "9:00": "Leaving at 9:00 means you arrive way after your shift starts.",
+  "8:55": "8:55 leaves only 5 minutes. The trip takes much longer."
+ },
+ "Your shift starts at 9:00. The walk to the stop is 10 min and the bus ride is 25 min. When should you leave home at the latest?": {
+  "8:35": "8:35 counts the ride but not the 10-minute walk.",
+  "9:00": "Leaving at 9:00 means you arrive way after your shift starts.",
+  "8:55": "8:55 leaves only 5 minutes. The trip takes much longer."
+ },
+ "Your shift starts at 9:00. The walk to the stop is 5 min and the bus ride is 25 min. When should you leave home at the latest?": {
+  "8:40": "8:40 is too late. Count both the walk and the ride.",
+  "9:00": "Leaving at 9:00 means you arrive way after your shift starts.",
+  "8:55": "8:55 leaves only 5 minutes. The trip takes much longer."
+ },
+ "Your shift starts at 9:00. The walk to the stop is 10 min and the bus ride is 20 min. When should you leave home at the latest?": {
+  "8:40": "8:40 counts the ride but not the 10-minute walk.",
+  "9:00": "Leaving at 9:00 means you arrive way after your shift starts.",
+  "8:55": "8:55 leaves only 5 minutes. The trip takes much longer."
+ },
+ "Your shift starts at 9:00. The walk to the stop is 5 min and the bus ride is 20 min. When should you leave home at the latest?": {
+  "8:45": "8:45 is too late. Count both the walk and the ride.",
+  "9:00": "Leaving at 9:00 means you arrive way after your shift starts.",
+  "8:55": "8:55 leaves only 5 minutes. The trip takes much longer."
+ },
+ "Why make a to-do list?": {
+  "To use up paper you already have at home": "A list is not about using up paper. It helps you remember.",
+  "It slows you down, so it is better to skip": "A list can save time, because you don’t forget steps.",
+  "So other people can see how busy you are": "A list is for you, not to show off."
+ },
+ "You have homework, chores and a friend’s party. What should you plan first?": {
+  "Fun first, then the rest": "If fun comes first, you may run out of time for the musts.",
+  "Nothing, just do it all": "With no plan, it is easy to forget something.",
+  "Only the chores, no fun": "Fun is fine once the musts are done. You don’t have to skip it."
+ },
+ "You have a project due Friday. What is the best plan?": {
+  "Do it all on Thursday night": "One night may not be enough, and you have no time to fix mistakes.",
+  "Wait until you feel like doing it": "You may not feel like it until it’s too late.",
+  "Do the fun parts and skip the rest": "Skipping parts leaves the project unfinished."
+ },
+ "Your bus leaves at 8:00 and it takes 15 minutes to walk to the stop. When should you leave, at the latest?": {
+  "At 8:00": "If you leave at 8:00, the bus is gone when you get there.",
+  "At 8:15": "8:15 is after the bus leaves.",
+  "At 7:00 exactly": "7:00 is fine but much earlier than you need. Look for the latest time."
+ },
+ "Why make a list before going to the store?": {
+  "Lists are only for big shopping trips": "Lists help on small trips too.",
+  "To make shopping take longer": "A list makes shopping faster, not slower.",
+  "So you can buy more things at once": "A list helps you buy what you need, not more."
+ },
+ "School starts at 8:00. It takes 35 minutes to get there. When should you leave, at the latest?": {
+  "8:35": "That is 35 minutes after school starts. You need to leave before 8:00.",
+  "8:00": "If you leave at 8:00, you will be 35 minutes late."
+ },
+ "School starts at 7:00. It takes 35 minutes to get there. When should you leave, at the latest?": {
+  "7:35": "That is 35 minutes after school starts. You need to leave before 7:00.",
+  "7:00": "If you leave at 7:00, you will be 35 minutes late."
+ },
+ "School starts at 8:00. It takes 25 minutes to get there. When should you leave, at the latest?": {
+  "8:25": "That is 25 minutes after school starts. You need to leave before 8:00.",
+  "8:00": "If you leave at 8:00, you will be 25 minutes late."
+ },
+ "School starts at 7:00. It takes 10 minutes to get there. When should you leave, at the latest?": {
+  "7:10": "That is 10 minutes after school starts. You need to leave before 7:00.",
+  "7:00": "If you leave at 7:00, you will be 10 minutes late."
+ },
+ "School starts at 7:00. It takes 20 minutes to get there. When should you leave, at the latest?": {
+  "7:20": "That is 20 minutes after school starts. You need to leave before 7:00.",
+  "7:00": "If you leave at 7:00, you will be 20 minutes late."
+ },
+ "School starts at 8:00. It takes 10 minutes to get there. When should you leave, at the latest?": {
+  "8:10": "That is 10 minutes after school starts. You need to leave before 8:00.",
+  "8:00": "If you leave at 8:00, you will be 10 minutes late."
+ },
+ "School starts at 7:00. It takes 25 minutes to get there. When should you leave, at the latest?": {
+  "7:25": "That is 25 minutes after school starts. You need to leave before 7:00.",
+  "7:00": "If you leave at 7:00, you will be 25 minutes late."
+ },
+ "School starts at 8:00. It takes 20 minutes to get there. When should you leave, at the latest?": {
+  "8:20": "That is 20 minutes after school starts. You need to leave before 8:00.",
+  "8:00": "If you leave at 8:00, you will be 20 minutes late."
+ },
+ "Jax says: “Put all your rent money into my cousin’s sneaker resale. You could double it!” What is the smartest view?": {
+  "You could double it, so the chance is worth taking with rent": "This looks only at the reward. Think about what happens if you lose your rent.",
+  "Jax is often wrong, so every investment idea is a bad one": "Being wrong before doesn’t make every idea bad. Judge this risk on its own.",
+  "Borrow a bit more money so you can make even more profit": "Borrowing makes the risk bigger, not smaller."
+ },
+ "Which lowers risk when starting a small business?": {
+  "Spend all your savings day one": "Spending everything at once means one mistake could wipe you out.",
+  "Borrow the maximum": "Borrowing the most raises how much you could lose.",
+  "Skip planning": "Skipping planning makes surprises and losses more likely."
+ },
+ "A new job pays more but is only for 2 weeks. Your current job is steady. What should you think about?": {
+  "Only the pay": "Pay matters, but this ignores what happens when the job ends.",
+  "Nothing": "A big choice like this needs some thought.",
+  "The color of the uniform": "Uniform color doesn’t affect your income."
+ },
+ "Jax offers to double your money by tomorrow. What is the best response?": {
+  "Give him all your savings, since he is a friend": "Being a friend doesn’t make a too-good-to-be-true deal safe.",
+  "Give him half, so you only lose some if it fails": "Losing half is still a loss. Deals like this are usually scams.",
+  "Borrow money to join so you can make even more": "Borrowing to join puts you in debt if it fails."
+ },
+ "Riding a bike without a helmet saves time but…": {
+  "Is perfectly safe": "Riding without a helmet is not safe. A fall can hurt your head.",
+  "Makes you faster": "A helmet doesn’t slow you down.",
+  "Is required": "This finishes the thought with a reason to skip, but the question asks what you risk."
+ },
+ "When is a risk worth taking?": {
+  "Always, since big risks lead to big rewards": "Big risks can also lead to big losses.",
+  "Never, since any risk could go badly": "Some risks are worth it, like learning a new skill.",
+  "When a friend says you will regret saying no": "Pressure from a friend isn’t a good reason to take a risk."
+ },
+ "Which choice has the most risk?": {
+  "Saving $10 each week": "Saving a little each week is very low risk.",
+  "Paying rent on time": "Paying rent on time protects your home. It lowers risk.",
+  "Buying groceries for the week": "Buying groceries meets a need. It isn’t risky."
+ },
+ "Wearing a seat belt is a way to…": {
+  "Increase risk": "A seat belt protects you in a crash, so it doesn’t raise danger.",
+  "Win a prize": "Seat belts aren’t about prizes.",
+  "Go faster": "A seat belt doesn’t change your speed."
+ },
+ "What is “reward” in risk and reward?": {
+  "What you could lose": "That’s the risk side, not the reward.",
+  "A punishment": "A punishment is something bad. Reward is the good side.",
+  "A fee": "A fee is a cost, not something you gain."
+ },
+ "Which is a lower-risk way to save money?": {
+  "Lending it to a stranger": "A stranger may never pay you back.",
+  "Betting it on a game": "Betting can lose all your money.",
+  "Hiding it under a rug": "Money under a rug can be lost or stolen, and it isn’t insured."
+ },
+ "Before trying a new skateboard trick, what lowers the risk?": {
+  "Try it on the stairs to learn faster": "Stairs make a fall more likely and more dangerous.",
+  "Go fast so you don’t lose balance": "Going fast makes falls worse.",
+  "Skip the helmet so you can move freely": "A helmet protects your head. Skipping it raises the risk."
+ },
+ "Higher reward usually comes with…": {
+  "No risk": "Big rewards almost never come with no risk.",
+  "Lower risk": "It usually works the other way.",
+  "Guaranteed success": "Nothing is a sure thing, especially a big payoff."
+ },
+ "Claim: “The new energy drink makes you smarter.” Which is the best evidence?": {
+  "One person who said it worked well for them": "One person’s story could be luck or something else.",
+  "The can is labeled “Brain Fuel” for students": "A label is marketing. It doesn’t prove anything.",
+  "A famous athlete drinks it before every game": "A famous person using it doesn’t show it works."
+ },
+ "A study was paid for by the company selling the product. What should you do?": {
+  "Trust it, since companies know their products": "A company has a reason to want good results, so check other studies.",
+  "Ignore all studies, since they can’t be trusted": "Not all studies are bad. Look for independent ones.",
+  "Buy the product and test it on yourself only": "Testing on just yourself is too small to prove anything."
+ },
+ "Claim: “This shampoo makes hair grow 2× faster.” Best evidence?": {
+  "A famous actor says it worked for her": "A famous actor’s word is an opinion, not a test.",
+  "The bottle says “Amazing results!”": "The bottle is advertising, not evidence.",
+  "One person’s story about fast growth": "One story could be luck or something else."
+ },
+ "Which is a fact you can check?": {
+  "The bus is the best": "“Best” is an opinion.",
+  "Buses are boring": "“Boring” is an opinion.",
+  "Everyone loves buses": "You can’t check that everyone loves buses."
+ },
+ "What makes evidence stronger?": {
+  "It is said loudly and with confidence": "Confidence doesn’t make something true.",
+  "Many people share it on social media": "Lots of shares doesn’t mean it was checked.",
+  "It comes from someone who is famous": "Fame doesn’t make evidence stronger."
+ },
+ "One person won the lottery after wearing red socks. Does that prove red socks are lucky?": {
+  "Yes, since it happened for real": "It happened, but one case can be a coincidence.",
+  "Only if they wear them on Fridays": "Wearing them on Fridays still proves nothing.",
+  "Yes, if it happens one more time": "Two cases can still be coincidence."
+ },
+ "Which is the weakest evidence?": {
+  "A study of 1,000 people": "A study of 1,000 people is strong evidence.",
+  "Official city data": "Official data can be checked, so it’s strong.",
+  "Several experts agreeing": "Several experts agreeing is strong support."
+ },
+ "Which is an example of a fair comparison?": {
+  "Testing one cleaner on dirt, one on paint": "Different stains make it unfair. You can’t tell which cleaner is better.",
+  "Asking one person which they like best": "One person’s opinion isn’t a test.",
+  "Guessing which one works from the bottle": "Guessing isn’t testing."
+ },
+ "A chart has no labels or source. How strong is it as evidence?": {
+  "Strong": "Without labels or a source, you can’t tell what it shows.",
+  "Perfect": "Even good evidence isn’t perfect, and this chart can’t be checked at all.",
+  "Better than data": "A chart with no source is less reliable than real data."
+ },
+ "Which is the strongest evidence that a new game is popular?": {
+  "The ad says it’s amazing": "Ads always say a product is amazing.",
+  "My best friend says it is great": "One friend’s opinion doesn’t show it’s popular with many.",
+  "It has a really cool cover": "A cool cover doesn’t mean people bought it."
+ },
+ "A website says chocolate cures colds. What should you check first?": {
+  "Whether the website looks modern": "A modern look doesn’t make facts true.",
+  "If it has lots of exclamation points": "Exclamation points don’t tell you if it’s true.",
+  "Nothing; it’s online so it’s true": "Anyone can post online, so you need to check."
+ },
+ "Which additional information would best help a reader judge the two views?": {
+  "The color of the diner’s sign and how big the diner is": "The sign and the diner’s size don’t help judge either view’s argument.",
+  "How many people like the economist who wrote View 1": "Liking the writer doesn’t tell you whether the claim is true.",
+  "Which view uses more strong words and exclamation points": "Strong words show feeling, not evidence."
+ },
+ "A customer drops a $20 bill and walks away. Nobody saw. What is the ethical choice?": {
+  "Keep it, nobody saw": "Nobody seeing doesn’t make it yours.",
+  "Put it in your tip jar": "A tip is money given freely, and this wasn’t.",
+  "Split it with a coworker": "Sharing it is still keeping money that isn’t yours."
+ },
+ "Your business could save money by not telling customers about an ingredient change that some people are allergic to. What should you do?": {
+  "Say nothing so the business saves money": "Saving money doesn’t justify putting allergic customers at risk.",
+  "Tell only the customers who ask about it": "People who don’t know to ask could still get sick.",
+  "Blame the supplier if someone gets sick": "Blaming others doesn’t fix the harm or the dishonesty."
+ },
+ "Your team project: one member did most of the work. What’s fair?": {
+  "Take the credit": "Taking credit for their work isn’t fair.",
+  "Say nothing": "Staying quiet lets others take credit they didn’t earn.",
+  "Blame them": "Blaming the person who worked hardest is unfair."
+ },
+ "A coworker asks you to lie about their late arrival. What should you do?": {
+  "Lie for them": "Lying for them is still dishonest.",
+  "Tell everyone": "Telling everyone embarrasses them. You can just say no kindly.",
+  "Lie and charge them": "Charging money for a lie makes it worse."
+ },
+ "You find a wallet with ID and $50. What is right?": {
+  "Keep the money and mail back the ID": "The money belongs to the owner too.",
+  "Leave it where you found it": "Leaving it means the owner may never get it back.",
+  "Keep it if no one is looking": "Whether anyone sees doesn’t change who owns it."
+ },
+ "You notice a cashier undercharged you $5. What is ethical?": {
+  "Say nothing, since it was their mistake": "The mistake was theirs, but keeping the money still isn’t fair.",
+  "Ask for an even bigger discount": "Asking for more makes it less fair.",
+  "Pay and leave quickly before they notice": "Hurrying off hides the mistake and keeps money that isn’t yours."
+ },
+ "You see a classmate cheating on a test. What should you think about?": {
+  "Copying them so your grade is fair too": "Copying is cheating too. It doesn’t make anything fair.",
+  "Nothing, since it is not your business": "Cheating affects everyone’s grades, so it is your concern.",
+  "Helping them so they do not get caught": "Helping them hide it keeps the unfairness going."
+ },
+ "You promised to help a friend move, but now you’re tired. What’s ethical?": {
+  "Ignore their calls and hope they find someone else": "Ignoring calls breaks trust and leaves them stuck.",
+  "Make up an excuse so their feelings are not hurt": "A made-up excuse is still a lie.",
+  "Go, but complain the whole time so they know": "Complaining the whole time hurts your friend."
+ },
+ "You find $20 on the floor of a store. What is the fair thing to do?": {
+  "Keep it, since finders are keepers": "“Finders keepers” doesn’t make the money yours.",
+  "Keep it if no one saw you pick it up": "Whether anyone saw doesn’t change who owns it.",
+  "Leave it there for someone else": "Leaving it lets someone else keep it."
+ },
+ "A friend asks to copy your homework. What is the best choice?": {
+  "Let them copy, since friends share": "Copying doesn’t help them learn and is unfair.",
+  "Tell the whole class what they asked": "Telling the class embarrasses them.",
+  "Let them copy just this one time": "Even once, copying is still cheating."
+ },
+ "Why is honesty important at work?": {
+  "It only matters if you get caught": "Honesty matters all the time, not just when you get caught.",
+  "Only bosses need to be honest": "Everyone on a team needs to be honest.",
+  "Small lies help work go faster": "Small lies can grow and break trust."
+ },
+ "You see a classmate cheating on a test. What is a fair choice?": {
+  "Copy them too": "Copying them is cheating too.",
+  "Announce it loudly": "A loud announcement embarrasses them. A private word is kinder.",
+  "Ignore it and cheat later": "Ignoring it and cheating later is still unfair."
+ },
+ "What is the first step in solving a problem?": {
+  "Guess a fix and try it": "Guessing before you know the problem can waste time.",
+  "Ask who caused it": "Blame doesn’t help you understand what’s wrong.",
+  "Try many fixes at once": "Many fixes at once hide which one worked."
+ },
+ "Why change only one thing at a time when fixing a problem?": {
+  "It’s faster to change everything": "Changing everything hides which change helped.",
+  "It doesn’t matter": "It does matter, or you won’t know what worked.",
+  "Rules say so": "It isn’t about a rule. It’s about learning what works."
+ },
+ "Your bike chain keeps falling off. What’s a good first check?": {
+  "Paint the bike a new color": "Paint doesn’t affect the chain.",
+  "Buy a whole new bike": "A new bike is a big cost before checking a simple fix.",
+  "Ignore it and keep riding": "Ignoring it could cause a crash."
+ },
+ "Your phone won’t charge. What is a smart first step?": {
+  "Buy a new phone and a new charger": "Buying new things first could waste money if the cable is the problem.",
+  "Leave it plugged in and wait a week": "Waiting a week won’t show what’s broken.",
+  "Shake the phone to fix the battery": "Shaking won’t fix a battery and could break the phone."
+ },
+ "A problem is too big to solve at once. What helps?": {
+  "Give up and try another one": "Giving up won’t solve it. Big problems can be broken down.",
+  "Wait for it to fix itself": "Big problems rarely fix themselves.",
+  "Do everything at once": "Doing everything at once is what makes it feel too big."
+ },
+ "You tried a solution and it didn’t work. What should you do?": {
+  "Keep repeating the same thing": "Repeating what failed will likely fail again.",
+  "Quit, since it must be impossible": "One failed try doesn’t make a problem impossible.",
+  "Blame someone else for the problem": "Blame doesn’t solve the problem or explain what went wrong."
+ },
+ "Your team keeps missing deadlines. What is the first step to fix it?": {
+  "Ask everyone to work late until it’s caught up": "Working late may help briefly but doesn’t fix the cause.",
+  "Find the person to blame and replace them": "Blaming one person skips finding what’s slowing the work.",
+  "Move every deadline back by a week": "Moving deadlines hides the problem instead of solving it."
+ },
+ "Which is a good way to test a solution?": {
+  "Use it everywhere at once": "Using it everywhere at once spreads any mistakes widely.",
+  "Never test": "Without testing, you won’t know if it works.",
+  "Ask one person only": "One person’s opinion isn’t a real test."
+ },
+ "You have $200 extra. Which choice helps you most a year from now?": {
+  "Buy a set of new phone cases you have wanted": "Phone cases are fun now but won’t help you much in a year.",
+  "Eat out at nice places every day this week": "Eating out is gone in a week and builds nothing.",
+  "Lend it to Jax, who says the plan is a sure thing": "A “sure thing” from Jax is a risk you may lose."
+ },
+ "You want a car in a year. What’s a good plan?": {
+  "Hope you have enough money by then": "Hoping isn’t a plan.",
+  "Borrow the most you can today": "Borrowing the most now means paying interest later.",
+  "Wait and save whatever is left over": "There may be nothing left over. A set amount is steadier."
+ },
+ "Which helps your future most?": {
+  "Buying a snack every day": "A daily snack adds up to a lot of spent money.",
+  "Skipping work to rest up": "Skipping work costs pay and trust.",
+  "Lending money to Jax again": "Lending to Jax again is a risk you may not get back."
+ },
+ "Which is a short-term choice that costs later?": {
+  "Exercising a few times a week": "Exercise helps you later, so it doesn’t cost you.",
+  "Saving a little from each check": "Saving helps your future.",
+  "Learning a new skill at night": "Learning a skill pays off later."
+ },
+ "Why do healthy habits matter for the long term?": {
+  "They don’t matter until you are older": "Habits now shape your health later.",
+  "They only matter for athletes": "Everyone’s health benefits from good habits.",
+  "They cost too much to be worth it": "Many healthy habits, like sleep and walking, are free."
+ },
+ "You can take a slightly lower-paying job with training and promotions, or a higher-paying dead-end job. Long-term thinking suggests…": {
+  "The job that pays more now": "More pay now can mean less growth later.",
+  "Turn down both jobs for now": "Turning down both leaves you with no job.",
+  "Flip a coin to decide fairly": "A coin flip skips the thinking this choice needs."
+ },
+ "A course takes 3 months but leads to a $3/hour raise. Is it worth it?": {
+  "No, 3 months is too long to wait for anything": "Three months is short compared to many months of a raise.",
+  "Only if the course is free and takes one day": "A raise this size can be worth some time and cost.",
+  "No, since you could just ask for a raise now": "Asking now may not work without new skills."
+ },
+ "Which choice builds your future career?": {
+  "Skipping work": "Skipping work hurts your record.",
+  "Ignoring feedback": "Feedback helps you grow, so ignoring it holds you back.",
+  "Quitting without a plan": "Quitting without a plan can leave you stuck."
+ },
+ "Reading for 20 minutes every day for a year adds up to about…": {
+  "2 hours of reading": "Two hours is about what you’d read in less than a week.",
+  "20 hours of reading": "Twenty hours is only about two months of daily reading.",
+  "365 hours of reading": "That would be an hour a day. Twenty minutes a day is a third of that."
+ },
+ "You can earn $10 today or $15 next week for the same job. Which choice shows long-term thinking?": {
+  "$10 today, since sooner is always better": "Sooner isn’t always better. Waiting can pay more when you can afford it.",
+  "$10 today, because a week is too long": "One week is short for 50% more pay, if you don’t need the cash now.",
+  "Neither; hold out for a bigger offer": "Holding out risks losing both offers for no clear reason."
+ },
+ "Why do people save for retirement when they are young?": {
+  "Young people have nothing else to buy": "Young people have plenty to buy. Saving early is about time, not spare money.",
+  "Banks make young people save first": "Banks don’t force young people to save.",
+  "It doesn’t matter when you start": "Starting time matters a lot, because growth builds on itself over the years."
+ },
+ "Two backpacks cost the same. One has a 1-year warranty, the other 5 years. Which is the better deal?": {
+  "The 1-year one, since it costs less": "They cost the same, so price isn’t a reason to pick the 1-year one.",
+  "Neither; a warranty adds no value": "A warranty protects you if the bag breaks, so it adds value.",
+  "Either one; they are exactly the same": "They differ in how long the warranty lasts, so they aren’t the same."
+ },
+ "A $15 pair of shoes lasts 3 months. A $40 pair lasts 2 years. Which costs less over 2 years?": {
+  "The cheap pair always": "Cheap now isn’t always cheap over time. Count how many pairs you’d buy in 2 years.",
+  "Neither": "Over 2 years, the two choices cost different amounts.",
+  "Buy both": "Buying both costs the most of all."
+ },
+ "Jax says, “Trust me, I’d never steer you wrong.” What should you do?": {
+  "Trust him, since he is your friend": "Being friends doesn’t replace facts. Ask how the plan really works.",
+  "Give him the money he asks for": "Handing over money before you check the facts is a big risk.",
+  "Decide right away so he isn’t upset": "Rushing to protect his feelings skips the thinking a money choice needs."
+ },
+ "“Smart people like you choose our phone.” is which technique?": {
+  "Urgency": "Nothing here says time is running out.",
+  "Evidence": "There are no facts or data here, just a compliment.",
+  "Fear": "Nothing here tries to scare you."
+ },
+ "“Only 3 left — buy now!” is which technique?": {
+  "Evidence": "There is no data or proof here.",
+  "Flattery": "Nothing here praises you.",
+  "Facts": "“Only 3 left” is a claim meant to rush you, not a fact that proves the product is good."
+ },
+ "“Don’t be the only one without it!” is which technique?": {
+  "Evidence from a study": "There is no study or data here.",
+  "Flattery about the buyer": "It doesn’t praise you. It worries you about being left out.",
+  "A discount on the price": "There is no price cut or discount here."
+ },
+ "A celebrity says a drink is great. This uses…": {
+  "A scientific study of the drink": "There was no study. A famous person just said they liked it.",
+  "Official data about the drink": "There is no data here, only an opinion.",
+  "A fact check from experts": "Experts didn’t check anything here."
+ },
+ "What is the best defense against pressure tactics?": {
+  "Decide fast before it’s gone": "Deciding fast is exactly what pressure tactics want.",
+  "Trust the seller to be fair": "A seller wants the sale, so trusting them blindly is risky.",
+  "Buy two so you have extra": "Buying more gives in to the pressure."
+ },
+ "“Doctors recommend…” with no doctor named is…": {
+  "Strong evidence": "With no doctor named, you can’t check it, so it’s weak.",
+  "A law": "This is advertising, not a law.",
+  "A fact you can check": "You can’t check it, because no one is named."
+ },
+ "Free trial that auto-charges later is a tactic to…": {
+  "Help you save money": "Auto-charges often cost you money you meant not to spend.",
+  "Give you free gifts": "The trial is free only until the charge starts.",
+  "Teach you about the product": "The goal is the later charge, not teaching you."
+ },
+ "An ad shows a famous athlete drinking a soda. What technique is this?": {
+  "Scientific evidence": "There is no study or data, just a famous face.",
+  "Price comparison": "Nothing here compares prices.",
+  "Fact check": "Nothing is checked. It’s a famous person selling the drink."
+ },
+ "“Only 3 left! Buy now!” is meant to make you…": {
+  "Compare prices carefully": "Comparing prices is the opposite of what this message wants.",
+  "Wait a week for a better deal": "The ad wants you to buy now, not wait.",
+  "Read reviews before you decide": "Reading reviews takes time, and the ad wants you rushing."
+ },
+ "“Don’t fall behind” is an example of which technique?": {
+  "Citing an expert who studies energy drinks": "It names no expert. It just plays on worry.",
+  "Giving a statistic about how athletes feel": "It gives no number or statistic.",
+  "Comparing two energy drinks fairly and calmly": "Nothing is compared. It pushes you with worry."
+ },
+ "A supplier wants $2 per cup lid. You need 1,000 lids. What is the best negotiation move?": {
+  "Demand that they give you the lids for free": "Demanding free lids is unfair and will likely end the talk.",
+  "Accept $2 per lid right away without asking": "Accepting right away gives up any chance at a better price.",
+  "Walk away and buy no lids from them at all": "Walking away leaves you with no lids, which you still need."
+ },
+ "What makes a win-win deal?": {
+  "One side gets everything": "If one side gets everything, the other loses.",
+  "Nobody agrees": "Without agreement, there is no deal at all.",
+  "Yelling": "Yelling hurts trust and rarely leads to a good deal."
+ },
+ "A landlord won’t lower rent. What else might you negotiate?": {
+  "Nothing, since the rent is the only thing that matters": "Rent isn’t the only thing you can trade. Other terms can be worth money too.",
+  "Ask them for a free house or a much bigger apartment": "Asking for something huge isn’t realistic and hurts the talk.",
+  "Tell them you will leave a bad review unless they agree": "Threats damage trust and make a fair deal less likely."
+ },
+ "Before negotiating a price, what should you know?": {
+  "Nothing": "Going in with no plan makes it easy to overpay.",
+  "The seller’s birthday": "The seller’s birthday doesn’t help you decide on a price.",
+  "Only their name": "Knowing their name doesn’t protect your budget."
+ },
+ "Why listen carefully in a negotiation?": {
+  "To find a moment to talk about yourself": "Listening is about learning their needs, not finding a turn to talk.",
+  "To look polite, even if it does not help": "Listening does help. It shows what the other side wants.",
+  "To wait until the other side gives up": "Waiting for them to give up isn’t a real plan, and it can backfire."
+ },
+ "The car price is $8,000. Your budget is $7,000. A good first move?": {
+  "Offer $9,000 so the seller agrees quickly": "$9,000 is over both the price and your budget.",
+  "Walk out without saying anything at all": "Leaving without a word ends the talk before you try.",
+  "Tell the seller the car is junk and worthless": "Insulting the car hurts trust and may end the deal."
+ },
+ "When should you walk away from a deal?": {
+  "Never": "Sometimes a deal is too costly, so leaving is smart.",
+  "Always immediately": "Leaving right away means you never get to bargain.",
+  "When it’s fair": "A fair deal is one worth taking."
+ },
+ "Why prepare facts before asking for a raise?": {
+  "To scare the boss into saying yes": "Scaring the boss hurts trust.",
+  "It doesn’t help, bosses decide anyway": "Facts can change a boss’s mind.",
+  "To make the meeting take longer": "Facts make the meeting stronger, not longer."
+ },
+ "What is a “compromise”?": {
+  "One side wins everything": "If one side wins everything, no one met in the middle.",
+  "No agreement": "Here both sides do agree.",
+  "A fight": "A fight is the opposite of meeting in the middle."
+ },
+ "You want a later bedtime. What is the best way to ask?": {
+  "Demand it loudly until they give in": "Demanding loudly tends to make people say no.",
+  "Just stay up late and see if they notice": "Breaking the rule breaks trust and isn’t asking.",
+  "Sulk until they feel bad and say yes": "Sulking pressures them instead of giving a reason."
+ },
+ "In a negotiation, what is a “win-win”?": {
+  "A deal where one side gets everything": "If one side gets everything, the other side loses.",
+  "A deal where neither side gives up anything": "Most deals need both sides to give a little.",
+  "A deal where the loudest person wins": "Being loud isn’t a fair way to decide."
+ },
+ "What should you do before negotiating a price?": {
+  "Decide to pay whatever the seller asks": "Paying whatever they ask leaves no room to bargain.",
+  "Tell the seller the most you can pay": "Telling your top price first lets them charge you that.",
+  "Plan to walk away no matter what": "Planning to leave no matter what means you never make a deal."
+ },
+ "A big chain opens a coffee shop near your cart. Which strategy fits a small business best?": {
+  "Lower your prices below what each cup costs you, for as long as it takes": "Selling below cost loses money on every cup, and a chain can last longer.",
+  "Copy the chain’s menu, decorations and prices as closely as you can": "Copying the chain gives customers no reason to pick you.",
+  "Close the cart right away before the chain takes your customers": "Closing right away gives up before trying your strengths."
+ },
+ "How do you know a strategy is working?": {
+  "Guess based on how you feel": "Feelings can be wrong. Results can be measured.",
+  "Ask a friend what they think": "A friend’s opinion isn’t a measured result.",
+  "Wait a year before you check": "Waiting a year means you can’t adjust in time."
+ },
+ "You have limited money. Where should a new business spend first?": {
+  "On fancy signs": "Fancy signs don’t help much if customers want something else.",
+  "On parties": "Parties use money without meeting customer needs.",
+  "Equally on everything": "Spreading money evenly wastes it on things that matter less."
+ },
+ "What should every strategy include?": {
+  "Only best-case hopes": "Only hoping for the best leaves you unready when things go wrong.",
+  "No goals": "A strategy without goals has nothing to aim for.",
+  "Secrets": "Secrets aren’t a part every strategy needs."
+ },
+ "A rival store lowers prices. What smart strategy fits a small shop?": {
+  "Lower prices below cost forever": "Selling below cost forever would lose money on every sale.",
+  "Close immediately": "Closing right away gives up without trying.",
+  "Copy their logo": "Copying a logo is wrong and doesn’t win customers."
+ },
+ "Your goal is a better job in a year. Which strategy fits?": {
+  "Wait for a good job to come along and hope for the best": "Hoping isn’t a strategy. It has no steady actions.",
+  "Apply for every job you see, even ones you don’t want": "Applying everywhere wastes effort on jobs you don’t want.",
+  "Change your goal each week to whatever sounds best": "Changing goals each week means you never build toward one."
+ },
+ "What is a SWOT analysis?": {
+  "A list of goals, plans and dates for the next year": "That’s a plan with dates, not a look at strengths and threats.",
+  "A test that measures how fast and well you work": "That’s a work test, not a strategy tool.",
+  "A chart that compares sales and costs each month": "That compares money over time. It doesn’t list strengths and threats."
+ },
+ "You want to win a race but your car is slow on corners. Best strategy?": {
+  "Paint it red so it looks faster": "Paint doesn’t change how a car handles corners.",
+  "Ignore the corners and go faster": "Going faster into corners could make you crash.",
+  "Quit and wait for a new car": "Quitting doesn’t fix the weakness."
+ },
+ "A shop’s sales drop every winter. What is a smart strategy?": {
+  "Close the shop for good after winter": "Closing for good ends the business over a pattern you could plan for.",
+  "Raise prices in winter to make up for it": "Higher prices when sales are low may drive more customers away.",
+  "Do nothing and hope next winter is better": "Hoping doesn’t change a pattern that repeats each year."
+ },
+ "Why might a company spend money now on training workers?": {
+  "Training is free, so there is no cost": "Training costs money, so it isn’t free.",
+  "To spend money before the year ends": "Spending just to use up money isn’t a strategy.",
+  "To keep workers busy when sales are slow": "Keeping people busy isn’t the main goal. Better skills are."
+ },
+ "A runner saves energy early in a long race. Why?": {
+  "To lose on purpose": "The runner wants to win, not lose.",
+  "Running fast early is required": "Nothing says you must run fast at the start.",
+  "It doesn’t matter": "Pacing matters a lot in a long race."
+ },
+ "A business lowers prices to win customers, but loses money on every sale. What is the risk?": {
+  "Customers will stop buying once prices are low": "Low prices usually bring more buyers, not fewer.",
+  "Other stores will be forced to close right away": "Rivals won’t close right away just because you cut prices.",
+  "There is no risk, since more sales mean more profit": "More sales at a loss means losing more money, not making more."
+ },
+ "Raising prices a lot could lead to…": {
+  "Always more money, since each sale earns more": "Each sale earns more, but fewer sales can mean less money overall.",
+  "Nothing, since customers don’t notice prices": "Customers do notice big price jumps, and many will shop elsewhere.",
+  "More customers, since higher prices seem better": "Most people buy less when prices rise."
+ },
+ "If a town loses its only grocery store, what might happen?": {
+  "Nothing changes for the people who live there": "Losing the only store changes a lot for the people who shopped there.",
+  "Food gets cheaper because there is less to buy": "Less food to buy usually means higher prices, not lower.",
+  "New stores open the very next day to replace it": "New stores take time to open, and none may come at all."
+ },
+ "What is a “ripple effect”?": {
+  "A wave pool at a water park": "A wave pool is a fun place, not the thinking idea here.",
+  "A type of fish in a pond": "That isn’t a fish. The term is about change spreading.",
+  "A song that repeats a lot": "A repeating song is something else. This is about one change causing more."
+ },
+ "A factory hires 100 people. What else might grow nearby?": {
+  "Nothing else, just the factory": "New workers spend money nearby, so other businesses can grow.",
+  "Fewer jobs for people nearby": "A big new employer usually adds jobs, not cuts them.",
+  "Less traffic on the roads": "More workers driving in usually means more traffic."
+ },
+ "Why is it hard to fix one part of a system alone?": {
+  "Systems don’t really exist in real life": "Systems are everywhere, like traffic, schools and stores.",
+  "It is always easy to fix just one part": "Fixing one part is often hard because it touches the others.",
+  "The parts never connect to each other": "The parts do connect. That’s why changes spread."
+ },
+ "A city adds a new highway, and soon traffic is as bad as before. Why might that happen?": {
+  "New roads always wear out in a year": "Roads don’t all wear out in a year, and that wouldn’t explain this.",
+  "Drivers slow down to look at the new road": "Looking at a new road wouldn’t keep traffic bad for long.",
+  "More roads always mean less traffic": "This is the very belief the example proves wrong."
+ },
+ "Why does fixing one part of a system sometimes cause a new problem elsewhere?": {
+  "Each part of a system works on its own": "Parts of a system are connected, so they don’t work alone.",
+  "The fix was done wrong every time": "Even a fix done right can affect other parts.",
+  "New problems are just bad luck": "These problems often follow from how parts connect, not luck."
+ },
+ "A school adds more homework, and students sleep less and do worse. This is a…": {
+  "Random event with no clear cause": "There is a clear cause here: more homework.",
+  "Plan that worked as it should": "The plan didn’t work, since students did worse.",
+  "Change that affects only homework": "The change reached sleep and grades too, not just homework."
+ },
+ "Which choice describes the system in paragraph 2 as a feedback loop?": {
+  "More ads → fewer users → fewer ads shown": "This loop shrinks itself, and it isn’t what paragraph 2 describes.",
+  "Calm posts → more outrage → more calm posts": "Outrage leading to calm posts doesn’t match a loop that feeds itself.",
+  "Users post → posts appear in time order": "This is a simple order, not a loop where results feed back."
+ },
+ "You might expand to Midtown. Sales could be great, okay or poor. Which plan is wisest?": {
+  "Sign a 5-year lease right away to lock in a good price": "A long lease locks you in even if sales turn out poor.",
+  "Spend most of your savings to make the new shop look great": "Spending most of your savings leaves no cushion if sales are poor.",
+  "Plan only for great sales, since worrying slows you down": "Planning only for great sales leaves you unready for the other outcomes."
+ },
+ "You’re not sure a new product will sell. Best first step?": {
+  "Make 10,000": "Making 10,000 risks a huge loss if it doesn’t sell.",
+  "Never try": "Never trying means you never learn if it could work.",
+  "Borrow to make lots": "Borrowing to make lots adds debt to the risk."
+ },
+ "A job offer pays more but the company is new and unstable. What should you weigh?": {
+  "Only the pay, since more money is better": "Pay matters, but so does how long the job might last.",
+  "Only how nice the new office looks": "A nice office doesn’t tell you if the job will last.",
+  "Only how close it is to your home": "Distance matters, but it isn’t the main risk here."
+ },
+ "What does “keep options open” mean?": {
+  "Never make any decision at all, ever": "It doesn’t mean never deciding. It means avoiding choices you can’t undo too early.",
+  "Say yes to every offer you get right away": "Saying yes to everything can lock you into choices.",
+  "Close off all other choices once you pick": "Closing off other choices is the opposite."
+ },
+ "The weather might be stormy for your outdoor event. What’s wise?": {
+  "Hope for sun": "Hoping doesn’t protect your event if it storms.",
+  "Cancel everything forever": "Canceling forever is too extreme for a possible storm.",
+  "Ignore the forecast": "Ignoring the forecast leaves you unready."
+ },
+ "Why keep savings when the future is uncertain?": {
+  "They don’t help once things go wrong": "Savings help most exactly when things go wrong.",
+  "To show others how rich you are": "Savings are for safety, not showing off.",
+  "Because every bank says you must": "Banks don’t require it. Savings protect you from surprises."
+ },
+ "What is a “worst-case scenario”?": {
+  "The best thing that could happen": "That’s the best case, the opposite.",
+  "A scary movie about the future": "It isn’t a movie. It’s a planning idea.",
+  "A promise that nothing will go wrong": "It doesn’t promise anything. It plans for trouble."
+ },
+ "A forecast says 60% chance of rain. Should you bring an umbrella?": {
+  "No, it never rains at 60%": "At 60%, rain is more likely than not.",
+  "Only if it’s sunny": "Sunny skies now don’t change the forecast.",
+  "Bring two": "Two umbrellas is more than you need."
+ },
+ "The forecast says 30% chance of rain. What is a sensible choice?": {
+  "Cancel all of your plans": "30% isn’t high enough to cancel everything.",
+  "Assume it will rain for sure": "30% means rain is possible, not certain.",
+  "Assume it can’t rain": "30% still means rain can happen."
+ },
+ "Why is it smart to have a backup plan?": {
+  "A good plan never fails": "Even good plans can fail when surprises happen.",
+  "It wastes time you could use": "A backup can save time when things go wrong.",
+  "Only for big emergencies": "Small surprises happen too, not only emergencies."
+ },
+ "A coin landed heads 4 times in a row. What is the chance of heads next?": {
+  "Almost zero": "The coin doesn’t remember past flips, so heads isn’t less likely.",
+  "Certain": "Nothing makes heads certain. Each flip is a fresh chance.",
+  "4 in 5": "Past flips don’t change the odds of the next one."
+ },
+ "Why do weather forecasts use percentages?": {
+  "To show what share of the town will get rain": "The percent is about chance, not how much of the town gets wet.",
+  "Because forecasts are always exactly right": "Forecasts aren’t always right. That’s why they use chances.",
+  "To show how much rain will fall in inches": "Inches are a separate measure. The percent shows chance."
+ },
+ "In “The kids ran quickly,” what part of speech is “quickly”?": {
+  "noun (person, place or thing)": "A noun names a thing. “Quickly” tells how the kids ran.",
+  "adjective (describing word)": "An adjective tells about a noun. “Quickly” tells about the action."
+ },
+ "In “The kids went to the library,” what part of speech is “library”?": {
+  "verb (action)": "A verb is an action. A library is a place.",
+  "adjective (describing word)": "An adjective describes. “Library” names a place."
+ },
+ "In “The kids were happy,” what part of speech is “happy”?": {
+  "verb (action)": "A verb shows action. “Happy” tells how the kids feel.",
+  "noun (person, place or thing)": "A noun names a thing. “Happy” describes the kids."
+ },
+ "In “The kids jumped,” what part of speech is “jumped”?": {
+  "noun (person, place or thing)": "A noun names a thing. “Jumped” is what the kids did.",
+  "adjective (describing word)": "An adjective describes. “Jumped” is an action."
+ },
+ "Choose the right word: “___ going to the park later.”": {
+  "Their": "This one shows something belongs to them. Here you need “they are.”",
+  "There": "This one points to a place. Here you need “they are.”"
+ },
+ "Choose the right word: “The kids lost ___ ball.”": {
+  "there": "This one points to a place, not who owns the ball.",
+  "they’re": "This one means “they are,” which doesn’t fit before “ball.”"
+ },
+ "Choose the right word: “I bought ___ apples.”": {
+  "to": "This one goes with a place or verb, like “to the store.” Here you need a number.",
+  "too": "This one means “also.” Here you need a number."
+ },
+ "Choose the right word: “I want to come ___.”": {
+  "to": "This one needs a place or verb after it, like “to the park.”",
+  "two": "This one is the number 2. Here you mean “also.”"
+ },
+ "Choose the right word: “___ welcome to join us!”": {
+  "Your": "This one shows something belongs to you. Here you need “you are.”"
+ },
+ "Choose the right word: “Put the box over ___.”": {
+  "their": "This one shows who owns a thing. Here you need a place.",
+  "they’re": "This one means “they are,” which doesn’t fit here."
+ },
+ "Choose the right word: “___ going to love this game!”": {
+  "Your": "This one shows something belongs to you. Here you need “you are.”"
+ },
+ "Choose the right word: “Is this ___ jacket?”": {
+  "you’re": "This one means “you are.” “Is this you are jacket?” doesn’t make sense."
+ },
+ "Choose the right word: “The dog wagged ___ tail.”": {
+  "it’s": "This one means “it is.” “Wagged it is tail” doesn’t make sense."
+ },
+ "Which word fits? “Put the box over ___.”": {
+  "their": "This one shows who owns a thing. Here you need a place.",
+  "they’re": "This one means “they are,” which doesn’t fit here."
+ },
+ "Which word fits? “___ the best team!”": {
+  "Your": "This one shows something belongs to you. Here you need “you are.”",
+  "Youre": "This is missing the apostrophe, so it isn’t a real word."
+ },
+ "Which word fits? “I want ___ go too.”": {
+  "two": "This one is the number 2. Here the word goes before a verb.",
+  "too": "This one means “also.” Here the word goes before a verb."
+ },
+ "Which word fits? “___ backpacks are blue.”": {
+  "There": "This one points to a place. Here you need a word that shows who owns them.",
+  "They’re": "This one means “they are.” “They are backpacks” doesn’t fit."
+ },
+ "Which word fits? “It’s ___ cold to swim.”": {
+  "to": "This one goes before a verb or place. Here you mean “more than enough.”",
+  "two": "This one is the number 2, which doesn’t fit before “cold.”"
+ },
+ "Which word fits? “Is this ___ coat?”": {
+  "you’re": "This one means “you are.” “Is this you are coat?” doesn’t make sense.",
+  "you are": "“You are coat” doesn’t make sense. You need a word that shows belonging."
+ },
+ "Which word fits? “The dog wagged ___ tail.”": {
+  "it’s": "This one means “it is.” “Wagged it is tail” doesn’t make sense.",
+  "its’": "This one is not a real word. Its belonging form has no apostrophe."
+ },
+ "Which word fits? “___ going to the park.”": {
+  "Their": "This one shows belonging. Here you need “they are.”",
+  "There": "This one points to a place. Here you need “they are.”"
+ },
+ "Which sentence is in the past tense?": {
+  "Today I walk to Fresh Mart.": "“Today” and “walk” show the present.",
+  "Tomorrow I will walk to Fresh Mart.": "“Tomorrow” and “will” show the future.",
+  "I am walking to Fresh Mart.": "“Am walking” is happening now."
+ },
+ "Which verb matches? “She ___ to work every day.”": {
+  "ride": "“Ride” goes with “they” or “I,” not “she.”",
+  "riding": "“Riding” needs a helper like “is” before it."
+ },
+ "Fix the tense: “Last week we go to the beach.”": {
+  "Last week we goes to the beach.": "“Goes” is present tense and doesn’t match “we.”",
+  "Last week we going to the beach.": "“Going” needs a helper like “were,” and it isn’t simple past."
+ },
+ "Which verb matches? “The dogs ___ in the park.”": {
+  "plays": "“Plays” goes with one subject, but “dogs” is more than one.",
+  "playing": "“Playing” needs a helper like “are” before it."
+ },
+ "Which is future tense?": {
+  "Yesterday I cooked dinner.": "“Yesterday” and “cooked” show the past.",
+  "I cook dinner.": "“I cook” is the present.",
+  "I cooked dinner.": "“Cooked” is the past."
+ },
+ "Which verb matches? “Each of the boxes ___ heavy.”": {
+  "are": "“Each” means one at a time, so it needs a singular verb.",
+  "be": "“Be” doesn’t fit after a subject like this."
+ },
+ "Fix it: “She don’t like rain.”": {
+  "She not like rain.": "This drops a needed helping verb.",
+  "She don’t likes rain.": "It still uses “don’t,” and “likes” doesn’t fit with it."
+ },
+ "Which is past tense of “run”?": {
+  "runned": "“Run” is irregular, so adding -ed doesn’t work.",
+  "running": "“Running” is the -ing form, not the past.",
+  "runs": "“Runs” is the present."
+ },
+ "Which sentence uses a comma after an introduction?": {
+  "However the store, closes early on Sunday.": "The comma is in the wrong spot. It should come right after the opening word.",
+  "However the store closes, early on Sunday.": "The comma splits the sentence in a strange place. It belongs after the opening word."
+ },
+ "Which date is written correctly?": {
+  "May, 4 2026": "The comma shouldn’t sit between the month and the day.",
+  "May 4 2026,": "The comma goes between the day and year, not at the end.",
+  ",May 4 2026": "A comma can’t start a date."
+ },
+ "Which sentence uses commas correctly in a list?": {
+  "I bought eggs milk and bread.": "This has no commas to separate the list items.",
+  "I, bought eggs milk, and bread.": "The comma after “I” splits the subject from its verb.",
+  "I bought, eggs, milk and, bread.": "Commas go between list items, not after “bought” or “and.”"
+ },
+ "Which greeting is punctuated correctly?": {
+  "Hi Rosa": "A greeting in a message needs a mark after the name.",
+  "Hi Rosa.": "A period ends a sentence. A greeting takes a different mark.",
+  ",Hi Rosa": "The mark goes after the greeting, not before."
+ },
+ "Which joins two sentences correctly?": {
+  "I was tired but, I finished my shift.": "The comma belongs before “but,” not after it.",
+  "I was tired, but, I finished my shift.": "Only one comma is needed, before “but.”"
+ },
+ "Which uses a comma correctly with a city and state?": {
+  "Austin Texas,": "The comma goes between the city and state, not at the end.",
+  ",Austin Texas": "The comma can’t come first.",
+  "Austin, Texas,": "There’s an extra comma at the end."
+ },
+ "Which is a question?": {
+  "The bus stop is here.": "This one tells. It ends with a dot.",
+  "Go to the bus stop.": "This one tells you to do a thing.",
+  "Wow, a bus!": "This one shows a strong feel. It does not ask."
+ },
+ "Which is NOT a complete sentence?": {
+  "Sam is running.": "This one says who and what they do.",
+  "The bus stops here.": "This one says what and what it does.",
+  "I like apples.": "This one says who and what they like."
+ },
+ "Which is a complete sentence?": {
+  "The cat on the mat.": "This one has no action word.",
+  "Sleeps on the mat.": "This one does not say who sleeps.",
+  "On the mat.": "This one has no who and no action."
+ },
+ "Fix it: “the dog barks”": {
+  "the dog barks.": "The first word needs a capital.",
+  "The dog barks": "It needs a dot at the end.",
+  "the Dog barks": "“Dog” is not a name. The first word needs the capital."
+ },
+ "Which sentence ends correctly?": {
+  "I love this game": "This has no mark at the end.",
+  "i love this game!": "The word “i” needs a capital.",
+  "I love this game,": "A comma does not end a sentence."
+ },
+ "Which group of words is NOT a complete sentence?": {
+  "The dog barks.": "This says who and what the dog does.",
+  "I see a cat.": "This says who and what they see.",
+  "We play ball.": "This says who and what they do."
+ },
+ "What goes at the end of a telling sentence?": {
+  "A comma (,)": "A comma goes in the middle, not at the end.",
+  "Nothing": "A sentence needs a mark at the end.",
+  "A capital letter": "A capital starts a sentence. It does not end one."
+ },
+ "A box says “Signature”. What goes there?": {
+  "Your email address and phone": "Email and phone go in their own boxes, not this one.",
+  "Today’s date and the time": "The date has its own box. This box is for your name.",
+  "Your age and your birthday": "Age and birthday go in other boxes."
+ },
+ "A form asks “Availability”. What should you write?": {
+  "The job you most want to have": "The job you want goes in another box.",
+  "Your phone number and email": "Phone and email are contact details, not when you can work.",
+  "How long you have lived there": "How long you lived there isn’t about when you are free."
+ },
+ "Which phone number is filled in correctly?": {
+  "5551": "This is too short to be a full phone number.",
+  "call me": "Words don’t give the number. Write the digits.",
+  "phone": "This is the label, not your number."
+ },
+ "Why fill in every part of a form neatly?": {
+  "So it looks nice when the form is hung up": "Forms are read, not hung up to look at.",
+  "So you use up the whole pen and paper": "Neat work isn’t about using up supplies.",
+  "So you can finish it before your friends": "Speed isn’t the goal. The reader must understand it."
+ },
+ "The form says “Last name”. For Nova Reyes, what do you write?": {
+  "Nova": "Nova is the first name. Look for the family name.",
+  "Nova Reyes": "This is the full name. The box asks for one part.",
+  "N.R.": "These are just letters, not the family name."
+ },
+ "A form asks for “Date of birth”. What goes there?": {
+  "Today’s date, like 05/14/2026": "Today’s date isn’t your birthday.",
+  "The street where you live": "Your street goes in the address box.",
+  "Your first and last name": "Your name goes in the name box."
+ },
+ "A form says “Please print”. What does that mean?": {
+  "Send it to a printer to fill it in": "You fill it in by hand. “Print” means a way of writing.",
+  "Sign your name in cursive": "Cursive is joined writing. Print is the other kind.",
+  "Draw a picture of yourself": "The form wants your name in letters, not a picture."
+ },
+ "A form asks for your “Date of birth.” What do you write?": {
+  "Today’s date, with the year": "Today’s date isn’t the day you were born.",
+  "Your age, like 8 years old": "Your age is a number of years, not a date.",
+  "The day you started school": "Starting school is a different day."
+ },
+ "A form says “Print your name.” What should you do?": {
+  "Sign it in joined cursive letters": "Joined cursive letters are not print.",
+  "Write your first name only": "The form wants your whole name.",
+  "Write it very small and fast": "Small, fast writing is hard to read."
+ },
+ "Why should you read a whole form before filling it in?": {
+  "So you can skip the hard boxes": "Skipping boxes can get the form sent back.",
+  "Because every form is the same": "Forms are not all the same, so read each one.",
+  "So you only fill in the first line": "Most forms need more than the first line."
+ },
+ "A box says “Leave blank – office use only.” What do you do?": {
+  "Write your name": "This box is for the office, not for you.",
+  "Write “blank”": "Do not write in it at all, not even this word.",
+  "Sign it": "This box is not for your name. Sign only where it asks."
+ },
+ "Which tone fits a message to a customer?": {
+  "Slangy": "Slang can confuse customers and sounds too casual for work.",
+  "Angry": "Anger pushes customers away.",
+  "All capitals": "All capitals reads like shouting."
+ },
+ "Which sentence is most professional?": {
+  "Sorry lol it’s late, it’ll get there.": "“Lol” sounds like you don’t care about the delay.",
+  "Not my fault, the truck was late.": "This blames others instead of taking responsibility.",
+  "Chill, your order is coming soon.": "“Chill” is too casual and brushes off the concern."
+ },
+ "How should you reply to an upset customer’s message?": {
+  "Argue that it was not your fault": "Arguing makes the customer more upset.",
+  "Ignore it until they calm down": "Ignoring them can make the problem worse.",
+  "Reply in all caps so they notice": "All caps looks like shouting."
+ },
+ "You’ll be late to work. Which message is best?": {
+  "hey rosa bus is late, idk when i’ll get there, sorry": "It doesn’t say when you’ll arrive and has no capitals.",
+  "Hi Rosa, I’m running late today. Sorry for the trouble.": "It doesn’t give a reason or a new arrival time.",
+  "Rosa, my bus is late again. Not my fault. See you soon.": "“Not my fault” sounds defensive, and it gives no time."
+ },
+ "Which word is more professional than “stuff”?": {
+  "Things and stuff": "This still uses “stuff,” so it isn’t more precise.",
+  "Junk": "“Junk” is negative and casual.",
+  "Whatchamacallits": "This is a silly word, not a precise one."
+ },
+ "Why keep work messages short and specific?": {
+  "Short messages sound more serious": "Short isn’t about sounding serious. It’s about being clear.",
+  "Long messages are seen as rude": "Long messages aren’t rude, but they take longer to read.",
+  "It means you can skip a greeting": "Short messages still need a greeting."
+ },
+ "The shop door has a sign: 🔒 CLOSED. What is true?": {
+  "It is open for shoppers": "The sign says closed, not open.",
+  "You can go in to look": "A closed shop does not let you in to look.",
+  "It is free to go in now": "The sign is about the shop being shut, not about cost."
+ },
+ "👀 Look: ☁️🌧️☔. What do you notice?": {
+  "It is sunny": "There is no sun in the pictures.",
+  "It is snowy": "The pictures show rain, not snow.",
+  "It is night": "Nothing shows a moon or stars."
+ },
+ "Which is an observation, not a guess?": {
+  "Sam drank all the milk": "You did not see Sam drink it. That is a guess.",
+  "Milk is the best drink": "“Best” is what you think, not what you see.",
+  "Someone was greedy": "You can’t see if someone was greedy. That is a guess."
+ },
+ "You see 🚶‍♀️ lit up at the crosswalk. What does it mean?": {
+  "Stop and wait here": "The lit-up walking person does not mean stop.",
+  "Run across fast": "Do not run. Cross with care.",
+  "Cars may go now": "The sign is for people. Cars must stop."
+ },
+ "🍌🍌🍎 Which one is different?": {
+  "🍌": "There are two of these. Look for the one that is not like the rest."
+ },
+ "The floor is wet and there is a ⚠️ sign. What should you do?": {
+  "Run across it fast": "Running on a wet floor can make you slip.",
+  "Jump in the water": "Jumping in can make you fall.",
+  "Walk right through it": "Walking through the wet spot can make you slip."
+ },
+ "🐶🦴🥣 What does the dog probably want?": {
+  "A bath": "A bowl and a bone are not for a bath.",
+  "A hat": "Nothing here is about a hat.",
+  "A car": "Nothing here is about a car."
+ },
+ "The sidewalk is wet but the sky is blue. What could explain it?": {
+  "It is raining right now": "The blue sky shows it is not raining now.",
+  "The sidewalk is wet all the time": "Sidewalks dry out. Something made it wet.",
+  "The blue sky made it wet": "The sky can’t make the ground wet."
+ },
+ "What is the best way to notice details in a picture?": {
+  "Glance at it fast one time": "A quick look can miss things.",
+  "Close your eyes": "You can’t see with your eyes shut.",
+  "Only look at the colors": "Colors are just one part. Look at all of it."
+ },
+ "Your plant is drooping and the soil is dry. What is the likely cause?": {
+  "It has too much sun": "Too much sun is a guess. The dry soil is the big clue.",
+  "It is too cold": "Nothing here says it is cold.",
+  "It needs a bigger pot": "The pot size is not the clue here. Look at the soil."
+ },
+ "Footprints in the snow lead to the shed. What can you infer?": {
+  "It is summer": "Snow means it is cold, not summer.",
+  "The shed is new": "Footprints do not tell if the shed is new.",
+  "Snow makes footprints by itself": "Snow can’t make footprints by itself."
+ },
+ "You save $5 every week for a year. What happens?": {
+  "$5": "That is just one week of saving.",
+  "$52": "There are 52 weeks, but you save $5 each one.",
+  "$0": "You save every week, so you will have money."
+ },
+ "You’re kind to a new coworker. What might happen later?": {
+  "They will be mean": "Being kind rarely makes someone mean.",
+  "Nothing ever": "Kind acts often come back to you.",
+  "You will lose your job": "Being kind will not cost you your job."
+ },
+ "You forget to water your plants for two weeks. What happens?": {
+  "They grow faster": "Plants need water to grow.",
+  "They turn into trees": "Plants do not turn into trees from no water.",
+  "Nothing": "Plants need water, so skipping it hurts them."
+ },
+ "You spend your rent money on shoes. What could happen?": {
+  "Rent becomes free": "Rent doesn’t go away because you spent the money.",
+  "The landlord gives you more shoes": "The landlord wants rent, not to give you shoes.",
+  "Nothing changes": "The rent is still due, so this does change things."
+ },
+ "You stay up very late before work. What will likely happen?": {
+  "You’ll get a raise": "Being tired does not earn you a raise.",
+  "Nothing": "Little sleep does change how you feel.",
+  "You’ll sleep at work and be fine": "Sleeping at work could get you in trouble."
+ },
+ "You ignore a small leak under the sink. What could happen?": {
+  "It will fix itself if you wait long enough": "Leaks don’t fix themselves.",
+  "It will only make the floor a little shiny": "Water can harm floors and wood, not just make them shiny.",
+  "Nothing, small leaks always stay small": "Small leaks often grow if no one fixes them."
+ },
+ "You practise the register every day. What will likely happen?": {
+  "You’ll get slower and make more mistakes": "Practice helps you get better, not worse.",
+  "You’ll forget how to do it by next week": "Doing it every day helps you remember.",
+  "Nothing will change, no matter how much": "Practice does make a change."
+ },
+ "You leave your bike outside in the rain all week. What might happen?": {
+  "It will get shinier": "Rain does not make a bike shiny.",
+  "Nothing will happen": "Rain on metal can harm it.",
+  "It will ride faster": "Rain does not make a bike faster."
+ },
+ "If you skip breakfast before a big game, what could happen?": {
+  "You will play better and faster": "Your body needs fuel to play well.",
+  "Nothing, because games are short": "Even short games need energy.",
+  "You will feel light and full of energy": "Without food, you may feel weak, not full of energy."
+ },
+ "You promise to help a friend, then don’t show up. What is a likely consequence?": {
+  "They will trust you more": "Breaking a promise doesn’t build trust.",
+  "Nothing will change": "Breaking a promise does change how others see you.",
+  "They will forget it by the next day": "People often remember a broken promise."
+ },
+ "If you don’t charge your tablet tonight, what might happen tomorrow?": {
+  "It will charge itself overnight": "Tablets don’t charge unless they are plugged in.",
+  "Nothing will happen at all": "If it isn’t charged, the battery can run low.",
+  "It will run faster tomorrow": "A low battery won’t make it run faster."
+ },
+ "College costs money now. What is a possible long-term gain?": {
+  "Nothing, since it costs money": "The cost now doesn’t mean there is no gain later.",
+  "Getting rich for sure later": "College can help, but nothing makes you rich for sure.",
+  "Less learning on the job": "College adds learning. It doesn’t take any away."
+ },
+ "You choose the bus ($2, 40 min) over a taxi ($15, 15 min). What did you give up?": {
+  "$13 of money": "The bus costs less, so you saved money.",
+  "Nothing at all": "You did give up something. Compare the times.",
+  "The bus ride": "You chose the bus ride, so you didn’t give it up."
+ },
+ "You buy a $40 jacket instead of saving it. What did you give up?": {
+  "Nothing": "You gave up something: the money could have stayed saved.",
+  "The jacket": "You got the jacket, so you didn’t give it up.",
+  "$4": "$4 is too small. Look at what the jacket cost."
+ },
+ "You can work an extra shift ($60) or go to a free class. If you choose the class, what is the opportunity cost?": {
+  "Nothing, since the class is free": "The class is free to join, but you still give up something.",
+  "The free class you chose": "You chose the class, so it isn’t what you gave up.",
+  "$120, two shifts of pay": "You could only work one extra shift."
+ },
+ "You can go to the movies or a friend’s game, same time. You pick the movies. The opportunity cost is…": {
+  "The movies": "You picked the movies, so they aren’t what you gave up.",
+  "Nothing": "You did give up something by choosing.",
+  "The ticket price only": "The ticket is a money cost, but think about the other choice you missed."
+ },
+ "You spend Saturday playing games instead of studying. What is the opportunity cost?": {
+  "The fun of the games": "You got the fun, so it isn’t what you gave up.",
+  "Nothing, it was free": "Free in money still costs time.",
+  "Your free time on Sunday": "Sunday is a different day."
+ },
+ "Why think about opportunity cost?": {
+  "To feel bad about the choices you make": "The goal isn’t to feel bad. It’s to choose well.",
+  "To avoid having to make any choices": "You still make choices. This helps you make better ones.",
+  "It only matters for banks and big stores": "Everyone faces this kind of cost, not just big businesses."
+ },
+ "You can go to a party or study for a test, not both. If you go to the party, what is the opportunity cost?": {
+  "The fun you have at the party": "You got the fun, so it’s what you gained.",
+  "Nothing, since you chose the party": "Choosing always means giving up something.",
+  "The time you spend at the party": "You spent that time on the party, which is what you chose."
+ },
+ "You spend $20 on a game. What is one opportunity cost?": {
+  "The game you chose to buy": "You chose the game, so it’s what you gained.",
+  "Nothing, since you wanted the game": "Wanting the game doesn’t mean you gave up nothing.",
+  "The tax added to the price": "Tax is part of the price. Think about what else the money could do."
+ },
+ "Why is it useful to think about opportunity cost?": {
+  "It makes every choice quick and easy": "Thinking it through can take time. It doesn’t make choices instant.",
+  "It means you never spend money": "You can still spend. It just helps you spend wisely.",
+  "It tells you which choice is free": "Few choices are truly free. It shows what each one costs."
+ },
+ "Store A is closer but costs $2 more. Store B is a long bus ride away. Why might Store A be the better choice?": {
+  "Closer stores always have better things": "Closer doesn’t mean better items.",
+  "Price is the only thing that matters": "Time and travel matter too.",
+  "Prices never matter when you shop": "Prices do matter. Compare the full cost."
+ },
+ "You choose to work an extra shift instead of resting. What is the opportunity cost?": {
+  "The money you earned from the shift": "You gained the money, so it isn’t what you gave up.",
+  "Nothing, because you got paid": "Getting paid doesn’t mean nothing was given up.",
+  "The hours you spent at the shift": "Those hours are what you chose to spend working."
+ },
+ "A good leader…": {
+  "Takes credit for the team’s good work": "Taking credit for others’ work breaks trust.",
+  "Makes every choice without asking": "Making every choice alone shuts out the team’s ideas.",
+  "Points out who made each mistake": "Pointing out blame makes people afraid to try."
+ },
+ "How can a leader create opportunity for others?": {
+  "Keep what they know secret to stay ahead": "Keeping knowledge secret holds others back.",
+  "Only help the people who are their friends": "Helping only friends is unfair to the rest of the team.",
+  "Do all the important work alone": "Doing everything alone doesn’t help others grow."
+ },
+ "Which shows leadership at work?": {
+  "Arriving late but working hard": "Arriving late isn’t leadership, even if the work is good.",
+  "Ignoring small problems at work": "Ignoring problems lets them grow.",
+  "Telling others how to do their jobs": "Telling others how to work isn’t the same as helping them."
+ },
+ "Your team disagrees. What should a leader do?": {
+  "Pick the side of a favorite teammate": "Picking a favorite is unfair to the others.",
+  "Ignore it and hope it goes away": "Ignoring it lets the conflict grow.",
+  "Let the loudest person decide for all": "The loudest person isn’t always right."
+ },
+ "A mistake happened on your team. A good leader…": {
+  "Finds out who to blame for it": "Blame doesn’t fix the problem and hurts trust.",
+  "Hides it so the team looks good": "Hiding mistakes can make them worse and breaks trust.",
+  "Quits so someone else can lead": "Quitting leaves the team without help."
+ },
+ "A team member keeps missing meetings. What would a good leader do first?": {
+  "Yell at them in front of everyone": "Yelling in public embarrasses them and hurts trust.",
+  "Kick them off right away": "Removing them first skips finding out why.",
+  "Ignore it": "Ignoring it lets the problem continue."
+ },
+ "What makes a leader trustworthy?": {
+  "Always being the loudest in the room": "Loudness doesn’t build trust.",
+  "Never admitting to any mistakes": "Hiding mistakes breaks trust.",
+  "Making every decision on their own": "Deciding alone can make people feel unheard."
+ },
+ "A good team leader listens to ideas because…": {
+  "Leaders know everything already": "Even the best leader doesn’t know everything.",
+  "It wastes time": "Listening often saves time by finding better ideas.",
+  "Only to be polite": "Listening is more than politeness. It leads to better decisions."
+ },
+ "A project failed. What does a strong leader do?": {
+  "Find out who caused it and remove them from the team": "Removing people first hides what the team could learn.",
+  "Move on quickly and avoid talking about it": "Avoiding the topic means the same mistake may happen again.",
+  "Explain to the boss that the team let them down": "Blaming the team breaks their trust."
+ },
+ "Bus: $2, 30 minutes. Walk: free, 50 minutes. You’re late. Which?": {
+  "Walk": "Walking takes 50 minutes. You are late, so that is slow.",
+  "Stay home": "Staying home means you do not get there at all."
+ },
+ "🍎 $1 each or 🍎🍎🍎 3 for $2. Which is cheaper per apple?": {
+  "$1 each": "Three of these cost $3. Look at the other deal.",
+  "They are the same": "They are not the same. Find the cost for 3 each way."
+ },
+ "Which is longer: a pencil or a crayon?": {
+  "A crayon": "A crayon is most of the time shorter.",
+  "They are the same": "Most of the time they are not the same size.",
+  "You can’t tell": "Line them up at one end and you can tell."
+ },
+ "Cup A has 3 apples. Cup B has 5 apples. Which has more?": {
+  "Cup A": "Cup A has 3. That is less than 5.",
+  "They are the same": "3 and 5 are not the same.",
+  "Neither": "One cup does have more."
+ },
+ "How are a cat and a dog the same?": {
+  "Both bark at noises": "Cats don’t bark. Only dogs do.",
+  "Both like to chase mice": "Most dogs don’t chase mice.",
+  "Both lay eggs in a nest": "Cats and dogs don’t lay eggs."
+ },
+ "How are a bike and a car alike?": {
+  "Both need gas to make them go": "A bike doesn’t need gas.",
+  "Both have pedals you push": "A car doesn’t have pedals you push.",
+  "Both have a motor inside": "A bike doesn’t have a motor."
+ },
+ "A friend says “Everyone is buying these shoes, so they must be the best.” What is wrong with this?": {
+  "Nothing; if many buy it, it is best": "Many people buying something doesn’t prove it’s best.",
+  "Expensive shoes are always the best": "Price doesn’t prove quality either.",
+  "Friends never know about shoes": "This blames your friend instead of looking at the reasoning."
+ }
+}

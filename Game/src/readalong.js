@@ -143,8 +143,24 @@ const SOUND = { a: 'ah', e: 'eh', i: 'ih', o: 'aw', u: 'uh', b: 'buh', c: 'kuh',
   ai: 'ay', ay: 'ay', ee: 'ee', ea: 'ee', oa: 'oh', oo: 'oo', ow: 'oh', ou: 'ow', oi: 'oy', oy: 'oy', ar: 'ar', or: 'or', er: 'er', ir: 'er', ur: 'er', ew: 'oo', aw: 'aw', au: 'aw', ll: 'lll', ss: 'sss', ff: 'fff', zz: 'zzz' };
 const sayPart = (p) => SOUND[p] || (/[^aeiou]e$/.test(p) && SOUND[p.slice(0, -1)]) || p.replace(/y$/, 'ee').replace(/le$/, 'ul');
 
+/** the sentence with the chosen word in bold */
+function sentenceWith(sentence, word) {
+  const re = new RegExp(`\\b(${word.replace(/[^A-Za-z']/g, '')})\\b`, 'i'), m = sentence.match(re);
+  if (!m) return [sentence];
+  return [sentence.slice(0, m.index), h('b', { class: 'wc-hit' }, m[0]), sentence.slice(m.index + m[0].length)];
+}
+/** read a whole sentence aloud, slowly enough to follow */
+export function readSentence(sentence) { stopReading(); return say(sentence, { rate: 0.85 }); }
+/** the sentence (inside el's text) around a character offset */
+export function sentenceAt(text, at) {
+  const t = String(text); let a = at, b = at;
+  while (a > 0 && !/[.!?…]/.test(t[a - 1])) a--;
+  while (b < t.length && !/[.!?…]/.test(t[b])) b++;
+  while (b < t.length && /[.!?…”"’)]/.test(t[b])) b++;
+  return t.slice(a, b).replace(/\s+/g, ' ').trim();
+}
 /** The word card: big word, hear it, sound it out part by part, meaning, saved to My Words. */
-export function wordCard(rawWord) {
+export function wordCard(rawWord, sentence) {
   const word = String(rawWord).replace(/^[^A-Za-z']+|[^A-Za-z']+$/g, '');
   if (!word || !/[a-z]/i.test(word)) return;
   document.querySelectorAll('.wcard-wrap').forEach((x) => x.remove());
@@ -163,6 +179,7 @@ export function wordCard(rawWord) {
         h('button', { class: 'primary', onclick: () => say(word, { rate: 0.75 }) }, '🔊 Say it'),
         parts.length > 1 ? h('button', { class: 'ghost', onclick: sound }, '🧩 Sound it out') : null,
         h('button', { class: 'ghost sm', onclick: () => say(word.toUpperCase().split('').join(', ') + '. ' + word, { rate: 0.7 }) }, '🔤 Spell it')),
+      sentence ? h('div', { class: 'wc-sent' }, h('p', { class: 'wc-sline' }, ...sentenceWith(sentence, word)), h('button', { class: 'primary sm', onclick: () => readSentence(sentence, word) }, '🔊 Say the whole sentence')) : null,
       e ? h('p', { class: 'wc-mean' }, h('b', {}, 'Means: '), e.meaning, ' ', h('button', { class: 'say-btn', onclick: () => say(`${word} means ${e.meaning}`) }, '🔊')) : null,
       h('p', { class: 'wc-note' }, '📖 Saved to My Words'),
       h('button', { class: 'ghost sm', onclick: () => close() }, 'Close')));
@@ -189,7 +206,11 @@ function wordAt(x, y) {
   const w = t.slice(a, b);
   // make sure the tap was really on the word, not empty space next to it
   try { const r = document.createRange(); r.setStart(node, a); r.setEnd(node, b); const bb = r.getBoundingClientRect(); if (x < bb.left - 6 || x > bb.right + 6 || y < bb.top - 6 || y > bb.bottom + 6) return null; } catch (e) {}
-  return w.length > 1 ? w : null;
+  if (w.length <= 1) return null;
+  // global offset of the tap inside the readable element, so we can find the whole sentence
+  const host = node.parentElement && node.parentElement.closest(READABLE); let sent = null;
+  if (host) { let off2 = 0; const tw = document.createTreeWalker(host, NodeFilter.SHOW_TEXT); for (let n = tw.nextNode(); n && n !== node; n = tw.nextNode()) off2 += n.textContent.length; sent = sentenceAt(host.textContent, off2 + a); }
+  return { w, sent };
 }
 let installed = false;
 function installTaps() {
@@ -199,7 +220,7 @@ function installTaps() {
     if (!el || ev.target.closest('button, a, input, textarea, .gloss')) return;
     if (el.classList.contains('d-text') && el.dataset.typing === '1') return;   // first tap finishes the typewriter
     const w = wordAt(ev.clientX, ev.clientY);
-    if (w) { ev.stopPropagation(); wordCard(w); }
+    if (w) { ev.stopPropagation(); wordCard(w.w, w.sent && w.sent.split(/\s+/).length > 1 ? w.sent : null); }
   }, true);
 }
 
@@ -234,4 +255,43 @@ export function wordPractice(level = 1) {
   };
   next();
   return box;
+}
+
+// ------------------------------------------------------------------------------------------- Talk log
+/** Every conversation line so far (what people said, and what you said). Pick any word to learn it, or hear any
+ *  whole sentence. Find a word: tap a word chip or type one, and see every line it was used in. */
+export function talkLog() {
+  const s = getState() || {}, log = (s.talk || []).slice().reverse();
+  const box = h('div', { class: 'act talklog' });
+  if (!log.length) { box.append(h('p', { class: 'lead' }, 'Your conversations will show up here. Talk to people around the city!')); return box; }
+  // word chips: the longer words people used most, so a learner can choose one without typing
+  const count = {};
+  for (const l of log) for (const w of l.t.toLowerCase().match(/[a-z']{4,}/g) || []) if (!/^(that|this|with|have|your|you're|what|they|them|then|than|there|here|from|will|just|like|when|were|been|it's|i'm|don't|about|into|some|more|very|even)$/.test(w)) count[w] = (count[w] || 0) + 1;
+  const top = Object.entries(count).sort((a, b) => b[1] - a[1]).slice(0, 18).map(([w]) => w).sort();
+  const find = h('input', { class: 'writebox', type: 'search', placeholder: 'Find a word…', 'aria-label': 'Find a word in your conversations' });
+  const list = h('div', { class: 'talk-list' });
+  const render = () => {
+    const q = find.value.trim().toLowerCase().replace(/[^a-z']/g, '');
+    const rows = q ? log.filter((l) => new RegExp(`\\b${q}`, 'i').test(l.t)) : log.slice(0, 120);
+    list.replaceChildren(...(rows.length ? rows.map((l) => {
+      const p = h('p', { class: 'readable talk-t' }, ...(q ? sentenceWith(l.t, (l.t.match(new RegExp(`\\b${q}[a-z']*`, 'i')) || [q])[0]) : [l.t]));
+      if (!q) markWords(p);
+      return h('div', { class: 'talk-line' + (l.w === 'You' ? ' me' : '') }, h('div', { class: 'talk-who' }, h('b', {}, l.w), h('small', {}, l.d ? ` · Day ${l.d}` : '')), p,
+        h('button', { class: 'ghost sm', 'aria-label': 'Say the whole sentence', onclick: () => readSentence(l.t) }, '🔊 Say it all'));
+    }) : [h('p', { class: 'tip' }, `Nobody has said “${q}” yet.`)]));
+  };
+  find.oninput = render;
+  box.append(h('p', { class: 'lead' }, 'Tap any word to learn it. Tap 🔊 to hear the whole sentence.'), find,
+    h('div', { class: 'chips' }, top.map((w) => h('button', { class: 'chip', onclick: () => { find.value = w; render(); } }, w))), list);
+  render();
+  return box;
+}
+/** remember a conversation line (called for every line shown in a dialog) */
+export function logLine(who, text) {
+  const s = getState(); if (!s || !text) return;
+  const t = s.talk || (s.talk = []);
+  const w = who === s.name ? 'You' : who;
+  if (t.length && t[t.length - 1].t === text && t[t.length - 1].w === w) return;
+  t.push({ w, t: String(text), d: s.day });
+  if (t.length > 300) t.splice(0, t.length - 300);
 }

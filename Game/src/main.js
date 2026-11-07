@@ -22,7 +22,7 @@ import { installEvents } from './events.js';
 import { scatterFlora, updateLook } from './lookfx.js';
 import { schoolFromLink, enableSchool, teacherDashboard, assignFromLink, setAssignment } from './school.js';
 import { installKeyboard } from './keyboard.js';
-import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText } from './readalong.js';
+import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
 import { PetCourse, RobotArena } from './arenas.js';
@@ -55,6 +55,7 @@ const saveNow = () => { try { if (game && mode === 'play' && player && !game.sta
 document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); });
 window.addEventListener('pagehide', saveNow);
 initReadAlong(() => game && game.state);
+UI.onLine = (who, text) => logLine(who, text);   // the Talk log in the phone
 installKeyboard();
 // 🔊 on the goal bar, and the "Read to me" switch on the title screen
 document.getElementById('obj-say').onclick = (e) => { e.stopPropagation(); readEls([document.getElementById('obj-text')]); };

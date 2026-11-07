@@ -599,7 +599,8 @@ export function installExpansion(Game) {
     const ok = judged === tip.good;
     this.edu.record(tip.skill, ok, { ctx: 'jax' }); this.edu.record('think.evaluate', ok, { ctx: 'jax' });
     if (ok) s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1;
-    await UI.say(ok ? 'Good call' : 'Worth a second look', tip.why);
+    if (ok) await UI.say('Jax', (tip.good ? 'See? Told you. ' : 'Ha. You caught that one. ') + tip.why, null, { tone: 'jax' });
+    else await UI.say('Thinking it through', (tip.good ? 'Look again: this tip was actually good advice. ' : 'Look again: this tip was bad advice. ') + tip.why);
     this.befriend('Jax', 0.3); this.save();
   };
   /** Calendar → plan the week: scheduling + budget allocation. */

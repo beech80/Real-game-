@@ -17,7 +17,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   // answer helper: right (or deliberately wrong) answers to activity sheets; pick menu buttons; continue dialogs
   const answer = async (wrong = false) => { const Q = await ev(() => window.__lastQ && { a: window.__lastQ.a, type: window.__lastQ.type });
     if (!Q) return false; const opts = await p.$$('#modal .modal:last-child .opt:not([disabled])');
-    for (const o of opts) { const t = (await o.textContent()).trim(); if ((t === String(Q.a)) !== wrong) { await o.click(); await sleep(300); break; } }
+    let hit = false; for (const o of opts) { const t = (await o.textContent()).trim(); if ((t === String(Q.a)) !== wrong) { await o.click(); hit = true; await sleep(300); break; } }
+    if (!hit && opts.length) { await opts[0].click(); await sleep(300); }   // only the right one left after wrong tries
     const c = await p.$('#modal .modal:last-child button.primary:text-is("Continue")'); if (c && await c.isVisible()) { await c.click(); await sleep(400); } return true; };
   const flow = async ({ pick = [], wrong = false, rounds = 60 } = {}) => {
     for (let i = 0; i < rounds; i++) {

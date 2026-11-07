@@ -12,6 +12,7 @@ const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
 /** choice item; wrong answers are de-duplicated and never equal the key */
 const ch = (skill, q, a, wrong, why, extra = {}) => ({ type: 'choice', skill, q, a, o: [a, ...[...new Set(wrong.map(String))].filter((w) => w !== String(a)).slice(0, 3)], why, ...extra });
+const whyEach = (opts, f) => Object.fromEntries(opts.map((x) => [String(x), f(String(x))]));   // a reason for each wrong option
 const num = (skill, q, a, why, extra = {}) => ({ type: 'number', skill, q, a, why, ...extra });
 
 // ------------------------------------------------------------------------------------------------ reading: letters
@@ -22,9 +23,9 @@ const CONFUSE = { b: 'dpv', d: 'bpt', p: 'bdq', q: 'pgd', m: 'nwh', n: 'mhu', f:
 const CASES = { B: 'bdpq', D: 'dbpq', P: 'pqbd', Q: 'qpgd', M: 'mnwu', N: 'nmuh', G: 'gqpj', E: 'eaoc', A: 'aoed', R: 'rnhf', T: 'tfli', H: 'hnbk', F: 'ftlk', L: 'litj', Y: 'yvjg' };
 const letters = [
   () => { const [w, e, f] = pick(FIRST); const wrong = shuffle(CONFUSE[f].split('')).slice(0, 2).concat(pick('bdfghjlmnprstvwz'.split('').filter((x) => x !== f && !CONFUSE[f].includes(x))));
-    return ch('read.letters', 'Look at the picture and listen. Which letter makes the first sound?', f, wrong, `“${w}” starts with the /${f === 'y' ? 'y' : f}/ sound. The letter ${f} makes that sound.`, { v: { big: e }, say: w, diff: 1 }); },
+    return ch('read.letters', 'Look at the picture and listen. Which letter makes the first sound?', f, wrong, `“${w}” starts with the /${f === 'y' ? 'y' : f}/ sound. The letter ${f} makes that sound.`, { v: { big: e }, say: w, diff: 1, whyWrong: whyEach(wrong, (x) => `${x} makes a different sound. Say “${w}” slowly. Listen to the very first sound.`) }); },
   () => { const U = pick(Object.keys(CASES)); const [l, ...w] = CASES[U].split('');
-    return ch('read.letters', `Which lowercase letter matches the capital ${U}?`, l, w, `Capital ${U} and lowercase ${l} are the same letter. Watch out: ${w.slice(0, 2).join(' and ')} look a lot like it.`, { v: { big: U }, decode: true, diff: 2 }); },
+    return ch('read.letters', `Which lowercase letter matches the capital ${U}?`, l, w, `Capital ${U} and lowercase ${l} are the same letter. Watch out: ${w.slice(0, 2).join(' and ')} look a lot like it.`, { v: { big: U }, decode: true, diff: 2, whyWrong: whyEach(w, (x) => `${x} is a different letter. Look at the shape of ${U} and find its small partner.`) }); },
 ];
 
 // ------------------------------------------------------------------------------------------------ reading: phonics (decoding)
@@ -50,10 +51,10 @@ const PHON = [
   ['car', '🚗', 'c-ar', ['cat', 'curl', 'jar'], 6], ['star', '⭐', 's-t-ar', ['stir', 'stop', 'tar'], 6], ['bird', '🐦', 'b-ir-d', ['bid', 'third', 'bud'], 6], ['corn', '🌽', 'c-or-n', ['cone', 'born', 'coin'], 6], ['shirt', '👕', 'sh-ir-t', ['short', 'shut', 'skirt'], 6],
 ];
 const phonics = [() => { const [w, e, snd, near, d] = pick(PHON);
-  return ch('read.phonics', 'Read each word. Which word names the picture?', w, near, `Say each sound, then blend them: ${snd} → “${w}”. ${near[0]} has a different sound, so it doesn’t match.`, { v: { big: e }, decode: true, diff: d }); },
+  return ch('read.phonics', 'Read each word. Which word names the picture?', w, near, `Say each sound, then blend them: ${snd} → “${w}”. ${near[0]} has a different sound, so it doesn’t match.`, { v: { big: e }, decode: true, diff: d, whyWrong: whyEach(near, (x) => `“${x}” has a different sound in it. Say each sound, then look at the picture again.`) }); },
   () => { const [w, e, snd, near, d] = pick(PHON);   // the other direction: read one word, find its picture
     const others = shuffle(PHON.filter((p) => p[0] !== w && p[4] <= Math.max(2, d) && p[0][0] !== w[0])).slice(0, 3);
-    return ch('read.phonics', `Read the word: ${w}. Which picture is it?`, e, others.map((p) => p[1]), `${snd} → “${w}”, the ${e}.`, { decode: true, diff: d }); }];
+    return ch('read.phonics', `Read the word: ${w}. Which picture is it?`, e, others.map((p) => p[1]), `${snd} → “${w}”, the ${e}.`, { decode: true, diff: d, whyWrong: whyEach(others.map((p) => p[1]), () => `That picture does not match. Say each sound: ${snd}. Then blend them.`) }); }];
 
 // ------------------------------------------------------------------------------------------------ reading: phonological awareness (listening)
 const RHYME = [['cat', '🐱', ['🦇 bat', '🎩 hat'], ['🐶 dog', '☀️ sun', '🐟 fish']], ['dog', '🐶', ['🪵 log', '🐸 frog'], ['🐱 cat', '🚌 bus', '🔑 key']], ['bee', '🐝', ['🌳 tree', '🔑 key'], ['🐱 cat', '🦊 fox', '☀️ sun']],
@@ -62,8 +63,8 @@ const RHYME = [['cat', '🐱', ['🦇 bat', '🎩 hat'], ['🐶 dog', '☀️ su
 const CLAP = [['cat', 1], ['dog', 1], ['sun', 1], ['apple', 2], ['tiger', 2], ['rabbit', 2], ['pencil', 2], ['banana', 3], ['elephant', 3], ['butterfly', 3], ['computer', 3], ['caterpillar', 4], ['watermelon', 4]];
 const START = [['sun', '☀️', ['🧦 sock', '🐍 snake'], ['🎩 hat', '🐶 dog', '🌙 moon']], ['moon', '🌙', ['🗺️ map', '🐒 monkey'], ['☀️ sun', '🐟 fish', '🐱 cat']], ['fish', '🐟', ['🦊 fox', '🚩 flag'], ['🐷 pig', '🚌 bus', '🐶 dog']], ['bus', '🚌', ['⚽ ball', '🛏️ bed'], ['🐱 cat', '🦊 fox', '🌙 moon']]];
 const SOUNDS = [
-  () => { const [w, e, yes, no] = pick(RHYME); const a = pick(yes); return ch('read.sounds', `Listen: “${w}”. Which word rhymes with ${w}?`, a, shuffle(no).slice(0, 3), `Rhyming words sound the same at the end: ${w} – ${a.split(' ')[1]}.`, { v: { big: e }, listen: true, diff: 1 }); },
-  () => { const [w, n] = pick(CLAP); return ch('read.sounds', `Clap the word: “${w}”. How many claps (syllables)?`, String(n), ['1', '2', '3', '4'].filter((x) => x !== String(n)), `Each clap is one syllable. “${w}” has ${n}.`, { listen: true, say: w, diff: 2 }); },
+  () => { const [w, e, yes, no] = pick(RHYME); const a = pick(yes); return ch('read.sounds', `Listen: “${w}”. Which word rhymes with ${w}?`, a, shuffle(no).slice(0, 3), `Rhyming words sound the same at the end: ${w} – ${a.split(' ')[1]}.`, { v: { big: e }, listen: true, diff: 1, whyWrong: whyEach(no, (x) => `${x.split(' ').pop()} ends with a different sound than ${w}. Rhymes sound the same at the end.`) }); },
+  () => { const [w, n] = pick(CLAP); return ch('read.sounds', `Clap the word: “${w}”. How many claps (syllables)?`, String(n), ['1', '2', '3', '4'].filter((x) => x !== String(n)), `Each clap is one syllable. “${w}” has ${n}.`, { listen: true, say: w, diff: 2, whyWrong: whyEach(['1', '2', '3', '4'], (x) => `Say “${w}” and clap each part. ${x} ${x === '1' ? 'clap is' : 'claps is'} ${+x > n ? 'too many' : 'too few'}.`) }); },
   () => { const [w, e, yes, no] = pick(START); const a = pick(yes); return ch('read.sounds', `Which word starts with the same sound as “${w}”?`, a, shuffle(no).slice(0, 3), `${w} and ${a.split(' ')[1]} both start with the /${w[0]}/ sound.`, { v: { big: e }, listen: true, diff: 2 }); },
   () => { const [whole, part, rest, w2] = pick([['cupcake', 'cup', 'cake', 'cap'], ['sunshine', 'sun', 'shine', 'sign'], ['rainbow', 'rain', 'bow', 'bay'], ['football', 'foot', 'ball', 'bell'], ['bedroom', 'bed', 'room', 'broom']]);
     return ch('read.sounds', `Say “${whole}”. Now say it without “${part}”. What word is left?`, rest, [part, w2, whole], `${whole} = ${part} + ${rest}. Take away ${part} and “${rest}” is left.`, { listen: true, diff: 3 }); },
@@ -75,12 +76,12 @@ const SOUNDS = [
 const SUBJ = [['cat', '🐱'], ['dog', '🐶'], ['fox', '🦊'], ['pig', '🐷'], ['hen', '🐔']], OBJ = [['hat', '🎩'], ['bag', '👜'], ['box', '📦'], ['sock', '🧦'], ['cup', '☕']];
 const sentences = [() => { const [s, se] = pick(SUBJ), [o, oe] = pick(OBJ); const s2 = pick(SUBJ.filter((x) => x[0] !== s)), o2 = pick(OBJ.filter((x) => x[0] !== o));
   const verb = pick(['has a', 'sits on a', 'naps in a']);
-  return ch('read.sentences', `Read the sentence: “The ${s} ${verb} ${o}.” Which picture shows it?`, `${se} ${oe}`, [`${s2[1]} ${oe}`, `${se} ${o2[1]}`, `${s2[1]} ${o2[1]}`], `The sentence names the ${s} ${se} and the ${o} ${oe}. Read both words to find the match.`, { decode: true, diff: 2 }); }];
+  return ch('read.sentences', `Read the sentence: “The ${s} ${verb} ${o}.” Which picture shows it?`, `${se} ${oe}`, [`${s2[1]} ${oe}`, `${se} ${o2[1]}`, `${s2[1]} ${o2[1]}`], `The sentence names the ${s} ${se} and the ${o} ${oe}. Read both words to find the match.`, { decode: true, diff: 2, whyWrong: whyEach([`${s2[1]} ${oe}`, `${se} ${o2[1]}`, `${s2[1]} ${o2[1]}`], () => `Check each picture. One of them is not in the sentence. Read each word again.`) }); }];
 
 // ------------------------------------------------------------------------------------------------ spelling (band 1): heart words and CVC
 const SPELL = [['the', ['teh', 'th', 'thu']], ['said', ['sed', 'siad', 'sayd']], ['was', ['wuz', 'waz', 'wsa']], ['you', ['yu', 'yuo', 'yoo']], ['have', ['hav', 'haev', 'havv']], ['they', ['thay', 'tehy', 'thei']],
   ['play', ['pley', 'plai', 'paly']], ['cat', ['kat', 'cta', 'catt']], ['dog', ['dawg', 'dgo', 'doog']], ['ship', ['shp', 'shipp', 'sihp']], ['what', ['wut', 'whut', 'wath']], ['come', ['cum', 'kom', 'coem']]];
-const spelling = [() => { const [w, bad] = pick(SPELL); return ch('write.letters', `Listen: “${w}”. Which is the right spelling?`, w, bad, `“${w}” is spelled ${w.split('').join('-')}.${['the', 'said', 'was', 'you', 'have', 'they', 'what', 'come'].includes(w) ? ' It’s a heart word: part of it doesn’t follow the usual sounds, so learn it by heart.' : ''}`, { say: w, decode: true, diff: w.length <= 3 ? 1 : 2 }); }];
+const spelling = [() => { const [w, bad] = pick(SPELL); return ch('write.letters', `Listen: “${w}”. Which is the right spelling?`, w, bad, `“${w}” is spelled ${w.split('').join('-')}.${['the', 'said', 'was', 'you', 'have', 'they', 'what', 'come'].includes(w) ? ' It’s a heart word: part of it doesn’t follow the usual sounds, so learn it by heart.' : ''}`, { say: w, decode: true, diff: w.length <= 3 ? 1 : 2, whyWrong: whyEach(bad, () => `Some letters in that one are not right. Say “${w}” slowly and check each letter.`) }); }];
 
 // ------------------------------------------------------------------------------------------------ math (K–2)
 const ITEMS = ['🍎', '⭐', '🐟', '🌸', '🍪', '🚗'];
@@ -106,7 +107,7 @@ const count = [
 const SHAPES = ['🔴', '🔵', '🟡', '🟢', '⭐', '🔺'];
 const patterns = [
   () => { const [a, b] = shuffle(SHAPES).slice(0, 2); const unit = pick([[a, b], [a, b, b], [a, a, b]]); const seq = Array.from({ length: unit.length * 2 + 1 }, (_, i) => unit[i % unit.length]); const next = unit[seq.length % unit.length];
-    return ch('math.patterns', `What comes next? ${seq.join(' ')} ?`, next, [next === a ? b : a, pick(SHAPES.filter((x) => x !== a && x !== b))], `The part that repeats is ${unit.join(' ')}. After ${seq.slice(-1)} comes ${next}.`, { diff: 1 }); },
+    return ch('math.patterns', `What comes next? ${seq.join(' ')} ?`, next, [next === a ? b : a, pick(SHAPES.filter((x) => x !== a && x !== b))], `The part that repeats is ${unit.join(' ')}. After ${seq.slice(-1)} comes ${next}.`, { diff: 1, whyWrong: whyEach([a, b, ...SHAPES], (x) => `${x} would break the pattern. Find the part that repeats, then say it again.`) }); },
   () => { const st = ri(1, 10), step = pick([1, 2, 5, 10]); const seq = [0, 1, 2, 3].map((i) => st + i * step); return num('math.patterns', `What comes next? ${seq.join(', ')}, ?`, st + 4 * step, `Each number goes up by ${step}: ${seq[3]} + ${step} = ${st + 4 * step}.`, { diff: 2 }); },
 ];
 const COINS = [['penny', 1], ['nickel', 5], ['dime', 10], ['quarter', 25]];
@@ -127,9 +128,9 @@ const place = [
 ];
 const tm = (h, m) => `${h}:${String(m).padStart(2, '0')}`;
 const time = [
-  () => { const h = ri(1, 12), m = pick([0, 30]); const wrong = [tm(h, m === 0 ? 30 : 0), tm(h % 12 + 1, m), tm(m === 30 ? 6 : 12, h * 5 % 60)]; return ch('math.time', 'What time does the clock show?', tm(h, m), wrong, m === 0 ? `The long hand points to 12, so it’s exactly ${h} o’clock: ${tm(h, 0)}.` : `The long hand points to 6 (half an hour). The short hand is just past ${h}: ${tm(h, 30)}.`, { v: { clock: [h, m] }, diff: 1 }); },
-  () => { const h = ri(1, 12), m = pick([15, 45, 5, 20, 40, 50]); return ch('math.time', 'What time does the clock show?', tm(h, m), [tm(h, (60 - m) % 60), tm(h % 12 + 1, m), tm(m / 5, h * 5 % 60)], `The long hand points to ${m / 5}: count by fives, ${m / 5} × 5 = ${m} minutes. The short hand is past ${h}. So ${tm(h, m)}.`, { v: { clock: [h, m] }, diff: 2 }); },
-  () => { const h = ri(1, 10), m = pick([0, 30]), d = pick([1, 2]); return ch('math.time', `It is ${tm(h, m)}. Soccer starts in ${d} hour${d > 1 ? 's' : ''}. What time does it start?`, tm(h + d, m), [tm(h + d, m === 0 ? 30 : 0), tm(h + d + 1, m), tm(h - 1 || 12, m)], `Move the hour hand forward ${d}: ${h} → ${h + d}. The minutes stay the same: ${tm(h + d, m)}.`, { v: { clock: [h, m] }, diff: 3 }); },
+  () => { const h = ri(1, 12), m = pick([0, 30]); const wrong = [tm(h, m === 0 ? 30 : 0), tm(h % 12 + 1, m), tm(m === 30 ? 6 : 12, h * 5 % 60)]; return ch('math.time', 'What time does the clock show?', tm(h, m), wrong, m === 0 ? `The long hand points to 12, so it’s exactly ${h} o’clock: ${tm(h, 0)}.` : `The long hand points to 6 (half an hour). The short hand is just past ${h}: ${tm(h, 30)}.`, { v: { clock: [h, m] }, diff: 1, whyWrong: whyEach(wrong, () => `Check both hands. The short hand shows the hour. The long hand shows the minutes.`) }); },
+  () => { const h = ri(1, 12), m = pick([15, 45, 5, 20, 40, 50]); return ch('math.time', 'What time does the clock show?', tm(h, m), [tm(h, (60 - m) % 60), tm(h % 12 + 1, m), tm(m / 5, h * 5 % 60)], `The long hand points to ${m / 5}: count by fives, ${m / 5} × 5 = ${m} minutes. The short hand is past ${h}. So ${tm(h, m)}.`, { v: { clock: [h, m] }, diff: 2, whyWrong: whyEach([tm(h, (60 - m) % 60), tm(h % 12 + 1, m), tm(m / 5, h * 5 % 60)], () => `Check both hands. The short hand shows the hour. Count by fives on the long hand for the minutes.`) }); },
+  () => { const h = ri(1, 10), m = pick([0, 30]), d = pick([1, 2]); return ch('math.time', `It is ${tm(h, m)}. Soccer starts in ${d} hour${d > 1 ? 's' : ''}. What time does it start?`, tm(h + d, m), [tm(h + d, m === 0 ? 30 : 0), tm(h + d + 1, m), tm(h - 1 || 12, m)], `Move the hour hand forward ${d}: ${h} → ${h + d}. The minutes stay the same: ${tm(h + d, m)}.`, { v: { clock: [h, m] }, diff: 3, whyWrong: whyEach([tm(h + d, m === 0 ? 30 : 0), tm(h + d + 1, m), tm(h - 1 || 12, m)], () => `Start at ${tm(h, m)} and count forward ${d} hour${d > 1 ? 's' : ''}. The minutes do not change.`) }); },
 ];
 const change = [
   () => { const c = pick([35, 45, 55, 65, 70, 85, 90]); return num('math.change', `A pencil costs ${c}¢. You pay with $1 (100¢). How much change?`, 100 - c, `Count up from ${c}¢ to 100¢: ${c} → ${Math.ceil(c / 10) * 10 === c ? c : Math.ceil(c / 10) * 10}${Math.ceil(c / 10) * 10 === c ? '' : ` (+${Math.ceil(c / 10) * 10 - c})`}, then to 100 (+${100 - Math.ceil(c / 10) * 10}). Change: ${100 - c}¢.`, { suffix: '¢', diff: 1 }); },

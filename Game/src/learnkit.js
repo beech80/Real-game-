@@ -9,6 +9,49 @@ import { GEN } from './curriculum.js';
 import { splitWords } from './glossary.js';
 import { difficulty } from './readlevel.js';
 import { say } from './readalong.js';
+import { WW } from './ww/index.js';
+
+/** Who answers a wrong pick: the person you were just talking to (Rosa at work, Mr. Okafor at the center…), else the coach. */
+function coachName(G) {
+  const L = UI.lastSpeaker; if (!L || Date.now() - L.t > 10 * 60 * 1000 || L.name === G.state.name) return '';
+  return String(L.name).split(' · ')[0].replace(/^[^A-Za-z]+/, '').trim();
+}
+const num = (x) => { const m = String(x).replace(/−/g, '-').replace(/[$,]/g, '').match(/^\s*(-?\d+(?:\.\d+)?)\s*(%|[a-z]+)?\s*$/i); return m ? parseFloat(m[1]) : null; };
+/** Reasons for the questions made from random numbers and words (each one is new, so the reason follows the rule). */
+const SKILL_WHY = {
+  'write.caps': () => 'Check each name, day and place. Each one needs a capital letter, and so does the first word.',
+  'write.commas': (Q) => /date/i.test(Q.q) ? 'Look at where each comma sits. A comma goes after the day of the week, and between the date and the year.' : 'Look at where each comma sits. Commas go between the things in a list, not between other words.',
+  'write.sentences': (Q) => /NOT/.test(Q.q) ? 'That one is a full sentence: it tells who and what they do. Find the one that is missing a part.' : 'That one is missing a part. A sentence tells who, and what they do.',
+  'write.tense': () => 'Look for the time word in the sentence, like yesterday or tomorrow. It tells you when it happens.',
+  'write.grammar': (Q, o) => { const role = (Q.q.match(/\b(noun|verb|adjective|adverb)\b/) || [])[1]; const DEF = { noun: 'A noun names a person, place or thing.', verb: 'A verb is the action word.', adjective: 'An adjective tells what something is like.', adverb: 'An adverb tells how something is done.' }; return role ? `“${o}” is not the ${role}. ${DEF[role]}` : null; },
+  'math.coords': (Q) => /first number/.test(Q.q) ? 'A point is written (across, up). Think about which way the first number moves you.' : 'Move across first: right adds to the first number. Then move up: that adds to the second number.',
+  'tech.conditionals': () => 'Check the number against the IF test first. Only one branch runs: the first one whose test is true.',
+  'soc.maps': () => 'Find the first place on the map. Then look which way you go to reach the other one. North is up, so east is to the right.',
+  'fin.bills': () => 'Compare the day you paid with the due day. A fee only comes when you pay after the due day.',
+  'read.contracts': () => 'Compare the day you paid with the due day in the lease. Then read what the lease says happens.',
+  'math.time': () => 'Check both hands. The short hand shows the hour. The long hand shows the minutes.',
+  'math.stats': () => 'Look for one number far bigger than the rest. It pulls the average up, so a middle value describes most days better.',
+  'math.statsadv': () => 'Look for the one day far from the rest. It pulls the mean, so the median describes a usual day better.',
+  'math.probability': () => 'Chance = the number of ways you want ÷ all the things in the bag. Count both again.',
+  'math.ratio': () => 'Find the price for one item in each deal, then compare those.',
+  'fin.prices': () => 'Compare the dollars first, then the cents. The smaller price costs less.',
+  'math.numbers': (Q, o) => /same/i.test(o) ? 'Look at the tens digit in each number first. They are not the same.' : null,
+  'math.place': (Q, o) => /same/i.test(o) ? 'Look at the tens digit in each number first. They are not the same.' : /what does/i.test(Q.q) ? 'Look at where the digit sits. The left place is tens, the right place is ones.' : null,
+};
+/** Why this pick isn't it: the item's own reason, the written bank of reasons, else a reason worked out from the numbers. Never just “wrong”. */
+export function reasonFor(Q, o, sk = {}) {
+  const own = (Q.whyWrong && Q.whyWrong[o]) || (WW[Q.q + '|' + Q.a] && WW[Q.q + '|' + Q.a][String(o)]) || (WW[Q.q] && WW[Q.q][String(o)]);
+  if (own) return own;
+  const rule = SKILL_WHY[Q.skill] && SKILL_WHY[Q.skill](Q, String(o));
+  if (rule) return rule;
+  const a = num(Q.a), v = num(o);
+  if (a !== null && v !== null && a !== v && Math.abs(v) === Math.abs(a)) return 'Check the sign. Did the amount go up past zero, or down below it?';
+  if (a !== null && v !== null && a !== v) {
+    const lvl = (sk.band || 1) <= 2;
+    return `${o} is ${v > a ? (lvl ? 'too big' : 'too high') : (lvl ? 'too small' : 'too low')}. ` + (lvl ? 'Count again, one step at a time.' : 'Check each step: what does the question ask you to find?');
+  }
+  return `“${o}” doesn’t fit what the question asks. Read the question again and look for the clue that rules it out.`;
+}
 
 const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
 const fmt = (Q, v) => `${Q.prefix || ''}${Q.decimals ? Number(v).toFixed(2) : v}${Q.suffix ? ' ' + Q.suffix : ''}`;
@@ -107,13 +150,15 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       return false;
     };
     const hint2 = h('p', { class: 'tip', hidden: true }), wwBox = h('p', { class: 'tip readable wwbox', hidden: true });
+    const coach = coachName(G);
+    const explainWrong = (text) => { wwBox.hidden = false; wwBox.replaceChildren(h('b', { class: 'ww-who' }, coach ? `🗨️ ${coach}: ` : '💡 '), h('span', { class: 'ww-say' }, text)); if (settings.readAloud) speak(text); };
     const head = [h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj] ? SUBJECTS[sk.subj].icon + ' ' + SUBJECTS[sk.subj].name : ''} · ${sk.name || ''}`),
       visual(Q.v), Q.cursive ? h('div', { class: 'cursive-note' }, ...Q.cursive.map((l) => h('div', {}, l))) : null,
       h('div', { class: 'qrow' }, h('p', { class: 'lead' }, ...wordful(G, Q.q, sk.band || 1, hp.card)), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
     let body;
     if (Q.type === 'choice') {
       const optsShown = shuffle([...new Set(Q.o)]);
-      body = h('div', { class: 'opts' + (Q.decode ? ' decode' : '') }, optsShown.map((o) => h('button', { class: 'opt', 'data-noread': Q.decode ? '1' : null, onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; if (Q.whyWrong && Q.whyWrong[o] && !CHECK) { wwBox.hidden = false; wwBox.textContent = '💡 ' + Q.whyWrong[o]; } } else e.currentTarget.classList.add('right'); } }, o)));
+      body = h('div', { class: 'opts' + (Q.decode ? ' decode' : '') }, optsShown.map((o) => h('button', { class: 'opt', 'data-noread': Q.decode ? '1' : null, onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; if (!CHECK) explainWrong(reasonFor(Q, o, sk)); } else e.currentTarget.classList.add('right'); } }, o)));
     } else if (Q.type === 'number') {
       let val = '';
       const disp = h('div', { class: 'keypad-disp' }, fmt(Q, 0));
@@ -121,7 +166,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       const value = () => (Q.decimals ? parseInt(val || '0', 10) / 100 : parseFloat(val || '0'));
       const key = (k) => h('button', { class: 'key', onclick: () => { if (k === '⌫') val = val.slice(0, -1); else if (k === '.' ) { if (!val.includes('.') && !Q.decimals) val += val ? '.' : '0.'; } else if (val.length < 9) val += k; show(); } }, k);
       body = h('div', {}, disp, h('div', { class: 'keypad' }, ['1', '2', '3', '4', '5', '6', '7', '8', '9', Q.decimals ? '⌫' : '.', '0', Q.decimals ? '' : '⌫'].filter(Boolean).map(key),
-        h('button', { class: 'key ok', onclick: () => { if (!done.hidden) return; const v = value(); const ok = Math.abs(v - Q.a) < 0.005; if (!attempt(ok, ok ? null : (v === 0 ? 'blank' : Math.abs(v - Q.a) / Math.max(1, Math.abs(Q.a)) < 0.15 ? 'close' : 'far'))) { val = ''; show(); } } }, '✓')));
+        h('button', { class: 'key ok', onclick: () => { if (!done.hidden) return; const v = value(); const ok = Math.abs(v - Q.a) < 0.005; if (!attempt(ok, ok ? null : (v === 0 ? 'blank' : Math.abs(v - Q.a) / Math.max(1, Math.abs(Q.a)) < 0.15 ? 'close' : 'far'))) { if (!CHECK && val) explainWrong(reasonFor({ ...Q, a: Q.a }, fmt(Q, v), sk)); val = ''; show(); } } }, '✓')));
     } else if (Q.type === 'order') {
       const pool = shuffle(Q.items.map((t, i) => ({ t, i }))), chosen = [];
       const list = h('ol', { class: 'orderlist' }), bank = h('div', { class: 'opts' });

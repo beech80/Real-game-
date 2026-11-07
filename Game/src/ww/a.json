@@ -1,0 +1,1366 @@
+{
+ "Who is Pip?": {
+  "A big ball": "The ball is what Pip plays with. Look at who Pip is.",
+  "Sam": "Sam is the boy in the story. Pip is not Sam.",
+  "A tub": "The tub is for the bath. Look at what Pip is."
+ },
+ "What color is the ball?": {
+  "Blue": "The story does not say blue. Look at the word next to ball.",
+  "Green": "The story does not say green. Look at the word next to ball.",
+  "Brown": "Brown is the mud, not the ball. Look at the ball's color word."
+ },
+ "Why does Pip need a bath?": {
+  "Pip is cold": "The story does not say Pip is cold. Think of what got on Pip.",
+  "Sam wants to swim": "Sam does not swim in this story. Think of what Pip got on him.",
+  "The ball is lost": "The ball is not lost. Think of where the ball went, and what came next."
+ },
+ "What happens last?": {
+  "Sam gets the tub": "Sam gets the tub, but one more thing comes after.",
+  "Pip sees the ball": "Pip sees the ball near the start. Look at the last line.",
+  "The ball rolls in the mud": "That comes in the middle. Look at the last line."
+ },
+ "Where do you put the seed?": {
+  "In the sun": "The seed needs the sun, but it does not go in the sun. Look at where you put it.",
+  "In a cup of water": "The text does not say to put it in a cup. Look again.",
+  "In a box": "The text does not say a box. Look at where it goes."
+ },
+ "What grows first?": {
+  "Leaves": "Leaves come later. Look for the word first.",
+  "A flower": "A flower comes much later. Look for the word first.",
+  "A big plant": "The big plant is the end, not the start. Look for first."
+ },
+ "What is this text mostly about?": {
+  "How to put soil in a pot": "Soil is just one part. Most lines tell how the seed changes.",
+  "Why plants need the sun": "The sun is just one part. Think of what all the lines tell.",
+  "What a big plant looks like": "The big plant is only the end. Most lines tell the steps before it."
+ },
+ "What made the hat fly up?": {
+  "A bird": "The story does not say a bird did it. Look for the whoosh.",
+  "Dad": "Dad helps later. Look for what went whoosh.",
+  "A dog": "There is no dog in this part. Look for what went whoosh."
+ },
+ "Where did the hat get stuck?": {
+  "On a car": "The hat did not land on a car. Look at where it got stuck.",
+  "In a pond": "The hat did not fall in a pond. Look at where it got stuck.",
+  "On the roof": "The hat did not land on the roof. Look at where it got stuck."
+ },
+ "Who got the hat out of the tree?": {
+  "Meg": "Meg wants the hat, but she does not get it down. Who got the stool?",
+  "The wind": "The wind put the hat up there. Who got the stool?",
+  "A bird": "A bird did not get the hat. Who got the step stool?"
+ },
+ "How did Meg feel at the end?": {
+  "Sad": "Meg got her hat back. Would that make her sad?",
+  "Mad": "Meg is not mad at the end. Look at the last words.",
+  "Sleepy": "The story does not say she was tired. Look at the last words."
+ },
+ "Where is the fish?": {
+  "In a pond": "The fish is not in a pond. Look at where it is.",
+  "In a bath": "A bath is for a pup, not this fish. Look again.",
+  "In a box": "The fish is not in a box. Look at where it is."
+ },
+ "Where can the fish hide?": {
+  "In a sock": "A sock is not a place for a fish. Look at what it can hide in.",
+  "Under a rock": "The text does not say a rock. Look at what it can hide in.",
+  "In a cup": "The fish does not hide in a cup. Look again."
+ },
+ "What does Beth give the fish?": {
+  "A shell": "The shell is a place to hide, not a gift. Look at what Beth puts in.",
+  "A bath": "Fish do not get a bath. Look at what Beth puts in.",
+  "A tank": "The fish is in the tank. Look at what Beth puts in it."
+ },
+ "Where did Chick sit at first?": {
+  "On a rock": "The story does not say a rock. Look at where Chick sat.",
+  "In the sun": "They sat in the sun at the end. Look at the start.",
+  "In the pond": "Chick did not sit in the pond. Look at where Chick sat."
+ },
+ "What can Chick do?": {
+  "Swim": "Chick did not say swim. Look at what Chick said.",
+  "Fly to the moon": "A chick can not fly to the moon. Look at what Chick said.",
+  "Sing": "Chick did not say sing. Look at what Chick said."
+ },
+ "What did they do at the end?": {
+  "Swam": "That is not how it ends. Look at the last words.",
+  "Ran home": "They did not run home. Look at the last words.",
+  "Went to bed": "They did not go to bed. Look at the last words."
+ },
+ "What color is the bus?": {
+  "Yellow": "Lots of school buses are yellow, but not this one. Look at the color word.",
+  "Blue": "The story does not say blue. Look at the color word.",
+  "Green": "The story does not say green. Look at the color word."
+ },
+ "Where does the bus go?": {
+  "To the beach": "The bus does not go to the beach. Look at where it will go.",
+  "To the zoo": "The bus does not go to the zoo. Look at where it will go.",
+  "Down to the shop": "The bus goes up, not down, and not to a shop."
+ },
+ "What did the manager say Lena had to use?": {
+  "A big wooden box": "A wooden box is not what he said. Look at his words after but only.",
+  "The building’s yard": "He did not say she could use the yard. Look at his words after but only.",
+  "Plastic bags": "He did not say bags. Look at his words after but only."
+ },
+ "What are a bat’s wings made of?": {
+  "Soft feathers like a bird’s wings": "Bats do not have feathers. Look at what the wings are made of.",
+  "Hard shell over short bones": "Bat wings are not hard, and the bones are long, not short.",
+  "Thick fur over strong claws": "Bats have fur on their bodies, but the wings are not fur and claws."
+ },
+ "How do bats find bugs in the dark?": {
+  "They can’t see at all, so they bump into bugs": "Bats are not blind, and they do not bump into bugs. They use sound.",
+  "They smell the bugs": "The text does not say they smell bugs. Think about their squeaks.",
+  "They wait for bugs to land on them": "Bats hunt. They do not wait for bugs. Think about their squeaks."
+ },
+ "Which detail shows that bats eat a lot?": {
+  "Most bats sleep during the day and hunt at night": "That tells when bats hunt, not how much they eat.",
+  "Bats are the only mammals that can really fly": "That is a fun fact about flying, not about eating.",
+  "People cannot hear most of the squeaks bats make": "That is about bat sounds, not how much they eat."
+ },
+ "“Wash hands, then put on gloves, then slice the bread.” What do you do right after washing hands?": {
+  "Slice the bread": "You slice the bread last. One step comes before it.",
+  "Eat the bread": "Eating is not one of the steps.",
+  "Take off gloves": "You put gloves on here, not take them off."
+ },
+ "Directions: “Fill the cup halfway. Add the powder. Stir for 30 seconds.” How long do you stir?": {
+  "Halfway": "Halfway is how much to fill the cup, not how long to stir.",
+  "Until full": "Until full is not in the steps. Look at the stir step for a time.",
+  "3 minutes": "The steps do not say minutes. Look at the number in the stir step."
+ },
+ "Why might reading all the steps first help?": {
+  "You can skip the steps that look too easy": "Skipping steps can ruin the task. Reading first is about planning, not skipping.",
+  "You can do the last step first": "Steps go in order, so doing the last one first can cause problems.",
+  "You will not need to look back at all": "You may still look back. Reading first helps you plan, not stop checking."
+ },
+ "“Preheat the oven to 350°F. Mix the dry ingredients. Bake for 20 minutes.” What happens before baking?": {
+  "Mix the dry ingredients and bake for 20 minutes": "Baking is the step you are asking about, so it cannot come before itself.",
+  "Preheat the oven and then bake for 20 minutes": "You left out a step. Something else happens between the oven and baking.",
+  "Only mix the dry ingredients in a bowl": "That leaves out the first step. Something happens before the mixing."
+ },
+ "A sign says “Wait for the green light, then press the button.” What do you do first?": {
+  "Press the button first": "The word then means pressing the button comes second.",
+  "Press the button twice": "The sign does not say to press twice. Look at what comes before then.",
+  "Wait for the red light": "The sign says green, not red. Look at the color in the sign."
+ },
+ "What can you infer about the apartment?": {
+  "Pets are not allowed": "A pet deposit would make no sense if pets were not allowed.",
+  "Pets are free": "A deposit is money you pay, so pets are not free.",
+  "Only fish are allowed": "The lease does not say only fish. A pet deposit means pets can live there."
+ },
+ "What can you infer?": {
+  "It is sunny": "Wet umbrellas and puddles do not fit a sunny day.",
+  "Rosa forgot her umbrella at home": "The clues say umbrellas are wet, not that Rosa forgot hers.",
+  "The store is closed": "Nothing says the store is closed. Think about the wet umbrellas and puddles."
+ },
+ "Where is Priya?": {
+  "At the beach": "A beach is not quiet with shelves of books. Look at the clues.",
+  "At a gas station": "A gas station does not have a librarian. Look at the clues.",
+  "At the gym": "A gym does not have shelves of books. Look at the clues."
+ },
+ "Why might the customer be upset?": {
+  "They got free food": "Free food would not make someone frown. Look at the receipt.",
+  "The store was clean": "A clean store is not a reason to be upset. Look at the receipt.",
+  "They found a dollar": "Finding a dollar is good news. Look at the receipt for the problem."
+ },
+ "Why is Dee holding an umbrella?": {
+  "It is sunny": "People do not usually need an umbrella in the sun. Look at the clouds and streets.",
+  "She is at the beach": "Nothing says she is at the beach. The text talks about wet streets.",
+  "She found it": "The text gives clues about the weather, not about finding it."
+ },
+ "What probably happened?": {
+  "The ice cream was eaten": "Eaten ice cream would be gone, not melted. Look at the open door clue.",
+  "It snowed inside": "Snow cannot fall inside. Think about why ice cream would melt.",
+  "Rosa bought more": "Buying more would not make it melt. Look at the open door clue."
+ },
+ "How does Sam probably feel?": {
+  "Bored": "A bored person would not practise again and again with shaking hands.",
+  "Sleepy": "Sleepy people do not usually have shaking hands. Look at the clues.",
+  "Angry": "The clues show worry, not anger. Think about shaking hands."
+ },
+ "What can you tell about Theo?": {
+  "He was not hungry": "His stomach growled and he ate fast. Those clues point the other way.",
+  "He was sleepy": "The clues are about his stomach and eating, not being tired.",
+  "He was sad": "Nothing in the clues shows sadness. Think about the growling stomach."
+ },
+ "Why would a camel be used instead of a truck in some places?": {
+  "Camels are faster than trucks": "The article does not say camels are faster. Look at the clues about roads and sand.",
+  "Trucks are not allowed in Kenya": "The article does not say trucks are banned. Look at the clues about roads and sand.",
+  "Children like camels more than trucks": "What children like is not the reason. Look at the clues about roads and sand."
+ },
+ "How did Theo feel when the lights went out? Which clue shows it?": {
+  "Bored: “The line moved slowly”": "The line moving slowly is not about the lights, and it does not show Theo's feelings.",
+  "Angry: “a toddler started to cry”": "The crying toddler is someone else. Look for a clue about Theo himself.",
+  "Excited: “the emergency lights hummed on”": "The emergency lights humming is about the store, not about how Theo felt."
+ },
+ "What would probably happen to a bridge built only with squares and no cross pieces?": {
+  "It would be stronger than a triangle bridge": "Squares squish when pushed, so they would be weaker, not stronger.",
+  "Nothing; shape doesn’t matter": "The experiment shows shape does matter a lot.",
+  "It would float": "Nothing about the shapes would make a bridge float. Think about what squares do when pushed."
+ },
+ "Why does a bleached coral start to starve?": {
+  "Fish stop visiting it": "The text does not say fish feed the coral. Think about what the algae did.",
+  "It forgets how to eat": "Coral does not forget things. Think about what the algae did for it.",
+  "White things cannot absorb water": "Color does not stop water. Think about what the coral lost when it turned white."
+ },
+ "Why does June write her own letter at the end?": {
+  "Her boss at the bike shop told her to write one": "Her boss is not the reason. Think about how the baker's letter connects to her dream.",
+  "She wanted to sell the old letter to a museum": "She does not try to sell the letter. Think about what the letter made her feel.",
+  "She was angry that the baker took such a risk": "She is not angry at the baker. Think about how the baker's hope connects to her."
+ },
+ "Why did the beaches shrink while the dams stood?": {
+  "Salmon dug up the sand to lay their eggs": "The text does not blame salmon for the beaches. Look at what the dams held back.",
+  "Ocean waves stopped reaching the beaches": "The waves still reached the beaches. Look at what stopped arriving to rebuild them.",
+  "The mill used the sand to make concrete": "The mill did not take the sand. Look at what the dams held back."
+ },
+ "How does the speaker feel about the paycheck?": {
+  "Disappointed, because the pay is small": "The speaker admits the pay is small, but folding it carefully shows a different feeling.",
+  "Bored, since it is just a slip of paper": "Calling the paycheck a key shows it means much more than a slip of paper.",
+  "Afraid the grandmother will laugh at it": "Nothing suggests the grandmother will laugh. Look at how the speaker treats the paycheck."
+ },
+ "You need to arrive by 9:00. Which bus should you take?": {
+  "Route 4 at 8:35": "Add the ride time to 8:35. That bus gets in after 9:00.",
+  "Route 4 at 8:20": "Look again at the schedule. Route 4 leaves at 8:35, not 8:20.",
+  "Either one": "Only one bus gets you there before 9:00. Add each ride time to check."
+ },
+ "Two bikes: $120 with a helmet, or $110 without. A helmet costs $20. Which is the better deal?": {
+  "The $110 bike without a helmet": "Add the helmet price: $110 + $20 is more than the other bike.",
+  "They cost about the same": "Add the $20 helmet first. Then the two totals are $10 apart."
+ },
+ "Phone plan A: $25 for 5 GB. Plan B: $30 for unlimited. You use about 3 GB. Which is the better deal?": {
+  "Plan B": "You only use about 3 GB, so you would pay extra for data you do not need.",
+  "They’re the same": "One plan costs $5 more each month, so they are not the same.",
+  "Neither": "One plan covers your 3 GB, so one of them does work."
+ },
+ "Job A: $15/hour, 10 minutes away. Job B: $16/hour, 90 minutes away by bus. What else should you compare?": {
+  "Only the pay for each hour": "Pay per hour matters, but a long bus ride costs time and money too.",
+  "The logo of each company": "A logo does not change what the job costs you.",
+  "The job titles they use": "A job title does not change your time or travel costs."
+ },
+ "Lease A: $600/month, pets OK. Lease B: $550/month, no pets. You have a cat. Which fits?": {
+  "Lease B": "Lease B is cheaper, but it says no pets, and you have a cat.",
+  "Neither": "One of the leases says pets are OK, so one does fit.",
+  "Both": "Lease B does not allow pets, so it does not fit."
+ },
+ "Store A sells 12 eggs for $3. Store B sells 6 eggs for $2. Which is cheaper per egg?": {
+  "Store B": "Divide $2 by 6 eggs. Each egg costs about 33 cents, which is more.",
+  "Same price": "Divide each price by the number of eggs. The prices per egg differ."
+ },
+ "Ad A: “Bike $120, free helmet.” Ad B: “Bike $110, helmet $20.” Which costs less in total with a helmet?": {
+  "Ad B ($110)": "$110 is only the bike. Add the $20 helmet to find the total.",
+  "They cost the same": "Add up Ad B's total first. The two totals are $10 apart.",
+  "You can’t tell": "Both ads give all the prices, so you can add them and compare."
+ },
+ "Two articles disagree about a fact. What should you do?": {
+  "Believe the longer one": "Length does not make an article correct.",
+  "Believe the first one you read": "Reading something first does not make it true.",
+  "Ignore both": "Ignoring both leaves you with no answer. You can still find out what is true."
+ },
+ "Article A says recess helps kids focus. Article B says the same, with a study of 500 schools. Which is stronger?": {
+  "Article A, because it came first": "Coming first does not make a claim stronger. Look for which one shows proof.",
+  "Both, because they say the same thing": "They agree, but only one backs up its claim with a study.",
+  "Neither, because they agree": "Agreeing does not make both weak. One gives evidence, which makes it stronger."
+ },
+ "How are a poem and a news article different?": {
+  "A poem tells facts; news uses feelings and rhymes": "That flips them. News is meant to report facts, not use rhymes.",
+  "They are the same, since both use words": "Both use words, but they have very different purposes.",
+  "A poem is always true; news is often made up": "Poems are not always true, and real news tries to report facts."
+ },
+ "How is a straw square different from two straw triangles?": {
+  "The square is stronger because it has four sides": "More sides does not mean stronger. The square slants when pushed.",
+  "They act exactly the same when you push a corner": "The experiment shows they act differently when pushed.",
+  "The triangles need more pins to stand up straight": "The pins are not the difference. Think about which shape holds when pushed."
+ },
+ "How is the “middle path” different from a full ban?": {
+  "Phones are allowed everywhere all day": "Allowed everywhere all day is not a middle path. It is no rule at all.",
+  "Phones are not allowed in school at all": "Not allowed at all is the full ban. The middle path is between the two.",
+  "Only teachers may use phones": "Paragraph 4 is about students' phones, not only teachers'."
+ },
+ "How tight should the bolts be?": {
+  "55 foot-pounds": "Check the number in the spec again. It is not 55.",
+  "As tight as possible": "Too tight can damage parts. The spec gives an exact value.",
+  "35 foot-pounds, in a circle": "The number is right, but the pattern is not a circle. Check the method."
+ },
+ "WARNING: “Unplug before cleaning.” Why read warnings first?": {
+  "They are decoration": "Warnings are not decoration. They tell you about danger.",
+  "They are optional": "Warnings are not optional. Skipping them can lead to harm.",
+  "They are jokes": "Warnings are serious. They tell you how to stay safe."
+ },
+ "The manual says: “Charge the battery 4 hours before first use.” What do you do first?": {
+  "Use it right away": "The manual says to charge it before first use, not use it right away.",
+  "Charge it 4 minutes": "Check the unit. The manual says hours, not minutes.",
+  "Throw away the charger": "You need the charger to charge the battery."
+ },
+ "A tire says “Max 35 PSI.” Your gauge reads 40 PSI. What should you do?": {
+  "Add more air until it feels hard": "The tire is already over the max. Adding air makes it worse.",
+  "Leave it at 40, since it is close": "Max means do not go over it, even by a little.",
+  "Let air out until it reads 20 PSI": "20 PSI is far below what the tire needs. Only let out enough to reach the max."
+ },
+ "The circuit spec says 12 volts. You have a 120-volt plug. Can you plug it in directly?": {
+  "Yes, more is better": "More voltage is not better. Too much can destroy the circuit.",
+  "Only on weekends": "The day of the week does not change the voltage.",
+  "Yes if it’s quick": "Even a quick connection with 10 times the voltage can destroy it."
+ },
+ "A recipe says 350°F. Your oven is in °C. What should you do?": {
+  "Set the oven to 350°C": "350°C is far hotter than 350°F and would burn the food.",
+  "Guess a little lower": "Guessing can ruin the recipe. You can work out the exact temperature.",
+  "Skip the baking part": "Skipping baking would leave the food raw. You can fix the units instead."
+ },
+ "A manual says “Unplug before cleaning.” Why is this step first?": {
+  "To save power": "Unplugging does save a little power, but the main reason is safety.",
+  "It’s optional": "Safety steps are not optional.",
+  "To make cleaning faster": "Unplugging does not make cleaning faster. Think about water and electricity."
+ },
+ "A diagram labels a part “A.” The text says “Insert tab A into slot B.” What should you do?": {
+  "Insert part B into the slot labeled A": "That swaps the labels. Read which part goes into which slot.",
+  "Put tab A anywhere that it seems to fit": "Technical steps are exact. The text names a specific slot.",
+  "Find part B first and set part A aside": "The text says to use tab A, not set it aside."
+ },
+ "What causes coral bleaching?": {
+  "Corals are painted white by pollution": "Pollution does not paint coral. Look at what Paragraph 2 says about the water.",
+  "Fish eat the coral’s colors": "Fish do not eat the color. Look at what Paragraph 2 says about the water.",
+  "Sunlight is too weak": "The text is about water being too warm, not about weak sunlight."
+ },
+ "According to the article, what is sediment?": {
+  "Concrete that breaks off the old dams": "The article does not call broken concrete sediment. Look at its definition.",
+  "Salmon eggs that wash down the river": "Salmon eggs are not sediment. Look at how the article defines it.",
+  "Electricity that the dams sent to the mill": "Electricity is not something a river carries. Look at the article's definition."
+ },
+ "Which sentence proves the bakery is popular?": {
+  "“The bakery opened in 2019 on Main Street.”": "When it opened does not show how many people like it.",
+  "“It sells fresh bread and sweet pastries.”": "What it sells does not prove many people buy it.",
+  "“The owner, June, bakes every morning.”": "The owner's work schedule does not show how popular the bakery is."
+ },
+ "Which detail best supports “The park is popular”?": {
+  "“The park has a fountain.”": "A fountain is a feature. It does not show how many people come.",
+  "“It opened in 1990.”": "An opening year does not show how popular it is now.",
+  "“Benches are green.”": "Bench color says nothing about how many people visit."
+ },
+ "Which line shows Rosa trusts Nova?": {
+  "“Rosa wears a green apron.”": "An apron is about what Rosa wears, not how she feels about Nova.",
+  "“Nova likes apples.”": "That is about Nova's food, not about trust.",
+  "“The store opens at 7.”": "Store hours do not show anything about Rosa and Nova."
+ },
+ "Which sentence proves the bus is often late?": {
+  "“The bus is blue with a white stripe.”": "The bus's color says nothing about being late.",
+  "“Route 1 goes all the way to Midtown.”": "Where the bus goes does not show if it is on time.",
+  "“The driver waves hello to each rider.”": "A friendly driver does not show anything about lateness."
+ },
+ "Which sentence proves Jax wasn’t honest?": {
+  "“Jax wore a cap and talked very fast.”": "Wearing a cap and talking fast does not prove someone lied.",
+  "“Jax said the sneakers were brand new.”": "That is what Jax claimed, not proof that he was dishonest.",
+  "“The sneakers were white with red laces.”": "The sneakers' color says nothing about honesty."
+ },
+ "Claim: “Cooking at home saves money.” Which is the best evidence?": {
+  "“Cooking at home is fun for the whole family.”": "Fun is a feeling. It does not show how much money you save.",
+  "“My kitchen is big and has a new stove.”": "A big kitchen does not show any savings.",
+  "“Many restaurants play music while you eat.”": "Music in restaurants has nothing to do with cost. Look for real prices."
+ },
+ "Which line proves the clinic is helping?": {
+  "“The clinic is clean and has a new waiting room.”": "A clean room is nice, but it does not show people got healthier.",
+  "“Nurse Kim is kind and remembers every name.”": "A kind nurse is nice, but that does not measure results.",
+  "“The clinic opens at 8 and closes at 6.”": "Opening hours do not show whether the clinic is helping."
+ },
+ "Which is the strongest kind of evidence for a claim about a park?": {
+  "A rumor from a neighbor": "A rumor cannot be checked. Look for something that was counted.",
+  "A guess from a friend": "A guess is not measured. Look for something that was counted.",
+  "A feeling that it is busy": "A feeling is not data. Look for something that was counted."
+ },
+ "Where should evidence come in a written answer?": {
+  "At random, anywhere it fits": "Random evidence confuses readers. It should sit near what it proves.",
+  "Only in the title at the top": "A title is too short to hold your proof. Evidence goes in the answer itself.",
+  "At the very end, all together": "Piling it at the end makes readers guess which point it supports."
+ },
+ "Which sentence best supports the idea that traveling libraries help children?": {
+  "“A camel can walk through sand and dry land.”": "That is about camels, not about children reading.",
+  "“A library boat sails along the coast every winter.”": "That tells where a boat goes, not how it helps children.",
+  "“Most people picture a library as a quiet building.”": "That is about what people picture, not about children."
+ },
+ "Which evidence do supporters of a ban use?": {
+  "Phones can be used as calculators": "Using phones as calculators is a point for allowing phones.",
+  "Parents want to reach their children": "Reaching their children is a reason parents give against a ban.",
+  "Some schools allow phones at lunch": "Phones at lunch is the middle path, not the case for a ban."
+ },
+ "Which detail best shows why reefs matter so much?": {
+  "Corals look like colorful rocks": "How corals look does not show why they matter.",
+  "Each coral is a colony of polyps": "That explains what coral is, not why reefs are so important.",
+  "Scientists grow corals in nurseries": "That tells how people help reefs, not why reefs matter so much."
+ },
+ "What is weak about the “9 out of 10 athletes” claim?": {
+  "Nine is an odd number, so it was probably made up": "Odd numbers are not a sign of lying. Think about who was asked.",
+  "Athletes don’t usually drink energy drinks at all": "The claim is about what athletes chose. The problem is how the group was picked.",
+  "It should say 10 out of 10 to be a strong claim": "A perfect score would not fix it. The weakness is how the athletes were chosen."
+ },
+ "How does each writer use evidence differently?": {
+  "Both writers rely only on stories from their own jobs and lives": "View 1 points to studies, not only personal stories.",
+  "Neither writer gives any real evidence for what they say is true": "Both writers give evidence, just of different kinds.",
+  "View 2 cites more studies than View 1 does, and newer ones too": "View 2 says the research is mixed and leans on the diner. View 1 cites more studies."
+ },
+ "Fact or opinion? “The library opens at 9 AM.”": {
+  "Opinion": "You could check the hours on the door or website. That makes it checkable.",
+  "Neither": "It has to be one or the other. Ask yourself if you could check it."
+ },
+ "Fact or opinion? “That movie was boring.”": {
+  "Fact": "Not everyone finds the same movie boring. That is a feeling, not something you can check.",
+  "Neither": "It has to be one or the other. Ask yourself if you could check it."
+ },
+ "Fact or opinion? “Water boils at 100°C at sea level.”": {
+  "Opinion": "You can test this with a thermometer. Opinions cannot be tested.",
+  "Neither": "It has to be one or the other. Ask yourself if you could check it."
+ },
+ "Fact or opinion? “Summer is the most fun season.”": {
+  "Fact": "Most fun is a feeling. Different people pick different seasons.",
+  "Neither": "It has to be one or the other. Ask yourself if you could check it."
+ },
+ "Fact or opinion? “The library is the best place in town.”": {
+  "Fact": "Best is a judgment. Other people might pick a different place.",
+  "Neither": "It has to be one or the other. Ask yourself if you could check it."
+ },
+ "Fact or opinion? “A week has seven days.”": {
+  "Opinion": "You can count the days on a calendar. That can be checked.",
+  "Neither": "It has to be one or the other. Ask yourself if you could check it."
+ },
+ "Fact or opinion? “Pizza is the tastiest food.”": {
+  "Fact": "Tastiest is a feeling. Other people like other foods best.",
+  "Neither": "It has to be one or the other. Ask yourself if you could check it."
+ },
+ "Fact or opinion? “The bus costs $2.”": {
+  "Opinion": "You can check the price on the fare sign. That makes it checkable.",
+  "Neither": "It has to be one or the other. Ask yourself if you could check it."
+ },
+ "Which is a fact about the moon?": {
+  "It is the prettiest thing in the sky": "Prettiest is a feeling. Not everyone would agree.",
+  "It is boring": "Boring is a feeling, not something you can check.",
+  "It is the best part of night": "Best part is a judgment. Look for something you could test."
+ },
+ "“Our city’s parks are wonderful.” Fact or opinion?": {
+  "Fact": "Wonderful is a judgment. You cannot measure wonderful.",
+  "Neither": "It has to be one or the other. Look at the word wonderful.",
+  "Both": "The sentence has no checkable detail. It only gives a judgment."
+ },
+ "Which sentence states an opinion rather than a fact?": {
+  "“A study of schools in England found that test scores rose after phones were banned.”": "That reports what a study found. You could look it up.",
+  "“Phones stay in lockers during class but can be used at lunch.”": "That describes a rule. You could check if it is true.",
+  "“Many schools are debating whether students should be allowed to use phones during the day.”": "That reports that schools are debating. It can be checked."
+ },
+ "Why was this written?": {
+  "To persuade you to buy": "It does not ask you to buy anything. It just gives facts and steps.",
+  "To entertain you": "There is no story or joke. It gives facts and steps.",
+  "To trick you": "Nothing in it tries to fool you. It gives facts and steps."
+ },
+ "A comic strip about a silly cat is mainly to…": {
+  "Inform": "A silly cat comic is not meant to teach facts.",
+  "Persuade": "The comic is not trying to change what you think or buy.",
+  "Warn": "A silly comic is not a warning about danger."
+ },
+ "A recipe card is written mainly to…": {
+  "Persuade you to buy a stove": "A recipe gives steps. It does not try to sell you a stove.",
+  "Entertain with a mystery": "A recipe has no mystery. It lists steps and amounts.",
+  "Make you sad": "A recipe is not meant to stir up feelings. It lists steps and amounts."
+ },
+ "An ad saying “Best shoes ever! Buy two, get one free!” is mainly to…": {
+  "Inform": "Best shoes ever is not a fact. The ad wants you to act.",
+  "Entertain": "The ad has no story or joke. It wants you to buy.",
+  "Teach history": "There is no history in the ad. Look at what it asks you to do."
+ },
+ "Why did the author mention Kenya, Norway and cities?": {
+  "To compare the weather in three places": "The article is not about weather. Each place shows a kind of library.",
+  "To tell a story about one family": "The places are not about one family. Each one shows a library.",
+  "To persuade you to visit Norway": "The author does not ask you to visit. Each place is an example."
+ },
+ "Why does the author include the straw experiment?": {
+  "To show how to make a toy": "The straws are not a toy. They help you test an idea about shapes.",
+  "To prove that straws are strong": "The experiment is about shapes, not about straws being strong.",
+  "To describe a famous bridge": "The straws are not a famous bridge. They let you test the idea yourself."
+ },
+ "What is the author’s purpose?": {
+  "To convince readers that phones must be banned": "The author gives both sides and does not take one.",
+  "To sell a new phone": "Nothing in the article sells a phone.",
+  "To tell a funny story about a student": "It is not a funny story. It lays out arguments on each side."
+ },
+ "Why does the author end with June hiding a letter in a jar?": {
+  "To explain how jars are made": "The jar is not about how jars are made. Think about the letter inside.",
+  "To show June is careless": "Hiding the letter is done with care, not carelessly.",
+  "To prove the bakery was a bad idea": "The ending does not judge the bakery. Think about what June's letter repeats."
+ },
+ "Why does the author include the last paragraph?": {
+  "To argue that every dam in the country should be removed soon": "The last paragraph says some dams are useful, so it does not argue for removing all of them.",
+  "To describe how concrete dams are built and how they make power": "The paragraph is about weighing costs and benefits, not how dams are built.",
+  "To tell a story about salmon fishing on the river long ago": "It does not tell an old fishing story. It weighs whether dams are worth it."
+ },
+ "Which is the best summary?": {
+  "Fresh Mart sells groceries and is open every day.": "That is true, but it leaves out the main news about new hours.",
+  "Rosa likes working at Fresh Mart on Saturdays.": "That is about one worker's feelings, not the main point.",
+  "Staff at Fresh Mart must wear green aprons and name tags.": "Aprons and name tags are small details, not the main point."
+ },
+ "Which is the best one-sentence summary of a lease?": {
+  "A lease is a paper you sign before you move into an apartment.": "That defines a lease in general. It skips the numbers that matter in this one.",
+  "The apartment has two rooms, a kitchen and a big front door.": "That describes the apartment, not what the lease asks of you.",
+  "Leases are long and use many words that are hard to read.": "That is a complaint about leases, not a summary of this one."
+ },
+ "Which best summarizes the story of the tortoise and the hare?": {
+  "A hare is very fast and likes to show off to others.": "That only describes the hare. It leaves out the race and how it ends.",
+  "Some animals in the forest decide to have a race.": "That is only the start. A summary also tells who wins and why.",
+  "A tortoise has a hard shell and moves very slowly.": "That only describes the tortoise. It leaves out the race and the lesson."
+ },
+ "Which is the best summary of a fire drill notice?": {
+  "Fire alarms are loud, so cover your ears when they ring.": "That is a side tip. It leaves out where to go.",
+  "The school has a parking lot behind the main building.": "That gives a location but not what to do.",
+  "Fire drills happen a few times each year at school.": "That says how often drills happen, not what to do."
+ },
+ "Which best summarizes a report on park litter?": {
+  "The park has many trees, paths and green bins.": "That describes the park. It skips the main finding.",
+  "Some people leave litter in the park on weekends.": "That is the problem, but it leaves out what the city did and found.",
+  "The city cleans the park once a week in summer.": "That is a detail about cleaning. It skips the main finding."
+ },
+ "What should a summary leave out?": {
+  "The main idea of the text": "The main idea is the heart of a summary, so keep it.",
+  "The key events in order": "Key events are what a summary should tell, in order.",
+  "Who the text is about": "A summary needs to say who the text is about."
+ },
+ "How long should a summary be compared with the original?": {
+  "Longer": "A summary cuts the text down, so it is not longer.",
+  "Exactly the same": "Then it would just be the same text. A summary condenses.",
+  "Twice as long": "A summary condenses, so it cannot be twice as long."
+ },
+ "Which sentence best summarizes the article?": {
+  "Camels can walk through sand better than trucks": "That is one small detail about camels, not the main idea.",
+  "Norway has many small islands that boats can reach": "That is one detail about Norway, not the main idea.",
+  "Most libraries are quiet buildings full of shelves": "That describes ordinary libraries. The article is about ones that move."
+ },
+ "Which is the best summary of the story?": {
+  "Theo has worked at the Fresh Mart register for only three weeks": "That is a background detail. It skips the problem and what Theo did.",
+  "A toddler cries in the dark store, and her mom heads for the exit": "That is one small moment, not the main events.",
+  "Rosa tells Theo he was steady as a rock after the power returns": "That is only the ending. It leaves out the problem and what Theo did."
+ },
+ "Which statement best summarizes the article?": {
+  "Dams produce electricity for mills, but they also block salmon": "That is true, but it skips what happened after the dams came down.",
+  "The Elwha shows that all dams should be removed to help rivers": "The author does not say all dams should go. The last part gives a balanced view.",
+  "Salmon lay their eggs in more than seventy miles of river": "That is one detail. It leaves out the cause and the larger point."
+ },
+ "A phone contract says “24-month term, $200 early cancellation fee.” What happens if you cancel after 12 months?": {
+  "Nothing": "12 months is before the 24-month term ends, so the fee applies.",
+  "They pay you": "The fee is something you pay them, not something they pay you.",
+  "You get a free phone": "Canceling early does not earn a phone. Look at the fee in the contract."
+ },
+ "Why read the “fine print” before signing?": {
+  "It only lists the company’s address": "Fine print often holds rules and fees, not just an address.",
+  "It just repeats the big print above": "Fine print often adds new details that the big print leaves out.",
+  "It only matters if you are a lawyer": "Anyone who signs agrees to the fine print, not just lawyers."
+ },
+ "“Workers … have lost purchasing power every year.” What does purchasing power mean here?": {
+  "How many hours a person works": "Hours worked is about time. The phrase is about what your money gets you.",
+  "The power of a store to set prices": "This is about workers' money, not a store's power.",
+  "A worker’s right to shop": "Everyone may shop. The phrase is about what a dollar can get you."
+ },
+ "Why should you be careful with this review?": {
+  "It has too many words": "Length is not the problem. Think about who wrote it.",
+  "It mentions prices": "Listing prices is useful. Think about who wrote it and why.",
+  "There is nothing to be careful about": "The writer owns the shop. That is a reason to be careful."
+ },
+ "Jax says: “Everyone who’s smart is buying this.” What kind of language is this?": {
+  "Neutral facts": "Neutral facts can be checked. This line uses flattery instead.",
+  "A scientific result": "There is no study or test here. It is just a claim to pressure you.",
+  "A definition": "A definition explains a word. This line tries to push you to buy."
+ },
+ "Which word choice shows bias?": {
+  "“The landlord raised rent by $50.”": "That gives a plain number with no loaded words.",
+  "“Rent went up on May 1.”": "That gives a date. It does not judge anyone.",
+  "“The rent is now $650.”": "That states the new price without judging anyone."
+ },
+ "A review only lists good things and was written by the owner’s friend. This is…": {
+  "Definitely true": "One-sided praise from a friend is not proof that it is true.",
+  "A primary source": "A primary source is a firsthand record, but that does not make this review fair.",
+  "A fact sheet": "A fact sheet gives balanced facts. This review is one-sided."
+ },
+ "A news story quotes only people who support a new road. What is missing?": {
+  "More pictures of the new road": "More pictures would not show the other side.",
+  "A longer and clearer title": "A longer title does not add missing views.",
+  "Quotes from more people who like it": "More supporters would make it even more one-sided."
+ },
+ "A soda company’s study says soda is healthy. Why be careful?": {
+  "Studies are always false": "Not all studies are false. The issue is who paid for this one.",
+  "Soda is blue": "The color of soda is not the issue. Think about who did the study.",
+  "It used numbers": "Using numbers is fine. The concern is who gains from the result."
+ },
+ "A charity ad shows only sad pictures. What should you ask?": {
+  "Nothing, since charities are good": "Charities can be good and still worth checking. Ask about the facts.",
+  "Whether to give everything you have now": "Sad pictures should not rush you. Check the facts first.",
+  "Whether to stop giving to all charities": "One ad is no reason to stop giving to every charity. Just check the facts."
+ },
+ "Which headline is most neutral?": {
+  "Greedy Council Robs Riders!": "Greedy and robs are loaded words that push an opinion.",
+  "Heroes Save Buses!": "Heroes is a loaded word that praises instead of reporting.",
+  "Outrageous Fare Hike Shocks All!": "Outrageous and shocks are loaded words. A neutral headline just reports."
+ },
+ "How can you spot bias in your own thinking?": {
+  "Only read what agrees with you": "Reading only what agrees with you makes bias stronger.",
+  "Never think about it": "Ignoring it lets bias grow. You need to check yourself.",
+  "Ask Jax": "Jax is not a trusted source. Check evidence yourself."
+ },
+ "A review of a restaurant is written by the restaurant’s owner. What should a reader think?": {
+  "It is fair, since the owner knows the food best": "The owner knows the food, but also gains if you believe the review.",
+  "It is the most reliable review you can find": "An owner's review has a reason to be one-sided, so it is not the most reliable.",
+  "It is true, because owners must be honest": "Owners are not required to be honest in reviews. They may show only one side."
+ },
+ "Why should a reader be careful with Message A?": {
+  "It is too short to give all the facts that are true": "Length is not the main issue. Think about why it was written.",
+  "It uses numbers, so it must be making things up": "Numbers are not a sign of lying. Think about who gains from the message.",
+  "It mentions athletes, so it is only meant for sports fans": "Mentioning athletes does not make it only for fans. Think about its purpose."
+ },
+ "Which statement fairly describes both writers?": {
+  "The economist has no point of view, so only the owner is biased": "Everyone has a point of view, including the economist.",
+  "The business owner is lying to protect the diner’s profits": "Having a viewpoint is not the same as lying.",
+  "Only one of them can be trusted, since they disagree": "Disagreeing does not mean one is untrustworthy. Compare their claims."
+ },
+ "Which source is most trustworthy for flu-season advice?": {
+  "A stranger’s post from 8 years ago": "Eight years old and from a stranger, this post may be out of date.",
+  "An ad for a vitamin drink": "An ad is trying to sell you something, so it may be one-sided.",
+  "Jax’s cousin": "A cousin's advice is secondhand, not from an expert."
+ },
+ "Which question helps judge a source?": {
+  "“Is the font pretty?”": "A pretty font does not show the author is right.",
+  "“Is it long?”": "Length does not tell you whether the facts are true.",
+  "“Is it popular?”": "Popular things can still be wrong. Ask about evidence."
+ },
+ "Which is the best source for bus times?": {
+  "A friend who rides the bus a lot": "A friend may know a lot, but schedules change. An official, current source is better.",
+  "A printed poster at the stop from 2015": "A poster from 2015 is probably out of date.",
+  "A post someone shared on social media": "Shared posts can be wrong or old. Look for an official, current source."
+ },
+ "Why check the date of a source?": {
+  "Older is always better": "Older is not always better. Facts can change over time.",
+  "Dates don’t matter": "Dates matter because facts change over time.",
+  "To find the author’s birthday": "The date tells how current the facts are, not the author's birthday."
+ },
+ "Which source is most reliable for a science report on volcanoes?": {
+  "A random blog with no author": "A blog with no author cannot show who knows the facts.",
+  "An ad for volcano tours": "A tour ad wants to sell trips, so it may not be balanced.",
+  "A meme": "A meme is a joke, not a science source."
+ },
+ "Two sites disagree about a medicine dose. What should you trust?": {
+  "Whichever site looks nicer": "How a site looks does not make a dose safe.",
+  "A forum post": "A forum post is not from a trusted health expert.",
+  "Your friend": "A friend is not a medical expert. Ask someone trained."
+ },
+ "Which is usually more reliable for local news?": {
+  "An anonymous rumor account": "An anonymous account cannot be held responsible for what it says.",
+  "A chain message": "Chain messages often spread rumors without checking facts.",
+  "A pop-up ad": "A pop-up ad is selling something, not reporting news."
+ },
+ "A source agrees with three others from different experts. This makes it…": {
+  "Less trustworthy": "Agreement from different experts makes a source stronger, not weaker.",
+  "Definitely false": "Experts agreeing is a sign it is likely true, not false.",
+  "Irrelevant": "Agreement from experts matters a lot when you judge a source."
+ },
+ "Which is a red flag for a source?": {
+  "A clear author and a recent date": "A clear author and date are good signs.",
+  "Links to studies that it cites": "Linking to studies is a good sign. It shows evidence.",
+  "A college or university website": "A college website is usually a good sign."
+ },
+ "What would make the supporters’ argument stronger?": {
+  "A louder headline": "A louder headline adds no evidence.",
+  "A quote from a phone company ad": "A phone ad is not good evidence, and it is from the other side.",
+  "More adjectives like “terrible”": "Strong words add feeling, not evidence."
+ },
+ "Why is Message B more trustworthy for health advice?": {
+  "It is longer and gives more details": "Length does not make advice trustworthy.",
+  "It uses capital letters for the key words": "Capital letters add volume, not proof.",
+  "It is written by a coach who knows sports": "A coach may know sports, but not be a medical expert."
+ },
+ "How does the author handle the idea of “filter bubbles”?": {
+  "Proves filter bubbles affect everyone equally": "The author does not claim it affects everyone equally. Paragraph 3 gives two views.",
+  "Ignores the idea completely": "The author does bring up the idea. Look at Paragraph 3.",
+  "Says filter bubbles are a myth with no research": "The author does not call it a myth. Some researchers warn about it."
+ },
+ "Two sources agree the bike lane reduced accidents. A third (from a car dealer) says it didn’t. What’s the best conclusion?": {
+  "The car dealer is right, since that source disagrees": "Disagreeing does not make a source right, and a car dealer may be biased.",
+  "Nobody can know, because the sources do not all agree": "Sources often disagree. You can still weigh their evidence and motives.",
+  "Average all three and say the lane helped a little": "Averaging ignores which sources are reliable. Weigh them instead."
+ },
+ "After gathering sources, what comes next?": {
+  "Copy one source word for word": "Copying one source skips the step of comparing them.",
+  "Stop and guess": "Guessing throws away the sources you found.",
+  "Delete them": "Deleting them wastes your research. Use them next."
+ },
+ "You want to know if the new bike lane is safer. What is the best first step?": {
+  "Ask one friend who bikes on that lane every day": "One friend is just one view, not data.",
+  "Read the bike shop’s ad about how safe the lane is": "A bike shop's ad wants to sell you something.",
+  "Guess based on how the lane looks when you ride it": "How a lane looks does not show if it is safer. Look for data."
+ },
+ "How should you use what sources say in your report?": {
+  "Copy their exact words so the facts stay right": "Copying exact words without care is not using your own words.",
+  "Explain it in your words, but skip the source": "Skipping the source means you do not give credit.",
+  "Change a few numbers so it sounds like your own": "Changing numbers makes the facts wrong and is not honest."
+ },
+ "Three sources agree; one disagrees. What should you do?": {
+  "Trust the three that agree and ignore the other one": "Ignoring the outlier skips a step. Find out why it disagrees first.",
+  "Trust only the one that disagrees, since it stands out": "Standing out does not make a source right. Check its evidence first.",
+  "Throw out all four, since sources should never disagree": "Sources often disagree. That is a reason to dig in, not to throw them all out."
+ },
+ "Which research question is best?": {
+  "“Is health good for people who live in cities?”": "That is too broad to answer. A good question names a place, a time and a result.",
+  "“What are clinics, and why do people go to them?”": "That asks for a definition, not something you can test with evidence.",
+  "“Why does everyone get sick in the winter?”": "Not everyone gets sick, and the question is too broad to answer with data."
+ },
+ "Your sources don’t answer your question. What now?": {
+  "Make up an answer that sounds right": "Making up an answer is not research. Change the question or the sources.",
+  "Quit and pick a new topic": "You do not need to give up. Try a sharper question or new sources.",
+  "Copy the first website you find": "The first site may not answer it either. Look for better sources."
+ },
+ "Why write down where each fact came from?": {
+  "To make your notes look messy": "Keeping notes on sources makes them clearer, not messier.",
+  "There is no real reason to": "There is a real reason. You need to give credit and check facts again.",
+  "So you can hide where it came from": "Writing it down is about being open about sources, not hiding them."
+ },
+ "Which conclusion is careful?": {
+  "“This proves everything forever.”": "Evidence rarely proves everything, and never forever. That claim goes too far.",
+  "“I’m 100% sure.”": "Saying 100% sure claims more than evidence can usually show.",
+  "“Everyone agrees.”": "Saying everyone agrees is a claim you can almost never back up."
+ },
+ "You find two studies with opposite results. What should you look at to decide which to trust more?": {
+  "Which one has the clearest title and nicest charts": "Titles and charts can look good even if the study is weak.",
+  "Which one came out most recently, and nothing else": "Being newer can help, but size, funding and repeats matter more.",
+  "Which one agrees with what you already believe": "Picking what you already believe is bias, not careful research."
+ },
+ "What is the main point of disagreement between the two writers?": {
+  "Whether workers deserve to earn a living": "The last paragraph says both writers agree workers should be treated fairly.",
+  "Whether businesses should stay open": "Both writers want businesses to survive. That is something they share.",
+  "What the current federal minimum wage is": "The current wage is a fact they both know. They argue about something else."
+ },
+ "According to the article, why might a feed tilt toward extreme content?": {
+  "Companies want users to be angry on purpose": "Paragraph 2 says it happens without anyone choosing that on purpose.",
+  "Users can only follow extreme accounts": "Users can follow anyone. The tilt comes from how posts are ranked.",
+  "Algorithms show posts in the order they were made": "A feed in time order would not tilt. Paragraph 2 says posts are ranked by reactions."
+ },
+ "Read the handwritten note. How many boxes should go to aisle 2?": {
+  "5": "Check the number written beside the word boxes again. It is not 5.",
+  "6": "Check the number written beside the word boxes again. It is not 6.",
+  "12": "Check the number written beside the word boxes again. It is not 12."
+ },
+ "Where should you meet Sam?": {
+  "At the bus stop": "The note does not name the bus stop. Read the place after at the.",
+  "At home": "The note does not say home. Read the place after at the.",
+  "At the library": "The note does not name the library. Read the place after at the."
+ },
+ "When is the order ready?": {
+  "Monday": "Monday is not the day in the note. Look at the end of the line.",
+  "Today": "The note names a day of the week, not today.",
+  "Sunday": "Sunday is not the day in the note. Look at the end of the line."
+ },
+ "Which item is NOT on the list?": {
+  "Eggs": "Eggs are on the list. Read each item again.",
+  "Milk": "Milk is on the list. Read each item again.",
+  "Bread": "Bread is on the list. Read each item again."
+ },
+ "Read the handwritten note. Which day is the delivery?": {
+  "Monday": "Monday starts with M. Look at the first letter of the day in the note.",
+  "Tuesday": "Tuesday starts with T. Check the first letter of the day in the note.",
+  "Wednesday": "Wednesday is a long word that starts with W. Check the day in the note."
+ },
+ "The handwritten chart says when the next check-up is. When?": {
+  "7:00": "The chart does not say 7:00. Read the time after Next check.",
+  "12:30": "The chart does not say 12:30. Read the time after Next check.",
+  "3:15": "Look closely at the first digit. The minutes match, but the hour does not."
+ },
+ "What was the patient’s temperature?": {
+  "98°F": "98°F is a normal temperature. Read the number after Temp again.",
+  "110°F": "Look at the order of the digits. 110 swaps two of them.",
+  "91°F": "Look at the order of the digits. 91 leaves one out."
+ },
+ "What time is Nova’s Sunday shift?": {
+  "1–9": "That flips the times. Read which number comes first.",
+  "9–5": "Check the end time again. The shift ends earlier.",
+  "10–2": "Check the start time again. The shift starts earlier."
+ },
+ "How much did Ana pay?": {
+  "$54.00": "That swaps the digits. Read their order again.",
+  "$4.50": "The decimal point is in the wrong place. That is far too small.",
+  "$450": "That drops the decimal point. Read where it sits."
+ },
+ "Which dock?": {
+  "Dock 12": "12 is not the number written next to dock.",
+  "Dock 2": "Look closely. 2 is close, but not the number next to dock.",
+  "Dock 8": "8 is not the number next to dock. Read it again."
+ },
+ "When is the payment due?": {
+  "June 4": "Look at the day number after Due. It is not 4.",
+  "June 20": "Look at the day number after Due. It is not 20.",
+  "July 10": "The day number is right, but check the month."
+ },
+ "A handwritten receipt shows the total. How much?": {
+  "$4.50": "That is far too small. Read all the digits before the decimal point.",
+  "$12.05": "The decimal point is in the wrong place in that answer.",
+  "$187.50": "Check the middle digits again. They are not 8 and 7."
+ },
+ "A handwritten form says “Qty: 12.” What does Qty mean?": {
+  "Quality (how good)": "Quality starts with Qu too, but a number like 12 tells how many, not how good.",
+  "Quickly (how fast)": "Quickly is about speed. A form with 12 is counting something.",
+  "Question (what to ask)": "A question is not a number. 12 tells how many items there are."
+ },
+ "An old handwritten Club letter says the meeting is on what day?": {
+  "Tuesday": "Tuesday is shorter. The word in the letter starts with Th and has a long middle.",
+  "Saturday": "Saturday starts with S. The word in the letter starts with Th.",
+  "Monday": "Monday starts with M. The word in the letter starts with Th."
+ },
+ "What is wrong with the gate?": {
+  "It is broken off": "The note does not say broken off. Read the word after gate.",
+  "It is new": "A new gate is not a problem. Read the word after gate.",
+  "It is painted": "Being painted is not a problem. Read the word after gate."
+ },
+ "How much sugar?": {
+  "2 cups": "Match the amount right next to sugar. It is not 2.",
+  "3 cups": "Match the amount right next to sugar. It is not 3.",
+  "none": "The recipe does list sugar, with an amount next to it."
+ },
+ "How much is owed?": {
+  "$125.0": "The decimal point is in the wrong place. Read where it falls.",
+  "$1.25": "That moves the decimal point. Read the amount again.",
+  "$15": "That drops the cents. Read the amount after the dollar sign."
+ },
+ "Where is the meeting?": {
+  "Room 10": "Check the number after rm. It is not 10.",
+  "Wednesday": "Wednesday is when, not where. The question asks where.",
+  "Room 1": "Check the number after rm. It is not 1."
+ },
+ "When does the mill open?": {
+  "At night": "Dawn and morn point to morning, not night.",
+  "At noon": "Noon is the middle of the day. Look at the old word dawn.",
+  "Never": "The note says when it opens, so it does open."
+ },
+ "How many crates of pears?": {
+  "1": "Check the number by pears. It is not 1.",
+  "3": "Check the number by pears. It is not 3.",
+  "5": "Check the number by pears. It is not 5."
+ },
+ "When is the fair?": {
+  "June 30th": "The letter says the 3rd, not the 30th.",
+  "July 3rd": "The day is right, but check the month in the letter.",
+  "January 3rd": "The day is right, but check the month in the letter."
+ },
+ "An old letter is signed at the bottom. Who wrote it?": {
+  "Martha": "Martha starts with M too, but it is shorter. Compare the length of the name.",
+  "Rosa": "Rosa starts with R. Look at the first letter of the signature."
+ },
+ "What is the problem in the story?": {
+  "Pip lived on a farm": "Living on a farm is the setting, not what goes wrong.",
+  "Pip found her way home": "Finding her way home is how it gets fixed, not the problem.",
+  "The barn had a light": "A light in the barn helps at the end. Look for what went wrong."
+ },
+ "What is the setting?": {
+  "A snowy mountain": "The story is not on a snowy mountain. Look for where and when.",
+  "Maya’s kitchen at night": "The story is not in a kitchen at night. Look for where and when.",
+  "A school bus": "The story is not on a bus. Look for where and when."
+ },
+ "How is the problem solved?": {
+  "Leo took a long nap": "A nap would slow Leo down. Think about how the race is won.",
+  "Leo stopped to rest": "Stopping to rest is what slows racers down. Think about what Leo did.",
+  "Leo got a ride": "Leo did not get a ride. Think about how he kept moving."
+ },
+ "“On a snowy night in the mountains, a fox found a lost cub.” What is the setting?": {
+  "The fox who finds the cub": "The fox is a character, not where or when.",
+  "The little lost cub": "The cub is a character, not where or when.",
+  "Finding the cub at night": "Finding the cub is what happens. The setting is where and when."
+ },
+ "A character who causes trouble for the hero is often called the…": {
+  "Narrator or speaker": "The narrator tells the story but does not cause trouble.",
+  "Main character": "The main character is usually the hero, not the one causing trouble.",
+  "Author of the story": "The author writes the story but is not part of it."
+ },
+ "In a story, the part where everything works out is the…": {
+  "Setting": "The setting is where and when, not how it ends.",
+  "Character": "A character is a who, not a part of the story's events.",
+  "Title": "The title is the name of the story, not how it ends."
+ },
+ "Who is the main character in “The Little Red Hen”?": {
+  "The farmer": "The farmer is not who the story is mostly about.",
+  "The bread": "The bread is a thing she makes, not a character.",
+  "The mill": "The mill is a place, not the main character."
+ },
+ "What is the “theme” of a story?": {
+  "The setting": "The setting is where and when, not the lesson.",
+  "The cover color": "The cover color is about how the book looks.",
+  "The first word": "The first word does not tell the big idea."
+ },
+ "What is the “plot” of a story?": {
+  "The title of the book": "The title is just the name of the book.",
+  "The person who wrote it": "The person who wrote it is the author.",
+  "The picture on the cover": "The cover picture is art, not what happens."
+ },
+ "What problem does Lena have at the start?": {
+  "Her plants are dying": "Her plants are not dying at the start. She has not planted yet.",
+  "She is afraid of the roof": "The story does not say she fears the roof. Look at the first lines.",
+  "Mr. Diaz is moving away": "Mr. Diaz is not moving away. Look at what she does not have."
+ },
+ "How did other people feel about the garden? How do you know?": {
+  "They were angry, because it was noisy": "The story does not say it was noisy or that people were angry.",
+  "They did not notice it": "People came up to look, so they did notice.",
+  "They liked it, because the manager said so": "The manager did not say how others felt. Look at what the families did."
+ },
+ "What did Omar want at the beginning?": {
+  "To make a new friend": "The story does not say he wanted a new friend. Look at what he wanted.",
+  "To stop running": "Omar wanted to run, not stop.",
+  "To be the race judge": "Omar was a runner, not the judge. Look at what he wanted."
+ },
+ "“Omar felt his face get hot.” What does this show?": {
+  "He had a fever": "Nothing says he was sick. Think about how the race went.",
+  "The sun was very hot": "The sun is not the reason here. Think about how he felt after the race.",
+  "He was happy to win": "He came in second, so he did not win."
+ },
+ "What helped Theo solve the problem?": {
+  "A customer took over": "A customer did not take over. Theo handled it himself.",
+  "The power came back right away": "The power did not come back right away. Theo had to act in the dark.",
+  "He closed the store": "Theo kept the store going. He did not close it."
+ },
+ "How are June and the baker alike?": {
+  "Both of them worked as bakers on Cedar Avenue": "June works toward a bike shop, not a bakery.",
+  "Both of them opened a shop in the year 1952": "Only the baker opened a shop then. June has not opened hers yet.",
+  "Both of them found an old letter in the wall": "June found the letter. The baker wrote it."
+ },
+ "What is the theme (big message) of the poem?": {
+  "Grandmothers often laugh at the plans of young people": "The grandmother is a detail, not the big message.",
+  "A paycheck should be folded and kept safe like a letter": "Folding the paycheck is a detail. Think about what it stands for.",
+  "Money is all that matters when you start your first job": "The speaker cares about what the pay could lead to, not money alone."
+ },
+ "What does “careless” mean?": {
+  "Full of care": "That is what -ful means. Look at the ending -less.",
+  "Careful again": "Careful again would use re- and -ful. Look at the ending -less.",
+  "Very caring": "Very caring is close to the opposite. Look at the ending -less."
+ },
+ "Which word is an antonym (opposite) of “early”?": {
+  "Soon": "Soon is close in meaning to early, not the opposite.",
+  "First": "First is close in meaning to early, not the opposite.",
+  "Quick": "Quick is about speed, not time of day."
+ },
+ "What does “reread” mean?": {
+  "Not read": "Not read would use un- or not. Look at what re- means.",
+  "Read badly": "Read badly would use mis-. Look at what re- means.",
+  "Stop reading": "Stop reading is not in the word. Look at what re- means."
+ },
+ "Which word is a synonym (same meaning) for “big”?": {
+  "Tiny": "Tiny means the opposite of big.",
+  "Cold": "Cold is about heat, not size.",
+  "Slow": "Slow is about speed, not size."
+ },
+ "What does “unhappy” mean?": {
+  "Very happy": "Un- does not mean very. It flips the meaning.",
+  "Happy again": "Happy again would use re-. Look at what un- means.",
+  "Full of happy": "Full of would use -ful. Look at what un- means."
+ },
+ "What does “helpful” mean?": {
+  "Without help": "That is what -less means. Look at the ending -ful.",
+  "Not helping": "Not helping would use un-. Look at the ending -ful.",
+  "Help again": "Help again would use re-. Look at the ending -ful."
+ },
+ "What does “misread” mean?": {
+  "Read again": "That is what re- means. Look at what mis- means.",
+  "Read before": "That is what pre- means. Look at what mis- means.",
+  "Read loudly": "Mis- has nothing to do with loud. Think of misspell."
+ },
+ "What does “preheat” mean?": {
+  "Heat again": "That is what re- means. Look at what pre- means.",
+  "Not heat": "Not heat would use un-. Look at what pre- means.",
+  "Heat a lot": "Pre- is not about how much. Think of preview."
+ },
+ "The word part “-less” helps you read “fearless.” What does “fearless” mean?": {
+  "full of fear": "That is what -ful means. Look at the ending -less.",
+  "fear again": "Fear again would use re-. Look at the ending -less.",
+  "more fear": "More fear would use -er or more. Look at the ending -less."
+ },
+ "The word part “pre-” helps you read “preview.” What does “preview” mean?": {
+  "view again": "That is what re- means. Look at what pre- means.",
+  "not view": "Not view would use un-. Look at what pre- means.",
+  "view after": "Pre- means the opposite of after."
+ },
+ "The word part “-er” helps you read “teacher.” What does “teacher” mean?": {
+  "to teach once again": "That is what re- would add. Look at the ending -er.",
+  "not able to teach": "Not able to teach would use un-. Look at the ending -er.",
+  "a book for teaching": "A teacher is not a book. The ending -er names someone."
+ },
+ "The word part “re-” helps you read “redo.” What does “redo” mean?": {
+  "not do": "Not do would use un-. Look at what re- means.",
+  "do before": "That is what pre- means. Look at what re- means.",
+  "do wrong": "That is what mis- means. Look at what re- means."
+ },
+ "The word part “un-” helps you read “unhappy.” What does “unhappy” mean?": {
+  "very happy": "Un- does not mean very. It flips the meaning.",
+  "happy again": "Happy again would use re-. Look at what un- means.",
+  "happy before": "Happy before would use pre-. Look at what un- means."
+ },
+ "The word part “mis-” helps you read “misspell.” What does “misspell” mean?": {
+  "spell again": "That is what re- means. Look at what mis- means.",
+  "spell before": "That is what pre- means. Look at what mis- means.",
+  "spell well": "Mis- means the opposite of well."
+ },
+ "The word part “-ful” helps you read “careful.” What does “careful” mean?": {
+  "without care": "That is what -less means. Look at the ending -ful.",
+  "care again": "Care again would use re-. Look at the ending -ful.",
+  "not care": "Not care would use un-. Look at the ending -ful."
+ },
+ "“Fresh Mart sells produce, such as apples, carrots and lettuce.” Produce means…": {
+  "Frozen pizza": "Apples and carrots are not frozen pizza. Look at the examples.",
+  "Cleaning supplies": "Cleaning supplies do not match apples, carrots and lettuce.",
+  "Bread only": "The examples are not bread. Look at the words after such as."
+ },
+ "“The rent is due on the first; if it’s late, a penalty, or extra fee, is added.” What is a penalty?": {
+  "A free gift": "A penalty costs you money. It is not a gift.",
+  "A type of apartment": "The sentence is about paying rent late, not a kind of apartment.",
+  "A discount": "A discount lowers the price. A penalty is added when you are late."
+ },
+ "“Unlike his timid sister, Theo was brave and spoke to everyone.” Timid means…": {
+  "Loud": "Loud does not fit. The sister is unlike Theo, who spoke to everyone.",
+  "Tall": "Height is not the point. Unlike tells you she is the opposite of Theo.",
+  "Brave": "Brave describes Theo. Unlike tells you his sister is the opposite."
+ },
+ "“The puppy was exhausted after running all day, so it slept for hours.” Exhausted means…": {
+  "Very hungry": "The clue is sleeping for hours, not eating.",
+  "Excited": "Excited does not fit a puppy that sleeps for hours.",
+  "Lost": "The puppy ran and then slept. Nothing says it was lost."
+ },
+ "“Rosa was elated, smiling and dancing after her promotion.” Elated means…": {
+  "Tired": "Smiling and dancing do not show a tired person.",
+  "Worried": "Smiling and dancing are not signs of worry.",
+  "Angry": "Smiling and dancing after good news do not show anger."
+ },
+ "“The room was so cluttered we couldn’t see the floor.” Cluttered means…": {
+  "Clean and very tidy": "You could see the floor in a tidy room. Look at the clue.",
+  "Dark and very cold": "Dark and cold do not explain why the floor was hidden.",
+  "Empty with no stuff": "An empty room would show the floor. Look at the clue."
+ },
+ "“The soup was so scalding that Ana waited ten minutes to taste it.” Scalding means…": {
+  "Very cold": "Cold soup would not need ten minutes of waiting.",
+  "Delicious": "Ana waited before tasting, so she could not know yet if it was good.",
+  "Salty": "Salt does not make you wait to taste. Think about why she waited."
+ },
+ "“Please be punctual; the bus leaves exactly at 8.” Punctual means…": {
+  "Late": "Late is the opposite. The bus leaves exactly at 8.",
+  "Quiet": "The sentence is about time, not noise.",
+  "Polite": "Polite is nice, but the clue is about the clock."
+ },
+ "“The soup was so scalding that Leo waited ten minutes before eating.” What does scalding mean?": {
+  "Very cold": "Cold soup would not make Leo wait ten minutes.",
+  "Very salty": "Salt does not make you wait to eat. Think about why he waited.",
+  "Very small": "The sentence is about how the soup felt, not its size."
+ },
+ "“Mia was famished after the long hike, so she ate two sandwiches.” Famished means…": {
+  "Very tired": "Tired fits a long hike, but the clue is eating two sandwiches.",
+  "Very happy": "The clue is about eating, not about feelings.",
+  "Lost": "Nothing says Mia was lost. Look at how much she ate."
+ },
+ "In paragraph 3, what is a bookmobile?": {
+  "A phone app for reading": "Paragraph 3 is about a vehicle, not a phone app.",
+  "A boat that sails to islands": "Boats are a different kind of traveling library. Look at what bookmobiles are.",
+  "A moving staircase": "A moving staircase is an escalator. Look at the words after the commas."
+ },
+ "In paragraph 3, “rigid” most likely means…": {
+  "Soft and easy to bend": "The next sentence says pushing on it does not change its shape, so it does not bend easily.",
+  "Very bright and colorful": "Rigid is not about color. Look at the next sentence.",
+  "Hard to see from far away": "Rigid is not about how far you can see it. Look at the next sentence."
+ },
+ "In paragraph 4, “heat-tolerant” corals are corals that…": {
+  "Make the water warmer": "Tolerant means putting up with heat, not making it.",
+  "Live only in cold water": "Heat-tolerant corals handle more heat, not only cold water.",
+  "Are kept in heated tanks forever": "The paragraph is about corals that can handle warm water in the ocean, not tanks forever."
+ },
+ "“The wind whispered through the trees.” Giving the wind a human action is called…": {
+  "A simile": "A comparison would use like or as. This line gives the wind a human action.",
+  "A rhyme": "Whispered and trees do not rhyme. Think about the action the wind does.",
+  "An opinion": "An opinion is a belief. This line gives the wind a human action."
+ },
+ "“She ran as fast as lightning.” This is a…": {
+  "Metaphor": "A metaphor says one thing is another. This line uses as to compare.",
+  "Fact": "Nobody is really as fast as lightning. It is a comparison, not a fact.",
+  "Question": "The line does not ask anything. Look for the word as."
+ },
+ "“The classroom was a zoo.” What does it really mean?": {
+  "Animals lived in the classroom": "A zoo here is a comparison, not real animals.",
+  "It was quiet": "A zoo is noisy, so the class was not quiet.",
+  "The class visited a zoo": "The class did not go anywhere. The zoo is a comparison."
+ },
+ "Which line rhymes with “The cat sat on the mat”?": {
+  "And ran away fast": "Fast ends with a different sound than mat. Listen for the -at sound.",
+  "Then it went to sleep": "Sleep does not sound like mat. Listen for the -at sound.",
+  "Under the table": "Table does not sound like mat. Listen for the -at sound."
+ },
+ "“It’s raining cats and dogs.” This idiom means…": {
+  "Pets are falling": "An idiom does not mean the words exactly. No pets really fall.",
+  "It’s sunny": "Raining is in the phrase, so it is not sunny.",
+  "Animals are wet": "The phrase is not really about animals. Think about how much rain."
+ },
+ "“Her smile was as bright as the sun.” What does it mean?": {
+  "Her teeth were glowing": "Teeth do not really glow. The comparison shows a quality.",
+  "Her face was very hot": "Bright here is not about heat. Think about what a bright smile looks like.",
+  "She was out in the sun": "The sun is only a comparison. She does not have to be outside."
+ },
+ "“The city never sleeps” is an example of…": {
+  "A simile": "A comparison would use like or as. This gives the city a human action.",
+  "A fact": "Cities do not really sleep, so it is not a fact.",
+  "A question": "The line does not ask anything. Think about the human action."
+ },
+ "“Break a leg!” before a show means…": {
+  "Get hurt": "Nobody wants an actor to get hurt. Idioms mean something else.",
+  "Run fast": "The phrase is not about running. Think about what people say before a show.",
+  "Sit down": "The phrase is not about sitting. Think about what people say before a show."
+ },
+ "“The classroom was a zoo.” What does this mean?": {
+  "There were animals in class": "There are no real animals. The zoo is a comparison.",
+  "The class went to the zoo": "The class did not go anywhere. The zoo is a comparison.",
+  "The classroom was quiet": "Zoos are noisy, so the comparison does not mean quiet."
+ },
+ "Rosa says Theo was “steady as a rock.” What does she mean?": {
+  "He did not move all day": "The comparison is not about standing still all day. Rocks do not shake.",
+  "He was heavy and slow": "Rosa is praising Theo, not calling him heavy or slow.",
+  "He was hard and unkind": "Rosa is praising Theo. Rocks being hard is not her point."
+ },
+ "“The building is still standing, and so, I hope, is someone’s dream.” What does the baker mean?": {
+  "The baker hopes the building is a dream": "The baker compares the building to a dream. The building is not a dream.",
+  "The baker wants the reader to stand up": "Still standing is about lasting, not standing up.",
+  "The baker is only talking about bricks": "The baker also mentions someone's dream, not only the building."
+ },
+ "The speaker carries the paycheck “like a key.” What does this simile suggest?": {
+  "The paycheck is stiff and made of metal": "The comparison is about what keys do, not what they are made of.",
+  "The speaker lost the key to their house": "The speaker did not lose a real key. The comparison is about what keys can open.",
+  "The paycheck will lock their money away": "Keys can lock, but the speaker feels hopeful. Think about what keys can open."
+ },
+ "🚌 What is a “route”?": {
+  "A tree root": "A root is part of a tree. It sounds the same but means a different thing.",
+  "A bus driver": "A bus driver is a person. A route is not a person.",
+  "A ticket": "A ticket is what you pay with. Think about where the bus goes."
+ },
+ "🛒 What is a “cart”?": {
+  "A kind of fruit": "A cart is not a food. Think about what you push in a store.",
+  "A bus stop": "A bus stop is where a bus stops. A cart is in the store.",
+  "A coat": "A coat is what you wear. Think about what you push in a store."
+ },
+ "🧾 What is a “receipt”?": {
+  "A list of things to buy": "That is a shopping list. It comes before you buy.",
+  "A ticket to ride the bus": "A bus ticket lets you ride. This paper is from a store.",
+  "A map of the store": "A map shows where things are. This paper comes after you pay."
+ },
+ "🚪 The sign says EXIT. What does it mean?": {
+  "The way in": "The way in is ENTER. EXIT is the other way.",
+  "Stop here": "A stop sign says STOP. This sign says EXIT.",
+  "Wash hands": "That sign is in the bathroom. This sign says EXIT."
+ },
+ "🕐 What is a “shift” at work?": {
+  "A kind of shirt": "A shirt is what you wear. Shift sounds like it but is not the same.",
+  "A break": "A break is time off. A shift is the other part.",
+  "A place": "A shift is not a place. It is about time."
+ },
+ "🔒 The door says “Staff only.” Who can go in?": {
+  "Anyone who wants to": "Only means just some people. Not anyone can go in.",
+  "Only kids and moms": "Staff means workers, not kids and moms.",
+  "People who shop there": "People who shop are customers, not staff."
+ },
+ "💵 What is a “price”?": {
+  "How big something is": "That is size. Price is about money.",
+  "Who made the thing": "That is who made it. Price is about money.",
+  "Where it is in the store": "That is a place in the store. Price is about money."
+ },
+ "What does “begin” mean?": {
+  "end": "End is the opposite of begin.",
+  "stop": "Stop is the opposite of begin.",
+  "wait": "Wait means to not go yet. Begin means to go."
+ },
+ "What does “rapid” mean?": {
+  "slow": "Slow is the opposite of rapid.",
+  "quiet": "Rapid is not about sound. It is about speed.",
+  "wet": "Rapid is not about water here. It is about speed."
+ },
+ "What does “glad” mean?": {
+  "sad": "Sad is the opposite of glad.",
+  "angry": "Angry is not how a glad person feels.",
+  "sleepy": "Sleepy means tired. Glad is a good feeling."
+ },
+ "What does “chilly” mean?": {
+  "hot": "Hot is the opposite of chilly.",
+  "dry": "Dry is about water, not how warm it is.",
+  "sunny": "Sunny is about the sky. Chilly is about how it feels."
+ },
+ "What does “enormous” mean?": {
+  "very small": "That is the opposite. Enormous is not small.",
+  "very fast": "Enormous is about size, not speed.",
+  "very old": "Enormous is about size, not age."
+ },
+ "What does “tiny” mean?": {
+  "very big": "That is the opposite. Tiny is not big.",
+  "loud": "Tiny is about size, not sound.",
+  "shiny": "Tiny is about size, not how it shines."
+ },
+ "What does “silent” mean?": {
+  "noisy": "Noisy is the opposite of silent.",
+  "bright": "Silent is about sound, not light.",
+  "happy": "Silent is about sound, not how you feel."
+ },
+ "What does “shout” mean?": {
+  "whisper": "A whisper is soft. A shout is the opposite.",
+  "sleep": "Sleep is not a sound. A shout is loud.",
+  "walk": "Walk is how you move. A shout is a sound."
+ },
+ "What is the main idea?": {
+  "The bins are blue": "Bin color is a small detail. The main idea covers all the details.",
+  "Paper can be recycled": "That is one detail. The main idea covers the whole text.",
+  "Trucks come on Monday": "Truck day is a small detail. Look for the big idea."
+ },
+ "What is this note mostly about?": {
+  "Rosa’s dog": "The note is not about a dog. Look at what most lines talk about.",
+  "The price of milk": "Milk is not what most lines are about.",
+  "A lost key": "The note is not about a key. Look at what most lines talk about."
+ },
+ "What is this message mostly about?": {
+  "The driver’s name": "The driver's name is not what each line is about.",
+  "The weather": "The weather is not the topic. Look at what each line explains.",
+  "A new café": "A café is not in the message. Look at what each line explains."
+ },
+ "What is the best title for this?": {
+  "My Favorite Color": "A color is not the main idea. The text is about money and a goal.",
+  "Rainy Days": "Rain is not the main idea. The text is about money and a goal.",
+  "The Bus": "A bus is not the main idea. The text is about money and a goal."
+ },
+ "What is this mostly about?": {
+  "How to bake bread": "Bread is not in this text. Every sentence is about a pet.",
+  "Bus times": "Bus times are not in this text. Every sentence is about a pet.",
+  "Paying rent": "Rent is not in this text. Every sentence is about a pet."
+ },
+ "A paragraph tells how bees carry pollen, make honey and help plants grow. What is the main idea?": {
+  "Bees make sweet honey": "Honey is only one detail. The main idea covers all three jobs.",
+  "Plants grow in the sun": "That is about plants, not what the whole paragraph says about bees.",
+  "Some bees can sting you": "Stinging is not in the paragraph. Look at what all the details share."
+ },
+ "What is the story mostly about?": {
+  "Sunflowers can grow taller than a child in one summer": "That is one small detail about sunflowers.",
+  "Lena waters her plants every morning before school": "Watering is one detail. Think about what all the details build to.",
+  "A building manager makes the rules for the roof": "The manager is a small part. The story is about what Lena did."
+ },
+ "What is the last paragraph mostly about?": {
+  "How bats fly": "The last paragraph is not about flying. Look at what it says bats do for us.",
+  "When bats sleep": "Sleeping is not the topic of the last paragraph.",
+  "What echolocation is": "Echolocation comes earlier. The last paragraph is about people."
+ },
+ "What lesson does Omar learn?": {
+  "Practice always makes you win the race": "Omar did not win, so practice does not always mean winning.",
+  "Friends should never race each other": "Omar gives Kay a high five, so racing friends is fine.",
+  "You should feel bad if you come in second": "Omar is proud of his fastest time, so he does not feel bad."
+ },
+ "Who wrote the note?": {
+  "Dad": "Look at the name after Love. It is not Dad.",
+  "Rosa": "Look at the name after Love. It is not Rosa.",
+  "Sam": "Look at the name after Love. It is not Sam."
+ },
+ "When is dinner?": {
+  "5": "Look at the number again. It is not 5.",
+  "8": "Look at the number again. It is not 8.",
+  "9": "Look at the number again. It is not 9."
+ },
+ "What does the note say?": {
+  "The store is closed": "The note does not say the store is closed. Read each word.",
+  "Rosa quit": "The note says Rosa is coming back, not that she quit.",
+  "Buy 5 apples": "The 5 is about time, not apples. Read the words near it."
+ },
+ "Who is the card for?": {
+  "Rosa": "Read the name after the greeting. It is not Rosa.",
+  "Theo": "Read the name after the greeting. It is not Theo.",
+  "Nova": "Read the name after the greeting. It is not Nova."
+ },
+ "How many things are on the list?": {
+  "2": "Count each line again. There are more than 2.",
+  "4": "Count each line again. There are fewer than 4.",
+  "5": "Count each line again. There are fewer than 5."
+ },
+ "What should you bring?": {
+  "A bike": "Read the second line. It does not say bike.",
+  "A book": "Read the second line. It does not say book.",
+  "Lunch": "Read the second line. It does not say lunch."
+ },
+ "When is it closed?": {
+  "Monday": "Monday starts with M. Look for the capital S.",
+  "Saturday": "Saturday starts with S too, but it is longer. Look at the word again.",
+  "Friday": "Friday starts with F. Look for the capital S."
+ },
+ "What is the note saying?": {
+  "Please help me right now": "The note is not asking for help. Read each word.",
+  "Go away and let me rest": "The note is kind, not asking you to go away.",
+  "See you soon at the shop": "The note does not say see you soon. Read each word."
+ },
+ "Read the cursive note. What should you do before school?": {
+  "Walk the dog": "Read the last word. It is cat, not dog.",
+  "Wash the car": "The note is not about the car. Read each word slowly.",
+  "Call the cat": "Read the first word. It is not call."
+ },
+ "Read the cursive note. When will Mom be back?": {
+  "3:00": "The hour is right, but check the minutes.",
+  "5:30": "The minutes are right, but check the hour.",
+  "1:30": "The minutes are right, but check the hour."
+ },
+ "Read the cursive note. Who is the card for?": {
+  "Mom": "Mom is not the name on the card. Read the name.",
+  "Theo": "Theo is a longer name. Count the letters on the card.",
+  "Kai": "Kai starts with K. Look at the first letter on the card."
+ },
+ "Read the cursive note. What is on the list?": {
+  "Milk, eggs and juice": "Look at the last item again. It is not juice.",
+  "Eggs, rice and bread": "Look at the first item again. It is not rice in the middle.",
+  "Milk, jam and bread": "Look at the middle item again. It is not jam."
+ },
+ "Which word starts with the same sound as “bus”?": {
+  "🐱 cat": "Cat starts with /k/. Bus starts with /b/.",
+  "🦊 fox": "Fox starts with /f/. Bus starts with /b/.",
+  "🌙 moon": "Moon starts with /m/. Bus starts with /b/."
+ },
+ "Which word starts with the same sound as “fish”?": {
+  "🐷 pig": "Pig starts with /p/. Fish starts with /f/.",
+  "🐶 dog": "Dog starts with /d/. Fish starts with /f/.",
+  "🚌 bus": "Bus starts with /b/. Fish starts with /f/."
+ },
+ "Which word starts with the same sound as “sun”?": {
+  "🌙 moon": "Moon starts with /m/. Sun starts with /s/.",
+  "🐶 dog": "Dog starts with /d/. Sun starts with /s/.",
+  "🎩 hat": "Hat starts with /h/. Sun starts with /s/."
+ },
+ "Which word starts with the same sound as “moon”?": {
+  "☀️ sun": "Sun starts with /s/. Moon starts with /m/.",
+  "🐟 fish": "Fish starts with /f/. Moon starts with /m/.",
+  "🐱 cat": "Cat starts with /k/. Moon starts with /m/."
+ },
+ "Say “bedroom”. Now say it without “bed”. What word is left?": {
+  "bed": "Bed is the part you take away. What is left?",
+  "broom": "Broom has a /b/ in it. Take bed off and say what is left.",
+  "bedroom": "That is the whole word. Take bed off first."
+ },
+ "Say “rainbow”. Now say it without “rain”. What word is left?": {
+  "rain": "Rain is the part you take away. What is left?",
+  "bay": "Bay ends with a different sound. Take rain off and listen.",
+  "rainbow": "That is the whole word. Take rain off first."
+ },
+ "Say “sunshine”. Now say it without “sun”. What word is left?": {
+  "sun": "Sun is the part you take away. What is left?",
+  "sign": "Sign ends with /n/. Take sun off and listen to the end.",
+  "sunshine": "That is the whole word. Take sun off first."
+ },
+ "Say “cupcake”. Now say it without “cup”. What word is left?": {
+  "cup": "Cup is the part you take away. What is left?",
+  "cap": "Cap has the /a/ sound, like cat. Take cup off and listen.",
+  "cupcake": "That is the whole word. Take cup off first."
+ },
+ "Say “football”. Now say it without “foot”. What word is left?": {
+  "foot": "Foot is the part you take away. What is left?",
+  "bell": "Bell has the /e/ sound. Take foot off and listen.",
+  "football": "That is the whole word. Take foot off first."
+ },
+ "Listen: “dog”. What is the middle sound?": {
+  "/u/": "/u/ is in bug, not dog. Say d-o-g slowly.",
+  "/a/": "/a/ is in bag, not dog. Say d-o-g slowly."
+ },
+ "Listen: “pig”. What is the middle sound?": {
+  "/a/": "/a/ is in pan, not pig. Say p-i-g slowly.",
+  "/e/": "/e/ is in pet, not pig. Say p-i-g slowly."
+ },
+ "Listen: “sun”. What is the middle sound?": {
+  "/o/": "/o/ is in sock, not sun. Say s-u-n slowly.",
+  "/a/": "/a/ is in sat, not sun. Say s-u-n slowly."
+ },
+ "Listen: “cat”. What is the middle sound?": {
+  "/i/": "/i/ is in kit, not cat. Say c-a-t slowly.",
+  "/o/": "/o/ is in cot, not cat. Say c-a-t slowly."
+ },
+ "Listen: “bed”. What is the middle sound?": {
+  "/i/": "/i/ is in bid, not bed. Say b-e-d slowly.",
+  "/a/": "/a/ is in bad, not bed. Say b-e-d slowly."
+ }
+}

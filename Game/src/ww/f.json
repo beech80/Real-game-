@@ -1,0 +1,889 @@
+{
+ "How long should you scrub your hands with soap?": {
+  "1 second": "One second is too fast. Germs stay on your hands.",
+  "5 minutes": "That is much more than you need. Hands get clean sooner.",
+  "You don’t need soap": "Water alone can’t lift off germs. Soap helps a lot.",
+  "Only if they look dirty": "Germs are too small to see. Clean hands can still have them."
+ },
+ "How often should you brush your teeth?": {
+  "Once a week": "Once a week is not enough. Germs build up each day.",
+  "Only when they hurt": "Don’t wait for pain. Brushing stops tooth pain from starting.",
+  "Once a month": "That is far too long. Germs make holes in teeth by then."
+ },
+ "When is it most important to wash your hands?": {
+  "Only when your hands look dirty": "Germs are too small to see. Hands can look clean but not be.",
+  "After you brush your hair": "Hair does not spread many germs to your food.",
+  "Before you go to sleep": "Bedtime is fine, but it is not the big one."
+ },
+ "You need to sneeze and have no tissue. What should you do?": {
+  "Sneeze into your hands": "Germs get on your hands. Then you touch things and spread them.",
+  "Sneeze at your friend": "That sends germs right at your friend. That can make them sick.",
+  "Hold it in forever": "You can’t hold a sneeze in. It will come out."
+ },
+ "🧼 Which removes germs best?": {
+  "Water only": "Water helps, but it can’t lift off germs by itself.",
+  "Wiping on your shirt": "Your shirt can have germs too. It does not clean hands.",
+  "Blowing on hands": "Blowing does not kill germs. It just moves air."
+ },
+ "Why should you not share a toothbrush?": {
+  "They break": "They don’t break when you share. The real worry is what spreads.",
+  "It’s rude": "Manners are nice, but this is about health.",
+  "Toothbrushes are expensive": "Cost is not the main reason. Think of what lives on it."
+ },
+ "When should you change into clean clothes?": {
+  "Once a week, on Sundays": "A whole week is too long. Sweat and germs build up.",
+  "Only when they look dirty": "Clothes can smell and hold germs before they look dirty.",
+  "Only on holidays and trips": "You need clean clothes more than just on special days."
+ },
+ "🪥 Why brush your tongue too?": {
+  "To make your tongue look pink": "Pink is not the goal. Your tongue is not just for looks.",
+  "Because it is a dentist rule": "It is not just a rule. There is a real reason for it.",
+  "To make your teeth whiter": "Your tongue does not change your teeth color."
+ },
+ "You sneeze and have no tissue. What should you do?": {
+  "Sneeze into your hands": "Germs get on your hands. Then you touch things and spread them.",
+  "Sneeze toward a friend": "That sends germs to your friend. They could get sick.",
+  "Cover your mouth with your hand": "Your hand gets germs on it. Then you spread them."
+ },
+ "Why do we brush our teeth twice a day?": {
+  "To make our teeth grow bigger": "Brushing does not make teeth grow. They grow on their own.",
+  "Only to make our breath smell nice": "Fresh breath is nice. It is not the main reason.",
+  "To make our teeth turn white": "White teeth are not the main goal. Think about germs."
+ },
+ "A cut on your knee is dirty. What should you do first?": {
+  "Cover it right away without cleaning": "Dirt and germs get trapped under the bandage. It must be clean.",
+  "Put dirt on it to stop the blood": "Dirt has germs. It can make the cut sick.",
+  "Ignore it": "A dirty cut can get sick. It needs care."
+ },
+ "Why shouldn’t you share hairbrushes or hats?": {
+  "They can break easily": "They may not break. The real worry is what can spread.",
+  "Your friend may lose them": "Losing it is not the big worry here.",
+  "They will not fit you": "Fit is not the point. Think about what hides in hair."
+ },
+ "You have a test tomorrow and your stomach feels jumpy. That feeling is often…": {
+  "Hungry for candy": "Candy is not what your tummy wants here. Think about the test.",
+  "Sleepy": "Sleepy feels slow and heavy, not jumpy.",
+  "Angry": "Mad feels hot, like you want to yell. This is different."
+ },
+ "Is it OK to feel scared sometimes?": {
+  "No, never": "Everyone feels scared at times. It is a normal feeling.",
+  "Only adults feel scared": "Kids feel scared too. That is okay.",
+  "Only on weekends": "Fear can come on any day, not just some days."
+ },
+ "Your friend’s pet ran away. They are quiet and their eyes are wet. How might they feel?": {
+  "Excited": "Excited kids smile and jump. Wet eyes don’t fit that.",
+  "Bored": "Bored looks flat, not teary. Think about the lost pet.",
+  "Proud": "Proud is a good feeling. A lost pet does not feel good."
+ },
+ "What is a healthy thing to do when you feel angry?": {
+  "Hit a pillow as hard as you can": "Hitting hard can keep you wound up. Calm down first.",
+  "Yell at the person who made you mad": "Yelling can hurt the other person and make things worse.",
+  "Keep it inside and say nothing": "Hiding it can make the mad feeling grow bigger."
+ },
+ "😊 Your friend smiles and jumps up and down. They feel…": {
+  "Sad": "Sad kids often look down and quiet. This friend is not.",
+  "Scared": "Scared kids may hide or freeze. Jumping looks fun.",
+  "Sleepy": "Sleepy kids yawn and rest. They don’t jump around."
+ },
+ "What can you say when you feel upset?": {
+  "“You made me do it!”": "Blaming can start a fight. Share how you feel instead.",
+  "Nothing, keep it inside": "Keeping it in can make it feel worse. Words can help.",
+  "“Go away, I hate you!”": "Mean words hurt others. They don’t fix the upset."
+ },
+ "😠 Your face feels hot and you want to shout. You might feel…": {
+  "Calm": "Calm feels slow and still, not hot and loud.",
+  "Sleepy": "Sleepy feels slow, with yawns. You would not want to shout.",
+  "Hungry": "Hunger is in your tummy. A hot face is a sign of mad."
+ },
+ "Who can you talk to about big feelings?": {
+  "Nobody, keep them to yourself": "Big feelings are hard to hold alone. It helps to share.",
+  "A stranger you meet online": "You don’t know a stranger online. They may not be safe.",
+  "Only your pet, since it listens": "Pets are sweet, but they can’t help you fix things."
+ },
+ "Your friend’s fists are tight and their face is red. How might they feel?": {
+  "Sleepy": "Sleepy kids yawn and droop. Tight fists don’t fit.",
+  "Calm": "Calm kids look relaxed. A red face shows a big feeling.",
+  "Bored": "Bored kids look flat. Tight fists show something strong."
+ },
+ "You feel worried about a test. What could help?": {
+  "Keep it a secret and stay up all night": "Secrets and no sleep make worry worse. Rest helps you think.",
+  "Skip school": "Skipping school makes you miss out. The test will still come.",
+  "Yell at your sister": "Yelling hurts her and does not fix the worry."
+ },
+ "Is it okay to feel sad sometimes?": {
+  "No, you should always be happy": "Even happy people feel sad at times. That is okay.",
+  "Only grown-ups feel sad": "Kids feel sad too. That is okay.",
+  "Only babies feel sad": "Big kids and grown-ups feel sad too. It is normal."
+ },
+ "A classmate is sitting alone and looks sad. What is a kind thing to do?": {
+  "Laugh at them": "Laughing at them can hurt their feelings more.",
+  "Ignore them": "Leaving them out can make them feel more alone.",
+  "Tell everyone they are sad": "That can make them feel shy or hurt."
+ },
+ "What should you wear when riding a bike?": {
+  "Sunglasses only": "Sunglasses help your eyes. They don’t keep your head safe.",
+  "Nothing special": "Bikes can tip over. You need something to keep you safe.",
+  "Flip-flops": "Flip-flops can slip off. They don’t keep your head safe."
+ },
+ "What number do you call in the U.S. for an emergency?": {
+  "0": "That is just one number. It won’t call for help.",
+  "123": "That number won’t get you help fast.",
+  "411": "That is not the one for help in the U.S.",
+  "000": "That works in some lands, but not the U.S."
+ },
+ "A stranger offers you a ride home. What should you do?": {
+  "Get in the car if they seem nice": "Nice looks can fool you. Never get in a stranger’s car.",
+  "Tell them where you live": "Keep where you live private. Strangers should not know it.",
+  "Wait there to see what they do": "Staying near them is not safe. Get away fast."
+ },
+ "Where is the safest place to cross the street?": {
+  "Between parked cars": "Cars can’t see you there. It is not safe.",
+  "Wherever is closest": "Close is not always safe. Cars may not see you.",
+  "Running across without looking": "You need to look first. Cars can come fast."
+ },
+ "🔥 What should you do if your clothes catch fire?": {
+  "Run": "Running makes the fire grow. Air feeds the flames.",
+  "Wave your arms": "Waving your arms fans the fire. It can get bigger.",
+  "Jump": "Jumping won’t put out the fire. Air helps it grow."
+ },
+ "What should you know by heart in case you get lost?": {
+  "Your favorite song": "A song is fun. It can’t help you get home.",
+  "Your friend’s pet’s name": "A pet’s name won’t help a grown-up reach your family.",
+  "Nothing": "You need to know something that helps you get home."
+ },
+ "What does a red traffic light mean for a walker?": {
+  "Run across": "Running across is not safe. Cars may be coming.",
+  "Dance": "Dancing in the street is not safe. Cars may come.",
+  "Go": "Green means go. Red means something else."
+ },
+ "Should you open the door to a stranger when home alone?": {
+  "Yes, always": "Always opening the door is not safe with strangers.",
+  "Only if they knock loudly": "A loud knock does not make a stranger safe.",
+  "Only at night": "Strangers are not safe in the day or at night."
+ },
+ "An adult you don’t know offers you a ride home. What should you do?": {
+  "Get in if they seem nice": "Nice looks can fool you. Never get in with a stranger.",
+  "Get in if they say your mom sent them": "Strangers can say things that are not true. Stay safe.",
+  "Go if it’s raining": "Rain does not make a stranger safe."
+ },
+ "What should you do before crossing a street?": {
+  "Run across fast so cars can’t hit you": "Cars are fast. You can’t outrun them.",
+  "Look one way, then walk across": "Cars can come from both sides. Check them all.",
+  "Step out between parked cars to see": "Cars can’t see you between parked cars."
+ },
+ "You find a pill on the floor. What should you do?": {
+  "Taste it": "Pills can make you very sick. Never taste one.",
+  "Put it in your pocket": "Pills don’t go in your pocket. Someone could get hurt.",
+  "Give it to a friend": "Pills can hurt your friend too."
+ },
+ "Why do you wear a helmet when riding a bike?": {
+  "It makes you go faster": "A helmet won’t make you go fast. It has a safer job.",
+  "It keeps your hair neat": "Neat hair is not the point. Think about falls.",
+  "It is only for racing": "Everyone on a bike needs one, not just racers."
+ },
+ "Which habit helps you fall asleep?": {
+  "Playing video games in bed": "Screens and games keep your brain awake and wired.",
+  "Drinking soda at night": "Most soda has caffeine and sugar. They can keep you awake.",
+  "Changing bedtime every day": "Your body likes a set bedtime. Changing it makes sleep harder."
+ },
+ "Why is sleep important for learning?": {
+  "It isn’t": "Sleep matters a lot. Your brain does important work at night.",
+  "You learn more if you skip sleep": "Skipping sleep makes it harder to think and remember.",
+  "Sleep erases memories": "Sleep helps memories stick. It does not wipe them out."
+ },
+ "About how much sleep do children ages 6–12 need each night?": {
+  "4–5 hours": "That is far too little for a growing kid. You would feel tired.",
+  "2 hours": "Two hours is much too little. Your body and brain need lots more.",
+  "15–18 hours": "That is more than kids this age need each night."
+ },
+ "What happens when you don’t sleep enough?": {
+  "You get smarter and more awake": "Too little sleep makes you foggy, not sharper.",
+  "Nothing changes the next day": "You feel it the next day. Your mood and focus change.",
+  "You grow taller faster": "Growing happens during good sleep. Less sleep does not help."
+ },
+ "Which helps you sleep better?": {
+  "Bright lights and a TV on": "Bright light and TV tell your brain to stay awake.",
+  "Loud music to fall asleep": "Loud sounds can wake you up or keep you from resting.",
+  "A soda before bed": "Soda often has caffeine and sugar. They can keep you up."
+ },
+ "A big test is tomorrow. What’s smarter?": {
+  "Stay up all night studying hard": "Skipping sleep makes it hard to remember what you studied.",
+  "Study late and drink coffee to stay up": "Coffee can keep you awake, but it hurts your sleep and focus.",
+  "Sleep two hours, then study more": "Two hours of sleep leaves your brain too tired to think well."
+ },
+ "Why go to bed at the same time each night?": {
+  "So you can skip dinner": "Bedtime and dinner are not linked. You still need to eat.",
+  "So you can stay up later": "Staying up late is not the goal. Rest is.",
+  "Because school says so": "School is not the reason. It helps your own body."
+ },
+ "How much sleep do teens need?": {
+  "3 hours": "Three hours is far too little. Teens would feel worn out.",
+  "15 hours": "That is more than most teens need each night.",
+  "None": "Everyone needs sleep. The body can’t go without it."
+ },
+ "About how much sleep do kids 6–12 need each night?": {
+  "3 to 4 hours": "That is much too little for a growing kid.",
+  "Exactly 6 hours": "Six hours is not enough for kids this age.",
+  "Only on weekends": "Kids need sleep every night, not just on weekends."
+ },
+ "Maya slept 5 hours and can’t focus in class. What is the most likely reason?": {
+  "The class is too easy": "An easy class would not make her this foggy.",
+  "She ate breakfast": "Breakfast helps you focus. It would not cause this.",
+  "She sat by the window": "Sitting by a window does not usually stop focus."
+ },
+ "Why does sleep matter for learning?": {
+  "Sleep doesn’t change how you learn": "Sleep does change learning. It helps your brain sort the day.",
+  "Your brain forgets the day while you sleep": "Your brain keeps lessons while you sleep. It does not toss them out.",
+  "Only naps in the day help you learn": "Night sleep matters most. Naps can’t replace it."
+ },
+ "What does regular exercise help with?": {
+  "Only making your muscles look bigger": "Exercise does much more than change how muscles look.",
+  "Making you tired so you sleep all day": "Good exercise gives you energy. It should not wipe you out.",
+  "Losing weight, and nothing else at all": "Exercise helps many parts of you, not just one."
+ },
+ "Which activity is exercise?": {
+  "Watching TV": "Watching TV keeps your body still. Exercise gets you moving.",
+  "Scrolling on a phone": "Scrolling uses your thumb, but not your whole body.",
+  "Sitting still for hours": "Sitting for hours does not get your heart pumping."
+ },
+ "About how much physical activity should kids and teens get each day?": {
+  "5 minutes": "Five minutes is a good start, but kids need much more.",
+  "0 minutes": "Kids need some active time every day.",
+  "6 hours": "That is too much for most kids. You need rest too."
+ },
+ "Which activity builds strong bones?": {
+  "Sitting": "Sitting does not push on your bones to make them strong.",
+  "Sleeping all day": "Sleep is important, but bones need movement too.",
+  "Watching sports": "Watching does not move your body. Playing does."
+ },
+ "Why warm up before exercise?": {
+  "To get tired before you start": "A warm-up should not tire you out. It gets you ready.",
+  "So you can skip the stretching": "A warm-up does not replace stretching.",
+  "To make your muscles cold": "Warm muscles work better. Cold ones are easier to hurt."
+ },
+ "What is a good sign you’re exercising hard enough?": {
+  "You can’t breathe at all": "Not being able to breathe means stop and rest now.",
+  "You feel nothing": "If you feel nothing, your body is not working very hard.",
+  "You fall asleep": "Falling asleep is not a sign of exercise. Something is wrong."
+ },
+ "How can you be active on a rainy day?": {
+  "You can’t be active inside the house": "You can move a lot inside. Lots of games fit indoors.",
+  "Watch TV until the rain stops": "TV keeps you still. Rain is no reason to stop moving.",
+  "Take a long nap until it is sunny": "A long nap is not active. You can play inside."
+ },
+ "Why drink water when exercising?": {
+  "To make your body heavier": "Water does not make you heavier in a helpful way.",
+  "Because water cools the air": "Water inside you does not cool the air around you.",
+  "So your muscles grow faster": "Water helps your body, but it does not grow muscle fast."
+ },
+ "How much active play do kids need each day?": {
+  "5 minutes": "Five minutes is a start, but kids need a lot more.",
+  "Only on gym days": "Kids need active play every day, not just gym days.",
+  "4 hours of running": "Four hours of running is too much for most kids."
+ },
+ "Which is a way to get exercise?": {
+  "Watching a movie": "A movie keeps you sitting still. Exercise gets you moving.",
+  "Taking a long nap": "Naps help you rest, but they are not exercise.",
+  "Playing a game on a tablet": "Tablet games use your fingers, not your whole body."
+ },
+ "Why does your heart beat faster when you run?": {
+  "Your heart is getting tired and weak": "A healthy heart speeds up to help you. It is not tired.",
+  "Running makes your blood get thicker": "Your blood does not get thicker when you run.",
+  "Your body is trying to cool itself down": "Sweat cools you down. Your heart speeds up for another reason."
+ },
+ "What should you do before hard exercise?": {
+  "Eat a huge meal": "A big meal can give you a sore tummy during exercise.",
+  "Sit still for an hour": "Sitting still keeps muscles cold and stiff.",
+  "Hold your breath": "Holding your breath can make you dizzy. Keep breathing."
+ },
+ "Which is a sign of a good friend?": {
+  "They make you do things you don’t want to": "A good friend won’t push you to do things you don’t want.",
+  "They laugh at you": "Being laughed at hurts. Good friends lift you up.",
+  "They only talk to you when they need something": "Good friends care about you all the time, not just sometimes."
+ },
+ "You see someone being teased again and again. What should you do?": {
+  "Laugh along so they do not tease you too": "Joining in hurts the person being teased.",
+  "Stay out of it, since it is not your problem": "Teasing hurts people. Everyone can help make it stop.",
+  "Tease the teasers back so they know how it feels": "Teasing back can make it worse and start a fight."
+ },
+ "A new kid sits alone at lunch. What is a kind choice?": {
+  "Point at them": "Pointing can make them feel embarrassed and left out.",
+  "Take their seat": "Taking their seat is unkind and makes them feel worse.",
+  "Pretend they aren’t there": "Ignoring them can make them feel lonely."
+ },
+ "What’s a good way to fix it after hurting a friend?": {
+  "Pretend nothing happened": "Acting like nothing happened leaves your friend still hurt.",
+  "Blame them": "Blaming them is not fair if you did the hurting.",
+  "Never talk again": "Never talking ends the friendship. You can fix things."
+ },
+ "Online, someone posts mean comments about a classmate. What should you do?": {
+  "Like the comments so you fit in": "Liking mean posts spreads them and hurts your classmate.",
+  "Add your own comment as a joke": "A mean joke still hurts. It adds to the pain.",
+  "Share it so others can see it": "Sharing it spreads the hurt to even more people."
+ },
+ "Saying “thank you” and “please”…": {
+  "Is too old-fashioned to matter": "Good manners never go out of style. People still like them.",
+  "Doesn’t matter to most people": "Most people notice and feel good when you use these words.",
+  "Is only for talking to adults": "These words are kind to say to anyone, any age."
+ },
+ "How can you show empathy?": {
+  "Laugh so they feel less sad": "Laughing can feel like you don’t care how they feel.",
+  "Tell them how you felt one time": "Talking about you shifts the focus away from them.",
+  "Change the subject to something fun": "Changing the subject can make them feel unheard."
+ },
+ "Your friend is left out of a game. What can you do?": {
+  "Leave too": "Leaving too does not help your friend feel included.",
+  "Laugh": "Laughing can hurt their feelings even more.",
+  "Tell them to go away": "That would make them feel worse and more alone."
+ },
+ "A friend drops their books. What could you do?": {
+  "Walk away fast": "Walking away leaves your friend alone with a mess.",
+  "Laugh": "Laughing can make them feel embarrassed.",
+  "Tell them to be more careful and keep walking": "Anyone can drop things. A lecture won’t help them."
+ },
+ "Someone is being teased. What is a safe way to help?": {
+  "Tease the teaser back to make it even": "Teasing back can make it worse and spread the hurt.",
+  "Post about it online so people know": "Posting online can spread the hurt to more people.",
+  "Walk away and pretend you didn’t see": "Pretending you didn’t see leaves them alone with it."
+ },
+ "You and a friend want different games. What is a fair solution?": {
+  "The louder person wins": "Being loud is not fair. Both people matter.",
+  "Stop being friends": "A small fight does not have to end a friendship.",
+  "Nobody plays": "Then no one has fun. There is a better way."
+ },
+ "Why does saying sorry matter after you hurt someone?": {
+  "It makes the problem go away for good": "Sorry is a start, but it does not fix everything by itself.",
+  "It means you never have to change": "A real sorry means you try to do better next time.",
+  "It only counts if a grown-up tells you to": "A sorry matters most when you mean it yourself."
+ },
+ "Someone is badly hurt and not answering. What do you do?": {
+  "Try to give them some water to drink": "Someone who isn’t responding could choke on water, so never put anything in their mouth.",
+  "Shake them hard to wake them up": "Shaking a badly hurt person can make an injury, like a neck injury, much worse.",
+  "Wait and see if they get up on their own": "Waiting wastes time that could matter a lot when someone is badly hurt."
+ },
+ "You get a small cut. What should you do first?": {
+  "Leave it alone and keep playing outside": "Even small cuts can get infected if dirt and germs stay in them.",
+  "Put butter on it to help it heal fast": "Butter is an old myth; it can trap germs and doesn’t help a cut heal.",
+  "Rub it hard with a dry paper towel": "Rubbing hard can push dirt in and irritate the cut; gentle care works better."
+ },
+ "You touch a hot pan and get a small burn. What helps?": {
+  "Put ice right on the burn": "Ice can hurt skin that is already damaged and make the burn worse.",
+  "Rub butter on the burn": "Butter holds heat in and can trap germs, so it is a myth that it helps burns.",
+  "Pop any blisters right away": "Blisters protect the skin underneath; popping them lets germs in."
+ },
+ "Before helping someone injured, check…": {
+  "Your phone’s battery": "Your phone matters later, but first you must make sure you won’t get hurt too.",
+  "Your hair": "Your hair has nothing to do with safety at the scene.",
+  "The time": "The time can wait; your own safety comes before anything else."
+ },
+ "What should a basic first-aid kit have?": {
+  "Candy, toys and a book": "Candy and toys might cheer someone up, but they can’t treat an injury.",
+  "Only a phone and charger": "A phone helps you call for help, but a kit needs supplies to treat wounds.",
+  "Soap, shampoo and a towel": "Those are for bathing, not for treating cuts or other injuries."
+ },
+ "A bee stung you and your face is swelling and breathing feels hard. What do you do?": {
+  "Wait and see": "Swelling and trouble breathing can get worse fast, so waiting is risky.",
+  "Eat something": "Food won’t stop a serious allergic reaction and could make swallowing harder.",
+  "Sleep it off": "Sleeping through trouble breathing is dangerous; this needs fast help."
+ },
+ "Your nose is bleeding. What helps?": {
+  "Lean far back and look up at the sky": "Leaning back makes blood run down your throat, which can upset your stomach.",
+  "Lie flat on your back on the floor": "Lying flat can send blood down your throat instead of stopping it.",
+  "Blow your nose hard to clear it out": "Blowing hard can break the clot that is forming and start the bleeding again."
+ },
+ "A friend twisted their ankle. What helps right away?": {
+  "Keep running on it to loosen it up": "Running on a twisted ankle can make the injury worse.",
+  "Put a hot lamp on it right away": "Heat right away can increase swelling in a fresh injury.",
+  "Ignore it and see if it goes away": "Ignoring it can let swelling and pain build up; it needs some care now."
+ },
+ "Someone has a small burn from a hot pan. What should you do first?": {
+  "Spread butter or oil on it to soothe it": "Butter and oil hold heat in the skin and can trap germs.",
+  "Hold ice right on the skin for a while": "Ice straight on a burn can damage the skin even more.",
+  "Pop any blisters so they heal faster": "Blisters protect healing skin; popping them can let germs in."
+ },
+ "A friend has a nosebleed. What helps?": {
+  "Lie flat on your back and stay still": "Lying flat lets blood run down the throat instead of stopping.",
+  "Tilt the head way back and pinch the nose": "Tilting back sends blood down the throat and can make someone feel sick.",
+  "Blow the nose hard to clear the blood out": "Blowing hard can knock loose the clot and restart the bleeding."
+ },
+ "When should you call 911?": {
+  "Someone has a small scrape or a bruise": "Small scrapes and bruises can be handled with simple first aid at home.",
+  "A friend feels a little sick after lunch": "Feeling a little sick is usually something a trusted adult can help with.",
+  "Someone has hiccups that won’t stop": "Hiccups are annoying but almost never an emergency."
+ },
+ "Why should you wear gloves when helping someone who is bleeding, if you can?": {
+  "Gloves help the bleeding stop faster": "Gloves don’t change how fast blood clots; pressure does that.",
+  "So you get a better grip on the cloth": "Grip is not the main reason; think about what blood can carry.",
+  "So your hands stay clean and warm": "Warm, clean hands are nice, but gloves are mostly about safety for both people."
+ },
+ "At what temperature (or colder) should a fridge be kept?": {
+  "70°F (21°C)": "That is room temperature, where germs in food grow quickly.",
+  "100°F (38°C)": "That is about body temperature, which is perfect for germs to grow.",
+  "Any temperature": "Temperature really matters; a warm fridge lets germs multiply."
+ },
+ "You cut raw chicken on a board. Can you cut salad on it next?": {
+  "Yes, it’s fine": "Germs from raw chicken stay on the board and can get into the salad.",
+  "Only if you rinse it with cold water for 1 second": "A quick cold rinse doesn’t remove the germs from raw chicken.",
+  "Only on weekends": "The day of the week has nothing to do with germs on a board."
+ },
+ "Leftovers have been sitting out on the counter all day. What is safest?": {
+  "Eat them cold": "Eating them cold doesn’t help; germs may have grown all day.",
+  "Smell them to decide": "Many germs that make you sick have no smell at all.",
+  "Give them to a friend": "If the food is risky for you, it is risky for a friend too."
+ },
+ "How should you thaw frozen meat safely?": {
+  "On the counter all day": "At room temperature the outside warms up and germs can grow fast.",
+  "In the sun": "Sun heats the meat unevenly and lets germs multiply.",
+  "Under a pillow": "A pillow traps warmth, which helps germs grow, and it’s not clean."
+ },
+ "Why wash fruits and vegetables?": {
+  "To make them sweeter": "Washing doesn’t change how sweet produce tastes.",
+  "To make them bigger": "Water doesn’t make fruit or vegetables grow bigger.",
+  "No reason": "There is a good reason: produce can carry things you can’t see."
+ },
+ "A can is bulging. What should you do?": {
+  "Eat it fast before it goes bad": "A bulging can may hold germs that make a dangerous toxin; never taste it.",
+  "Shake it, then open it": "Shaking or opening it could spray out harmful germs.",
+  "Give it to a food bank": "Food banks can’t use damaged cans; they could make someone very sick."
+ },
+ "Why use a food thermometer?": {
+  "To make the food look nice": "A thermometer doesn’t change how food looks.",
+  "To stir the food in the pot": "It is for measuring, not for stirring.",
+  "To find out how much it weighs": "Scales measure weight; a thermometer measures something else."
+ },
+ "Raw chicken touched a cutting board. What should you do before cutting vegetables on it?": {
+  "Wipe it with a dry towel": "A dry towel can smear germs around instead of removing them.",
+  "Nothing; it looks clean": "Germs are too small to see, so looking clean isn’t enough.",
+  "Rinse it with cold water only": "Cold water alone doesn’t remove raw chicken germs well."
+ },
+ "How long can cooked food sit out at room temperature?": {
+  "All day": "Germs grow fast at room temperature, so all day is far too long.",
+  "A week": "A week at room temperature lets dangerous germs grow.",
+  "Until it smells bad": "Many germs that cause illness don’t make food smell bad."
+ },
+ "How cold should the fridge be?": {
+  "70°F": "That is room temperature, where germs grow quickly.",
+  "100°F": "That is close to body heat, which germs love.",
+  "It doesn’t matter": "Fridge temperature matters a lot for keeping germs from growing."
+ },
+ "Why is a food thermometer better than checking the color of meat?": {
+  "Thermometers make food taste better": "A thermometer measures heat; it doesn’t change the flavor.",
+  "Color is always correct": "Meat can look done before it is safe inside, so color can fool you.",
+  "Thermometers cook the food": "A thermometer only measures; the stove or oven does the cooking."
+ },
+ "Homework is piling up and you feel overwhelmed. What helps most?": {
+  "Put it all off until you feel ready to start": "Waiting to feel ready often makes the pile, and the worry, grow.",
+  "Try to do every assignment at the same time": "Doing everything at once splits your focus and adds stress.",
+  "Stay up all night so you finish it in one go": "Losing sleep makes it harder to think and makes stress worse."
+ },
+ "Which is box breathing?": {
+  "Hold your breath as long as you can": "Holding your breath a long time can make you dizzy, not calm.",
+  "Breathe as fast as possible": "Fast breathing can make you feel more anxious, not less.",
+  "Breathe into a box": "The name describes a pattern with four sides, not a real box."
+ },
+ "You feel stressed before a big game. Which is a healthy way to cope?": {
+  "Stay up late going over every play in your head": "Replaying every play late at night cuts into sleep you need for the game.",
+  "Tell your teammates they need to try much harder": "Blaming teammates adds tension and doesn’t calm your own nerves.",
+  "Skip eating so your stomach doesn’t feel upset": "Skipping food leaves you low on energy when you need it most."
+ },
+ "Too much to do this week. What helps?": {
+  "Do nothing until you feel less stressed": "Waiting to feel less stressed usually lets the work pile up more.",
+  "Try to do everything at the same time": "Doing everything at once splits your focus and gets less done.",
+  "Hide from the work and hope it goes away": "Hiding from work doesn’t make it go away; it often adds stress."
+ },
+ "Is some stress normal?": {
+  "No, any stress is bad for you": "A little stress is normal and can even help you get ready.",
+  "Only adults ever feel stress": "Kids and teens feel stress too; it is part of being human.",
+  "No, stress is always a sign of illness": "Stress is a normal reaction, not always a sign that you are sick."
+ },
+ "Which is an unhealthy way to handle stress?": {
+  "Taking a walk outside to clear your head": "A walk is a healthy way to calm your body and mind.",
+  "Talking to a friend you trust about it": "Talking to someone you trust is a healthy way to cope.",
+  "Taking slow, deep breaths for a minute": "Slow breathing is a healthy way to calm stress."
+ },
+ "What can help before a stressful presentation?": {
+  "Stay up late and skip sleep to practise": "Losing sleep makes it harder to think clearly and remember your words.",
+  "Drink lots of soda for extra energy": "Soda’s sugar and caffeine can make you jittery and then tired.",
+  "Skip practice so you don’t think about it": "Skipping practice usually makes you more nervous, not less."
+ },
+ "How does exercise help stress?": {
+  "It doesn’t help, it just makes you tired": "Exercise does help stress, even though your body may feel tired after.",
+  "It makes stress worse by using energy": "Moving your body usually lowers stress rather than raising it.",
+  "It only works for people who are athletes": "Anyone can get this benefit, not just athletes."
+ },
+ "You have three tests this week and feel overwhelmed. What helps most?": {
+  "Study all night before each test to cram": "Cramming all night leaves you tired and helps you remember less.",
+  "Wait and study the morning of each test": "Last-minute studying adds stress and leaves little time to learn.",
+  "Quit all your clubs and sports forever": "Quitting everything forever is extreme; a plan can help without losing what you enjoy."
+ },
+ "Which is a healthy way to calm down?": {
+  "Yelling at someone": "Yelling can hurt others and often keeps you upset longer.",
+  "Drinking energy drinks": "Energy drinks have lots of caffeine, which can make you feel more jittery.",
+  "Staying up late on your phone": "Screens late at night cut into sleep, which makes stress harder to handle."
+ },
+ "What is a sign that stress is getting too big?": {
+  "You feel a little nervous before a game": "A few nerves before a game are normal and can help you focus.",
+  "You remember your homework": "Remembering homework is a sign your mind is working well.",
+  "You laugh at a joke": "Laughing is a healthy sign, not a warning sign."
+ },
+ "Who could you talk to about stress?": {
+  "No one, because you should handle it alone": "You don’t have to handle stress alone; asking for help is smart.",
+  "Only people you meet in online games": "People in online games may not be who they say; they can’t help like someone you know.",
+  "Only friends your own age, never adults": "Friends are great, but trusted adults can help in ways friends can’t."
+ },
+ "You find pills that look like candy. What should you do?": {
+  "Eat one to check": "Pills that look like candy can be strong medicine and can make you very sick.",
+  "Share them": "Sharing them could make someone else very sick too.",
+  "Hide them in your pocket": "Hiding pills means a child could find them later and get hurt."
+ },
+ "Your friend offers you their prescription medicine for a headache. What should you do?": {
+  "Take it, since you both had the same kind of headache": "Headaches can look the same but have different causes, and that medicine was made for your friend’s body.",
+  "Take half, so the dose is too small to cause harm": "Even a half dose of the wrong medicine can cause harm or a reaction.",
+  "Take it only if your friend says it worked for them": "What worked for your friend may not be safe for your body."
+ },
+ "Why must you follow the dose on the medicine label?": {
+  "A bigger dose always works faster and better": "More medicine doesn’t work faster; too much can be harmful.",
+  "The dose is just a guess, so any amount is fine": "Doses are carefully figured out, so the amount really matters.",
+  "You can take more if the first dose doesn’t help": "Taking extra can lead to an overdose; ask an adult or doctor instead."
+ },
+ "Vitamins are…": {
+  "Candy": "Vitamins can look like candy, but they can be harmful if you take too many.",
+  "Unlimited": "Too many vitamins can make you sick, so there is a limit.",
+  "Always harmless in any amount": "Some vitamins build up in your body and can cause harm in large amounts."
+ },
+ "Where should medicine be kept in a home with small kids?": {
+  "On the kitchen table": "A table is easy for small kids to reach.",
+  "In a toy box in the closet": "Kids go in toy boxes looking for fun things, so medicine there is risky.",
+  "In a lunch bag by the door": "A lunch bag by the door is easy for kids to open."
+ },
+ "Why tell a doctor about other medicines you take?": {
+  "To fill time": "Doctors ask for a real safety reason, not to pass the time.",
+  "It doesn’t matter": "It really does matter for your safety.",
+  "For fun": "This is a serious safety question, not a game."
+ },
+ "What does the expiration date on medicine mean?": {
+  "The day the store will have more": "The date is about the medicine itself, not when the store restocks.",
+  "The day the price goes up at the store": "Prices have nothing to do with this date.",
+  "It is the day to take the last dose": "It doesn’t tell you when to stop taking it; that’s on the directions."
+ },
+ "What should you do if you feel sick after taking a medicine?": {
+  "Take more to make it work": "Taking more could make the reaction worse.",
+  "Hide it so no one worries": "Hiding it keeps adults from helping you when you may need it.",
+  "Ignore it and keep going": "Ignoring a reaction can let it get worse."
+ },
+ "Someone offers you a pill they say is a pain reliever. Why is that dangerous?": {
+  "It isn’t; pills from friends are the same as store pills": "Pills from friends or strangers can be fake, even if they look real.",
+  "It is only dangerous if you take two or more at once": "Even one fake pill can be deadly.",
+  "Only liquid medicine can be fake, not pills": "Fake pills are a big problem, not just fake liquids."
+ },
+ "Why should you only take medicine from a trusted adult or as the label says?": {
+  "More medicine always works faster": "More medicine doesn’t work faster, and too much can harm you.",
+  "Labels are only suggestions": "Labels give careful directions that keep you safe.",
+  "Medicine can’t hurt you": "Medicine is helpful but can cause harm if used the wrong way."
+ },
+ "A label says “take 1 tablet every 6 hours.” You took one at 8 AM. When is the next dose?": {
+  "9 AM": "That is only one hour later; you would take too much too soon.",
+  "10 AM": "That is two hours later, which is earlier than the label says.",
+  "Right away": "Taking another right away doubles the dose and can be harmful."
+ },
+ "Is it safe to take a friend’s prescription medicine if you feel the same?": {
+  "Yes, if your sickness feels the same": "Two sicknesses can feel alike but need different medicines.",
+  "Yes, if you only take a small amount": "Even a small amount of the wrong medicine can cause harm.",
+  "Yes, if your friend says it is okay": "Your friend isn’t a doctor, so their okay doesn’t make it safe for you."
+ },
+ "You missed one day of your new habit. What is best?": {
+  "Give up, since the habit is now broken for good": "One missed day doesn’t break a habit; progress still counts.",
+  "Do two days’ worth tomorrow to make up for it": "Doubling up can make the habit feel like too much and burn you out.",
+  "Wait until next month and start the habit over": "Waiting a month wastes the progress you already made."
+ },
+ "Which goal is specific and measurable?": {
+  "Be a lot healthier this year": "That is too vague; how would you know when you’ve reached it?",
+  "Exercise more often someday": "Someday has no time frame and no way to measure it.",
+  "Get fit and eat better food": "Fit and better are hard to measure; a goal needs clear numbers."
+ },
+ "What helps a new habit stick?": {
+  "Doing it once a year": "Once a year isn’t often enough for something to become a habit.",
+  "Waiting until you feel like it": "Waiting for the feeling means you may rarely do it.",
+  "Keeping it a secret from yourself": "You can’t keep a secret from yourself; tracking helps you see progress."
+ },
+ "How long does a new habit often take to feel automatic?": {
+  "About one day": "One day is too short; habits take repeated practice.",
+  "About one hour": "One hour isn’t enough time for anything to feel automatic.",
+  "It never does": "Habits do become automatic with enough practice over time."
+ },
+ "Why track a habit on a chart?": {
+  "It wastes time you could use": "Tracking takes only a moment and can help a lot.",
+  "Charts are only for school": "Charts can help with any goal, not just school.",
+  "So your friends can see it": "It’s mainly for you, not for showing off to friends."
+ },
+ "How can you remember to drink more water?": {
+  "Hide your bottle": "Hiding your bottle makes it easier to forget to drink.",
+  "Only drink soda": "Soda has lots of sugar and doesn’t replace water.",
+  "Wait until thirsty": "By the time you feel thirsty, your body already needs water."
+ },
+ "How can you break a bad habit?": {
+  "Do it more until you are bored": "Doing it more usually makes the habit stronger, not weaker.",
+  "Ignore it and hope it stops": "Bad habits rarely stop on their own without a plan.",
+  "Hide from what reminds you": "Avoiding triggers can help a little, but it doesn’t give you something new to do."
+ },
+ "Which is a SMART goal?": {
+  "Read more books this year": "More books is vague; it has no clear number or time frame.",
+  "Be a better reader soon": "Better and soon are hard to measure.",
+  "Try reading sometime next week": "Sometime is not a clear plan, and it doesn’t say how much."
+ },
+ "You want to read more. Which goal is clearest?": {
+  "Read more books sometime this year": "Sometime this year is vague; it has no clear amount or schedule.",
+  "Become a much better and faster reader": "Better and faster are hard to measure.",
+  "Read a lot whenever you have free time": "Whenever you have time is not a clear plan."
+ },
+ "It takes time to build a habit. What helps it stick?": {
+  "Doing it once and stopping": "Doing it once doesn’t give it time to become a habit.",
+  "Only doing it when you feel like it": "Only doing it when you feel like it makes it easy to skip.",
+  "Keeping no record": "Without a record, it’s hard to see your progress."
+ },
+ "You missed your goal two days in a row. What is the best next step?": {
+  "Give up, since the habit didn’t work": "Missing a couple of days doesn’t mean the habit failed.",
+  "Double the goal tomorrow to catch up": "Doubling up can make the habit feel too hard and lead to burnout.",
+  "Wait until next month to start over": "Waiting a month loses the progress you’ve made."
+ },
+ "Which helps you stick to a new habit?": {
+  "Waiting until you feel motivated": "Motivation comes and goes, so waiting for it is unreliable.",
+  "Doing it whenever you remember": "Without a set cue, it’s easy to forget.",
+  "Starting with a huge goal on day one": "A huge goal at the start can feel too hard and make you quit."
+ },
+ "A friend says they have felt very sad for weeks. What is the best response?": {
+  "Tell them everyone feels sad and it will pass soon": "Weeks of sadness can be more than a passing mood, so brushing it off may leave your friend without support.",
+  "Change the subject so they can stop thinking about it": "Changing the subject can make your friend feel unheard, and the feelings don’t go away.",
+  "Tell other friends so everyone can cheer them up": "Spreading it around can break their trust; this needs someone with the skills to help."
+ },
+ "Is asking for help with your feelings a sign of weakness?": {
+  "Yes, strong people handle it alone": "Even strong people need support sometimes; handling everything alone can make things harder.",
+  "Only if you are an adult": "People of any age can and should ask for help with their feelings.",
+  "Yes, unless it is a big problem": "You don’t have to wait for a big problem; asking early is wise."
+ },
+ "Which helps mental health every day?": {
+  "Staying up late so you have more time to relax": "Staying up late cuts into sleep, which your mood and focus depend on.",
+  "Spending all your free time alone on screens": "Lots of screen time alone can leave you feeling more isolated.",
+  "Skipping meals when you are busy or stressed": "Skipping meals leaves your brain low on fuel, which can make stress feel worse."
+ },
+ "What is mental health?": {
+  "Only how smart we are": "Mental health isn’t about how smart you are; everyone has it.",
+  "How fast we can run": "Running speed is about physical fitness, not your thoughts and feelings.",
+  "How many friends we have": "The number of friends you have doesn’t define your mental health."
+ },
+ "Where can you find help if you feel down?": {
+  "Nowhere, you have to handle it alone": "You never have to handle hard feelings alone; help is out there.",
+  "Only strangers in chat rooms online": "Strangers online may not be safe or able to help.",
+  "Only yourself, by keeping busy": "Keeping busy can distract you, but it doesn’t replace real support."
+ },
+ "A friend tells you they want to hurt themselves. What should you do?": {
+  "Keep it secret, because they trusted you with it": "Their safety matters more than a promise; this is too serious to keep secret.",
+  "Wait a few days to see if they still feel that way": "Waiting could be dangerous; someone at risk needs help now.",
+  "Tell them to cheer up and think about good things": "Telling them to cheer up can make them feel unheard and doesn’t get them help."
+ },
+ "Which is a sign someone may need support?": {
+  "They laugh and joke with friends": "Laughing with friends is usually a sign someone is doing okay.",
+  "They sleep well most nights": "Sleeping well is usually a healthy sign.",
+  "They eat lunch with others": "Eating with others shows connection, which is a good sign."
+ },
+ "What is self-care?": {
+  "Being selfish and ignoring the people around you": "Self-care isn’t selfish; caring for yourself helps you care for others too.",
+  "Buying new things whenever you feel a little sad": "Shopping might feel good briefly, but it doesn’t meet your real needs.",
+  "Staying home alone instead of going to school": "Avoiding school can make problems grow; self-care keeps you healthy and connected."
+ },
+ "A friend says they don’t want to be alive anymore. What should you do?": {
+  "Keep it a secret, because they asked you to": "Their safety comes first; this is too serious to keep secret.",
+  "Change the subject so they can feel better": "Changing the subject can make them feel dismissed when they need help.",
+  "Wait a few days to see if they really mean it": "Waiting could be dangerous; words like these always need a quick response."
+ },
+ "What is a sign someone might need help with their mental health?": {
+  "They have one bad day after a test": "One bad day after a test is a normal reaction.",
+  "They feel nervous before a speech": "Feeling nervous before a speech is normal for most people.",
+  "They want some quiet time alone at times": "Wanting quiet time now and then is healthy."
+ },
+ "Asking for help with your feelings is…": {
+  "A sign that you are weak": "Reaching out takes courage; it is not a sign of weakness.",
+  "Something only adults do": "People of every age can ask for help with feelings.",
+  "Only needed in an emergency": "You can ask for help with any problem, big or small."
+ },
+ "A friend tells you they’ve been hurting themselves. What should you do?": {
+  "Promise to keep it secret so they trust you": "Self-harm is serious, and keeping it secret could put your friend in danger.",
+  "Wait to see if they feel better next week": "Waiting can let things get worse; your friend needs support now.",
+  "Try to fix it yourself without telling anyone": "This is too big to handle on your own; trained adults can help."
+ },
+ "Which is a sign of a healthy relationship?": {
+  "Jealousy and control": "Jealousy and control are warning signs, not signs of love.",
+  "Keeping secrets that hurt you": "Secrets that hurt you are a red flag in any relationship.",
+  "One person always deciding": "When one person always decides, the relationship isn’t equal."
+ },
+ "What is a boundary?": {
+  "A fence that keeps animals inside a farm": "That is a farm fence, not the kind of limit this question means.",
+  "A rule that only other people must follow": "Boundaries apply to everyone, including the person who sets them.",
+  "A promise to always say yes to friends": "Always saying yes is the opposite of having limits."
+ },
+ "Friends pressure you to do something that feels wrong. What should you do?": {
+  "Do it once so they keep liking you": "Giving in once teaches them that pressure works on you.",
+  "Do part of it so they leave you alone": "Doing part of something that feels wrong can still put you at risk.",
+  "Go along and pretend you agree with them": "Pretending to agree can lead you into something you don’t want."
+ },
+ "Someone keeps checking your phone and telling you who you can see. This is…": {
+  "Normal, it shows love": "Love doesn’t mean checking someone’s phone or controlling them.",
+  "Friendly and caring": "Caring friends trust you and don’t limit who you see.",
+  "Polite and respectful": "Polite people don’t try to control your choices."
+ },
+ "A friend says “no” to sharing their snack. What do you do?": {
+  "Take it anyway": "Taking it anyway ignores their choice and isn’t fair.",
+  "Get angry": "Getting angry doesn’t change their answer and can hurt the friendship.",
+  "Tell everyone": "Telling everyone could embarrass them over a simple choice."
+ },
+ "Peer pressure means…": {
+  "Feeling stress about homework": "Homework stress is real, but it isn’t about friends pushing you.",
+  "The air pressure in tires": "Tire pressure is about air, not about people.",
+  "Getting tired from exercise": "Being tired from exercise is a body feeling, not a social one."
+ },
+ "What makes a friendship strong?": {
+  "One person doing everything": "When one person does everything, the friendship becomes unbalanced.",
+  "Keeping score": "Keeping score can create resentment rather than trust.",
+  "Gossip": "Gossip can break trust and hurt people."
+ },
+ "How do you set a boundary?": {
+  "Hope they guess how you feel": "People can’t read your mind; they need you to say it.",
+  "Yell so they know you mean it": "Yelling can cause conflict and make it harder to be heard.",
+  "Say nothing and avoid them": "Avoiding them leaves the problem unsolved."
+ },
+ "Your friend keeps checking your phone and gets angry when you see other friends. This is…": {
+  "Normal, because it shows they really care": "Caring doesn’t look like checking your phone or getting angry about your friends.",
+  "A sign they love you more than others do": "Love includes trust and freedom, not control.",
+  "Fine as long as they say sorry after": "Saying sorry without changing the behavior doesn’t make it okay."
+ },
+ "Someone pressures you to share a private photo. What should you do?": {
+  "Send it if they promise to delete it": "Once a photo is sent, you can’t control where it goes, even if they promise.",
+  "Send it to stay friends": "A real friend wouldn’t pressure you to send private photos.",
+  "Ignore it but keep talking": "Ignoring it while still talking may let the pressure continue."
+ },
+ "What is a sign of a healthy friendship?": {
+  "One person always makes the decisions": "When one person always decides, the friendship isn’t equal.",
+  "You share all your passwords to prove trust": "Sharing passwords isn’t needed to show trust and can put your privacy at risk.",
+  "You never disagree about anything at all": "Disagreeing sometimes is normal and can even be healthy."
+ },
+ "Why are regular check-ups at the clinic useful?": {
+  "They are only needed when you already feel sick": "Check-ups help even when you feel fine, because some problems show no signs at first.",
+  "They replace the need to eat well and exercise": "Check-ups don’t replace healthy daily habits like eating well and moving.",
+  "They are mostly for getting a school form signed": "Forms are a small part; the main value is your health."
+ },
+ "You’re working long hours and feel worn out. Which change best supports wellbeing?": {
+  "Work even more hours so the job gets done sooner": "Working more without rest can lead to burnout and poorer health.",
+  "Skip meals and breaks to save time during the day": "Skipping meals and breaks drains energy and makes you less focused.",
+  "Stop seeing friends until things are less busy": "Cutting off friends removes support you need when stressed."
+ },
+ "Why have hobbies?": {
+  "They keep you too busy to rest": "Hobbies should help you relax, not make you too busy to rest.",
+  "Only kids need them": "People of all ages benefit from hobbies.",
+  "They help you earn more money": "Some hobbies make money, but that isn’t their main health benefit."
+ },
+ "How can helping others improve your own wellbeing?": {
+  "It doesn’t": "Helping others really does tend to boost your own mood.",
+  "It makes you tired only": "Helping can take energy, but it often gives back a lot too.",
+  "It costs money": "Many ways to help, like volunteering, cost nothing."
+ },
+ "Which is a long-term health habit?": {
+  "Ignoring small pains so they go away": "Ignoring small pains can let problems grow.",
+  "Skipping sleep to get more done": "Skipping sleep harms your health over time.",
+  "Only seeing a doctor when very sick": "Waiting until you’re very sick misses the chance to catch problems early."
+ },
+ "What does work-life balance mean?": {
+  "Working nonstop now to rest later": "Working nonstop now can lead to burnout before you ever get to rest.",
+  "Never working more than a few hours": "Balance isn’t about avoiding work; it’s about making room for both.",
+  "Only taking time off on weekends": "Rest only on weekends can leave weekdays too draining."
+ },
+ "Why limit screen time?": {
+  "Screens are bad in every single way": "Screens can be useful for learning and connecting, so they aren’t bad in every way.",
+  "To save batteries and power only": "The main reason is your health and time, not batteries.",
+  "Because screens hurt your eyes forever": "Screen use can strain eyes, but it doesn’t usually cause lasting damage."
+ },
+ "Which helps wellbeing every day?": {
+  "Skipping meals so you have more free time": "Skipping meals leaves your body and brain without needed fuel.",
+  "Staying up late to relax with screens": "Late-night screens cut into sleep, which affects mood and focus.",
+  "Spending most of your free time alone": "Too much time alone can increase loneliness."
+ },
+ "Which combination supports long-term health best?": {
+  "Lots of hard exercise, even if you skip sleep": "Skipping sleep undoes many benefits of exercise and raises injury risk.",
+  "A strict diet with very few calories": "Very low-calorie diets can leave your body without the nutrients it needs.",
+  "Extra sleep on weekends to catch up": "Weekend catch-up sleep doesn’t fully make up for missed sleep during the week."
+ },
+ "Why do doctors recommend regular checkups even when you feel fine?": {
+  "A checkup by itself keeps you from getting sick": "A checkup can find problems, but it doesn’t prevent illness by itself.",
+  "Doctors can only treat you if you visit every year": "Doctors can treat you any time you need care, not only after a yearly visit.",
+  "Checkups are mainly for getting a note for school": "School notes are a small part; the real value is your health."
+ },
+ "Which helps long-term mental health?": {
+  "Keeping busy so there’s no time to feel": "Staying busy to avoid feelings can let them build up.",
+  "Spending free time mostly on screens alone": "Lots of solo screen time can increase loneliness.",
+  "Handling every problem on your own": "Handling everything alone can leave you without support."
+ },
+ "Why is balance between work and rest important?": {
+  "Resting is only needed after you get sick": "Rest helps prevent illness, not just recover from it.",
+  "Work causes no stress if you enjoy it": "Even work you enjoy can cause stress if you never rest.",
+  "Balance matters only for older adults": "Balance matters at every age, including for students."
+ },
+ "Why do restaurants have food-safety inspections?": {
+  "To check how the food tastes to customers": "Taste is up to customers and reviewers, not health inspectors.",
+  "To choose the dishes that go on the menu": "Restaurants choose their own menus.",
+  "To count how many people eat there each day": "Counting customers is a business task, not a safety check."
+ },
+ "Why do cities treat drinking water?": {
+  "To change its color": "Treatment isn’t about color; it focuses on safety.",
+  "To make it taste like juice": "Water treatment doesn’t add flavors like juice.",
+  "There is no reason": "There is a real health reason; think about what you can’t see in water."
+ },
+ "How do vaccines help a whole community?": {
+  "They only protect the one person who got the shot": "Think beyond one person; protection can reach people who never got the shot.",
+  "They make germs stronger so bodies learn to fight": "Vaccines don’t make germs stronger; they train the immune system safely.",
+  "They replace the need to wash hands or stay home": "Vaccines work alongside other healthy habits; they don’t replace them."
+ },
+ "What is an epidemic?": {
+  "A kind of medicine for a disease": "Medicine treats disease; an epidemic is about disease spreading.",
+  "A town where nobody gets sick": "An epidemic is the opposite of a place where nobody gets sick.",
+  "A vitamin that keeps you healthy": "Vitamins are nutrients, not an outbreak of disease."
+ },
+ "Seat belt laws are a public health measure because…": {
+  "They look nice": "Looks have nothing to do with safety laws.",
+  "They make cars faster": "Seat belts don’t change a car’s speed.",
+  "They are optional": "Seat belt laws require buckling up, so they aren’t optional."
+ },
+ "Why do cities have trash pickup?": {
+  "To keep the streets quiet": "Trash pickup can be noisy; its purpose is health, not quiet.",
+  "To save the city money": "Trash pickup costs the city money; its main reason is public health.",
+  "To make the city look busy": "Busy streets aren’t the goal; health is."
+ },
+ "Why are there rules against smoking in public places?": {
+  "Smoke smells bad to some people": "The smell bothers some people, but the real issue is harm to health.",
+  "Smoking makes places too dark": "Smoke doesn’t make places dark in a way that matters for health.",
+  "To keep places quiet": "Smoking rules aren’t about noise."
+ },
+ "Why do schools ask sick students to stay home?": {
+  "To punish them": "Staying home isn’t a punishment; it helps everyone, including the sick student.",
+  "To close the school": "Schools stay open; asking sick students to rest helps it stay that way.",
+  "No reason": "There’s a real health reason behind this rule."
+ },
+ "How do vaccines protect a whole community?": {
+  "They only protect the one person who gets the shot": "Think bigger; the effect reaches more than the one person who got the shot.",
+  "They give people enough protection to skip hand-washing": "Vaccines don’t replace hand-washing; healthy habits still matter.",
+  "They kill the germs already living in the community": "Vaccines train the immune system; they don’t kill germs in the environment."
+ },
+ "Why do cities test drinking water?": {
+  "To check that it tastes and smells the same": "Taste and smell matter less than what you can’t see in water.",
+  "To find out how much water each home uses": "Usage is tracked by water meters, not safety tests.",
+  "To decide how much to charge for each gallon": "Billing is separate from testing for health."
+ },
+ "Why do restaurants get health inspections?": {
+  "To check that menu prices are fair for customers": "Prices are a business matter, not a health inspection.",
+  "To rate how good the food tastes for reviews": "Taste ratings come from reviewers, not health inspectors.",
+  "To count how many people eat there each day": "Counting customers is a business task, not a safety check."
+ },
+ "Why do cities ban smoking indoors in public places?": {
+  "To stop smoke alarms from going off": "Smoke alarms aren’t the reason; the concern is people’s health.",
+  "Because smoking is only harmful indoors": "Smoking is harmful anywhere; indoor bans protect people nearby.",
+  "To make restaurants spend less on cleaning": "Cleaning costs aren’t the main reason; health is."
+ }
+}

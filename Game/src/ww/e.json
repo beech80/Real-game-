@@ -1,0 +1,1498 @@
+{
+ "Who grows much of the food we buy at Fresh Mart?": {
+  "Pilots": "Pilots fly planes. They do not grow crops.",
+  "Librarians": "Librarians help you find books, not grow food.",
+  "Lawyers": "Lawyers help people with laws, not with crops."
+ },
+ "You feel very sick. Which community helper can check on you?": {
+  "A bus driver": "A bus driver gets you to places. They do not treat sick people.",
+  "A cashier": "A cashier helps you pay at a store, not get well.",
+  "A builder": "A builder makes homes and roads, not makes you well."
+ },
+ "A house is on fire. Who should come to help?": {
+  "Librarians": "Librarians help with books. They do not put out fires.",
+  "Bakers": "Bakers make bread. They are not trained to fight fires.",
+  "Mail carriers": "Mail carriers bring mail. They do not fight fires."
+ },
+ "Who helps you find a book about planets?": {
+  "A firefighter": "A firefighter puts out fires. Think of who works with books.",
+  "A dentist": "A dentist takes care of your teeth, not books.",
+  "A police officer": "A police officer keeps us safe, but books are not their job."
+ },
+ "Who delivers letters and packages?": {
+  "A chef": "A chef cooks food. They do not bring mail.",
+  "A judge": "A judge works in a court, not on a mail route.",
+  "A farmer": "A farmer grows food. They do not bring your mail."
+ },
+ "Who helps people who are sick?": {
+  "Bus drivers": "Bus drivers take people to places. They do not treat the sick.",
+  "Mail carriers": "Mail carriers bring mail, not care for sick people.",
+  "Bakers": "Bakers make bread and cakes. They do not treat the sick."
+ },
+ "Who would you ask for a library book?": {
+  "A firefighter": "A firefighter puts out fires. Think of who keeps the books.",
+  "A dentist": "A dentist looks at teeth. They do not lend books.",
+  "A farmer": "A farmer grows food. Books are not their job."
+ },
+ "Why does a community need many kinds of workers?": {
+  "So everyone can have the same job": "If all of us had one job, who would do the rest?",
+  "Workers like to be in big groups": "Big groups are not the point. Think of the needs a town has.",
+  "So no one has to work very hard": "Lots of jobs still take hard work. Think of what each job gives."
+ },
+ "There is a fire at a house. Who should come?": {
+  "Teachers": "Teachers help kids learn. They do not fight fires.",
+  "Chefs": "Chefs cook food. They do not put out fires.",
+  "Librarians": "Librarians help with books, not with fires."
+ },
+ "A road has a big pothole. Who in the community usually fixes it?": {
+  "The mail carrier": "The mail carrier brings mail. Roads are not their job.",
+  "The school nurse": "The school nurse helps sick kids, not holes in roads.",
+  "A store cashier": "A cashier works at a store. They do not fix roads."
+ },
+ "Which place in a town is free for everyone to use?": {
+  "A toy store": "A toy store sells toys. You must pay to get them.",
+  "A movie theater": "A movie show costs money to see.",
+  "A restaurant": "You must pay for the food you eat there."
+ },
+ "Why do roads have traffic lights?": {
+  "To make streets colorful": "Lights are bright, but that is not why we have them. Think of who goes when.",
+  "To slow down the bus on purpose": "The lights stop all cars, not just the bus. Think of why.",
+  "So drivers can rest": "Drivers do not stop to rest. Think of crashes."
+ },
+ "Why do people wait in line at the store?": {
+  "Lines make the store look busy": "How the store looks is not the point. Think of who gets served first.",
+  "The cashiers like to see a line": "What the cashier likes is not the point. Think of what is fair.",
+  "The store makes more money that way": "A line does not make the store more money. Think of fair turns."
+ },
+ "What makes a rule fair?": {
+  "Only some people must follow it": "If just some must follow it, that is not fair to the rest.",
+  "It changes every day": "A rule that keeps changing is hard to know and follow.",
+  "Nobody knows about it": "People can't follow a rule they don't know about."
+ },
+ "A park sign says “Dogs on leashes.” What is the main reason?": {
+  "To make dogs tired": "The rule is not to tire dogs out. Think of safe.",
+  "To sell leashes": "The park does not sell leashes. Think of who could get hurt.",
+  "Because dogs dislike parks": "Dogs like parks just fine. Think of who the leash keeps safe."
+ },
+ "What happens if a community has no rules?": {
+  "Everyone gets to be happier": "With no rules, some may get hurt. That is not happy.",
+  "Nothing would change at all": "Rules keep us safe. Lose them and things change.",
+  "Things would get cleaner": "Things would not get clean on their own. Who would keep them so?"
+ },
+ "Who helps make sure laws are followed in a city?": {
+  "Bakers": "Bakers make bread. Laws are not their job.",
+  "Musicians": "Musicians play songs. They do not check on laws.",
+  "Painters": "Painters make art, not check that laws are kept."
+ },
+ "Why do we raise hands in class?": {
+  "To stretch our arms": "We stretch at other times. Think of who gets to talk.",
+  "So we can be loud": "Hands up helps keep the room calm, not loud.",
+  "So the teacher can see us": "The teacher can see you, but think of turns to speak."
+ },
+ "A rule says “No running by the pool.” Why?": {
+  "Running makes too much noise": "Noise is not the big worry here. Think of a wet floor.",
+  "To keep the pool water clean": "Your feet do not make the pool dirty. Think of falls.",
+  "So the lifeguard can rest": "The lifeguard still has to watch. Think of why you walk."
+ },
+ "Why do we raise our hands in class?": {
+  "So we can stretch our arms": "We stretch at other times. Think of turns to talk.",
+  "So the class is loud and fun": "Hands up helps keep the class calm, not loud.",
+  "Because our hands get tired": "Tired hands are not the reason. Think of fair turns."
+ },
+ "What could happen if there were no traffic lights?": {
+  "Cars would all drive slower": "With no lights, cars would not know when to stop. Think of what could happen.",
+  "Nothing would change at all": "Lights tell cars when to go. Lose them and things change.",
+  "Cars would never need to stop": "Cars would still need to stop. They just would not know when."
+ },
+ "Who makes the laws for a city?": {
+  "Kids at recess": "Kids at play do not make laws for a whole city.",
+  "Store owners": "Store owners run shops. They do not make city laws.",
+  "Anyone who wants to": "Not just anyone can make laws. Leaders are picked by vote."
+ },
+ "A rule says “no running in the hall.” What is the reason?": {
+  "Running is not allowed anywhere ever": "The rule is just for the hall. You can run at the park.",
+  "To make hallways quiet only": "Quiet is nice, but think of what could hurt you.",
+  "There is no reason": "Good rules have a reason. Think of what could go wrong."
+ },
+ "What does a map key (legend) tell you?": {
+  "The name of who drew the map": "The key does not name who made the map.",
+  "How old the map is in years": "The key does not tell the age of the map.",
+  "How far it is to every place": "That is a job for the map scale, not the key."
+ },
+ "On most maps, which direction is at the top?": {
+  "South": "South is most often at the bottom of a map.",
+  "East": "East is most often on the right side of a map.",
+  "West": "West is most often on the left side of a map."
+ },
+ "The sun rises in which direction?": {
+  "West": "The sun sets in the west. Think of where it comes up.",
+  "North": "The sun does not rise in the north.",
+  "South": "The sun does not rise in the south."
+ },
+ "On a map, the library is left of the park. North is up. Which direction is the library from the park?": {
+  "East": "East is on the right when north is up.",
+  "North": "North is up. The library is to the left, not up.",
+  "South": "South is down. The library is to the left, not down."
+ },
+ "You face north and turn right. Which way do you face now?": {
+  "West": "West is to your left when you face north.",
+  "South": "South is at your back when you face north.",
+  "North": "You were at north. A turn moves you off it."
+ },
+ "Which is a map symbol for water?": {
+  "Red dots": "Red dots are often towns or spots, not water.",
+  "Black lines only": "Black lines are often roads or lines between states.",
+  "Stars": "Stars often show a capital city, not water."
+ },
+ "You face south. What is behind you?": {
+  "East": "East is to one side, not behind you.",
+  "West": "West is to one side, not behind you.",
+  "South": "South is the way you face, not behind you."
+ },
+ "What does a scale on a map show?": {
+  "How much the map weighs": "A scale on a map is not for weight.",
+  "What the weather is like there": "A map scale does not tell you the weather.",
+  "Which way north is on the map": "A compass rose shows which way north is."
+ },
+ "What does a map key (legend) show?": {
+  "How much the map costs": "The key does not show a price.",
+  "The name of who drew the map": "The key does not name who drew the map.",
+  "What the weather will be": "A map key does not tell you the weather."
+ },
+ "If north is up, which way is east?": {
+  "To the left": "Left is west when north is up.",
+  "Down": "Down is south when north is up.",
+  "Up": "Up is north on most maps."
+ },
+ "Which continent is covered in ice and has no permanent cities?": {
+  "Africa": "Africa is warm in most parts and has lots of big cities.",
+  "Europe": "Europe has many big cities, like Paris and Rome.",
+  "Asia": "Asia has many of the biggest cities on Earth."
+ },
+ "What is the highest mountain above sea level on Earth?": {
+  "Mount Kilimanjaro": "Kilimanjaro is the tallest in Africa, but other peaks are taller.",
+  "The Alps": "The Alps are a range of many mountains in Europe, and none is the tallest on Earth.",
+  "Mount Fuji": "Mount Fuji in Japan is tall, but much shorter than the tallest peak."
+ },
+ "The Amazon rainforest is mostly on which continent?": {
+  "Africa": "Africa has big rain forests too, but this one is not there.",
+  "Europe": "Europe does not have a big rain forest like this one.",
+  "Australia": "Australia has some rain forest, but this one is on another continent."
+ },
+ "Which continent is the largest?": {
+  "Europe": "Europe is one of the smallest continents.",
+  "Australia": "Australia is the smallest continent.",
+  "South America": "South America is big, but some continents are bigger."
+ },
+ "Which is the largest ocean?": {
+  "The Atlantic Ocean": "The Atlantic is the second biggest ocean.",
+  "The Indian Ocean": "The Indian Ocean is third in size.",
+  "The Arctic Ocean": "The Arctic is the smallest ocean."
+ },
+ "What is the pretend line around the middle of the Earth called?": {
+  "The North Pole": "The North Pole is the top point of Earth, not a line around the middle.",
+  "The prime ocean": "There is no ocean by that name. Think of a line on a map.",
+  "The horizon": "The horizon is where the land seems to meet the sky."
+ },
+ "How many continents are there?": {
+  "5": "Five is too few. Try to name them all and count.",
+  "9": "Nine is too many. Count them one by one.",
+  "12": "Twelve is far too many. Count them again."
+ },
+ "Which continent is the United States on?": {
+  "South America": "South America is below us, past Mexico.",
+  "Europe": "Europe is across the Atlantic Ocean from the U.S.",
+  "Asia": "Asia is across the Pacific Ocean from the U.S."
+ },
+ "What is the largest desert on Earth?": {
+  "The Pacific Ocean": "An ocean is full of water, so it is not a desert.",
+  "The Amazon rain forest": "A rain forest gets lots of rain, so it is not a desert.",
+  "The Gobi in Asia": "The Gobi is big, but some deserts are much bigger."
+ },
+ "Which is the longest river in Africa?": {
+  "The Amazon": "The Amazon is in South America, not Africa.",
+  "The Mississippi": "The Mississippi is in the United States.",
+  "The Thames": "The Thames is a short river in England."
+ },
+ "What is the largest ocean on Earth?": {
+  "The Atlantic Ocean": "The Atlantic is the second biggest ocean.",
+  "The Indian Ocean": "The Indian Ocean is third in size.",
+  "The Arctic Ocean": "The Arctic is the smallest ocean."
+ },
+ "Which continent is the U.S. on?": {
+  "South America": "South America is below us, past Mexico.",
+  "Europe": "Europe is across the Atlantic Ocean from the U.S.",
+  "Asia": "Asia is across the Pacific Ocean from the U.S."
+ },
+ "Why are many big cities built next to rivers or coasts?": {
+  "Rivers and coasts look pretty to visitors": "A nice view is not why towns first grew there. Think of what people need.",
+  "Land near water always costs less": "Land by water often costs more, not less.",
+  "Cities stay cold near the water": "Water does not keep a city cold. Think of what water gives people."
+ },
+ "A decade is how many years?": {
+  "1": "1 year is just one trip around the sun.",
+  "5": "5 years is half of a decade.",
+  "100": "100 years is a century, which is much longer.",
+  "1,000": "1,000 years is a millennium, a very long time."
+ },
+ "A century is how many years?": {
+  "10": "10 years is a decade, which is shorter.",
+  "50": "50 years is half of a century.",
+  "1,000": "1,000 years is a millennium, much longer."
+ },
+ "Which came first: cars or airplanes?": {
+  "Airplanes": "The first airplane flew in 1903. Gas cars came in the 1880s.",
+  "Same year": "They did not come in the same year. Check the dates."
+ },
+ "On a timeline, which side usually shows earlier events?": {
+  "The right": "The right side shows later events.",
+  "The top": "Most timelines go side to side, not top to bottom.",
+  "The middle": "The middle is between early and late events."
+ },
+ "On a timeline, events on the left usually happened…": {
+  "Later": "Later events go on the right side.",
+  "At the same time": "Events at the same time sit at the same spot.",
+  "Never": "A timeline only shows things that did happen."
+ },
+ "Which came first: the first airplane flight (1903) or the Moon landing (1969)?": {
+  "The Moon landing": "The Moon landing was in 1969. Compare that to 1903.",
+  "They were the same year": "1903 and 1969 are not the same year.",
+  "Neither happened": "Both events really did happen. Compare the years."
+ },
+ "How many years are in a century?": {
+  "10": "10 years is a decade, which is shorter.",
+  "50": "50 years is half of a century.",
+  "1,000": "1,000 years is a millennium, much longer."
+ },
+ "A new classmate celebrates a holiday you don’t know. What is respectful?": {
+  "Tell them it’s weird": "Calling it weird can hurt their feelings.",
+  "Ignore them": "Ignoring them leaves them out and alone.",
+  "Say yours is better": "Saying yours is better is not kind or fair."
+ },
+ "What is culture?": {
+  "Only the kinds of food that people in a place eat": "Food is part of it, but culture is much more than food.",
+  "The weather and the land where a group lives": "Weather and land are geography, not the way people live.",
+  "The country a group of people lives in today": "A country is a place. Culture is about how a group lives."
+ },
+ "About how many languages are spoken in the world today?": {
+  "About 10": "Far more than 10 languages are spoken on Earth.",
+  "About 100": "100 is still much too small. Think bigger.",
+  "Just 1": "People speak many languages, not just one."
+ },
+ "Which shows that people in different places share traditions?": {
+  "Everyone in the world speaks the same language": "People speak many different languages, not just one.",
+  "All holidays happen on the very same day": "Holidays fall on many different days around the world.",
+  "Each culture has its own food that no one else eats": "This shows a difference, not a shared tradition."
+ },
+ "Many cultures share stories passed down by talking. These are called…": {
+  "Text messages": "Text messages are typed, not passed down by talking.",
+  "Laws": "Laws are rules, not stories told over time.",
+  "Maps": "Maps show places, not stories told aloud."
+ },
+ "Which is part of a culture?": {
+  "The weather only": "Weather is part of nature, not something people make.",
+  "Mountains": "Mountains are part of the land, not of a culture.",
+  "The ocean": "The ocean is part of nature, not a culture."
+ },
+ "A family speaks two languages at home. That makes them…": {
+  "Silent": "Silent means not talking at all. This family talks a lot!",
+  "Foreign forever": "Two languages does not make anyone foreign forever.",
+  "Confused": "Speaking two languages is a skill, not a mix-up."
+ },
+ "Why learn about other cultures?": {
+  "To find things to make fun of": "Making fun of people is not kind or fair.",
+  "To copy everything they do": "We learn about others, but we don't have to copy them.",
+  "To decide which one is the best": "Learning is not about picking a winner."
+ },
+ "What is a tradition?": {
+  "A rule that every school must follow": "A school rule is not the same as a group's custom.",
+  "Something a family does only one time": "Doing it just one time is not a tradition. Think of again and again.",
+  "A new idea that a group just made up": "A brand new idea has not been passed down yet."
+ },
+ "Why is it good to learn about other cultures?": {
+  "So we can copy other people exactly": "We learn about others to know them, not to copy them.",
+  "To prove that one culture is the best": "Learning is not about picking one culture as best.",
+  "It doesn’t help, since all people are the same": "People are not all the same, and learning does help."
+ },
+ "Lunar New Year, Diwali and Thanksgiving are all…": {
+  "Different names for the same holiday": "These are three different holidays, not one.",
+  "Kinds of food from other places": "They are days, not kinds of food.",
+  "Laws that every person must follow": "They are holidays, not laws."
+ },
+ "Why might families in different places eat different foods?": {
+  "Stores only sell one kind of food": "Stores sell many kinds of food.",
+  "People pick foods at random": "Food choices are not random. Think about climate and crops.",
+  "All families eat the same foods": "Families do not all eat the same foods."
+ },
+ "What does the judicial branch (the courts) do?": {
+  "Makes the laws for the whole country": "Making laws is the job of Congress, the legislative branch.",
+  "Carries out laws and runs the army": "Carrying out laws and leading the army is the President’s job.",
+  "Collects taxes to pay for schools": "Collecting taxes is handled by other parts of government, not the courts."
+ },
+ "Why is power split into three branches?": {
+  "To make government slower on purpose": "Slowing things down is not the goal. Think about sharing power.",
+  "So there are more buildings": "The number of buildings has nothing to do with it.",
+  "Because three is lucky": "Luck is not the reason. Think about who holds power."
+ },
+ "Who leads a city government?": {
+  "A king": "The U.S. does not have kings. Cities elect their leaders.",
+  "A principal": "A principal leads a school, not a city.",
+  "A captain": "A captain leads a ship or a team, not a city."
+ },
+ "Which is a service governments usually provide?": {
+  "Video game shops and toy stores": "Video game shops and toy stores are private businesses.",
+  "The menus at restaurants": "Restaurants choose their own menus, not the government.",
+  "New phones for every family": "Families buy their own phones. Taxes don't pay for them."
+ },
+ "In the United States, which branch of government makes laws?": {
+  "The President and the Cabinet": "The President carries out laws but does not write them.",
+  "The Supreme Court": "The Supreme Court decides what laws mean. It does not write them.",
+  "The state governors": "Governors lead states, not the national government."
+ },
+ "What does a city council do?": {
+  "Runs the state courts and prisons": "State courts and prisons are run by the state, not the city.",
+  "Teaches classes at city schools": "Teachers teach classes, not the city council.",
+  "Makes laws for the whole country": "Laws for the whole country come from Congress."
+ },
+ "What is the U.S. Constitution?": {
+  "A storybook about the first president": "It is not a storybook. It is a founding document.",
+  "A map of all the states and capitals": "It is not a map. Think about how the government is set up.",
+  "A list of every law Congress has passed": "It does not list every law. It sets up the government."
+ },
+ "How many U.S. states are there?": {
+  "13": "13 was the number of original colonies, not today’s states.",
+  "48": "48 was the count before Alaska and Hawaii joined in 1959.",
+  "100": "100 is too many. That is the number of U.S. senators."
+ },
+ "What are the three branches of the U.S. government?": {
+  "Federal, state and city": "Those are levels of government, not the three branches.",
+  "President, governor and mayor": "Those are leaders at different levels, not branches.",
+  "Police, fire and schools": "Those are public services, not branches of government."
+ },
+ "Why does the government have three branches?": {
+  "To make more jobs for government workers": "Making jobs is not the reason. Think about power.",
+  "So that new laws can be made faster": "Three branches can actually make lawmaking slower.",
+  "Because each state needs its own branch": "The branches are part of the national government, not one per state."
+ },
+ "Who is the leader of a state government?": {
+  "The mayor": "A mayor leads a city, not a whole state.",
+  "The President": "The President leads the whole country, not one state.",
+  "The principal": "A principal leads a school, not a state."
+ },
+ "Who makes federal laws in the U.S.?": {
+  "The Supreme Court": "The Supreme Court decides what laws mean. It does not write them.",
+  "Governors": "Governors lead states. They do not write national laws.",
+  "The mayor": "A mayor leads a city, not the national government."
+ },
+ "In the United States, the first ten amendments to the Constitution are called what?": {
+  "The Declaration of Independence": "The Declaration of Independence came in 1776, before the Constitution. It is not an amendment.",
+  "The Pledge": "The Pledge of Allegiance is a promise people say, not part of the Constitution.",
+  "The Treaty": "A treaty is an agreement between countries, not a change to the Constitution."
+ },
+ "At what age can U.S. citizens vote in national elections?": {
+  "12": "12 is much too young to vote in national elections.",
+  "16": "16 is close, but still too young to vote in national elections.",
+  "25": "25 is the age to serve in the House, not the age to vote."
+ },
+ "Respecting others’ rights is a…": {
+  "Right": "A right is something you are free to do. Respecting others is something you owe them.",
+  "Law of physics": "Laws of physics describe nature, like gravity. This is about how people treat each other.",
+  "Hobby": "A hobby is something you do for fun. This is a duty you have."
+ },
+ "Why is a fair trial a right?": {
+  "To make trials last longer": "Fair trials are about being fair, not about taking more time.",
+  "So judges can decide on their own": "Letting judges decide however they like could be unfair. Think about evidence.",
+  "So the loudest side always wins": "Being loud does not prove anything. Think about what a trial should be based on."
+ },
+ "Freedom of speech means…": {
+  "You can say anything with no effects at all": "Speech can still have effects. Others may disagree, and threats are not protected.",
+  "Only leaders can speak": "This freedom belongs to everyone, not just leaders.",
+  "You must stay quiet": "Staying quiet is the opposite of free speech."
+ },
+ "The First Amendment protects…": {
+  "Only freedom of speech and nothing else": "Speech is just one of the freedoms in this amendment. There are more.",
+  "The right to vote, own a home and drive a car": "Voting, owning a home and driving are not the freedoms listed in this amendment.",
+  "Free speech, the right to vote, and a free education": "Voting and free schooling are not part of this amendment. Think of its five freedoms."
+ },
+ "Which shows a responsibility that comes with rights?": {
+  "Ignoring laws you dislike": "Ignoring laws you dislike breaks a duty you have as a citizen.",
+  "Never voting": "Never voting skips a way citizens take part.",
+  "Only caring about yourself": "Caring only about yourself ignores your duties to others."
+ },
+ "Does freedom of speech mean you can say anything with no consequences?": {
+  "Yes, you can say anything at all with no limits": "Free speech has limits. Threats, for example, are not protected.",
+  "It means everyone must agree with what you say": "Free speech does not mean others must agree. They can respond freely too.",
+  "It only protects people who are over 18": "Free speech protects people of every age, not just adults."
+ },
+ "What does the right to a fair trial mean?": {
+  "You must prove to the judge that you are innocent": "In the U.S., you are innocent until proven guilty. The other side must prove guilt.",
+  "A trial happens only if the police agree to it": "Police do not decide if a trial happens. Courts and the law do.",
+  "The person who was harmed decides the punishment": "Judges and juries decide punishment, not the person who was harmed."
+ },
+ "Which is a responsibility of a citizen?": {
+  "Ignoring the law": "Ignoring the law goes against a citizen’s duties.",
+  "Never paying taxes": "Paying taxes is a duty, so never paying is not one.",
+  "Breaking rules you dislike": "Breaking rules you dislike goes against your duties."
+ },
+ "Why do rights have some limits?": {
+  "So leaders can take rights away when they want": "Leaders cannot take rights away whenever they want. Think about protecting others.",
+  "Because rights only belong to adults": "Kids have rights too. Think about how one person’s rights affect others.",
+  "So the government can save money": "Saving money is not the reason. Think about keeping others safe."
+ },
+ "A farm has a huge strawberry harvest. What usually happens to strawberry prices?": {
+  "They go up": "Prices usually rise when there is too little, not too much. Here there is a lot.",
+  "Strawberries disappear": "A big harvest means more strawberries, not fewer.",
+  "Nothing can happen": "Prices can change. Think about lots of supply."
+ },
+ "What is “demand”?": {
+  "How much of something there is to sell": "That describes supply, how much is available to sell.",
+  "How much it costs to make something": "That is the cost to make something, not how much people want it.",
+  "How many stores sell something": "The number of stores is not demand. Think about what buyers want."
+ },
+ "A new game console is hard to find and everyone wants one. This is…": {
+  "Low demand, high supply": "It’s the reverse: lots of people want it and few are around.",
+  "No demand": "Lots of people want one, so there is plenty of demand.",
+  "Perfect balance": "Balance would mean supply matches demand. Here many people can’t find one."
+ },
+ "A big storm is coming and everyone wants umbrellas. What usually happens to the price?": {
+  "It goes down": "Prices usually fall when fewer people want something. Here lots of people want umbrellas.",
+  "It stays exactly the same": "Prices tend to change when demand jumps like this.",
+  "Umbrellas become free": "Stores rarely give items away when lots of people want them."
+ },
+ "Why might a business lower prices?": {
+  "To lose customers": "Businesses want more customers, not fewer.",
+  "Because it’s raining": "Weather alone is not the reason. Think about demand.",
+  "No reason": "Businesses usually have a reason. Think about how many people are buying."
+ },
+ "Goods are things you can touch. Which is a service?": {
+  "A bike": "A bike is a thing you can touch, so it is a good.",
+  "An apple": "An apple is a thing you can touch, so it is a good.",
+  "A book": "A book is a thing you can touch, so it is a good."
+ },
+ "What is scarcity?": {
+  "Having too much of something for anyone to use": "Too much of something is a surplus, the opposite idea.",
+  "When prices go up because a store is greedy": "Scarcity is not about greed. It is about not having enough.",
+  "Getting something for free from the city": "Getting things free does not describe scarcity."
+ },
+ "What do we call people who buy goods and services?": {
+  "Producers": "Producers make goods and services. Think about who buys them.",
+  "Mayors": "Mayors lead cities. Think about who buys things.",
+  "Teachers": "Teachers teach. Think of the word for people who buy things."
+ },
+ "Lots of people want a new toy but there are only a few. What usually happens to the price?": {
+  "It goes down": "Prices usually fall when supply is high. Here there are only a few.",
+  "It stays at zero": "A price of zero would mean free. Sellers won’t give away a toy everyone wants.",
+  "The toy disappears": "The few toys don’t vanish. Think about what happens to the price."
+ },
+ "A farmer grows too many apples. What usually happens to apple prices?": {
+  "They go up": "Prices usually rise when there is too little. Here there are lots of apples.",
+  "They stay the same forever": "Prices change over time with supply and demand.",
+  "Apples become free by law": "Apples don’t turn free by law. Think about extra supply."
+ },
+ "What is the difference between goods and services?": {
+  "Goods cost money; services are always free": "Services usually cost money too, like a haircut.",
+  "Goods are made in factories; services are sold in stores": "Where something is made or sold is not the difference.",
+  "They mean the same thing in economics": "They mean different things. Think about touching versus doing."
+ },
+ "Why do prices of beach toys go up in summer?": {
+  "Fewer people want them (lower demand)": "If fewer people wanted them, prices would tend to fall.",
+  "Stores close early in summer": "Store hours don’t explain the price. Think about how many people want them.",
+  "They cost less to make in summer": "If they cost less to make, prices would likely fall, not rise."
+ },
+ "Johannes Gutenberg’s printing press (around 1440) changed the world because…": {
+  "It was the first way people ever wrote down words": "People were writing words thousands of years before Gutenberg.",
+  "It let people send messages over long distances": "Sending messages far away came later, with tools like the telegraph.",
+  "It made farm tools, so fewer people had to farm": "The printing press made pages, not farm tools."
+ },
+ "In 1969, Apollo 11 astronauts did what for the first time?": {
+  "Flew around the world": "Flying around the world had been done decades earlier.",
+  "Built the first car": "Cars were built long before 1969.",
+  "Invented the radio": "Radio was invented around 1900, not in 1969."
+ },
+ "Why was the invention of the airplane (1903) a turning point?": {
+  "It ended wars, since armies could not keep up": "Airplanes did not end wars. They were soon used in wars.",
+  "It led right away to the start of the internet": "The internet came almost 90 years later.",
+  "Cars and trains were no longer needed after it": "Cars and trains are still widely used today."
+ },
+ "The Declaration of Independence was signed in which year?": {
+  "1492": "1492 is the year Columbus sailed to the Americas.",
+  "1865": "1865 is when the Civil War ended.",
+  "1969": "1969 is the year of the first Moon landing."
+ },
+ "Martin Luther King Jr. is known for…": {
+  "Being the first Black president of the U.S.": "The first Black president was Barack Obama, elected in 2008.",
+  "Writing the Declaration of Independence": "Thomas Jefferson wrote the Declaration of Independence in 1776.",
+  "Leading the army in the Civil War": "He lived long after the Civil War, which ended in 1865."
+ },
+ "Who invented the telephone (1876)?": {
+  "Thomas Edison": "Thomas Edison is known for the light bulb and the phonograph.",
+  "The Wright brothers": "The Wright brothers built the first airplane in 1903.",
+  "Isaac Newton": "Isaac Newton studied gravity and motion in the 1600s."
+ },
+ "The internet became widely used in the 1990s. One big change was…": {
+  "Letters and mail stopped forever": "Mail still exists today, even with email.",
+  "People stopped watching TV for good": "People still watch TV, often over the internet now.",
+  "Nothing much changed for most people": "The internet changed daily life for billions of people."
+ },
+ "What changed when electric light spread in the late 1800s?": {
+  "Nothing much changed for most people": "Electric light changed how people lived, worked and read at night.",
+  "People stopped needing to sleep at night": "People still need sleep, even with lights.",
+  "Candles were banned in every city": "Candles were not banned. People simply used them less."
+ },
+ "Why was the invention of the printing press (around 1450) a turning point?": {
+  "It was the first time anyone had written books": "Books had been written by hand for centuries before this.",
+  "It let kings control what everyone could read": "It actually made it harder for rulers to control ideas.",
+  "It replaced paper with a faster, cheaper material": "It still printed on paper. It changed how books were made, not the material."
+ },
+ "The civil rights movement worked to…": {
+  "Win independence for the colonies from Britain": "Independence from Britain was the American Revolution, in the 1700s.",
+  "Free enslaved people in the Southern states": "Ending slavery came with the Civil War and the 13th Amendment in 1865.",
+  "Give women the right to vote in elections": "Women won the vote through the 19th Amendment in 1920, a separate movement."
+ },
+ "Why do historians look at more than one source about an event?": {
+  "To find the one source that has no bias at all": "Every source has some point of view, so no single one is free of bias.",
+  "Because the oldest source is always the most wrong": "Older sources are not always wrong. Each has to be judged on its own.",
+  "To count which version most sources repeat": "Many sources repeating a story does not make it true."
+ },
+ "Why do historians study the past?": {
+  "To memorize dates and names for tests": "Dates matter, but history is about more than memorizing them.",
+  "To predict exactly what will happen next": "History can’t predict the future exactly. It helps us understand patterns.",
+  "To prove that people in the past were wrong": "The goal is to understand the past, not to prove people wrong."
+ },
+ "Why do historians compare several primary sources?": {
+  "To find the one source that tells the whole true story": "Each source tells only part of the story.",
+  "Because primary sources are always wrong about events": "Primary sources are often very useful. They just show one view.",
+  "To pick the oldest source, since it is the most correct": "Older sources are not always more correct."
+ },
+ "Is a photo taken at the 1969 Moon landing a primary or secondary source?": {
+  "Secondary": "A secondary source is made later by someone explaining the event. This photo was taken right then."
+ },
+ "Which is the best way to understand a historical event?": {
+  "Read one website": "One website gives just one view, which may be incomplete.",
+  "Guess": "Guessing doesn’t use any evidence.",
+  "Ask one friend": "One friend gives just one opinion, which may not be complete."
+ },
+ "Is your history textbook primary or secondary?": {
+  "Primary": "A primary source is made at the time by people who were there. A textbook is written much later."
+ },
+ "Why might two primary sources disagree?": {
+  "One of them must be fake or a copy": "Disagreeing doesn’t mean a source is fake. People notice different things.",
+  "Primary sources are always wrong about events": "Primary sources are often useful. They show one person’s view.",
+  "The older source is always the correct one": "Being older doesn’t make a source more correct."
+ },
+ "Which is a primary source about a 1900s factory?": {
+  "A 2020 textbook chapter": "A 2020 textbook was written long after, by people who weren’t there.",
+  "A movie made last year": "A movie from last year was made long after the 1900s.",
+  "An encyclopedia summary": "An encyclopedia summary is written later, using other sources."
+ },
+ "A textbook explaining the American Revolution is a…": {
+  "Primary source": "A primary source is made at the time by someone who was there. A textbook is written later.",
+  "Fiction book": "A textbook tells about real events, so it isn’t fiction.",
+  "Map key": "A map key explains symbols on a map, not history."
+ },
+ "Why might a soldier’s letter home leave out frightening details?": {
+  "Letters had to be short by law": "Letters had no legal length limit. Think about his family.",
+  "He didn’t see anything": "He may have seen a lot. Think about why he might not share it.",
+  "Ink was expensive": "Cost of ink is not the likely reason. Think about his family."
+ },
+ "A photo taken at a 1963 march is a…": {
+  "Secondary source": "A secondary source is made later. This photo was taken at the march.",
+  "Fictional story": "A photo of a real event is not a made-up story.",
+  "Map": "A photo of people marching is not a map."
+ },
+ "Which question helps you judge a source?": {
+  "How colorful is it?": "Colors don’t tell you whether a source is reliable.",
+  "How long is it?": "Length doesn’t tell you if a source is trustworthy.",
+  "Is it on the first page?": "Where it appears doesn’t tell you whether to trust it."
+ },
+ "Two diaries from the same battle disagree. What is the best explanation?": {
+  "One of the diaries must be a fake": "Disagreeing doesn’t mean one is fake. Think about point of view.",
+  "One writer must have been lying on purpose": "A different memory is not always a lie. People notice different things.",
+  "Diaries are never useful as sources": "Diaries are often very useful. They give one person’s view."
+ },
+ "Why is voting important in a democracy?": {
+  "It is a fun thing to do every few years": "Voting can be enjoyable, but its real purpose is giving people a voice.",
+  "Leaders get picked by each other anyway": "In a democracy, citizens choose leaders. Leaders don’t simply pick each other.",
+  "Voting decides what the laws mean in court": "Deciding what laws mean is the job of the courts, not voters."
+ },
+ "A secret ballot means…": {
+  "Only secret agents vote": "Every eligible citizen can vote, not just spies.",
+  "You vote out loud": "Voting out loud would let others see your choice, the opposite of secret.",
+  "The ballot is hidden from everyone forever": "Ballots are still counted by officials. Only your personal choice stays private."
+ },
+ "How can citizens tell lawmakers what they think?": {
+  "They can’t, only leaders decide": "Citizens can share views with lawmakers in many ways.",
+  "Only by voting once every four years": "Voting is one way, but citizens can also reach out anytime.",
+  "Only by posting angry comments": "Angry posts are one option, but there are many respectful, direct ways to be heard."
+ },
+ "What is a democracy?": {
+  "Rule by one king or queen for life": "Rule by one king or queen for life is a monarchy.",
+  "Having no government or laws at all": "Having no government at all is called anarchy.",
+  "Rule by the richest families in the land": "Rule by a few rich families is called an oligarchy."
+ },
+ "What is a “candidate”?": {
+  "A person who votes": "A person who votes is a voter, not someone running.",
+  "A box for ballots": "A box for ballots is a ballot box.",
+  "A law that is passed": "A passed law is called an act or statute."
+ },
+ "Who can vote in U.S. national elections?": {
+  "Anyone who lives in the U.S., of any age": "Voters must be citizens and meet an age rule, so not just anyone living here.",
+  "Any U.S. citizen who is 16 or older": "16 is too young for national elections. Check the voting age.",
+  "Only citizens who own a home or land": "Owning property is no longer required. That rule ended long ago."
+ },
+ "What is a veto?": {
+  "A type of vote count": "Counting votes is a tally, not a veto.",
+  "A new law": "A new law is passed by lawmakers. A veto stops a bill instead.",
+  "A party": "A political party is a group of people with shared goals, not a veto."
+ },
+ "The President vetoes a bill. Can it still become law?": {
+  "No, once the President vetoes it, the bill is dead": "Congress has a way to overcome a veto, so the bill is not always dead.",
+  "Yes, if the Supreme Court signs it into law instead": "The Supreme Court does not sign bills into law. It reviews laws later.",
+  "Yes, if more than half of the House votes for it again": "A simple majority in one chamber isn’t enough. Overriding takes more votes."
+ },
+ "How many senators does each U.S. state have?": {
+  "1": "One is too few. Every state has more than that.",
+  "10": "Ten is too many. Every state has the same small number.",
+  "It depends on population": "House seats depend on population, but Senate seats do not."
+ },
+ "What does the Supreme Court do?": {
+  "Makes the laws for the whole country": "Making laws is the job of Congress.",
+  "Leads the army and signs new treaties": "Leading the army and signing treaties is the President’s job.",
+  "Collects taxes and plans the budget": "Taxes and budgets are handled by Congress and the executive branch."
+ },
+ "Why might a small state like Wyoming have the same number of senators as California?": {
+  "Wyoming has more voters than California": "California has far more voters than Wyoming.",
+  "Senate seats are based on land area": "Senate seats don’t depend on land size. Alaska and Rhode Island have the same number.",
+  "Senators are picked at random each year": "Senators are elected by voters, not picked at random."
+ },
+ "A country sells its coffee to other countries. Coffee is its…": {
+  "Import": "Goods coming into a country are imports. Coffee here is going out.",
+  "Tax": "A tax is money paid to the government, not the goods being sold.",
+  "Budget": "A budget is a spending plan, not something sold abroad."
+ },
+ "A factory overseas closes. Why might phone prices rise here?": {
+  "Phone stores raise prices whenever any news happens": "Prices don’t change with just any news. Think about missing parts.",
+  "The phones here get faster, so they cost more": "A closed factory doesn’t make phones faster.",
+  "The overseas factory set the prices for all phones": "One factory doesn’t set prices for every phone. Think about supply."
+ },
+ "Why do countries trade?": {
+  "Trading lets every country make everything it needs": "Trade helps countries get things they can’t make well themselves.",
+  "Laws say every country must trade with all others": "Countries choose their trading partners. Nothing requires them to trade with everyone.",
+  "So that each country can stop making its own goods": "Countries trade but still make many of their own goods."
+ },
+ "Your banana was grown in Ecuador. For your country, the banana is an…": {
+  "Export": "Goods sent out to sell abroad are exports. This banana came in.",
+  "Tax": "A tax is money paid to the government, not the banana itself.",
+  "Ticket": "A ticket lets you into an event or onto a ride. It’s not a good from abroad."
+ },
+ "Why might a country specialize in one product?": {
+  "Because laws force every country to": "Countries choose to specialize. Laws don’t force them to.",
+  "Because it has nothing else to sell": "Countries that specialize often have other things to sell too.",
+  "To stop trading with other countries": "Specializing usually leads to more trade, not less."
+ },
+ "A storm closes a big port. What might happen to store shelves?": {
+  "Nothing at all will change": "A closed port slows goods down, so things are likely to change.",
+  "More goods arrive than usual": "Fewer goods can get through when a port closes.",
+  "Prices drop to almost zero": "Prices tend to rise, not drop, when supply is cut."
+ },
+ "What is a tariff?": {
+  "A free trade gift": "A tariff costs money. It is not a gift.",
+  "A bus ticket": "A bus ticket pays for a ride, not for goods from abroad.",
+  "A kind of fruit": "A tariff has nothing to do with fruit. It is about trade."
+ },
+ "What is a “supply chain”?": {
+  "A chain used on a bike or a gate": "A bike chain is a real chain. This is about how products get made and moved.",
+  "The line of people at a store checkout": "A checkout line is about shopping, not the steps that make a product.",
+  "A group of stores that share one name": "Stores sharing a name are a chain store, a different idea."
+ },
+ "Why do countries trade with each other?": {
+  "Every country is required to by world law": "There is no world law that requires countries to trade.",
+  "To get rid of things they make too much of": "Getting rid of extra goods can happen, but it isn’t the main reason. Think about what each does best.",
+  "Trading makes each country need fewer workers": "Trade doesn’t mainly reduce workers. Think about the benefits of specializing."
+ },
+ "A tariff makes imported steel more expensive. Who might benefit?": {
+  "Car makers that buy steel": "Car makers that buy steel pay more because of the tariff.",
+  "Shoppers buying cars": "Shoppers may pay more for cars made with pricier steel.",
+  "Nobody": "Tariffs help some groups even while they cost others."
+ },
+ "What is an import?": {
+  "A good a country sells to other countries": "A good sold to other countries is an export.",
+  "A tax paid on goods that leave a country": "A tax on goods is a tariff, not the goods themselves.",
+  "A good made and sold inside one country": "A good made and sold at home never crosses a border."
+ },
+ "What makes a public decision fair?": {
+  "It is decided quickly by a small group in secret": "Quick, secret choices by a small group leave out the people affected.",
+  "Only people who pay the most taxes vote on it": "Letting only the biggest taxpayers vote leaves many affected people out.",
+  "It is changed often so that everyone gets a turn": "Changing a decision often makes it confusing, not fair."
+ },
+ "A new rule lowers bus fares. Who pays the trade-off?": {
+  "Nobody, because lower fares do not cost anything": "Lower fares mean less money comes in, so someone has to cover that cost.",
+  "Only the bus drivers, since they get paid less": "Drivers’ pay isn’t automatically cut when fares drop.",
+  "Only riders from other cities who visit the town": "Visitors aren’t the ones who cover this cost. Think about the city’s money."
+ },
+ "The city can spend $1 million on a new park OR more buses. What is the best first step?": {
+  "Pick whichever option sounds nicer to most people": "Sounding nice is not enough. Good choices weigh costs and benefits.",
+  "Do neither and keep the money saved for later": "Doing nothing skips the decision without comparing the options.",
+  "Let the mayor decide without asking anyone else": "Leaving out the public misses who is affected."
+ },
+ "What is a public good?": {
+  "A private car that one family owns and drives": "A private car belongs to one family, so others can’t use it.",
+  "A phone you bought that only you get to use": "A phone only you use is a private good.",
+  "Any item that is sold in a store for a price": "Things sold in stores are usually private goods."
+ },
+ "Why do governments hold public hearings?": {
+  "To make decisions take as long as possible": "Hearings aren’t meant to slow things down. They gather input.",
+  "To keep decisions hidden from the public": "Hearings are public, so they make decisions more open, not hidden.",
+  "To announce a choice that is already final": "Hearings happen before decisions are final, so people can be heard."
+ },
+ "A city raises taxes to fix roads. Who benefits?": {
+  "Nobody, since taxes only take money away": "Taxes cost money, but fixed roads give something back to the people who use them.",
+  "Only the mayor and the people at city hall": "City officials use roads too, but so do many other people across the city.",
+  "Only tourists who drive through the city": "Visitors may benefit a little, but most road users live and work in the city."
+ },
+ "What evidence would show a new bus policy worked?": {
+  "A nice new logo painted on every bus": "A new logo changes how buses look, not whether the service got better.",
+  "One happy post from a rider online": "One post is just one opinion, not a measure of results for all riders.",
+  "The mayor says the policy is a success": "A leader’s claim is not evidence. Look for numbers that match the policy’s goals."
+ },
+ "A policy helps one neighborhood but raises costs for another. What is fair?": {
+  "Ignore the second area, since it is smaller": "Being smaller doesn’t make an area’s concerns matter less.",
+  "Cancel the policy so no one is affected": "Cancelling throws away the benefits for the first area without trying to balance things.",
+  "Flip a coin so the choice is random": "A coin flip ignores the evidence about who gains and who is harmed."
+ },
+ "A city can build a new park or fix old roads with the same money. This is an example of…": {
+  "A tariff on imported goods": "A tariff is a tax on imported goods, which has nothing to do with this choice.",
+  "A tax refund for residents": "A tax refund returns money to people. This is about choosing between two uses of money.",
+  "A budget surplus for the city": "A surplus is extra money left over. Here the same money can only go to one project."
+ },
+ "Why do governments hold public hearings before big decisions?": {
+  "To delay the decision until people forget": "Hearings are meant to gather input, not to stall until people stop caring.",
+  "To let officials skip a formal vote": "Hearings don’t replace votes. Officials still follow the formal process.",
+  "To announce a decision that is already final": "Hearings happen before decisions are final, so public input can shape them."
+ },
+ "A town wants fewer cars downtown. Which policy fits?": {
+  "Build a large new parking garage": "A big parking garage makes driving downtown easier, which tends to bring more cars.",
+  "Cut bus service to save money": "Cutting buses pushes more people to drive instead.",
+  "Make the downtown streets wider": "Wider streets make room for more cars, not fewer."
+ },
+ "Why do policies often have trade-offs?": {
+  "Every policy helps all people in the same way": "Policies rarely help everyone equally. Some groups gain more than others.",
+  "Policies are paid for by companies, not the public": "Most public policies are paid for with public money, like taxes.",
+  "Laws require each policy to have a downside": "Laws don’t require a downside. Trade-offs come from limited resources."
+ },
+ "The park near your home is full of litter. What is an active-citizen response?": {
+  "Post a complaint online and wait for someone else": "Complaining and waiting leaves the work to someone else.",
+  "Pick up only the litter that is near your house": "Cleaning near your house helps a little, but active citizens tackle the bigger problem.",
+  "Tell your friends to stop going to that park": "Avoiding the park doesn’t fix it. It just leaves the problem for others."
+ },
+ "Which is a way young people can be active citizens before they can vote?": {
+  "Wait until they turn 18, since only voters count": "Young people count before 18. There are many ways to take part.",
+  "Share their opinions online without reading about issues": "Sharing opinions without learning about issues can spread mistakes.",
+  "Break a rule so that leaders notice their cause": "Breaking rules can cause harm and is not a respectful way to be heard."
+ },
+ "Why is staying informed part of good citizenship?": {
+  "It isn’t, since leaders make the choices anyway": "Citizens make many choices too, like voting and judging claims.",
+  "So you can win every argument about the news": "Being informed is about making good choices, not winning arguments.",
+  "Because the news is always right about everything": "News can contain mistakes, so informed citizens check claims."
+ },
+ "Which is an example of volunteering?": {
+  "Getting paid at a job": "Getting paid makes it a job, not volunteering.",
+  "Watching TV": "Watching TV doesn’t help anyone else.",
+  "Shopping": "Shopping is buying things for yourself, not helping others for free."
+ },
+ "What is a petition?": {
+  "A tax that a city asks people to pay": "A tax is money people must pay. A petition is something people choose to sign.",
+  "A law that leaders pass without a vote": "A petition comes from citizens, not from leaders passing laws.",
+  "A list of names of people who voted": "Voter lists are records of who voted. A petition asks for a change."
+ },
+ "Why does every vote matter?": {
+  "It doesn’t, since leaders choose anyway": "In a democracy, voters choose leaders. Leaders don’t pick themselves.",
+  "Only votes in big national elections count": "Local and state elections count too, and they are often very close.",
+  "Votes only matter in very big cities": "Votes count in towns of every size."
+ },
+ "Why attend a town meeting?": {
+  "For the free snacks and coffee only": "Snacks may be offered, but the real purpose is taking part in local decisions.",
+  "To hear what friends think of the mayor": "Meetings are about local issues and choices, not just opinions of one leader.",
+  "Only to complain about your neighbors": "Meetings are for discussing community issues, not neighbor complaints."
+ },
+ "How can you disagree with a law peacefully?": {
+  "Break things so leaders notice you": "Breaking things causes harm and is not peaceful.",
+  "Ignore the law and hope no one sees": "Ignoring the law breaks it rather than working to change it.",
+  "Post angry threats online": "Threats are harmful and not protected speech."
+ },
+ "Which is an example of active citizenship?": {
+  "Never reading the news": "Not reading the news means staying uninformed, which is the opposite of active.",
+  "Ignoring local problems": "Ignoring problems leaves them for someone else to fix.",
+  "Littering": "Littering makes the community worse, not better."
+ },
+ "You want your town to add a crosswalk near school. What is an effective first step?": {
+  "Paint a crosswalk on the road yourself": "Painting roads yourself is unsafe and not allowed. Officials must install crosswalks.",
+  "Post complaints online and wait for change": "Complaining online and waiting rarely leads to action. Go to the people who decide.",
+  "Wait for someone else to notice the problem": "Waiting for others may mean nothing changes. You can take the first step."
+ },
+ "Which is a way young people can participate in democracy?": {
+  "Waiting until they turn 18 to get involved": "Young people can take part long before 18.",
+  "Sharing posts without checking the facts": "Sharing posts without checking facts can spread false information.",
+  "Leaving all decisions to the adults in charge": "Leaving everything to adults means young people’s voices go unheard."
+ },
+ "Why does voting matter in local elections?": {
+  "Local votes only matter in years with a national race": "Local elections matter every year, not only when there is a national race.",
+  "Local leaders mostly handle wars and trade deals": "Wars and trade deals are handled by the national government, not local leaders.",
+  "Local results are decided before anyone votes": "Local results depend on the votes people cast."
+ },
+ "Which part is the “brain” of a computer?": {
+  "The speaker": "A speaker plays sound. It does not do the thinking.",
+  "The screen": "The screen shows you things. It does not do the work.",
+  "The keyboard": "The keyboard lets you type. It does not do the thinking."
+ },
+ "Where does a computer keep your files when it is turned off?": {
+  "In the screen you look at": "The screen just shows things. It can’t hold files when off.",
+  "In the keys of the keyboard": "Keys send letters to the computer. They don’t hold files.",
+  "In the power cord and plug": "The cord brings power. It does not keep your files."
+ },
+ "What is software?": {
+  "The glass on the front of the screen": "The glass is a part you can touch. That is hardware.",
+  "The charger that gives the device power": "A charger is a thing you can hold. That is hardware.",
+  "The case that protects the outside": "A case is a thing you can touch. That is hardware."
+ },
+ "Why restart a device that’s frozen?": {
+  "To delete everything": "A restart does not wipe out all your stuff.",
+  "To charge it": "A restart does not add power. Plug it in to charge.",
+  "It never helps": "A restart helps fix lots of problems."
+ },
+ "What does Wi-Fi let a device do?": {
+  "Charge the battery faster": "Wi-Fi does not charge your battery.",
+  "Take clearer photos": "Wi-Fi does not change how your photos look.",
+  "Print without any paper": "You still need paper to print."
+ },
+ "Which is hardware?": {
+  "A game app": "An app is a program, so it is software.",
+  "A website": "A website is made of code, so it is software.",
+  "A password": "A password is a secret word, not a part you can touch."
+ },
+ "What does a keyboard let you do?": {
+  "Print pages on paper": "A printer puts pages on paper.",
+  "Hear music and sounds": "Speakers or headphones let you hear sounds.",
+  "Charge the battery": "A charger fills up the battery."
+ },
+ "Which one lets you HEAR the computer?": {
+  "A mouse": "A mouse helps you point and click. It does not play sound.",
+  "A keyboard": "A keyboard is for typing, not for sound.",
+  "A microphone": "A microphone takes your voice in. It does not play sound out."
+ },
+ "Your app froze. What is a good first step?": {
+  "Keep tapping the screen fast": "Tapping fast can make a stuck app worse.",
+  "Turn off the Wi-Fi": "Wi-Fi is not what froze the app.",
+  "Delete everything": "That is too much. You may lose your work."
+ },
+ "What does saving a file do?": {
+  "Deletes your work": "Saving does the opposite. It does not delete.",
+  "Prints your work on paper": "A printer puts work on paper. Saving is not printing.",
+  "Sends your work to everyone": "Saving does not send your work to people."
+ },
+ "What can the internet let you do?": {
+  "Charge your tablet when it is low": "The internet does not charge your tablet. A charger does.",
+  "Turn on the lights in your room": "A light switch turns on the lights, not the internet.",
+  "Make your screen bigger and brighter": "The internet does not change your screen size."
+ },
+ "What is an algorithm?": {
+  "A type of robot that does chores": "A robot can follow steps, but it is a machine.",
+  "A brand of computer or phone": "A brand is a company name, not a list of steps.",
+  "A song that a computer plays": "A song is music, not a list of steps."
+ },
+ "What happens if steps in an algorithm are out of order?": {
+  "Nothing changes": "The order of steps does matter.",
+  "It gets faster": "Mixed-up steps don’t make it go fast.",
+  "The computer fixes it": "Computers do what you say. They don’t fix your order."
+ },
+ "A robot needs to get a cup of water. What goes first?": {
+  "Turn off the tap": "You turn off the tap after the cup is filled.",
+  "Drink the water": "You can’t drink until the cup has water in it.",
+  "Put the cup away": "Putting the cup away comes at the end."
+ },
+ "Why must computer steps be in the right order?": {
+  "Computers can fix the order of the steps for you": "Computers can’t fix the order. They do just what you say.",
+  "The order does not change what the computer does": "The order does change what the computer does.",
+  "Only the first step has to be in the right place": "Every step must be in the right place, not just the first."
+ },
+ "Which is the correct order to brush your teeth?": {
+  "Rinse, brush, put paste on": "You rinse at the end, not the start.",
+  "Brush, put paste on, rinse": "You need paste on the brush before you brush.",
+  "Put brush away, brush, rinse": "You put the brush away when you are done."
+ },
+ "A program says: move forward, turn right, move forward. The robot ends up…": {
+  "Back where it started": "The robot only moves forward, so it can’t end back at the start.",
+  "Ahead of where it started, and off to the left": "It turned right, not left. Check the turn.",
+  "Right where it started, facing right": "It moves forward two times, so it does not stay in place."
+ },
+ "Someone online you don’t know asks to meet in person. What should you do?": {
+  "Meet them, but only in a busy place": "Even a busy place is not safe to meet a stranger alone.",
+  "Send a photo so they know you": "A photo helps a stranger find you. Keep photos private.",
+  "Keep it a secret from your family": "Secrets like this can put you in danger. Tell your family."
+ },
+ "You see something online that upsets you. What should you do?": {
+  "Keep watching": "Watching more can make you feel worse.",
+  "Share it with friends": "Sharing it can upset your friends too.",
+  "Feel bad alone": "You don’t have to deal with it alone. Get help."
+ },
+ "Who should know your online accounts?": {
+  "Strangers": "Strangers should never know your accounts.",
+  "Everyone": "Not everyone should know. Keep accounts private.",
+  "Nobody, even parents": "Parents can help keep you safe online, so they should know."
+ },
+ "Is it OK to use your real photo as a game avatar with strangers?": {
+  "Yes, always": "Your real face can help strangers know who you are.",
+  "Only with your address": "Never share your address with strangers online.",
+  "Only at night": "Time of day does not make it safe."
+ },
+ "A pop-up says “You won a phone! Click here!” What should you do?": {
+  "Click fast": "Clicking fast is what tricks want you to do.",
+  "Enter your address": "Never type your address into a pop-up.",
+  "Share it": "Sharing it can trick your friends too."
+ },
+ "A game asks for your home address. What should you do?": {
+  "Type it in so you can play": "Your home address is private. Games don’t need it.",
+  "Share it if the game is fun": "A fun game still should not get your address.",
+  "Give a friend’s address": "A friend’s address is private too."
+ },
+ "Someone you only know online wants to meet. What should you do?": {
+  "Meet them at a busy park in the day": "A busy park is still not safe without a trusted adult.",
+  "Keep it a secret so you don’t get in trouble": "Secrets like this can put you in danger. Tell an adult.",
+  "Send them a photo first to be safe": "A photo helps a stranger know you. It does not keep you safe."
+ },
+ "A message says “You won a prize! Click here.” What should you do?": {
+  "Click it fast before it goes away": "Tricks rush you to click before you think.",
+  "Send it to friends so they win too": "Sending it on could trick your friends too.",
+  "Type your password to get the prize": "Never type your password to get a prize. That is a trick."
+ },
+ "What makes information private?": {
+  "Your favorite color and favorite food": "A favorite color can’t help a stranger find you.",
+  "The kind of pet you have at home": "Knowing your pet type can’t help a stranger find you.",
+  "A picture of a tree you drew in class": "A tree drawing doesn’t tell anyone where you are."
+ },
+ "A pop-up says your device has a virus and to call a number. What should you do?": {
+  "Call the number fast so the virus stops": "The number may belong to a scammer. Don’t call it.",
+  "Click the pop-up to see what it wants": "Clicking the pop-up may let the trick in.",
+  "Turn off the screen and call them later": "Calling later is still calling a scammer."
+ },
+ "Before downloading an app, what should you check?": {
+  "That a friend sent you the link to download it": "Links from friends can still be unsafe.",
+  "That the icon looks fun and colorful": "A fun icon doesn’t tell you if an app is safe.",
+  "That it is free, so it must be safe": "Free apps can still be harmful."
+ },
+ "Why use a different password for each account?": {
+  "It’s more fun": "Fun is not the reason. Think about what happens if one is stolen.",
+  "Websites require the same one": "Sites don’t ask you to use the same one.",
+  "It makes logging in faster": "Using one password may be faster, but it is not safer."
+ },
+ "Who can you share your password with?": {
+  "Your best friend": "Even a best friend could share it by mistake.",
+  "Anyone who asks nicely": "People who ask nicely can still be tricking you.",
+  "A website pop-up": "Pop-ups that ask for passwords are often scams."
+ },
+ "Which password is strongest?": {
+  "password123456": "It uses a common word and simple numbers, so it’s easy to guess.",
+  "Ilovemydog2024": "Pet names and years are easy for others to guess.",
+  "Qwerty123456!": "Qwerty is the row of keys on a keyboard, so it’s guessed fast."
+ },
+ "Which is the weakest password?": {
+  "Blue!Tiger_Runs7": "This one mixes words, numbers and symbols, so it’s strong.",
+  "Pizza-Moon-88!": "This one is long and mixes words and symbols, so it’s strong.",
+  "Rain#Drop#Lake4": "This one mixes words, numbers and symbols, so it’s strong."
+ },
+ "A website asks you to create a password using your birthday. Why is that weak?": {
+  "Birthdays are too long": "A birthday is short, not long.",
+  "It’s strong": "Personal facts like birthdays make weak passwords.",
+  "Websites ban it": "Sites may allow it, but that does not make it safe."
+ },
+ "What is two-step verification?": {
+  "Typing your password twice": "Typing it twice is still just one check.",
+  "Two passwords on paper": "Two passwords on paper can be lost or seen.",
+  "Logging in twice a day": "Logging in more is not the same as an extra check."
+ },
+ "Where is a bad place to keep passwords?": {
+  "In a password manager": "A password manager keeps passwords locked up safely.",
+  "Memorized": "Keeping it in your head is a safe place.",
+  "With a parent": "A parent can help keep your password safe."
+ },
+ "How often should you change a password that might have leaked?": {
+  "Never": "A leaked password must be changed. Waiting is risky.",
+  "Once every 10 years": "Ten years is much too long to wait.",
+  "Only if you forget it": "Forgetting is not the issue. Someone else may know it."
+ },
+ "Who should know your password?": {
+  "Your best friend": "Even a best friend could share it by mistake.",
+  "Everyone in class": "If the class knows it, they could get into your account.",
+  "Anyone who asks nicely": "People who ask nicely can still be tricking you."
+ },
+ "Why shouldn’t you use the same password for everything?": {
+  "Websites will block a password used elsewhere": "Sites don’t check what you use on other sites.",
+  "Typing the same one makes your computer slower": "Typing the same password won’t slow down your computer.",
+  "Passwords wear out if you use them too much": "Passwords don’t wear out. The risk is one leak opening all."
+ },
+ "How often should you change a password that might have been seen?": {
+  "Never": "A password others may know must be changed.",
+  "Once a year": "A year is too long. Someone could use it now.",
+  "Only if you forget it": "Forgetting is not the issue. Someone else may know it."
+ },
+ "To draw a square, a robot repeats “move 10, turn right” how many times?": {
+  "2": "Two times makes only half a square.",
+  "3": "Three repeats leave the last side missing. Count the sides of a square.",
+  "10": "10 is how far it moves each time, not how many times."
+ },
+ "A loop that never stops is called…": {
+  "A short loop": "A short loop ends soon. This one never ends.",
+  "A bug-free loop": "Being bug-free means it works right. A never-ending loop is often a bug.",
+  "A circle": "A circle is a shape, not a kind of code loop."
+ },
+ "Which task is best done with a loop?": {
+  "Saying hello once": "Saying hello once is one step. There’s nothing to repeat.",
+  "Opening one door": "Opening one door happens once. There’s nothing to repeat.",
+  "Signing your name once": "Signing your name once is one step. There’s nothing to repeat."
+ },
+ "A robot must take 5 steps forward. Which is shortest?": {
+  "Step, step, step, step, step": "This works, but writing every step out is longer than using a loop.",
+  "Step forward once": "One step is not enough. The robot needs five.",
+  "Repeat forever: step forward": "Forever never stops. The robot would keep going past five."
+ },
+ "What does “repeat 3 times: clap, stomp” do?": {
+  "Clap 3 times, then stomp 3 times": "The loop repeats both actions together, one after the other.",
+  "Clap, stomp": "That is only one time through. The loop runs 3 times.",
+  "Clap 3 times": "Stomp is part of the loop too, so it repeats as well."
+ },
+ "Why do programmers use loops?": {
+  "To make programs longer and more detailed": "Loops make programs shorter, not longer.",
+  "To stop a program when something goes wrong": "Stopping a program on errors is a different tool, not a loop.",
+  "To make a program choose between two paths": "Choosing between paths is what an if statement does."
+ },
+ "Which search is best for finding bus times to Midtown?": {
+  "Can you please tell me what time buses go places": "Long questions add extra words that can hide good results.",
+  "bus": "One word is too vague. You’ll get every kind of bus page.",
+  "transportation things": "This is vague and doesn’t name the place you’re going."
+ },
+ "You find two websites that disagree. What is the smartest move?": {
+  "Believe the one that showed up first in the results": "Showing up first doesn’t mean a site is correct.",
+  "Believe the one with the nicer design and more pictures": "Nice design doesn’t make information true.",
+  "Pick the one that agrees with what you already think": "Agreeing with you doesn’t make a site right."
+ },
+ "A website has no author, no date and lots of ads. How should you treat it?": {
+  "Trust it completely": "Missing authors and dates are warning signs, so full trust is risky.",
+  "Share it right away": "Sharing it spreads facts you haven’t checked yet.",
+  "Use it for your report as the only source": "Relying on one unclear source can put mistakes in your report."
+ },
+ "You found an answer on one site. What next?": {
+  "Stop searching, since one site is enough": "One site can be wrong. It’s smart to check more.",
+  "Copy the answer into your report as is": "Copying it as is skips checking and may be plagiarism.",
+  "Trust it, since it came up first": "Coming up first doesn’t prove a site is correct."
+ },
+ "Which search words are best for “What’s the weather in Midtown tomorrow?”": {
+  "what is the thing outside": "This is too vague. It doesn’t name weather or a place.",
+  "weather": "This leaves out where and when.",
+  "tomorrow": "This leaves out what and where."
+ },
+ "You need facts for a report on volcanoes. Which result is likely best?": {
+  "A comment someone left on a video": "A video comment is one person’s opinion, not a checked fact.",
+  "An ad for a lava lamp store": "An ad is trying to sell something, not teach about volcanoes.",
+  "A joke site about funny facts": "Joke sites are for fun, not for reliable facts."
+ },
+ "The first result is an ad. What should you notice?": {
+  "Ads are always the most correct answer": "Ads are paid spots, so they aren’t always correct.",
+  "Ads are free facts from experts": "Ads come from companies who pay, not from experts.",
+  "Ads show up first because they are best": "Ads are first because someone paid for that spot."
+ },
+ "Putting words in quotes, like “Brighter Park hours”, searches for…": {
+  "Any one of the words": "Without quotes, a search may match any of the words.",
+  "Pictures only": "Quotes don’t limit you to pictures.",
+  "Nothing": "Quotes still search. They change how the words are matched."
+ },
+ "You want facts about frogs for a report. Which search is best?": {
+  "frogs": "One word is too broad. You may get pet stores and toys.",
+  "I like frogs a lot what do they do": "Long chatty questions add words that can confuse a search.",
+  "green": "Green could be about anything, not frogs."
+ },
+ "How can you tell if a website is reliable?": {
+  "It has lots of bright pictures and videos": "Bright pictures can make a page look nice, but that doesn’t make it true.",
+  "It is the very first result in the search": "Being first in search results doesn’t mean it’s correct.",
+  "It sounds sure of itself and uses big words": "Sounding sure doesn’t make something true."
+ },
+ "Search results marked “Ad” or “Sponsored” are…": {
+  "The most trusted answers, checked by experts": "Ads aren’t checked by experts. Companies pay for them.",
+  "Results picked by teachers for students": "Teachers don’t pick ads. Companies pay for them.",
+  "Pages that the search engine is hiding": "Ads aren’t hidden. They show up near the top."
+ },
+ "Putting a phrase in quotes in a search, like \"water cycle\", does what?": {
+  "Finds pages with either word": "Without quotes, a search may match pages with either word.",
+  "Searches only for pictures": "Quotes don’t limit you to pictures. That’s a separate image search.",
+  "Removes those words from results": "Quotes keep words in, not out. A minus sign is used to leave words out."
+ },
+ "Before posting a photo of a friend, you should…": {
+  "Post it right away": "Posting first skips asking your friend. They may not want it shared.",
+  "Add a funny caption without asking": "A funny caption can still embarrass someone who didn’t agree to it.",
+  "Post it everywhere": "Posting it everywhere spreads it even further without their say."
+ },
+ "Why should you think before posting?": {
+  "Posts disappear once you delete them from your page": "Deleting doesn’t erase copies or screenshots others may have made.",
+  "Only your close friends will ever see what you post": "Posts can be shared beyond your friends, even by people you trust.",
+  "It does not matter if your account is set to private": "Private accounts help, but followers can still copy or share posts."
+ },
+ "You want to use a picture you found online in your project. What is right?": {
+  "Say you made it, since you found it yourself": "Finding a picture doesn’t make you its creator.",
+  "Use it without saying where it came from": "Using it without credit ignores the person who made it.",
+  "Change one color, then call it your own picture": "Changing one color doesn’t make someone else’s work yours."
+ },
+ "What is a “digital footprint”?": {
+  "The size of shoe you buy online": "It has nothing to do with shoes. It’s about what you leave behind online.",
+  "A website that you made yourself": "A website you made is just one small part. Think about all your online activity.",
+  "A game you play on the internet": "A game is just one thing you do online. The idea is much bigger."
+ },
+ "Why shouldn’t you pretend to be someone else online?": {
+  "It is funny, so it is fine": "Being funny doesn’t make it okay. It can trick or hurt people.",
+  "Everyone does it sometimes": "Even if others do it, it’s still dishonest.",
+  "It is fine if you are careful": "Being careful doesn’t change that it’s dishonest."
+ },
+ "How long can a post stay online?": {
+  "One minute": "Posts can last much longer than a minute, even after deleting.",
+  "Until tomorrow": "Posts don’t disappear overnight. Screenshots can keep them.",
+  "Never": "Posts do stay online, sometimes for years."
+ },
+ "You disagree with a comment. What is good digital citizenship?": {
+  "Reply with an insult so they stop": "Insults make things worse and are not respectful.",
+  "Post the same reply over and over": "Repeating the same reply is spamming, not a good discussion.",
+  "Tell everyone to report them": "Asking everyone to report someone just for disagreeing is unfair."
+ },
+ "Someone shares a rumor online about a classmate. What should you do?": {
+  "Share it only with your closest friends": "Even close friends can pass a rumor on and spread the hurt.",
+  "Add a comment asking if it is true": "Commenting keeps the rumor going and draws more attention to it.",
+  "Like it so the person posting feels heard": "Liking it helps the rumor spread and can hurt your classmate."
+ },
+ "You see a mean comment about a classmate online. What is a good choice?": {
+  "Like it so the writer doesn’t pick on you": "Liking it supports the mean comment and spreads it.",
+  "Reply with a mean comment about the writer": "A mean reply adds more hurt and can make things worse.",
+  "Forward it to friends so they know too": "Forwarding it spreads the hurtful post to even more people."
+ },
+ "Is it okay to use any picture you find online in your project?": {
+  "Yes, everything you find online is free to use": "Not everything online is free to use. Creators own their work.",
+  "Yes, as long as you change the colors a little": "Small changes don’t make someone else’s work yours to use.",
+  "Only if you found it on the first page of results": "Being on the first page has nothing to do with permission to use it."
+ },
+ "What is your digital footprint?": {
+  "The number of steps your device counts": "A step counter measures walking, not your online trail.",
+  "The size of the files saved on your computer": "File sizes on your computer are about storage, not your online activity.",
+  "A list of games you have downloaded": "Downloaded games are just one small part. Think about all you do online."
+ },
+ "Why should you think before you post?": {
+  "Posts vanish after a day, so they don’t matter": "Posts don’t vanish after a day. They can last for years.",
+  "Only your close friends can ever see a post": "Posts can spread far beyond close friends.",
+  "Posts can be fully deleted from everywhere": "Once shared or copied, a post can’t always be fully deleted."
+ },
+ "IF it is raining THEN take an umbrella. It is sunny. What happens?": {
+  "An umbrella is taken": "The umbrella part only runs when it’s raining. It’s sunny.",
+  "It starts raining": "The program can’t change the weather. It only checks it.",
+  "The program stops": "The program keeps going. The IF just skips its action."
+ },
+ "A game says: IF score ≥ 10 THEN “You win!” ELSE “Try again.” Score is 10. What shows?": {
+  "Try again.": "That message is the ELSE part. Check whether 10 ≥ 10 is true.",
+  "Nothing": "One of the two messages always shows with IF and ELSE.",
+  "Both messages": "IF and ELSE pick only one path, never both."
+ },
+ "Why do programs need conditionals?": {
+  "To repeat the same steps many times": "Repeating steps is what loops do.",
+  "To store numbers and words for later": "Storing values is what variables do.",
+  "To draw shapes and pictures on the screen": "Drawing is done with drawing commands, not conditionals."
+ },
+ "What is the best way to find a bug?": {
+  "Change many lines at once and see if it works": "Changing many lines at once makes it hard to tell what fixed or broke it.",
+  "Delete the program and write it over from scratch": "Starting over throws away work and may bring back the same bug.",
+  "Guess which line is wrong and change that one": "Guessing can waste time. Testing shows where the problem is."
+ },
+ "A robot should go to the door: “turn left, move 5”. It walks into the wall on the right. What’s the most likely bug?": {
+  "The door is too big": "The door size doesn’t explain walking into a wall on the right.",
+  "The robot is tired": "Robots don’t get tired. They follow the code they’re given.",
+  "Move 5 is too many letters": "The number 5 is a distance, not a count of letters."
+ },
+ "Code: total = 0; REPEAT 3 { total = total + 2 }. You expected 6 but got 2. What likely went wrong?": {
+  "2 is the right answer": "Adding 2 three times should give 6, so 2 shows something went wrong.",
+  "The computer is broken": "A broken computer is unlikely. Look at how many times the code ran.",
+  "Addition doesn’t work in code": "Addition works fine in code. Look at the loop."
+ },
+ "A program crashes only when the number is 0. What should you test?": {
+  "Only big numbers, like 500 or 1,000": "Big numbers work already. The crash happens with a special number.",
+  "Only the number 5, since it worked": "5 worked fine. Test the case that causes the crash.",
+  "The font and colors of the program": "Fonts and colors don’t cause crashes with numbers."
+ },
+ "After fixing a bug, what should you do?": {
+  "Assume it’s fixed and move on": "Assuming it’s fixed can miss a bug that’s still there.",
+  "Delete the program and start over": "Starting over throws away the fix you just made.",
+  "Add more code to be safe": "Adding extra code can create new bugs."
+ },
+ "Why explain your code out loud when debugging?": {
+  "To be loud so others will help you": "Being loud isn’t the point. Talking it through helps you think.",
+  "It doesn’t help, it is just a habit": "It does help. Explaining each step shows where logic goes wrong.",
+  "So you can type faster while you talk": "Talking doesn’t make you type faster. It helps you think."
+ },
+ "What is a “bug” in programming?": {
+  "A small insect inside the computer": "Real insects aren’t the issue today. It means a mistake in code.",
+  "A new feature that was added on purpose": "Features are added on purpose. A bug is something going wrong.",
+  "A password that has been hacked": "A hacked password is a security problem, not a coding mistake."
+ },
+ "Your recipe app shows “2 eggs” but the recipe needs 4. What’s the bug?": {
+  "Eggs are broken": "The eggs aren’t the problem. The app shows the wrong amount.",
+  "The screen is dirty": "A dirty screen wouldn’t change the number shown.",
+  "Recipes don’t use eggs": "Many recipes use eggs. Compare what it shows with what it needs."
+ },
+ "A program should add 2 + 3 but shows 23. What is the likely bug?": {
+  "The computer forgot how to add numbers": "Computers don’t forget how to add. Something else changed the result.",
+  "The plus sign was read as multiply": "2 times 3 would give 6, not 23.",
+  "The answer is too big for the screen": "23 fits on the screen fine. Look at how 2 and 3 were combined."
+ },
+ "What is the first step in debugging?": {
+  "Delete the code and start over from scratch": "Starting over skips finding the real cause.",
+  "Add more code to cover up the problem": "Covering up a problem leaves the bug in place.",
+  "Restart the computer and hope it works": "Restarting won’t fix a bug in the code itself."
+ },
+ "A robot turns left when it should turn right. What should you check?": {
+  "The color and size of the robot": "Color and size don’t affect which way it turns.",
+  "How bright the lights in the room are": "Room lights don’t control the robot’s turns.",
+  "The name you gave the robot": "The robot’s name doesn’t change how it moves."
+ },
+ "Why test a program after every small change?": {
+  "Because testing makes the program run faster": "Testing doesn’t speed up a program. It finds problems.",
+  "So the computer can fix bugs on its own": "Computers don’t fix bugs on their own. You need to find them.",
+  "Because you only need to test once at the end": "Waiting until the end makes it harder to find which change caused a bug."
+ },
+ "score = 5, then score = score + 3. What is score now?": {
+  "3": "3 is the amount added, not the new total.",
+  "5": "5 is the old value. The second line changes score.",
+  "53": "53 joins the digits like text. Here score is a number, so 3 is added to it."
+ },
+ "What is a variable?": {
+  "A type of computer used for math": "A variable isn’t a kind of computer. It’s a part of a program.",
+  "A mistake that makes code break": "A mistake in code is a bug, not a variable.",
+  "A step that repeats again and again": "A step that repeats is a loop."
+ },
+ "lives = 3. Each hit does lives = lives − 1. After 2 hits, lives is…": {
+  "0": "0 would take three hits, not two.",
+  "2": "2 is the value after one hit, but there were two hits.",
+  "3": "3 is the starting value. Each hit takes one away."
+ },
+ "A flashlight app asks for your location and contacts. What should you do?": {
+  "Allow them, since the app is free to use": "Being free doesn’t mean an app needs everything it asks for.",
+  "Allow them, because all apps need them": "Not all apps need location and contacts. A flashlight just needs the light.",
+  "Allow just the contacts, not the location": "A flashlight doesn’t need your contacts either."
+ },
+ "Why do many free apps collect data?": {
+  "Because data is free to store forever": "Storing data costs money. Apps collect it to earn money.",
+  "To give it back to you": "Apps don’t collect data to hand it back to you.",
+  "They never do": "Many free apps do collect data about how you use them."
+ },
+ "What are privacy settings for?": {
+  "Making your phone or computer faster": "Privacy settings don’t change your device’s speed.",
+  "Changing how your screen and apps look": "Changing looks is done in display settings, not privacy settings.",
+  "Stopping all ads from showing up": "Privacy settings may limit some tracking, but they don’t stop all ads."
+ },
+ "Which information is private?": {
+  "Your favorite color": "A favorite color can’t be used to find or identify you.",
+  "Your favorite animal": "A favorite animal can’t be used to find or identify you.",
+  "Your favorite sport": "A favorite sport can’t be used to find or identify you."
+ },
+ "What is a “cookie” on a website?": {
+  "A snack that the site gives you for visiting": "It’s not a real snack. The name is just a nickname for a small file.",
+  "A virus that always harms your computer": "Cookies aren’t viruses, though they can track you.",
+  "A password the site saves for every user": "Cookies can remember you, but they aren’t a password saved for every user."
+ },
+ "A quiz asks your pet’s name and your first school. Why be careful?": {
+  "Quizzes like this are always safe": "Quizzes can be used by scammers, so they are not always safe.",
+  "It is just for fun, so it is fine": "Something that looks like fun can still be a trick to collect answers.",
+  "The quiz needs it to give a result": "A real fun quiz doesn’t need personal details like these."
+ },
+ "Why turn off location sharing on photos you post?": {
+  "To save space on your phone": "Location data is tiny and doesn’t take up much space.",
+  "To make the colors look better": "Location data doesn’t affect how colors look.",
+  "So photos load faster online": "Location data doesn’t make photos load faster."
+ },
+ "Why read what an app can access before installing?": {
+  "To waste time": "Reading permissions isn’t a waste. It protects your data.",
+  "It doesn’t matter": "It does matter, because apps may access more than they need.",
+  "Apps never collect data": "Many apps do collect data, so checking matters."
+ },
+ "Why do many free apps collect your data?": {
+  "To keep your account safe from hackers": "Security is a separate goal. Free apps usually collect data to earn money.",
+  "Because the law says every app must": "Laws don’t make every app collect data. Think about how free apps earn money.",
+  "To make the app run faster on your phone": "Collecting data doesn’t make an app faster."
+ },
+ "Which setting protects your privacy most?": {
+  "Making every post public": "Public posts let anyone see them, which shares more, not less.",
+  "Using your full name as your username": "Using your full name makes it easier for strangers to find you.",
+  "Accepting all permissions": "Accepting all permissions gives apps more of your data."
+ },
+ "What does it mean when an app asks for “location access”?": {
+  "It wants your name": "Location is about where you are, not your name.",
+  "It wants to charge your battery": "Location access has nothing to do with charging.",
+  "Nothing": "It does mean something: the app wants to know where your device is."
+ },
+ "What is a server?": {
+  "A person who brings websites to your screen": "A server is a computer, not a person.",
+  "A type of cable that connects computers": "Cables connect computers, but a server is a computer itself.",
+  "A program that makes websites look nice": "Making sites look nice is the job of design code, like CSS."
+ },
+ "Why is information sent in small packets?": {
+  "Big files are not allowed on the internet": "Big files are allowed. They are just split up to travel.",
+  "Packets use less power than a whole file": "Power is not the main reason. Think about speed and routes.",
+  "It keeps all the data on one single path": "Packets can take many paths, not just one."
+ },
+ "What is an IP address?": {
+  "The home address where your device is": "It isn’t your home address. It’s a number for your device on a network.",
+  "A password that unlocks your device": "A password unlocks things. An IP address identifies a device.",
+  "An email you use to sign in to sites": "An email address is for messages, not for finding a device on a network."
+ },
+ "What does “https” at the start of a web address mean?": {
+  "The site has been checked and is honest and safe to pay on": "The “s” doesn’t prove a site is honest. Scam sites use it too.",
+  "The site is free to use and has no ads or trackers at all": "The “s” has nothing to do with cost, ads or trackers.",
+  "The site is fast, official and always kept up to date": "The “s” doesn’t mean a site is fast, official or up to date."
+ },
+ "What is a web browser?": {
+  "A search engine only": "A search engine is a website you can visit inside a browser.",
+  "A cable": "A cable is hardware. A browser is software.",
+  "A virus": "A virus is harmful software. A browser is a useful app."
+ },
+ "What is a router?": {
+  "A map app that shows you the way to go": "A map app gives directions on roads, not internet traffic.",
+  "A keyboard that has no wire attached": "A wireless keyboard is for typing, not for connecting to the internet.",
+  "A charger that powers many devices": "A charger gives power, not internet connections."
+ },
+ "What is the “cloud”?": {
+  "The clouds that bring rain and snow": "It isn’t the weather in the sky. It’s a name for online storage.",
+  "Data saved only on your own phone": "Data saved only on your phone is local storage, not the cloud.",
+  "A printer that is connected by Wi-Fi": "A Wi-Fi printer prints pages. It isn’t online storage."
+ },
+ "How does information travel across the internet?": {
+  "It moves as one big file through a single wire": "Data isn’t sent as one big file down a single wire.",
+  "It is beamed straight from satellites to each device": "Most internet data travels through cables, not straight from satellites.",
+  "It is copied onto every computer at the same time": "Data goes only to the device that asked for it, not to every computer."
+ },
+ "What does a URL tell your browser?": {
+  "Your password for the site": "A URL doesn’t hold your password.",
+  "How fast your Wi-Fi is": "A URL doesn’t measure Wi-Fi speed.",
+  "Which computer you are using": "A URL points to a page, not to the computer you are using."
+ },
+ "Why can a website load slowly when many people visit at once?": {
+  "The internet slows down after it is used all day": "The internet doesn’t get tired from use during the day.",
+  "Websites only let one visitor in at a time": "Websites can handle many visitors at once, but too many can overload them.",
+  "Your screen can’t show pages that are popular": "Your screen can show any page. The slowdown happens on the server."
+ },
+ "What is Wi-Fi?": {
+  "A cable that plugs into the back of a router": "A cable is a wired connection. Wi-Fi is the opposite.",
+  "A website that lets you search for things": "A search website runs on the internet. It isn’t how you connect.",
+  "The password you type to get online": "A password may be needed to join, but it isn’t Wi-Fi itself."
+ },
+ "An AI chatbot gives you a fact for your report. What should you do?": {
+  "Copy it as is, because AI checks its own facts": "AI doesn’t reliably check its own facts and can be wrong.",
+  "Use it if it sounds right and is clearly written": "AI can sound clear and confident and still be wrong.",
+  "Ask the chatbot again to see if it says the same": "Getting the same answer twice doesn’t prove it’s true."
+ },
+ "Which is a good use of AI?": {
+  "Letting it make every choice in the project": "Letting AI make every choice means you stop using your own judgment.",
+  "Handing in its writing as your own work": "Turning in AI writing as yours is dishonest.",
+  "Sharing private information to get better help": "Sharing private information with AI can put your privacy at risk."
+ },
+ "How do most AI systems learn?": {
+  "By magic": "AI isn’t magic. It follows math and data.",
+  "By reading your mind": "AI can’t read your mind. It works from the data it is given.",
+  "They are born knowing everything": "AI isn’t born knowing anything. It has to be trained."
+ },
+ "Which is a common use of AI?": {
+  "Growing trees": "Growing trees takes soil, water and sun, not AI.",
+  "Making rain": "Rain comes from weather, not from AI.",
+  "Baking bread by itself": "AI doesn’t bake bread on its own."
+ },
+ "Why shouldn’t you share private information with AI chatbots?": {
+  "They forget instantly always": "Chatbots don’t always forget. Data may be stored.",
+  "It’s required": "Sharing private information is never required.",
+  "They need it": "Chatbots can help without your private details."
+ },
+ "A photo might be made by AI. How can you check?": {
+  "Believe it, since photos show what is real": "AI can make fake photos that look real, so a photo isn’t proof.",
+  "Ask a friend if they think it looks real": "A friend’s guess isn’t a reliable check.",
+  "Share it first and see what others say": "Sharing first can spread something fake."
+ },
+ "Why can AI give biased answers?": {
+  "AI is always fair, since it is a machine": "Machines can still be unfair if their data is unfair.",
+  "It has strong opinions of its own": "AI doesn’t have its own opinions. It reflects its data.",
+  "It never learns anything from data": "AI does learn from data. That’s where bias can come from."
+ },
+ "Is it honest to hand in AI-written homework as your own?": {
+  "Yes": "Handing in someone else’s work as yours is not honest, even if a computer wrote it.",
+  "Only on Fridays": "The day of the week doesn’t change whether something is honest.",
+  "If nobody notices": "Getting away with it doesn’t make it honest."
+ },
+ "How does a photo app learn to recognize cats?": {
+  "It is programmed with one perfect cat photo": "One photo isn’t enough. Cats look very different from each other.",
+  "A person checks every photo by hand": "Checking every photo by hand isn’t how the app learns.",
+  "It guesses at random until it gets lucky": "Random guessing isn’t learning. Training uses many examples."
+ },
+ "Why can AI be unfair?": {
+  "AI has its own feelings about some people": "AI doesn’t have feelings about people.",
+  "Computers choose to like some groups more": "Computers don’t choose to like some groups. They follow patterns in data.",
+  "AI makes random mistakes that even out over time": "Biases don’t even out. They can repeat in the same direction."
+ },
+ "What does the article mean by an algorithm?": {
+  "A type of advertisement": "An advertisement is a paid message, not a set of rules.",
+  "A person who chooses posts by hand": "Choosing posts by hand is what a person does. The article means something a computer follows.",
+  "A phone’s battery setting": "A battery setting controls power, not how decisions are made."
+ },
+ "Testers keep tapping the wrong button. What should the designer do?": {
+  "Tell the testers to read the guide first": "If many testers struggle, the design is the problem, not the testers.",
+  "Make the button smaller so it fits better": "A smaller button would be even harder to tap.",
+  "Add more buttons so testers have more choices": "More buttons would add confusion, not fix it."
+ },
+ "What does “user-friendly” mean?": {
+  "Has lots of buttons and menus": "Lots of buttons and menus can make things confusing.",
+  "Costs a lot, so it must be good": "Price doesn’t tell you if something is easy to use.",
+  "Loads fast, even if it is confusing": "Fast but confusing isn’t friendly for users."
+ },
+ "Who should test a new app?": {
+  "Only the designer": "The designer already knows how it works, so they can miss problems.",
+  "Nobody": "Skipping testing means problems go unnoticed.",
+  "Only robots": "Robots can check code, but they can’t show how people really use it."
+ },
+ "Users can’t find the Save button. What should designers do?": {
+  "Remove it and save files on their own": "Removing it takes away control users may want.",
+  "Tell the users to read the guide": "If users can’t find it, a guide won’t fix the design.",
+  "Leave it, since users will learn": "Leaving it means users keep struggling."
+ },
+ "Why make apps work for people with different abilities?": {
+  "It is not needed for most apps": "Many people use these features, including people with disabilities.",
+  "Only a few people would ever use it": "Lots of people benefit, including people with temporary injuries or noisy surroundings.",
+  "Because the law says so, and that is all": "Laws may require it, but the main goal is letting everyone use the app."
+ },
+ "What is a prototype in app design?": {
+  "The final app that people download": "The final app comes later, after testing early versions.",
+  "A bug that was found in testing": "A bug is a mistake found in testing, not an early version.",
+  "A password that protects the app": "A password protects an account. It isn’t a version of the app."
+ },
+ "Why do good apps use big buttons on phones?": {
+  "Big buttons are always ugly": "Big buttons aren’t ugly by rule. They help people tap.",
+  "To slow users down on purpose": "Slowing users down isn’t the goal. Easy tapping is.",
+  "So the app looks more modern": "Looks are not the main reason. Think about fingers."
+ },
+ "You’re designing an app for older adults. What should you test first?": {
+  "Which colors you like best for the app": "Your color choices matter less than what the real users need.",
+  "How many ads can fit on each screen": "Ads don’t help users read or use the app.",
+  "Whether it works well for you and your team": "You and your team aren’t the users. Test with the people it’s for."
+ },
+ "Why add captions to videos in an app?": {
+  "To make the video files bigger and sharper": "Captions don’t change video quality or size.",
+  "To keep viewers from turning on the sound": "Captions don’t stop people from using sound.",
+  "Only to make the videos look more fun": "Captions are mainly to help people follow along, not just for fun."
+ },
+ "Users keep tapping the wrong button. What does that tell a designer?": {
+  "The users need to read the directions more": "If many people make the same mistake, the design is the problem.",
+  "Nothing; people always make some mistakes": "Repeated mistakes are a sign something can be improved.",
+  "The app needs more buttons to choose from": "More buttons would add confusion, not fix it."
+ },
+ "What is “user testing”?": {
+  "Running a program to check a computer’s speed": "Checking a computer’s speed is a performance test, not user testing.",
+  "Asking the designer whether the design is good": "The designer isn’t the user. User testing involves real people.",
+  "Checking the code for typos before launch": "Checking code for typos is code review, not user testing."
+ }
+}
