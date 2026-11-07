@@ -138,21 +138,26 @@ const change = [
 
 // ------------------------------------------------------------------------------------------------ print handwriting (manuscript)
 const FAMILIES = [
-  ['l t i', 'Tall letters: start at the top. Pull straight down. Cross or dot last.'],
-  ['c o a d g', 'Magic c letters: start like a c. Curve back and around. Then finish.'],
-  ['n m h r b p', 'Tunnel letters: pull down first. Then go back up and over.'],
-  ['u y j f', 'Hook letters: curve at the bottom like a hook. The f hooks at the top.'],
-  ['v w x k z', 'Slant letters: start at the top. Slant down in straight lines.'],
+  ['l t', 'Tall letters: start at the top line. Pull straight down. Cross the t last.'],
+  ['i j', 'Dot letters: start at the dashed line. Pull down. Lift your pencil. Add the dot last.'],
+  ['c o a d g q', 'Magic c letters: start at the dashed line. Make a c. Then finish the letter.'],
+  ['n m r p', 'Tunnel letters: start at the dashed line. Pull down. Go back up and over.'],
+  ['h b', 'Tall tunnel letters: start at the top line. Pull down. Go back up and over.'],
+  ['u y', 'Cup letters: start at the dashed line. Pull down, curve up, then pull down.'],
+  ['f', 'Hook letter: start below the top line. Curve up and over. Pull down. Cross it.'],
+  ['v w x', 'Slant letters: start at the dashed line. Slant down, then slant up.'],
+  ['k', 'Start at the top line. Pull down. Then slant in and slant out.'],
+  ['z', 'Zigzag: go across the dashed line. Slant down. Go across the bottom.'],
   ['e s', 'Curvy letters: e goes across, then around. s curves one way, then back.'],
 ];
 const printing = [
   () => { const [ls, tip] = pick(FAMILIES); const l = pick(ls.split(' ')); return { type: 'trace', skill: 'write.print', style: 'print', word: l, q: `Trace the letter “${l}” in print. ${tip}`, why: tip, diff: 1 }; },
-  () => { const U = pick('BDEFHILMNPRT'.split('')); return { type: 'trace', skill: 'write.print', style: 'print', word: U, q: `Trace the capital “${U}”. Start at the top line. Touch the bottom line.`, why: 'Capital letters are tall. They go from the top line to the bottom line.', diff: 2 }; },
-  () => { const w = pick(['cat', 'dog', 'sun', 'map', 'pig', 'hat', 'bed', 'fox']); return { type: 'trace', skill: 'write.print', style: 'print', word: w, q: `Trace the word “${w}” in print, one letter at a time.`, why: 'Make each letter. Leave a small space. Letters sit on the bottom line.', diff: 2 }; },
+  () => { const U = pick('BDEFHILMNPRTCGOQ'.split('')); return { type: 'trace', skill: 'write.print', style: 'print', word: U, q: `Trace the capital “${U}”. Start at the top line. Touch the bottom line.`, why: 'Capital letters are tall. They go from the top line to the bottom line.', diff: 2 }; },
+  () => { const w = pick(['cat', 'dog', 'sun', 'map', 'pig', 'hat', 'bed', 'fox']); return { type: 'trace', skill: 'write.print', style: 'print', word: w, q: `Trace the word “${w}” in print. Keep the letters close together.`, why: 'Keep the letters in a word close together. Most letters sit on the bottom line.', diff: 2 }; },
   () => { const w = pick(['I can run.', 'The cat sat.', 'We go up.']); return { type: 'trace', skill: 'write.print', style: 'print', word: w, q: `Trace the sentence in print: “${w}”`, why: 'Start with a capital. Leave finger spaces. End with a period.', diff: 3 }; },
 ];
 export const K2_SKILLS = [
-  ['write.print', 'writing', 1, 'Printing letters', 'Form print letters neatly on the lines, then words and sentences.', [], 'Start most letters at the top. Tall letters touch the top line. Small letters reach the dashed line. All letters sit on the bottom line.', 'Say the steps as you write: top, pull down, back up and around.', ['Learn app']],
+  ['write.print', 'writing', 1, 'Printing letters', 'Form print letters neatly on the lines, then words and sentences.', [], 'Tall letters touch the top line. Small letters reach the dashed line. Letters sit on the bottom line. g, j, p, q and y go below it.', 'Say the steps as you write: top, pull down, back up and around.', ['Learn app']],
   ['read.sounds', 'reading', 1, 'Hearing sounds', 'Hear rhymes, syllables and the sounds inside words.', [], 'Words are made of sounds. Listen for the beginning, middle and end, and clap the parts (syllables).', 'Say the word slowly, like stretching a rubber band: sssuuunnn. Then say it fast again.', ['Library', 'Learn app']],
 ];
 // skills whose old items are replaced entirely by these banks (also in the Learn app)

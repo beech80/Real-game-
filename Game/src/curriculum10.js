@@ -10,14 +10,14 @@ export const BANKS_B = {
   'sci.safety': bank('sci.safety', [
     ['In a science activity, why do we wear goggles?', 'To protect our eyes from splashes and flying bits', ['To see better in the dark', 'To look like a scientist', 'Only when it is sunny'], 'Eyes are easy to hurt and hard to heal. Goggles protect them.', 1],
     ['You spill water on the floor during an experiment. What should you do?', 'Tell the adult and help clean it up so no one slips', ['Leave it', 'Walk through it', 'Pour more water'], 'Spills can cause falls. Clean them up right away.', 2],
-    ['Should you taste or smell things in a science lab?', 'No, unless the teacher says it is safe', ['Yes, always taste', 'Yes, smell everything up close', 'Only taste the blue ones'], 'Some materials are harmful. Follow the safety rules.', 1],
+    ['Should you taste or smell things in a science lab?', 'No, unless the teacher says it is safe', ['Yes, always taste', 'Yes, smell everything up close', 'Smell it close up if it looks safe'], 'Some materials are harmful. Follow the safety rules.', 1],
     ['Why do we tie back long hair near a flame?', 'Hair can catch fire', ['To see the flame', 'It makes the flame bigger', 'It is just a rule for fun'], 'Loose hair near heat is a fire risk.', 2],
   ]),
   'sci.animals': bank('sci.animals', [
     ['What do all animals need to live?', 'Food, water, air and shelter', ['Only food', 'Toys and games', 'Sunlight only'], 'Animals need food, water, air and a safe place to live.', 1],
-    ['Why do some birds fly south in winter?', 'To find food and warmer weather', ['They get bored', 'To visit friends', 'Their feathers fall off'], 'Moving to find food and warmth is called migration.', 2],
-    ['A rabbit has brown fur in summer and white fur in winter. How does this help it?', 'It blends in with the ground or snow and hides from predators', ['It looks pretty', 'White fur is warmer only', 'It doesn’t help'], 'Blending in helps the rabbit hide and stay safe.', 3],
-    ['Which animal is a mammal?', 'A whale', ['A shark', 'A frog', 'A lizard'], 'Mammals breathe air and feed their babies milk. Whales are mammals even though they live in water.', 2, { 'A shark': 'Sharks are fish: they breathe through gills. Whales breathe air.' }],
+    ['Why do some birds fly south when winter is coming?', 'To find food and warmer weather', ['They get bored', 'To visit friends', 'Their feathers fall off'], 'Moving to find food and warmth is called migration.', 2],
+    ['A snowshoe hare has brown fur in summer and white fur in winter. How does this help it?', 'It blends in with the ground or snow and hides from predators', ['It looks pretty', 'White fur is warmer only', 'It doesn’t help'], 'Blending in helps the hare hide and stay safe.', 3],
+    ['Which animal is a mammal?', 'A whale', ['A shark', 'A frog', 'A lizard'], 'Mammals have hair and feed their babies milk. Whales are mammals even though they live in water.', 2, { 'A shark': 'Sharks are fish: they breathe through gills. Whales breathe air.' }],
   ]),
   'sci.observe': bank('sci.observe', [
     ['Which is an observation?', 'The leaf is green and has jagged edges', ['The leaf is the prettiest', 'Leaves are boring', 'I think it fell yesterday'], 'Observations describe what you can see, hear, smell or measure.', 2],
@@ -32,8 +32,8 @@ export const BANKS_B = {
   ]),
   'sci.plants': bank('sci.plants', [
     ['What part of a plant takes in water from the soil?', 'The roots', ['The leaves', 'The flower', 'The fruit'], 'Roots soak up water and hold the plant in place.', 1],
-    ['What is the right order of a plant’s life cycle?', 'Seed, sprout, plant, flower, seed', ['Flower, seed, root, nothing', 'Plant, seed, sprout', 'Fruit, rock, plant'], 'Plants grow from seeds, then make new seeds.', 2],
-    ['A plant in a dark closet turns yellow. Why?', 'It needs light to make its food', ['It is too cold', 'Closets are too quiet', 'It wants a bigger pot'], 'Plants use sunlight to make food. Without light they get weak.', 3],
+    ['What is the right order of a plant’s life cycle?', 'Seed, sprout, plant, flower, seed', ['Flower, sprout, seed, plant', 'Sprout, seed, flower, plant', 'Seed, flower, sprout, plant'], 'Plants grow from seeds, then make new seeds.', 2],
+    ['A plant in a dark closet turns yellow. Why?', 'It needs light to make its food', ['It is too cold', 'It needs more water', 'It wants a bigger pot'], 'Plants use sunlight to make food. Without light they get weak.', 3],
   ]),
   'sci.matter': bank('sci.matter', [
     ['Which is a liquid?', 'Juice', ['A rock', 'Steam', 'An ice cube'], 'Liquids flow and take the shape of their container.', 1],
@@ -44,7 +44,7 @@ export const BANKS_B = {
   ]),
   'sci.water': bank('sci.water', [
     ['What is it called when water falls from clouds as rain or snow?', 'Precipitation', ['Evaporation', 'Condensation', 'Collection'], 'Precipitation is any water that falls from the sky.', 1],
-    ['Put the water cycle in order.', 'Evaporation, condensation, precipitation, collection', ['Precipitation, evaporation, collection, condensation', 'Collection, rain, sun, clouds', 'Condensation, evaporation, collection, precipitation'], 'Water warms and rises, cools into clouds, falls, and collects again.', 2],
+    ['Put the water cycle in order.', 'Evaporation, condensation, precipitation, collection', ['Precipitation, evaporation, collection, condensation', 'Evaporation, precipitation, condensation, collection', 'Condensation, evaporation, collection, precipitation'], 'Water warms and rises, cools into clouds, falls, and collects again.', 2],
     ['Wet clothes dry faster on a sunny, windy day. Why?', 'Heat and wind speed up evaporation', ['The sun pulls out the color', 'Wind makes clothes heavier', 'Clothes dry the same every day'], 'Warmth and moving air help water turn into vapor faster.', 3],
   ]),
   'sci.space': bank('sci.space', [
@@ -162,13 +162,13 @@ export const BANKS_B = {
   'think.observe': bank('think.observe', [
     ['The sidewalk is wet but the sky is blue. What could explain it?', 'It rained earlier, or a sprinkler was on', ['It is raining now', 'The sidewalk is always wet', 'Nothing can explain it'], 'Look at clues and think of reasons that fit them.', 2],
     ['What is the best way to notice details in a picture?', 'Look slowly, part by part', ['Glance quickly', 'Close your eyes', 'Only look at the colors'], 'Careful looking finds more details.', 1],
-    ['Your plant is drooping and the soil is dry. What is the likely cause?', 'It needs water', ['It is too happy', 'It is sleepy', 'It wants music'], 'Put the clues together: dry soil + drooping = thirsty plant.', 2],
+    ['Your plant is drooping and the soil is dry. What is the likely cause?', 'It needs water', ['It has too much sun', 'It is sleepy', 'It needs a bigger pot'], 'Put the clues together: dry soil + drooping = thirsty plant.', 2],
   ]),
   'think.compare': bank('think.compare', [
-    ['Juice A: $3 for 1 bottle. Juice B: $5 for 2 bottles. Which costs less per bottle?', 'Juice B ($2.50 each)', ['Juice A', 'They cost the same', 'You can’t tell'], 'B: $5 ÷ 2 = $2.50 a bottle, less than $3.', 2],
+    ['Which is longer: a pencil or a crayon?', 'A pencil', ['A crayon', 'They are the same', 'You can’t tell'], 'Line them up at one end. The one that sticks out farther is longer.', 2],
+    ['Cup A has 3 apples. Cup B has 5 apples. Which has more?', 'Cup B', ['Cup A', 'They are the same', 'Neither'], '5 is more than 3.', 1],
+    ['How are a cat and a dog the same?', 'Both have fur and four legs', ['Both can fly', 'Both bark', 'Both lay eggs'], 'Comparing means finding what is the same and what is different.', 2],
     ['How are a bike and a car alike?', 'Both have wheels and take you places', ['Both use gas', 'Both have pedals', 'Both fly'], 'Comparing means finding what is the same and different.', 1],
-    ['Two backpacks cost the same. One has a 1-year warranty, the other 5 years. Which is the better deal?', 'The 5-year one, if everything else is equal', ['The 1-year one', 'Neither', 'You must pick the color first'], 'Same price, more protection = better value.', 2],
-    ['Store A is closer but costs $2 more. Store B is a long bus ride away. Why might Store A be the better choice?', 'The bus fare and time could cost more than $2', ['Closer is never better', 'Store B is always better', 'Prices don’t matter'], 'Compare total costs, including time and travel.', 3],
   ]),
   'think.directions': bank('think.directions', [
     ['“Fold the paper. Then draw a line.” What do you do first?', 'Fold the paper', ['Draw the line', 'Cut the paper', 'Color it'], 'Words like “then” tell the order of steps.', 1],
@@ -242,5 +242,13 @@ export const BANKS_B = {
   ]),
 };
 // a few templated items so the most-used thinking skills never run dry
-BANKS_B['think.compare'].push(() => { const a = ri(2, 5), n = ri(2, 4), b = Math.round((a * n - pick([1, 2])) * 100) / 100; return { type: 'choice', skill: 'think.compare', dok: 2, q: `Pack A: ${n} for $${b}. Single: $${a} each. Which is cheaper per item?`, a: 'Pack A', o: ['Pack A', 'The single', 'They cost the same'], why: `Pack A: $${b} ÷ ${n} ≈ $${(b / n).toFixed(2)} each. The single is $${a}. The pack is cheaper per item.` }; });
 BANKS_B['think.planning'].push(() => { const leave = pick([7, 8]), mins = pick([10, 20, 25, 35]); const t = leave * 60 - mins, hh = Math.floor(t / 60), mm = t % 60; const fmt = (h, m) => `${h}:${String(m).padStart(2, '0')}`; return { type: 'choice', skill: 'think.planning', dok: 2, q: `School starts at ${leave}:00. It takes ${mins} minutes to get there. When should you leave, at the latest?`, a: fmt(hh, mm), o: [fmt(hh, mm), `${leave}:${String(mins).padStart(2, '0')}`, `${leave}:00`], why: `${leave}:00 − ${mins} minutes = ${fmt(hh, mm)}. Leaving a few minutes earlier gives you a cushion.` }; });
+// unit prices and value comparisons belong with rates (grades 5–6), not early comparing
+BANKS_B['math.ratio'] = (BANKS_B['math.ratio'] || []).concat([
+  () => { const a = ri(2, 5), n = ri(2, 4), b = a * n + pick([-2, -1, 0, 1, 2]); const per = b / n, key = per < a ? 'Pack A' : per > a ? 'The single' : 'They cost the same';
+    const each = Number.isInteger(per) ? `= $${per}` : `≈ $${per.toFixed(2)}`;
+    return { type: 'choice', skill: 'math.ratio', dok: 2, q: `Pack A: ${n} for $${b}. Single: $${a} each. Which is cheaper per item?`, a: key, o: ['Pack A', 'The single', 'They cost the same'], why: `Pack A: $${b} ÷ ${n} ${each} each. The single is $${a}. ${key === 'They cost the same' ? 'They cost the same per item.' : key + ' is cheaper per item.'}` }; },
+  ...bank('math.ratio', [['Juice A: $3 for 1 bottle. Juice B: $5 for 2 bottles. Which costs less per bottle?', 'Juice B ($2.50 each)', ['Juice A', 'They cost the same', 'You can’t tell'], 'B: $5 ÷ 2 = $2.50 a bottle, less than $3.', 2]]),
+]);
+BANKS_B['think.longterm'] = (BANKS_B['think.longterm'] || []).concat(bank('think.longterm', [['Two backpacks cost the same. One has a 1-year warranty, the other 5 years. Which is the better deal?', 'The 5-year one, if everything else is equal', ['The 1-year one', 'Neither', 'You must pick the color first'], 'Same price, more protection means better value.', 2]]));
+BANKS_B['think.opportunity'] = (BANKS_B['think.opportunity'] || []).concat(bank('think.opportunity', [['Store A is closer but costs $2 more. Store B is a long bus ride away. Why might Store A be the better choice?', 'The bus fare and time could cost more than $2', ['Closer is never better', 'Store B is always better', 'Prices don’t matter'], 'Compare total costs, including time and travel.', 3]]));

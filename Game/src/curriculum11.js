@@ -28,8 +28,8 @@ export const BANKS_C = {
     ]),
   ],
   'write.grammar': [() => { const [w, part, others] = pick([['jumped', 'verb (action)', ['noun (person, place or thing)', 'adjective (describing word)']], ['happy', 'adjective (describing word)', ['verb (action)', 'noun (person, place or thing)']], ['library', 'noun (person, place or thing)', ['verb (action)', 'adjective (describing word)']], ['quickly', 'adverb (tells how)', ['noun (person, place or thing)', 'adjective (describing word)']]]);
-    return ch('write.grammar', `In “The kids ${w === 'happy' ? 'were happy' : w === 'library' ? 'went to the library' : w === 'quickly' ? 'ran quickly' : 'jumped'},” what part of speech is “${w}”?`, part, others, `“${w}” is a ${part}.`, { dok: 2 }); }],
-  'write.homophones': [() => { const [s, a, w] = pick([['___ going to the park.', 'They’re', ['Their', 'There']], ['The dog wagged ___ tail.', 'its', ['it’s', 'its’']], ['Put the box over ___.', 'there', ['their', 'they’re']], ['I want ___ go too.', 'to', ['two', 'too']], ['___ backpacks are blue.', 'Their', ['There', 'They’re']], ['It’s ___ cold to swim.', 'too', ['to', 'two']], ['___ the best team!', 'You’re', ['Your', 'Youre']], ['Is this ___ coat?', 'your', ['you’re', 'yore']]]);
+    return ch('write.grammar', `In “The kids ${w === 'happy' ? 'were happy' : w === 'library' ? 'went to the library' : w === 'quickly' ? 'ran quickly' : 'jumped'},” what part of speech is “${w}”?`, part, others, `“${w}” is ${/^[aeiou]/.test(part) ? 'an' : 'a'} ${part}.`, { dok: 2 }); }],
+  'write.homophones': [() => { const [s, a, w] = pick([['___ going to the park.', 'They’re', ['Their', 'There']], ['The dog wagged ___ tail.', 'its', ['it’s', 'its’']], ['Put the box over ___.', 'there', ['their', 'they’re']], ['I want ___ go too.', 'to', ['two', 'too']], ['___ backpacks are blue.', 'Their', ['There', 'They’re']], ['It’s ___ cold to swim.', 'too', ['to', 'two']], ['___ the best team!', 'You’re', ['Your', 'Youre']], ['Is this ___ coat?', 'your', ['you’re', 'you are']]]);
     const why = { 'They’re': '“They’re” = they are.', its: '“its” shows belonging; “it’s” = it is.', there: '“there” is a place.', to: '“to” goes with a verb or place.', Their: '“Their” shows belonging.', too: '“too” = also, or more than enough.', 'You’re': '“You’re” = you are.', your: '“your” shows belonging.' }[a];
     return ch('write.homophones', `Which word fits? “${s}”`, a, w, why, { dok: 2 }); }],
   'write.tense': [() => { const n = pick(NAMES), [base, past, fut] = pick([['walk', 'walked', 'will walk'], ['play', 'played', 'will play'], ['go', 'went', 'will go'], ['eat', 'ate', 'will eat'], ['write', 'wrote', 'will write'], ['run', 'ran', 'will run']]); const when = pick([['Yesterday', past], ['Tomorrow', fut]]);
@@ -37,7 +37,7 @@ export const BANKS_C = {
   'write.commas': [() => { const items = shuffle(['apples', 'bread', 'milk', 'eggs', 'rice', 'beans']).slice(0, 3); return ch('write.commas', 'Which sentence uses commas correctly in a list?', `We bought ${items[0]}, ${items[1]}, and ${items[2]}.`, [`We bought ${items[0]} ${items[1]} and ${items[2]}.`, `We bought, ${items[0]} ${items[1]}, and ${items[2]}.`, `We, bought ${items[0]}, ${items[1]} and, ${items[2]}.`], 'Put commas between items in a list. (The comma before “and” is common in school writing.)', { dok: 2 }); },
     () => { const d = pick(DAYS), n = ri(1, 28); return ch('write.commas', 'Which date is written correctly?', `${d}, May ${n}, 2026`, [`${d} May ${n} 2026`, `${d}, May, ${n} 2026`, `${d} May, ${n}, 2026`], 'Put a comma after the day of the week and between the date and the year.', { dok: 2 }); }],
   'write.forms': bank('write.forms', [
-    ['A form asks for your “Date of birth.” What do you write?', 'The day you were born, like 04/12/2014', ['Today’s date', 'Your age only', 'Your address'], 'Date of birth is your birthday with the year.', 2],
+    ['A form asks for your “Date of birth.” What do you write?', 'The day you were born, with the month, day and year, like April 12, 2018', ['Today’s date', 'Your age only', 'Write today’s date'], 'Date of birth is your birthday with the year.', 2],
     ['A form says “Print your name.” What should you do?', 'Write your name in clear separate letters, not cursive', ['Sign in cursive', 'Type it on your phone', 'Draw a picture'], 'Print means clear, separate letters so anyone can read it.', 2],
     ['Why should you read a whole form before filling it in?', 'So you know what each box wants and don’t make mistakes', ['To waste time', 'Forms are all the same', 'Only the first line matters'], 'Reading first prevents errors, like putting information in the wrong box.', 3],
     ['A box says “Leave blank – office use only.” What do you do?', 'Leave it empty', ['Write your name', 'Write “blank”', 'Sign it'], 'Some boxes are for the people who process the form.', 1],
@@ -50,7 +50,7 @@ export const BANKS_C = {
   'write.paragraph': bank('write.paragraph', [
     ['What is a topic sentence?', 'The sentence that tells what the paragraph is about', ['The last word', 'A sentence with a question', 'The title'], 'A topic sentence states the main idea, usually first.', 1],
     ['Which sentence does NOT belong in a paragraph about dogs as pets?', 'Cats like to climb trees.', ['Dogs need daily walks.', 'Dogs can learn tricks.', 'Many dogs love to play fetch.'], 'Every sentence should support the topic.', 2],
-    ['Which word helps connect ideas in a paragraph?', 'Also', ['Banana', 'Blue', 'Quickly'], 'Linking words like also, then, because and finally connect sentences.', 2],
+    ['Which word helps connect ideas in a paragraph?', 'Also', ['Big', 'Run', 'Happy'], 'Linking words like also, then, because and finally connect sentences.', 2],
   ]),
   'write.email': bank('write.email', [
     ['Which greeting is best for an email to a new boss?', 'Dear Ms. Park,', ['Yo!', 'Hey dude', 'sup'], 'Use a professional greeting for work emails.', 2],
@@ -149,10 +149,10 @@ export const BANKS_C = {
     ['Which is a need for most families?', 'Electricity for the home', ['A second TV', 'A trip to a theme park', 'A new game'], 'Electricity runs lights, the fridge and heat.', 2],
   ]),
   'fin.saving': [
-    () => { const goal = pick([20, 30, 45, 60]), per = pick([5, 10, 15]); const weeks = Math.ceil(goal / per); return { type: 'number', skill: 'fin.saving', q: `You save $${per} a week for a $${goal} game. How many weeks until you can buy it?`, a: weeks, why: `$${goal} ÷ $${per} = ${(goal / per).toFixed(1).replace('.0', '')}, so ${weeks} weeks.`, suffix: 'weeks', dok: 2 }; },
+    () => { const per = pick([1, 2, 5]), weeks = ri(2, 5), goal = per * weeks; return { type: 'number', skill: 'fin.saving', q: `You save $${per} each week for a $${goal} toy. How many weeks until you have enough?`, a: weeks, why: Array.from({ length: weeks }, (_, i) => `Week ${i + 1}: $${per * (i + 1)}`).join('. ') + `. So ${weeks} weeks.`, suffix: 'weeks', dok: 2 }; },
     ...bank('fin.saving', [
-      ['Where is a safe place to keep savings?', 'A bank account', ['Under a rock outside', 'In your shoe', 'With a stranger'], 'Banks keep money safe and some pay interest.', 1],
-      ['Why save some money from every paycheck?', 'To be ready for emergencies and goals', ['Saving is only for adults', 'Money loses all value', 'It isn’t useful'], 'Small, regular savings add up over time.', 2],
+      ['Where is a safe place to keep savings?', 'A bank or a piggy bank at home', ['In your coat pocket', 'Loose in your backpack', 'With a stranger'], 'A bank or a piggy bank at home keeps money safe.', 1],
+      ['Why save some of your birthday money?', 'So you can buy something bigger later', ['So it disappears', 'So you can’t use it', 'Because saving is only for grown-ups'], 'Saving a little at a time adds up to something bigger.', 2],
     ]),
   ],
   'fin.score': bank('fin.score', [

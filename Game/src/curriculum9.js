@@ -11,9 +11,9 @@ export const BANKS_A = {
   'hl.hygiene': bank('hl.hygiene', [
     ['How long should you scrub your hands with soap?', 'About 20 seconds', ['1 second', 'Only if they look dirty', '5 minutes'], 'Twenty seconds (singing “Happy Birthday” twice) is long enough for soap to lift germs off.', 1],
     ['When is it most important to wash your hands?', 'Before eating and after using the bathroom', ['Only at bedtime', 'Only when they are sticky', 'After brushing your hair'], 'Germs spread to food and your mouth from your hands. Washing at these times stops that.', 1],
-    ['You sneeze and have no tissue. What should you do?', 'Sneeze into your elbow', ['Sneeze into your hands', 'Sneeze toward a friend', 'Hold it in forever'], 'Your elbow keeps germs off your hands, which touch everything.', 2, { 'Sneeze into your hands': 'Then germs go on everything you touch next. Use your elbow.' }],
+    ['You sneeze and have no tissue. What should you do?', 'Sneeze into your elbow', ['Sneeze into your hands', 'Sneeze toward a friend', 'Cover your mouth with your hand'], 'Your elbow keeps germs off your hands, which touch everything.', 2, { 'Sneeze into your hands': 'Then germs go on everything you touch next. Use your elbow.' }],
     ['Why do we brush our teeth twice a day?', 'To clean away germs and food that cause cavities', ['To make teeth grow', 'So we don’t need to eat', 'Only to make breath smell nice'], 'Plaque (germs and food) builds up and makes holes called cavities. Brushing removes it.', 1],
-    ['A cut on your knee is dirty. What should you do first?', 'Wash it gently with clean water and soap', ['Cover it right away without cleaning', 'Put dirt on it to stop the blood', 'Ignore it'], 'Cleaning removes germs before you cover it with a bandage.', 2],
+    ['A cut on your knee is dirty. What should you do first?', 'Tell a grown-up so they can help you wash it', ['Cover it right away without cleaning', 'Put dirt on it to stop the blood', 'Ignore it'], 'A grown-up can wash it with clean water and soap, then cover it. Cleaning keeps germs out.', 2],
   ]),
   'hl.feelings': bank('hl.feelings', [
     ['Your friend’s fists are tight and their face is red. How might they feel?', 'Angry', ['Sleepy', 'Calm', 'Bored'], 'Tight fists and a red face are body clues for anger.', 2],
@@ -22,8 +22,8 @@ export const BANKS_A = {
     ['A classmate is sitting alone and looks sad. What is a kind thing to do?', 'Ask if they want to join you', ['Laugh at them', 'Ignore them', 'Tell everyone they are sad'], 'Noticing others’ feelings and including them is empathy.', 2],
   ]),
   'hl.safety': bank('hl.safety', [
-    ['An adult you don’t know offers you a ride home. What should you do?', 'Say no and go tell a trusted adult', ['Get in if they seem nice', 'Ask them for candy first', 'Go if it’s raining'], 'Never go anywhere with someone you don’t know, even if they seem friendly.', 2],
-    ['What should you do before crossing a street?', 'Stop, look left, right and left again', ['Run fast across', 'Look only one way', 'Cross between parked cars'], 'Cars can come from either side. Look both ways, then cross at a crosswalk if there is one.', 1],
+    ['An adult you don’t know offers you a ride home. What should you do?', 'Say no and go tell a trusted adult', ['Get in if they seem nice', 'Get in if they say your mom sent them', 'Go if it’s raining'], 'Never go anywhere with someone you don’t know, even if they seem friendly.', 2],
+    ['What should you do before crossing a street?', 'Hold a grown-up’s hand, stop, and look left, right and left again', ['Run fast across', 'Look only one way', 'Cross between parked cars'], 'Cars can come from either side. Cross with a grown-up, at a crosswalk if there is one.', 1],
     ['You find a pill on the floor. What should you do?', 'Don’t touch it; tell an adult', ['Taste it', 'Put it in your pocket', 'Give it to a friend'], 'Medicine can be dangerous. Only take it from a trusted adult.', 2],
     ['What number do you call in the U.S. for an emergency?', '911', ['411', '123', '0'], 'Call 911 when someone is hurt, in danger, or there is a fire.', 1],
     ['Why do you wear a helmet when riding a bike?', 'It protects your brain if you fall', ['It makes you go faster', 'It keeps your hair neat', 'It is only for racing'], 'Your brain can be hurt badly in a fall. A helmet absorbs the hit.', 1],
@@ -41,7 +41,7 @@ export const BANKS_A = {
     ['What should you do before hard exercise?', 'Warm up with easy movement', ['Eat a huge meal', 'Sit still for an hour', 'Hold your breath'], 'Warming up gets blood to your muscles and helps prevent injury.', 2],
   ]),
   'hl.kindness': bank('hl.kindness', [
-    ['A friend drops their books. What could you do?', 'Help pick them up', ['Walk away fast', 'Laugh', 'Kick one'], 'Small helpful acts show kindness.', 1],
+    ['A friend drops their books. What could you do?', 'Help pick them up', ['Walk away fast', 'Laugh', 'Tell them to be more careful and keep walking'], 'Small helpful acts show kindness.', 1],
     ['Someone is being teased. What is a safe way to help?', 'Stand with them and tell a trusted adult', ['Join in the teasing', 'Post about it online', 'Pretend you didn’t see'], 'Being an upstander means supporting the person and getting help.', 2],
     ['You and a friend want different games. What is a fair solution?', 'Take turns choosing', ['The louder person wins', 'Stop being friends', 'Nobody plays'], 'Taking turns lets both people feel heard.', 2],
     ['Why does saying sorry matter after you hurt someone?', 'It shows you understand how they feel and want to fix it', ['It makes the problem disappear', 'It isn’t needed', 'Only if a grown-up asks'], 'Saying sorry and meaning it, then acting better, helps fix trust.', 3],
@@ -95,8 +95,8 @@ export const BANKS_A = {
   // ================================================================ technology
   'tech.basics': bank('tech.basics', [
     ['What does a keyboard let you do?', 'Type letters and numbers into the computer', ['Print paper', 'Hear sounds', 'Charge the battery'], 'A keyboard is an input device: it sends what you type to the computer.', 1],
-    ['Which one is an output device?', 'A speaker', ['A mouse', 'A keyboard', 'A microphone'], 'Output devices show or play information from the computer. Speakers play sound.', 2],
-    ['Your app froze. What is a good first step?', 'Close it and open it again', ['Hit the screen', 'Throw the device', 'Delete everything'], 'Restarting an app or device fixes many problems.', 2],
+    ['Which one lets you HEAR the computer?', 'A speaker', ['A mouse', 'A keyboard', 'A microphone'], 'Speakers play sound from the computer. A microphone takes your voice in.', 2],
+    ['Your app froze. What is a good first step?', 'Close it and open it again', ['Keep tapping the screen fast', 'Turn off the Wi-Fi', 'Delete everything'], 'Restarting an app or device fixes many problems.', 2],
     ['What does saving a file do?', 'Keeps your work so you can open it later', ['Deletes it', 'Prints it', 'Sends it to everyone'], 'Saving stores your work. Save often so you don’t lose it.', 1],
   ]),
   'tech.sequence': bank('tech.sequence', [
@@ -171,7 +171,7 @@ export const BANKS_A = {
     ['Who would you ask for a library book?', 'A librarian', ['A firefighter', 'A dentist', 'A farmer'], 'Librarians help people find books and information.', 1],
     ['Why does a community need many kinds of workers?', 'Each job meets a different need, like food, safety and learning', ['So everyone has the same job', 'Workers like crowds', 'It doesn’t'], 'Communities depend on many people doing different jobs.', 3],
     ['There is a fire at a house. Who should come?', 'Firefighters', ['Teachers', 'Chefs', 'Librarians'], 'Firefighters put out fires and rescue people.', 1],
-    ['A road has a big pothole. Who in the community usually fixes it?', 'City road workers (public works)', ['The mail carrier', 'The school nurse', 'A store cashier'], 'Cities pay public works crews, with taxes, to fix roads.', 2],
+    ['A road has a big pothole. Who in the community usually fixes it?', 'City road workers', ['The mail carrier', 'The school nurse', 'A store cashier'], 'The city has workers whose job is fixing roads.', 2],
   ]),
   'soc.rules': bank('soc.rules', [
     ['Why do we raise our hands in class?', 'So everyone gets a turn to talk and be heard', ['To stretch', 'To make noise', 'Because hands get tired'], 'This rule keeps talking fair and orderly.', 2],
@@ -185,12 +185,14 @@ export const BANKS_A = {
       ['What does a map key (legend) show?', 'What the symbols on the map mean', ['The map’s price', 'Who drew the map', 'The weather'], 'The key explains symbols, like a tree for a park.', 1],
       ['If north is up, which way is east?', 'To the right', ['To the left', 'Down', 'Up'], 'North up, south down, east right, west left.', 2],
     ]),
-    () => { const places = ['library', 'park', 'school', 'store']; const P = places.map((n) => [n, Math.floor(Math.random() * 5), Math.floor(Math.random() * 5)]); const [a, b] = [P[0], P[1]];
-      if (a[1] === b[1] && a[2] === b[2]) b[1] = (b[1] + 2) % 5;
-      const dir = a[2] < b[2] ? 'north' : a[2] > b[2] ? 'south' : a[1] < b[1] ? 'east' : 'west';
-      return { type: 'choice', skill: 'soc.maps', dok: 2, v: { title: 'MAP (north is up)', lines: [`The ${a[0]} is at column ${a[1] + 1}, row ${5 - a[2]}.`, `The ${b[0]} is at column ${b[1] + 1}, row ${5 - b[2]}.`, 'Row 1 is the top row (north).'] },
-        q: `${a[2] !== b[2] && a[1] !== b[1] ? 'First go up or down. ' : ''}Which way is the ${b[0]} from the ${a[0]}?`, a: dir, o: [dir, ...['north', 'south', 'east', 'west'].filter((d) => d !== dir).slice(0, 3)],
-        why: a[2] !== b[2] ? `Row ${5 - b[2]} is ${b[2] > a[2] ? 'above' : 'below'} row ${5 - a[2]}, so you go ${dir}.` : `Same row: column ${b[1] + 1} is to the ${dir === 'east' ? 'right' : 'left'}, so you go ${dir}.` }; },
+    () => { const P = [['🏫', 'school'], ['🌳', 'park'], ['📚', 'library'], ['🏪', 'store']]; const [a, b] = [P[0], P[1 + Math.floor(Math.random() * 3)]];
+      const sameRow = Math.random() < 0.5, r = Math.floor(Math.random() * 3), c = Math.floor(Math.random() * 3);
+      const ax = sameRow ? 0 : c, ay = sameRow ? r : 0, bx = sameRow ? 2 : c, by = sameRow ? r : 2;
+      const flip = Math.random() < 0.5, [A, B] = flip ? [[a, ax, ay], [b, bx, by]] : [[b, bx, by], [a, ax, ay]];
+      const grid = Array.from({ length: 3 }, (_, y) => Array.from({ length: 3 }, (_, x) => (x === A[1] && y === A[2] ? A[0][0] : x === B[1] && y === B[2] ? B[0][0] : '⬜')).join(''));
+      const dir = A[2] === B[2] ? (B[1] > A[1] ? 'east' : 'west') : (B[2] > A[2] ? 'south' : 'north');
+      return { type: 'choice', skill: 'soc.maps', dok: 2, v: { big: '⬆️N\n' + grid.join('\n') }, q: `North is up. Which way is the ${B[0][1]} from the ${A[0][1]}?`, a: dir, o: ['north', 'south', 'east', 'west'],
+        why: `Up is north, down is south, right is east, left is west. The ${B[0][1]} is ${({ north: 'above', south: 'below', east: 'to the right of', west: 'to the left of' })[dir]} the ${A[0][1]}, so it is ${dir}.` }; },
   ],
   'soc.geography': bank('soc.geography', [
     ['What is the largest ocean on Earth?', 'The Pacific Ocean', ['The Atlantic Ocean', 'The Indian Ocean', 'The Arctic Ocean'], 'The Pacific covers about a third of Earth’s surface.', 1],

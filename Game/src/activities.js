@@ -187,7 +187,7 @@ export function cursivePad(G, text, skill, prompt, done, opts = {}) {
     strip.replaceChildren(...parts.map((t, i) => h('span', { class: st.final ? 'now' : i < st.i ? 'done' : i === st.i ? 'now' : '' }, t)));
     strip.classList.toggle('sentence', sentence);
     stepLbl.textContent = st.final
-      ? (PRINT ? `Now the whole ${sentence ? 'sentence' : 'word'}: trace “${text}”. Leave a small space between letters.` : `Now join them! Trace the whole ${sentence ? 'sentence' : 'word'} “${text}” in one smooth line.`)
+      ? (PRINT ? `Now the whole ${sentence ? 'sentence' : 'word'}: trace “${text}”. ${sentence ? 'Leave a finger space between words.' : 'Keep the letters close together.'}` : `Now join them! Trace the whole ${sentence ? 'sentence' : 'word'} “${text}” in one smooth line.`)
       : `${sentence ? 'Word' : 'Letter'} ${st.i + 1} of ${parts.length}: trace “${st.t}”.`;
   };
   const show = () => {
@@ -211,7 +211,8 @@ export function cursivePad(G, text, skill, prompt, done, opts = {}) {
     // the cursive font may still be loading: redraw the gold letters in cursive as soon as it arrives
     if (document.fonts && document.fonts.load) document.fonts.load(PRINT ? `${fit}px "Andika"` : `${fit}px "Dancing Script"`).then(() => { if (!cv.isConnected && !holder.isConnected) return; drawTarget(); if (!inked) drawGuide(); }).catch(() => {});
     let inked = false;
-    const drawGuide = () => { g.clearRect(0, 0, 640, 220); if (PRINT) { g.save(); g.strokeStyle = 'rgba(120,160,255,.45)'; g.lineWidth = 2; for (const [y, dash] of [[115 - fit * 0.42, []], [115 - fit * 0.05, [10, 10]], [115 + fit * 0.3, []]]) { g.setLineDash(dash); g.beginPath(); g.moveTo(16, y); g.lineTo(624, y); g.stroke(); } g.restore(); } g.font = gg.font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(233,169,58,.32)'; g.fillText(t, 320, 115); g.strokeStyle = 'rgba(233,169,58,.15)'; g.lineWidth = 1; g.beginPath(); g.moveTo(40, 160); g.lineTo(600, 160); g.stroke(); };
+    const drawGuide = () => { g.clearRect(0, 0, 640, 220); if (PRINT && t.length === 1) { const w = g.measureText ? (g.font = font, g.measureText(t).width) : fit * 0.5, x0 = 320 - w / 2, top = 115 - fit * 0.42, mid = 115 - fit * 0.05; const tall = /[bdfhklt]|[A-Z]/.test(t), magic = /[cadgqoes]|[CGOQ]/.test(t), sx = magic ? x0 + w * 0.8 : /[f]/.test(t) ? x0 + w * 0.75 : x0 + w * 0.2, sy = tall && !/[d]/.test(t) ? top : mid; g.save(); g.fillStyle = '#2fbf71'; g.beginPath(); g.arc(sx, sy, 9, 0, Math.PI * 2); g.fill(); g.font = '600 16px sans-serif'; g.fillText('start', sx + 14, sy - 10); g.restore(); }
+      if (PRINT) { g.save(); g.strokeStyle = 'rgba(120,160,255,.45)'; g.lineWidth = 2; for (const [y, dash] of [[115 - fit * 0.42, []], [115 - fit * 0.05, [10, 10]], [115 + fit * 0.3, []]]) { g.setLineDash(dash); g.beginPath(); g.moveTo(16, y); g.lineTo(624, y); g.stroke(); } g.restore(); } g.font = gg.font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(233,169,58,.32)'; g.fillText(t, 320, 115); g.strokeStyle = 'rgba(233,169,58,.15)'; g.lineWidth = 1; g.beginPath(); g.moveTo(40, 160); g.lineTo(600, 160); g.stroke(); };
     drawGuide();
     const ink = document.createElement('canvas'); ink.width = 640; ink.height = 220; const ig = ink.getContext('2d');
     let drawing = false, last = null;
