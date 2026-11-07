@@ -16,9 +16,10 @@ function coachName(G) {
   const L = UI.lastSpeaker; if (!L || Date.now() - L.t > 10 * 60 * 1000 || L.name === G.state.name) return '';
   return String(L.name).split(' · ')[0].replace(/^[^A-Za-z]+/, '').trim();
 }
-const num = (x) => { const m = String(x).replace(/−/g, '-').replace(/[$,]/g, '').match(/^\s*(-?\d+(?:\.\d+)?)\s*(%|[a-z]+)?\s*$/i); return m ? parseFloat(m[1]) : null; };
+const num = (x) => { const m = String(x).replace(/−/g, '-').replace(/[$,]/g, '').match(/^\s*(-?\d+(?:\.\d+)?)\s*(%|°?[a-z]+)?\s*$/i); return m ? parseFloat(m[1]) : null; };
 /** Reasons for the questions made from random numbers and words (each one is new, so the reason follows the rule). */
 const SKILL_WHY = {
+  'read.paragraph': (Q) => /^When /.test(Q.q) ? 'Find the line in the notice that tells the day and the time. Check both.' : null,
   'write.caps': () => 'Check each name, day and place. Each one needs a capital letter, and so does the first word.',
   'write.commas': (Q) => /date/i.test(Q.q) ? 'Look at where each comma sits. A comma goes after the day of the week, and between the date and the year.' : 'Look at where each comma sits. Commas go between the things in a list, not between other words.',
   'write.sentences': (Q) => /NOT/.test(Q.q) ? 'That one is a full sentence: it tells who and what they do. Find the one that is missing a part.' : 'That one is missing a part. A sentence tells who, and what they do.',
@@ -35,8 +36,8 @@ const SKILL_WHY = {
   'math.probability': () => 'Chance = the number of ways you want ÷ all the things in the bag. Count both again.',
   'math.ratio': () => 'Find the price for one item in each deal, then compare those.',
   'fin.prices': () => 'Compare the dollars first, then the cents. The smaller price costs less.',
-  'math.numbers': (Q, o) => /same/i.test(o) ? 'Look at the tens digit in each number first. They are not the same.' : null,
-  'math.place': (Q, o) => /same/i.test(o) ? 'Look at the tens digit in each number first. They are not the same.' : /what does/i.test(Q.q) ? 'Look at where the digit sits. The left place is tens, the right place is ones.' : null,
+  'math.numbers': (Q, o) => /same|equal/i.test(o) ? 'Look at the tens digit in each number first. They are not the same.' : null,
+  'math.place': (Q, o) => /same|equal/i.test(o) ? 'Look at the tens digit in each number first. They are not the same.' : /what does/i.test(Q.q) ? 'Look at where the digit sits. The left place is tens, the right place is ones.' : null,
 };
 /** Why this pick isn't it: the item's own reason, the written bank of reasons, else a reason worked out from the numbers. Never just “wrong”. */
 export function reasonFor(Q, o, sk = {}) {

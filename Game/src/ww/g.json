@@ -1,1 +1,523 @@
-{}
+{
+ "What is this text mostly about?|How a seed grows into a plant": {
+  "How to put soil in a pot": "The text does not tell how to fill a pot. It tells what a seed does.",
+  "Why plants need the sun": "The sun is one small part. Think about the whole text.",
+  "What a big plant looks like": "The big plant comes at the very end. Look at all the steps."
+ },
+ "What is this text mostly about?|How a bus takes kids to school and back": {
+  "How the bus goes up a big hill": "The hill is one small part. Think about the whole trip.",
+  "Kids who walk up the hill": "The kids in the text do not walk. They get on the bus.",
+  "What kids do all day at school": "The text does not tell what kids do at school. It is about the bus."
+ },
+ "When does the cooking class start?|Sunday at 10:30 AM": {
+  "Sunday at 6:00 PM": "The day is right, but 6:00 PM is not in the note. Check the time again.",
+  "Monday at 10:30 AM": "The note does not say Monday. Check which day the classes run.",
+  "5:00 AM": "That number comes from the $5 cost, not the start time. Find the day and time line."
+ },
+ "When does the cooking class start?|Saturday at 9:00 AM": {
+  "Saturday at 6:00 PM": "The day is right, but 6:00 PM is not in the note. Check the time again.",
+  "Monday at 9:00 AM": "The note does not say Monday. Check which day the classes run.",
+  "10:00 AM": "That number comes from the $10 cost, not the start time. Find the day and time line."
+ },
+ "When does the cooking class start?|Saturday at 1:00 PM": {
+  "Saturday at 6:00 PM": "The day is right, but 6:00 PM is not in the note. Check the time again.",
+  "Monday at 1:00 PM": "The note does not say Monday. Check which day the classes run.",
+  "5:00 AM": "That number comes from the $5 cost, not the start time. Find the day and time line."
+ },
+ "When does the cooking class start?|Friday at 1:00 PM": {
+  "Friday at 6:00 PM": "The day is right, but 6:00 PM is not in the note. Check the time again.",
+  "Monday at 1:00 PM": "The note does not say Monday. Check which day the classes run.",
+  "8:00 AM": "That number comes from the $8 cost, not the start time. Find the day and time line."
+ },
+ "When does the cooking class start?|Friday at 9:00 AM": {
+  "Friday at 6:00 PM": "The day is right, but 6:00 PM is not in the note. Check the time again.",
+  "Monday at 9:00 AM": "The note does not say Monday. Check which day the classes run.",
+  "5:00 AM": "That number comes from the $5 cost, not the start time. Find the day and time line."
+ },
+ "When does the cooking class start?|Sunday at 1:00 PM": {
+  "Sunday at 6:00 PM": "The day is right, but 6:00 PM is not in the note. Check the time again.",
+  "Monday at 1:00 PM": "The note does not say Monday. Check which day the classes run.",
+  "8:00 AM": "That number comes from the $8 cost, not the start time. Find the day and time line."
+ },
+ "When does the cooking class start?|Saturday at 10:30 AM": {
+  "Saturday at 6:00 PM": "The day is right, but 6:00 PM is not in the note. Check the time again.",
+  "Monday at 10:30 AM": "The note does not say Monday. Check which day the classes run.",
+  "10:00 AM": "That number comes from the $10 cost, not the start time. Find the day and time line."
+ },
+ "When does the cooking class start?|Sunday at 9:00 AM": {
+  "Sunday at 6:00 PM": "The day is right, but 6:00 PM is not in the note. Check the time again.",
+  "Monday at 9:00 AM": "The note does not say Monday. Check which day the classes run.",
+  "5:00 AM": "That number comes from the $5 cost, not the start time. Find the day and time line."
+ },
+ "How tight should the bolts be?|30 foot-pounds, in a star pattern": {
+  "50 foot-pounds": "Check the torque line. It shows a different number than 50.",
+  "As tight as possible": "The warning says do not over-tighten. Use the exact torque listed.",
+  "30 foot-pounds, in a circle": "The number is right, but the note says star pattern, not a circle."
+ },
+ "How tight should the bolts be?|40 foot-pounds, in a star pattern": {
+  "60 foot-pounds": "Check the torque line. It shows a different number than 60.",
+  "As tight as possible": "The warning says do not over-tighten. Use the exact torque listed.",
+  "40 foot-pounds, in a circle": "The number is right, but the note says star pattern, not a circle."
+ },
+ "How tight should the bolts be?|35 foot-pounds, in a star pattern": {
+  "55 foot-pounds": "Check the torque line. It shows a different number than 55.",
+  "As tight as possible": "The warning says do not over-tighten. Use the exact torque listed.",
+  "35 foot-pounds, in a circle": "The number is right, but the note says star pattern, not a circle."
+ },
+ "Why was this written?|To persuade you to buy": {
+  "To inform you about history": "The ad says nothing about the past. Look at the last line: what does it tell you to do?",
+  "To entertain you with a story": "There are no characters or events here. The words are trying to get you to act.",
+  "To give safety rules": "Nothing here is about staying safe. Notice the words \"Buy today!\""
+ },
+ "Why was this written?|To inform you": {
+  "To persuade you to buy": "The notice is not selling anything. It just tells riders about a stop change.",
+  "To entertain you": "There is no story or joke here. It gives facts riders need.",
+  "To trick you": "The notice is honest and helpful. It tells you which stop to use instead."
+ },
+ "Why was this written?|To inform about safety": {
+  "To entertain": "These lines are not a story or a joke. They are tips about fire safety.",
+  "To persuade you to buy": "Nothing is for sale here. The lines tell you how to stay safe.",
+  "To tell a joke": "Nothing here is meant to be funny. It is about smoke alarms and escape routes."
+ },
+ "Why was this written?|To persuade you to vote for a plan": {
+  "To tell a story about a vote": "There are no characters or plot here. The text asks you to do something.",
+  "To list the times to vote": "It names Tuesday, but it gives no list of times. Notice \"Vote YES\" with an exclamation mark.",
+  "To explain how voting works": "It does not explain the steps of voting. It gives reasons to choose one side."
+ },
+ "Why was this written?|To entertain with a story": {
+  "To sell something": "Nothing is for sale here. \"Once upon a time\" is how stories begin.",
+  "To give safety rules": "There are no rules here. A fox setting out on a trip sounds like a tale.",
+  "To list prices": "There are no prices or numbers here. Look at how the text begins."
+ },
+ "Which is the best summary?|Fresh Mart is adding late hours on weekends and needs more evening staff.": {
+  "Fresh Mart sells groceries and is open every day.": "The note never says this. It is about new late hours on certain nights.",
+  "Rosa likes working at Fresh Mart on Saturdays.": "Rosa is not in the note at all. A summary only uses what the text says.",
+  "Staff at Fresh Mart must wear green aprons and name tags.": "That is one detail from the last line. A summary covers the main points, like the new hours."
+ },
+ "Which is the best summary?|Maya saved $10 a week for 12 weeks to buy a $120 bike.": {
+  "Maya likes bikes and wants a red one.": "The text never says the bike is red. It also leaves out how she saved.",
+  "Maya saved some money and went shopping.": "This is too vague. A good summary keeps the key numbers and the bike.",
+  "Bikes cost a lot, so saving takes time.": "This is a general lesson, not a summary. It leaves out Maya and what she did."
+ },
+ "Which is correct?|We visited Brighter Park on Saturday.": {
+  "we visited brighter park on saturday.": "A sentence starts with a big letter. Names and days do too.",
+  "We visited brighter Park on saturday.": "The name of the park needs two big letters. Days need one too.",
+  "We Visited Brighter Park On Saturday.": "Too many big letters here. Plain words like \"on\" stay small."
+ },
+ "Which is correct?|My friend Sam lives in Midtown.": {
+  "my friend sam lives in midtown.": "A sentence starts with a big letter. Names do too.",
+  "My Friend Sam Lives In Midtown.": "Too many big letters here. Plain words like \"friend\" stay small.",
+  "my friend Sam lives in Midtown": "The first word needs a big letter. The end needs a dot too."
+ },
+ "Which is correct?|Yes, I can work Saturday.": {
+  "Yes I, can work Saturday.": "The comma is in the wrong spot. It should come right after the word \"Yes\".",
+  "Yes I can, work Saturday.": "This comma splits \"can\" from \"work\". The comma belongs after the opening word \"Yes\"."
+ },
+ "Which is correct?|After lunch, we went to the park.": {
+  "After lunch we, went to the park.": "This comma splits \"we\" from \"went\". The comma belongs after the opening phrase.",
+  "After, lunch we went to the park.": "This comma splits \"After\" from \"lunch\". Keep the opening phrase together, then add the comma."
+ },
+ "What is a topic sentence?|The sentence that states the main idea of a paragraph": {
+  "The last sentence that ends the paragraph": "That is a closing sentence. A topic sentence tells what the paragraph is about.",
+  "A question that starts every paragraph": "A topic sentence does not have to be a question. It tells the big idea.",
+  "The title written at the top of the page": "A title is not part of the paragraph. A topic sentence is inside it."
+ },
+ "What is a topic sentence?|The sentence that tells the main idea": {
+  "The sentence that ends the paragraph": "That is a closing sentence. A topic sentence tells what the paragraph is about.",
+  "The sentence with the most details": "Details support the big idea. A topic sentence tells the big idea itself.",
+  "The title written above the paragraph": "A title is not part of the paragraph. A topic sentence is inside it."
+ },
+ "Why include a chart in a report?|To show data clearly at a glance": {
+  "To fill space": "A good chart is not filler. It should help the reader understand numbers.",
+  "To decorate": "Charts are not just for looks. They have a job to do with data.",
+  "Charts are required always": "Many reports have no chart at all. You add one when it helps show data."
+ },
+ "Why include a chart in a report?|It shows patterns in data quickly": {
+  "It makes the report look longer": "Length is not the goal. A chart should help readers understand the numbers.",
+  "It can replace all the writing": "A chart supports your writing. You still need words to explain what it shows.",
+  "It adds color to fill the page": "Color and filler are not the purpose. A chart helps readers see the data."
+ },
+ "Which is paraphrasing?|Putting a source’s idea in your own words, with credit": {
+  "Copying word for word without credit": "That is plagiarism. Paraphrasing changes the wording and still gives credit.",
+  "Making up facts": "Paraphrasing starts from a real source. Making up facts uses no source at all.",
+  "Ignoring sources": "Paraphrasing works with a source's idea. It does not ignore it."
+ },
+ "Which is paraphrasing?|Explaining the idea in your own words and citing the source": {
+  "Copying a paragraph word for word, with the source": "Word-for-word copying is quoting, not paraphrasing. Paraphrasing changes the wording.",
+  "Changing a few words but keeping the rest the same": "Swapping a few words is still too close to the original. Paraphrasing rewrites the whole idea your way.",
+  "Putting quotation marks around the author’s words": "That is a direct quote. Paraphrasing uses your own words instead of the author's."
+ },
+ "Read the handwritten note. How many boxes should go to aisle 2?|7": {
+  "9": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "10": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "12": "Twelve is not next to the word \"boxes\" for aisle 2. Look at that line again."
+ },
+ "Read the handwritten note. How many boxes should go to aisle 2?|3": {
+  "5": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "6": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "12": "Twelve is not next to the word \"boxes\" for aisle 2. Look at that line again."
+ },
+ "Read the handwritten note. How many boxes should go to aisle 2?|8": {
+  "10": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "11": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "12": "Twelve is not next to the word \"boxes\" for aisle 2. Look at that line again."
+ },
+ "Read the handwritten note. How many boxes should go to aisle 2?|9": {
+  "11": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "12": "Twelve is not next to the word \"boxes\" for aisle 2. Look at that line again."
+ },
+ "Read the handwritten note. How many boxes should go to aisle 2?|6": {
+  "8": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "9": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "12": "Twelve is not next to the word \"boxes\" for aisle 2. Look at that line again."
+ },
+ "Read the handwritten note. How many boxes should go to aisle 2?|4": {
+  "6": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "7": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "12": "Twelve is not next to the word \"boxes\" for aisle 2. Look at that line again."
+ },
+ "Read the handwritten note. How many boxes should go to aisle 2?|5": {
+  "7": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "8": "The note shows a different number for aisle 2. Read the number right next to \"boxes\".",
+  "12": "Twelve is not next to the word \"boxes\" for aisle 2. Look at that line again."
+ },
+ "Read the handwritten note. Which day is the delivery?|Friday": {
+  "Monday": "The note does not say Monday. Look at the letters after \"Delivery\" and match them.",
+  "Tuesday": "The note does not say Tuesday. Look at the letters after \"Delivery\" and match them.",
+  "Wednesday": "The note does not say Wednesday. Look at the letters after \"Delivery\" and match them."
+ },
+ "Read the handwritten note. Which day is the delivery?|Saturday": {
+  "Monday": "The note does not say Monday. Look at the letters after \"Delivery\" and match them.",
+  "Tuesday": "The note does not say Tuesday. Look at the letters after \"Delivery\" and match them.",
+  "Wednesday": "The note does not say Wednesday. Look at the letters after \"Delivery\" and match them."
+ },
+ "Read the handwritten note. Which day is the delivery?|Monday": {
+  "Tuesday": "The note does not say Tuesday. Look at the letters after \"Delivery\" and match them.",
+  "Wednesday": "The note does not say Wednesday. Look at the letters after \"Delivery\" and match them.",
+  "Thursday": "The note does not say Thursday. Look at the letters after \"Delivery\" and match them."
+ },
+ "Read the handwritten note. Which day is the delivery?|Thursday": {
+  "Monday": "The note does not say Monday. Look at the letters after \"Delivery\" and match them.",
+  "Tuesday": "The note does not say Tuesday. Look at the letters after \"Delivery\" and match them.",
+  "Wednesday": "The note does not say Wednesday. Look at the letters after \"Delivery\" and match them."
+ },
+ "Read the handwritten note. Which day is the delivery?|Tuesday": {
+  "Monday": "The note does not say Monday. Look at the letters after \"Delivery\" and match them.",
+  "Wednesday": "The note does not say Wednesday. Look at the letters after \"Delivery\" and match them.",
+  "Thursday": "The note does not say Thursday. Look at the letters after \"Delivery\" and match them."
+ },
+ "Read the handwritten note. Which day is the delivery?|Wednesday": {
+  "Monday": "The note does not say Monday. Look at the letters after \"Delivery\" and match them.",
+  "Tuesday": "The note does not say Tuesday. Look at the letters after \"Delivery\" and match them.",
+  "Thursday": "The note does not say Thursday. Look at the letters after \"Delivery\" and match them."
+ },
+ "The handwritten chart says when the next check-up is. When?|10:45": {
+  "7:00": "The chart does not show 7:00 as the next check. Read the time after \"Next check\" again.",
+  "12:30": "The chart does not show 12:30 as the next check. Read the time after \"Next check\" again.",
+  "3:15": "The chart does not show 3:15 as the next check. Read the time after \"Next check\" again."
+ },
+ "The handwritten chart says when the next check-up is. When?|9:15": {
+  "7:00": "The chart does not show 7:00 as the next check. Read the time after \"Next check\" again.",
+  "12:30": "The chart does not show 12:30 as the next check. Read the time after \"Next check\" again.",
+  "3:15": "The chart does not show 3:15 as the next check. Read the time after \"Next check\" again."
+ },
+ "The handwritten chart says when the next check-up is. When?|8:30": {
+  "7:00": "The chart does not show 7:00 as the next check. Read the time after \"Next check\" again.",
+  "12:30": "The chart does not show 12:30 as the next check. Read the time after \"Next check\" again.",
+  "3:15": "The chart does not show 3:15 as the next check. Read the time after \"Next check\" again."
+ },
+ "A handwritten receipt shows the total. How much?|$18.75": {
+  "$4.50": "This amount is too small to be the total. Read each digit before the decimal point again.",
+  "$12.05": "Look where the decimal point sits. This amount moves it or swaps digits, so the dollars and cents do not match the receipt.",
+  "$187.50": "This moves the decimal point one place. Check how many digits come before it on the receipt."
+ },
+ "A handwritten receipt shows the total. How much?|$120.50": {
+  "$4.50": "This amount is too small to be the total. Read each digit before the decimal point again.",
+  "$12.05": "This moves the decimal point one place. Check how many digits come before it on the receipt.",
+  "$187.50": "Look where the decimal point sits. This amount moves it or swaps digits, so the dollars and cents do not match the receipt."
+ },
+ "A handwritten receipt shows the total. How much?|$45.00": {
+  "$4.50": "This moves the decimal point one place. Check how many digits come before it on the receipt.",
+  "$12.05": "Look where the decimal point sits. This amount moves it or swaps digits, so the dollars and cents do not match the receipt.",
+  "$187.50": "Look where the decimal point sits. This amount moves it or swaps digits, so the dollars and cents do not match the receipt."
+ },
+ "An old letter is signed at the bottom. Who wrote it?|Benjamin": {
+  "Bernard": "Bernard starts with the same letter, but the name length does not match. Count the letters in the signature.",
+  "Rosa": "Rosa starts with a different letter than the signature. Look at the first letter in the fancy writing."
+ },
+ "An old letter is signed at the bottom. Who wrote it?|Margaret": {
+  "Martha": "Martha starts with the same letter, but the name length does not match. Count the letters in the signature.",
+  "Rosa": "Rosa starts with a different letter than the signature. Look at the first letter in the fancy writing."
+ },
+ "An old letter is signed at the bottom. Who wrote it?|Eleanor": {
+  "Edward": "Edward starts with the same letter, but the name length does not match. Count the letters in the signature.",
+  "Rosa": "Rosa starts with a different letter than the signature. Look at the first letter in the fancy writing."
+ },
+ "An old letter is signed at the bottom. Who wrote it?|Theodore": {
+  "Thomas": "Thomas starts with the same letter, but the name length does not match. Count the letters in the signature.",
+  "Rosa": "Rosa starts with a different letter than the signature. Look at the first letter in the fancy writing."
+ },
+ "Each cup costs you $1 to make. Which price earns the most profit?|$3": {
+  "$2": "At $2, you earn $1 per cup times 100 cups, which is $100. Another price gives a bigger profit, so compare all three.",
+  "$4": "At $4, you earn $3 per cup times 45 cups, which is $135. Another price gives a bigger profit, so compare all three."
+ },
+ "Each cup costs you $1 to make. Which price earns the most profit?|$4": {
+  "$3": "At $3, you earn $2 per cup times 100 cups, which is $200. Another price gives a bigger profit, so compare all three.",
+  "$5": "At $5, you earn $4 per cup times 45 cups, which is $180. Another price gives a bigger profit, so compare all three."
+ },
+ "Each cup costs you $1 to make. Which price earns the most profit?|$5": {
+  "$6": "At $6, you earn $5 per cup times 70 cups, which is $350. Another price gives a bigger profit, so compare all three.",
+  "$7": "At $7, you earn $6 per cup times 45 cups, which is $270. Another price gives a bigger profit, so compare all three."
+ },
+ "Each cup costs you $1.5 to make. Which price earns the most profit?|$4": {
+  "$5": "At $5, you earn $3.5 per cup times 70 cups, which is $245. Another price gives a bigger profit, so compare all three.",
+  "$6": "At $6, you earn $4.5 per cup times 45 cups, which is $202.5. Another price gives a bigger profit, so compare all three."
+ },
+ "Each cup costs you $1.5 to make. Which price earns the most profit?|$5": {
+  "$6": "At $6, you earn $4.5 per cup times 70 cups, which is $315. Another price gives a bigger profit, so compare all three.",
+  "$7": "At $7, you earn $5.5 per cup times 45 cups, which is $247.5. Another price gives a bigger profit, so compare all three."
+ },
+ "Each cup costs you $2 to make. Which price earns the most profit?|$4": {
+  "$3": "At $3, you earn $1 per cup times 100 cups, which is $100. Another price gives a bigger profit, so compare all three.",
+  "$5": "At $5, you earn $3 per cup times 45 cups, which is $135. Another price gives a bigger profit, so compare all three."
+ },
+ "Each cup costs you $2 to make. Which price earns the most profit?|$5": {
+  "$6": "At $6, you earn $4 per cup times 70 cups, which is $280. Another price gives a bigger profit, so compare all three.",
+  "$7": "At $7, you earn $5 per cup times 45 cups, which is $225. Another price gives a bigger profit, so compare all three."
+ },
+ "What is a stock?|A small share of ownership in a company": {
+  "A loan you give to a friend or bank": "A loan is money you get paid back. A stock makes you a part owner of something.",
+  "A fee the bank charges each month": "A fee is money you pay out. A stock is something you own.",
+  "A promise that a company will pay you": "That sounds more like a bond. A stock means you own part of a company."
+ },
+ "What is a stock?|A small piece of ownership in a company": {
+  "A loan you make to a company": "Lending to a company is a bond. A stock means you own part of it.",
+  "A bank account that earns interest": "That is a savings account. A stock is a piece of a company, not a bank account.",
+  "A promise from the government to repay": "That is a government bond. A stock is tied to a company, not the government."
+ },
+ "Which is an observation?|The leaf is yellow and dry": {
+  "The tree is sad": "You can not see that a tree is sad. Trees do not feel.",
+  "Someone hurt the tree": "That is a guess. You did not see it.",
+  "Trees hate fall": "That is a feeling. You can not see or touch it."
+ },
+ "Which is an observation?|The leaf is green and has jagged edges": {
+  "The leaf is the prettiest one here": "That is what you think. Not all would say the same.",
+  "Leaves are more fun than flowers": "That is what you like. You can not see it.",
+  "I think it fell off yesterday": "That is a guess. You did not see it fall."
+ },
+ "Why are wires covered in plastic?|To insulate them and keep people safe": {
+  "To give the wires color only": "Color helps sort wires, but that is not the main job. Think about safety.",
+  "To make the wires heavier": "Extra weight would not help. The cover is there to protect people.",
+  "To help them carry more power": "The metal inside carries the power. The plastic cover does a different job."
+ },
+ "Why are wires covered in plastic?|Plastic doesn’t carry electricity, so it keeps us safe": {
+  "To keep the wires from getting cold": "Cold is not the problem here. Think about what plastic blocks.",
+  "The plastic makes the electricity flow faster": "The plastic does not speed anything up. Electricity flows through the metal inside.",
+  "Plastic stores extra electricity for later": "Plastic can not store electricity. That is what a battery does."
+ },
+ "What is a prototype?|An early model to test an idea": {
+  "The final product to sell": "A prototype comes before the final product. It is made to test and improve.",
+  "A drawing of the idea only": "A drawing is a sketch. A prototype is something you build and try out.",
+  "A list of the parts needed": "A parts list is a plan. A prototype is a working model you can test."
+ },
+ "What is a prototype?|An early model built to test an idea": {
+  "The final product in stores": "A prototype comes before the final product. It is built to test and improve the idea.",
+  "A drawing of the idea on paper": "A drawing is a sketch. A prototype is something you build and try out.",
+  "A machine that failed its test": "A prototype is not defined by failing. It is made so you can test it, whatever the result."
+ },
+ "How many continents are there?|7": {
+  "5": "That is too few. Count Asia, Africa, and the rest again.",
+  "9": "That is too many. Some count the oceans, but those are not land.",
+  "12": "That is far too many. There are fewer big land masses."
+ },
+ "How many continents are there?|Seven": {
+  "Five": "That is too few. Count Asia, Africa, and the rest again.",
+  "Nine": "That is too many. Some count the oceans, but those are not land.",
+  "Three": "That is far too few. Each big land mass counts."
+ },
+ "What is a tariff?|A tax on imported goods": {
+  "A free trade gift": "A tariff is not free. It is money paid to a government.",
+  "A bus ticket": "A bus fare is a different thing. A tariff has to do with trade between countries.",
+  "A kind of fruit": "A tariff is not food. It has to do with goods crossing borders."
+ },
+ "What is a tariff?|A tax on goods brought in from another country": {
+  "A deal that lets goods cross borders for free": "That is a free trade deal. A tariff adds a cost instead.",
+  "A ship that carries goods between countries": "A ship moves goods. A tariff is money owed on them.",
+  "A loan one country gives to another": "A loan gets paid back. A tariff is a charge on trade, not a loan."
+ },
+ "When is it most important to wash your hands?|Before eating and after using the bathroom": {
+  "Only when your hands look dirty": "Germs are too small to see. Clean hands can still have germs.",
+  "After you brush your hair": "That is not a key time. Think of food and the bathroom.",
+  "Before you go to sleep": "That is fine, but not the most key time. Think of meals."
+ },
+ "When is it most important to wash your hands?|Before you eat and after the bathroom": {
+  "Only when they look dirty": "Germs are too small to see. Clean hands can still have germs.",
+  "After you brush your hair": "That is not a key time. Think of food and the bathroom.",
+  "Only once a day at bedtime": "Once a day is not enough. Think of meals and the bathroom."
+ },
+ "Which habit helps you fall asleep?|Turning off screens before bed": {
+  "Playing video games in bed": "Games keep your brain wide awake. That makes sleep hard.",
+  "Drinking soda at night": "Many sodas have caffeine. It keeps you awake.",
+  "Changing bedtime every day": "Your body likes the same bedtime. Changing it makes sleep hard."
+ },
+ "Which habit helps you fall asleep?|Putting screens away before bed": {
+  "Playing video games in bed": "Games keep your brain wide awake. That makes sleep hard.",
+  "Drinking soda at night": "Many sodas have caffeine. It keeps you awake.",
+  "Going to bed at a different time every night": "Your body likes the same bedtime. Changing it makes sleep hard."
+ },
+ "What is a boundary?|A limit you set about what you are comfortable with": {
+  "A fence that keeps animals inside a farm": "That is a different meaning of the word. Here it is about your own comfort and limits.",
+  "A rule that only other people must follow": "A boundary is about you and how you want to be treated. It is not a rule for others alone.",
+  "A promise to always say yes to friends": "Always saying yes is the opposite of having limits. A boundary can mean saying no."
+ },
+ "What is a boundary?|A limit you set about what you’re okay with": {
+  "A rule that only adults can make for you": "You can set your own boundaries. They are about what you are comfortable with.",
+  "A wall that keeps all your friends away": "A boundary is not about pushing everyone away. It sets limits while keeping healthy friendships.",
+  "A promise to always do what friends ask": "Always going along is the opposite of having limits. A boundary can mean saying no."
+ },
+ "Which password is strongest?|Purple-Bus-Jumps-42!": {
+  "password123456": "This one is very common. It is one of the first ones people guess.",
+  "Ilovemydog2024": "This uses facts about you and a year. Those are easy to guess.",
+  "Qwerty123456!": "Qwerty is just keys in a row. Many people use it."
+ },
+ "Which password is strongest?|Purple!Tiger7Jumps": {
+  "Password123!": "This one is very common. It is one of the first ones people guess.",
+  "MaxTheDog2015": "A pet's name and a year are easy to guess. People can find them online.",
+  "sunshine12345": "This is a common word and numbers in order. It is easy to guess."
+ },
+ "What is two-step verification?|A second check, like a code texted to you": {
+  "Typing your password twice": "That is the same check two times. A second step needs a new kind of check.",
+  "Two passwords on paper": "Paper can get lost or seen. That is not a second check.",
+  "Logging in twice a day": "That is just logging in more. It adds no new check."
+ },
+ "What is two-step verification?|A code sent to your phone after you enter your password": {
+  "Typing your password twice to make sure it matches": "That just confirms the same password. Two-step verification adds a different kind of check.",
+  "Writing two passwords on paper in case you forget": "That is a backup, and an unsafe one. It does not add a second check when you log in.",
+  "Logging in twice a day to keep the account open": "Logging in more often adds no new check. The second step comes during the same login."
+ },
+ "An AI chatbot gives you a fact for your report. What should you do?|Check it with a trusted source before using it": {
+  "Copy it as is, because AI checks its own facts": "AI tools can state wrong facts with confidence. They do not reliably check themselves.",
+  "Use it if it sounds right and is clearly written": "Clear writing is not proof. A wrong fact can sound just as smooth as a true one.",
+  "Ask the chatbot again to see if it says the same": "The same tool can repeat the same mistake. You need a separate, trusted source."
+ },
+ "An AI chatbot gives you a fact for your report. What should you do?|Check it in a reliable source before using it": {
+  "Use it; AI is always right": "AI tools can be wrong, even when they sound sure. Facts need checking.",
+  "Copy it without checking": "Unchecked facts can put errors in your report. Look for confirmation somewhere else.",
+  "Ask the AI to promise it’s true": "A promise from the same tool proves nothing. You need an outside source."
+ },
+ "Coffee cups sold this week. Which day sold the most?|Mon": {
+  "Tue": "Tue sold 25 cups. Another day has a longer bar and a bigger number.",
+  "Wed": "Wed sold 40 cups. Another day has a longer bar and a bigger number.",
+  "Thu": "Thu sold 70 cups. Another day has a longer bar and a bigger number."
+ },
+ "Coffee cups sold this week. Which day sold the most?|Tue": {
+  "Mon": "Mon sold 40 cups. Another day has a longer bar and a bigger number.",
+  "Wed": "Wed sold 35 cups. Another day has a longer bar and a bigger number.",
+  "Thu": "Thu sold 70 cups. Another day has a longer bar and a bigger number."
+ },
+ "Coffee cups sold this week. Which day sold the most?|Thu": {
+  "Mon": "Mon sold 75 cups. Another day has a longer bar and a bigger number.",
+  "Tue": "Tue sold 30 cups. Another day has a longer bar and a bigger number.",
+  "Wed": "Wed sold 20 cups. Another day has a longer bar and a bigger number."
+ },
+ "Coffee cups sold this week. Which day sold the most?|Wed": {
+  "Mon": "Mon sold 35 cups. Another day has a longer bar and a bigger number.",
+  "Tue": "Tue sold 15 cups. Another day has a longer bar and a bigger number.",
+  "Thu": "Thu sold 85 cups. Another day has a longer bar and a bigger number."
+ },
+ "Coffee cups sold this week. Which day sold the most?|Fri": {
+  "Mon": "Mon sold 15 cups. Another day has a longer bar and a bigger number.",
+  "Tue": "Tue sold 90 cups. Another day has a longer bar and a bigger number.",
+  "Wed": "Wed sold 55 cups. Another day has a longer bar and a bigger number."
+ },
+ "Why do we have day and night?|Earth spins once every day": {
+  "The Sun turns off at night": "The Sun never turns off. It shines all the time.",
+  "The Moon blocks the Sun every night": "The Moon does not block the Sun each night. Think about how Earth moves.",
+  "Clouds cover the Sun": "Clouds come and go. Night comes every day, even with no clouds."
+ },
+ "Why do we have day and night?|Earth spins, so our side turns away from the Sun": {
+  "The Sun moves around Earth every day": "It looks that way, but Earth is the one that moves. Think about Earth turning.",
+  "The Moon blocks the Sun at night": "The Moon does not block the Sun each night. Think about how Earth moves.",
+  "The Sun goes out at night, then lights up": "The Sun never goes out. It shines all the time."
+ },
+ "Which is a sign that a chemical reaction happened?|Bubbles of gas or a color change": {
+  "The object moved to a new place": "Moving something does not change what it is made of. No new substance forms.",
+  "It got wet or dried out": "Getting wet or drying is a physical change. The material stays the same.",
+  "It was cut into small pieces": "Cutting only changes size and shape. The pieces are still the same material."
+ },
+ "Which is a sign that a chemical reaction happened?|Gas bubbles or a color change when two things mix": {
+  "Ice melts into water on a warm day": "Melting is a physical change. Water and ice are the same substance.",
+  "Paper is cut into small pieces": "Cutting only changes size and shape. The pieces are still paper.",
+  "Sugar dissolves in a cup of water": "Dissolving is a physical change. The sugar is still there, just spread out."
+ },
+ "What is the main idea?|Exercise helps your body and mind": {
+  "Running shoes are red": "The text never talks about shoes. Look at what all three lines share.",
+  "The gym opens at 6": "The text does not say when a gym opens. Think about what exercise does.",
+  "Water is wet": "Water is not in the text. Each line tells a good thing about exercise."
+ },
+ "What is the main idea?|The park needs helpers to clean up": {
+  "Parks have green grass": "The text does not talk about grass. Look at what it asks you to do.",
+  "Saturday is a fun day": "Saturday is just when it happens. Look at the first line again.",
+  "Bags will be free to take": "That is one detail. The main idea covers the whole text."
+ },
+ "What is the main idea?|Recycling helps the city": {
+  "The bins are blue": "The text never says what color the bins are. Look at what all lines share.",
+  "Paper can be recycled": "Paper is not named in the text. Each line tells a good thing about recycling.",
+  "Trucks come on Monday": "The text says nothing about trucks. Think about what recycling does."
+ },
+ "Which is a complete sentence?|Nova walks to work.": {
+  "Walks to work.": "Who walks? This needs a name to tell who.",
+  "Nova to work.": "What does Nova do? This needs an action word.",
+  "To work every day.": "This has no who and no action. It is just part of one."
+ },
+ "Which is a complete sentence?|The cat sleeps on the mat.": {
+  "The cat on the mat.": "What does the cat do? This needs an action word.",
+  "Sleeps on the mat.": "Who sleeps? This needs to tell who.",
+  "On the mat.": "This has no who and no action. It is just part of one."
+ },
+ "Which is a complete sentence?|Rosa opens the store.": {
+  "Opens the store.": "Who opens it? This needs a name to tell who.",
+  "Rosa the store.": "What does Rosa do? This needs an action word.",
+  "The store at seven.": "What does the store do? This needs an action word."
+ },
+ "Which word starts with the same sound as “moon”?|🐒 monkey": {
+  "🐱 cat": "\"cat\" starts with a k sound. \"moon\" starts with a m sound.",
+  "🐟 fish": "\"fish\" starts with a f sound. \"moon\" starts with a m sound.",
+  "☀️ sun": "\"sun\" starts with a s sound. \"moon\" starts with a m sound."
+ },
+ "Which word starts with the same sound as “moon”?|🗺️ map": {
+  "🐟 fish": "\"fish\" starts with a f sound. \"moon\" starts with a m sound.",
+  "🐱 cat": "\"cat\" starts with a k sound. \"moon\" starts with a m sound.",
+  "☀️ sun": "\"sun\" starts with a s sound. \"moon\" starts with a m sound."
+ },
+ "Which word starts with the same sound as “fish”?|🚩 flag": {
+  "🐷 pig": "\"pig\" starts with a p sound. \"fish\" starts with a f sound.",
+  "🐶 dog": "\"dog\" starts with a d sound. \"fish\" starts with a f sound.",
+  "🚌 bus": "\"bus\" starts with a b sound. \"fish\" starts with a f sound."
+ },
+ "Which word starts with the same sound as “fish”?|🦊 fox": {
+  "🐶 dog": "\"dog\" starts with a d sound. \"fish\" starts with a f sound.",
+  "🚌 bus": "\"bus\" starts with a b sound. \"fish\" starts with a f sound.",
+  "🐷 pig": "\"pig\" starts with a p sound. \"fish\" starts with a f sound."
+ },
+ "Which word starts with the same sound as “sun”?|🧦 sock": {
+  "🌙 moon": "\"moon\" starts with a m sound. \"sun\" starts with a s sound.",
+  "🎩 hat": "\"hat\" starts with a h sound. \"sun\" starts with a s sound.",
+  "🐶 dog": "\"dog\" starts with a d sound. \"sun\" starts with a s sound."
+ },
+ "Which word starts with the same sound as “sun”?|🐍 snake": {
+  "🌙 moon": "\"moon\" starts with a m sound. \"sun\" starts with a s sound.",
+  "🎩 hat": "\"hat\" starts with a h sound. \"sun\" starts with a s sound.",
+  "🐶 dog": "\"dog\" starts with a d sound. \"sun\" starts with a s sound."
+ },
+ "Which word starts with the same sound as “bus”?|⚽ ball": {
+  "🌙 moon": "\"moon\" starts with a m sound. \"bus\" starts with a b sound.",
+  "🐱 cat": "\"cat\" starts with a k sound. \"bus\" starts with a b sound.",
+  "🦊 fox": "\"fox\" starts with a f sound. \"bus\" starts with a b sound."
+ },
+ "Which word starts with the same sound as “bus”?|🛏️ bed": {
+  "🌙 moon": "\"moon\" starts with a m sound. \"bus\" starts with a b sound.",
+  "🦊 fox": "\"fox\" starts with a f sound. \"bus\" starts with a b sound.",
+  "🐱 cat": "\"cat\" starts with a k sound. \"bus\" starts with a b sound."
+ }
+}

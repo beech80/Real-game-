@@ -3,6 +3,8 @@
 // (its level + 1): early learners get help with "community", while teens aren't shown meanings of easy words.
 
 export const GLOSSARY = [
+  [3, 'denominators?', 'the bottom number of a fraction: how many equal parts the whole is cut into'],
+  [3, 'numerators?', 'the top number of a fraction: how many of the parts you have'],
   // level 1–2: early-reader words used in lessons
   [2, 'independen(ce|t)', 'taking care of yourself without someone doing it for you'],
   [2, 'achievements?', 'something good you did by working hard'],
