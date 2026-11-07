@@ -1,7 +1,7 @@
 // REAL — game director: chapters, needs, time, Jax, careers, Life Level, phone, save/load.
 import { UI, h, money, clock, wait } from './ui.js';
 import * as A from './activities.js';
-import { schoolSettings, isSchool } from './school.js';
+import { schoolSettings, isSchool, reportView } from './school.js';
 import { markWords } from './readalong.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
 import { lifeLevel, LIFE_CATS, CAREERS, TIER_NAMES, careerStatus, setSkillNames, ACHIEVEMENTS, INVITE_LEVEL, INVITE_MIN_DAY } from './life.js';
@@ -20,8 +20,16 @@ export function newState(profile) {
     edu: newEdu(), jobs: [], job: null, friends: { Rosa: 0, Dee: 0, Okafor: 0, Jax: 0 }, achievements: {}, ending: null,
   };
 }
-export function loadSave() { try { const s = JSON.parse(localStorage.getItem(SAVE_KEY)); return s && s.v === 2 ? s : null; } catch (e) { return null; } }
-export function clearSave() { try { localStorage.removeItem(SAVE_KEY); localStorage.removeItem('real.save.v1'); } catch (e) {} }
+export function loadSave() {   // the main save, or the backup copy if the main one is missing or damaged
+  for (const k of [SAVE_KEY, SAVE_KEY + '.bak']) { try { const s = JSON.parse(localStorage.getItem(k)); if (s && s.v === 2 && s.name) return s; } catch (e) {} }
+  return null;
+}
+/** A save as text the student can keep or move to another device (copy, or download as a file). */
+export const saveToText = (s) => 'REALSAVE1:' + btoa(unescape(encodeURIComponent(JSON.stringify(s))));
+export function saveFromText(t) {
+  try { const m = String(t).trim().match(/REALSAVE1:([A-Za-z0-9+/=]+)/); if (!m) return null; const s = JSON.parse(decodeURIComponent(escape(atob(m[1])))); return s && s.v === 2 && s.name ? s : null; } catch (e) { return null; }
+}
+export function clearSave() { try { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(SAVE_KEY + '.bak'); localStorage.removeItem('real.save.v1'); } catch (e) {} }
 
 export class Game {
   constructor(state, hooks) {
@@ -30,7 +38,10 @@ export class Game {
     this.busy = false;
   }
   sfx(n) { this.hooks.sfx(n); }
-  save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(this.state)); } catch (e) {} }
+  save() {
+    try { const j = JSON.stringify(this.state); localStorage.setItem(SAVE_KEY, j); this.state.savedAt = Date.now();
+      if (!this._bak || Date.now() - this._bak > 60000) { this._bak = Date.now(); localStorage.setItem(SAVE_KEY + '.bak', j); } } catch (e) {}
+  }
   life() { return lifeLevel(this.state, this.edu); }
   onSkill(sk, st) {
     if (st >= 3) UI.toast(`${SUBJECTS[sk.subj].icon} ${sk.name}: ${STATES[st]}`, st >= 4 ? 'gold' : 'good', 3000);
@@ -559,6 +570,12 @@ export function openPhone(G) {
           h('div', { class: 'bill-list' }, [['Find your way to the city', !!s.achievements.found_way], ['Find a place to live', !!s.flags.housed], ['Get your first job', !!s.flags.hired], ['Earn your first paycheck', s.stats.shifts >= 1], ['Pay rent on time', !!s.achievements.rent_on_time], ['Hold two jobs', s.jobs.length >= 2], ['Save $300', s.money >= 300], ['Earn a promotion', !!s.achievements.promoted], [`Reach Life Level ${INVITE_LEVEL}`, ll.level >= INVITE_LEVEL], ['Make the REAL decision', !!s.ending], ['Visit Midtown, Opportunity and The Heights', !!s.achievements.explorer], ['Get a Tier 2 career', !!s.achievements.career], ['Complete a course', !!s.achievements.graduate], ['Open your own business', !!s.biz], ['Hire an employee', !!s.achievements.boss], ['Buy a vehicle', !!s.vehicle], ['Move to a better home', !!s.achievements.moved_up || !!s.achievements.homeowner], ['Adopt a pet', !!s.pet], ['Make three friends', !!s.achievements.friend3], ['Clear a challenge zone', !!s.achievements.challenge], ['Become a Tier 3 professional', !!s.achievements.professional], ['Buy a home', !!s.achievements.homeowner]].map(([t, d]) =>
             h('div', { class: 'bill' + (d ? ' paid' : '') }, h('div', {}, h('b', {}, t)), h('span', { class: 'ok' }, d ? '✓' : '○'))))),
         Stats: () => h('div', { class: 'act' }, h('div', { class: 'lifering' }, h('b', {}, `Life Level ${ll.level}`), h('small', {}, 'Growth across your whole life. Never a measure of your worth.')),
+          h('div', { class: 'tier-h' }, 'My learning'),
+          h('div', { class: 'statgrid' }, [['📚', s.stats.lessons || 0, 'lessons'], ['⭐', G.edu.proficientCount(), 'skills I can do'], ['🏅', G.edu.masteredCount(), 'skills mastered'], ['📖', (s.words || []).length, 'words learned'], ['⏱️', Math.round((s.stats.playSecs || 0) / 60), 'minutes played'], ['📅', s.day, 'days in the city']].map(([ic, n, l]) => h('div', { class: 'stat' }, h('span', {}, ic), h('b', {}, n), h('small', {}, l)))),
+          h('div', { class: 'skills' }, Object.entries(SUBJECTS).map(([k, sb]) => { const p = G.edu.progress(k); const can = p.list.filter((x) => G.edu.state(x.id) >= 3).length; return h('div', { class: 'skill' }, h('span', {}, `${sb.icon} ${sb.name}`), h('div', { class: 'bar' }, h('i', { style: { width: Math.round(can / Math.max(1, p.list.length) * 100) + '%' } })), h('b', {}, `${can}/${p.list.length}`)); })),
+          (G.edu.s.journal || []).filter((j) => /Proficient|Mastered/.test(j.what)).length ? h('div', {}, h('div', { class: 'tier-h' }, 'Recently learned'), h('div', { class: 'ach' }, (G.edu.s.journal || []).filter((j) => /Proficient|Mastered/.test(j.what) && SKILLS[j.id]).slice(0, 6).map((j) => h('span', { class: 'chip' }, `${j.what === 'Mastered' ? '🏅' : '⭐'} ${SKILLS[j.id].name}`)))) : h('p', { class: 'tip' }, 'Practise in 📚 Learn, and skills you can do on your own will show up here.'),
+          h('button', { class: 'ghost sm', onclick: () => UI.sheet('My report', () => reportView(G), { icon: '📋' }) }, '📋 My full report'),
+          h('div', { class: 'tier-h' }, 'Life Level areas'),
           h('div', { class: 'skills' }, LIFE_CATS.map(([k, n, ic]) => h('div', { class: 'skill' }, h('span', {}, `${ic} ${n}`), h('div', { class: 'bar' }, h('i', { style: { width: ll.scores[k] * 10 + '%' } })), h('b', {}, ll.scores[k].toFixed(0))))),
           h('div', { class: 'tier-h' }, 'Achievements'), h('div', { class: 'ach' }, Object.keys(s.achievements).map((a) => h('span', { class: 'chip' }, '🏆 ' + ACHIEVEMENTS[a][0])))),
         Club: () => h('div', { class: 'act center' }, h('div', { class: 'big-emoji gold' }, '♛'),
@@ -598,6 +615,10 @@ export function openPhone(G) {
           h('div', { class: 'row' }, h('span', {}, 'Live neighbors'), isSchool(s) ? h('button', { class: 'ghost sm', disabled: true }, 'Off (school)') : h('button', { class: (s.settings || {}).noNeighbors ? 'ghost sm' : 'primary sm', onclick: () => { s.settings = s.settings || {}; s.settings.noNeighbors = !s.settings.noNeighbors; G.save(); open('Settings'); } }, (s.settings || {}).noNeighbors ? 'Off' : 'On')),
           h('button', { class: 'ghost', onclick: () => open('Grown-ups') }, '👪 For grown-ups: privacy & progress'),
           h('div', { class: 'row' }, h('span', {}, 'Sound'), h('button', { class: 'ghost sm', onclick: (e) => { e.currentTarget.textContent = G.hooks.toggleSound() ? 'On' : 'Off'; } }, G.hooks.soundOn() ? 'On' : 'Off')),
+          h('div', { class: 'tier-h' }, 'Save'),
+          h('p', { class: 'tip' }, `Your game saves by itself on this device${s.savedAt ? ' (last saved ' + new Date(s.savedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + ')' : ''}. To play on another device, take a save file with you.`),
+          h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => { G.save(); const t = saveToText(s); const a = h('a', { href: URL.createObjectURL(new Blob([t], { type: 'text/plain' })), download: `REAL-save-${s.name}-day${s.day}.txt` }); document.body.append(a); a.click(); setTimeout(() => a.remove(), 500); UI.toast('Save file downloaded. Open it on the title screen of any device: Load a save.', 'good', 4200); } }, '⬇️ Save file'),
+            h('button', { class: 'ghost sm', onclick: async () => { G.save(); try { await navigator.clipboard.writeText(saveToText(s)); UI.toast('Save code copied. Paste it on the title screen: Load a save.', 'good', 4200); } catch (e) { UI.toast('Copy didn’t work here. Use Save file instead.', 'warn'); } } }, '📋 Copy save code')),
           h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => { G.save(); UI.toast('Game saved.', 'good'); } }, 'Save now'), h('button', { class: 'danger sm', onclick: (e) => {
             if (e.currentTarget.dataset.arm) { clearSave(); location.reload(); } else { e.currentTarget.dataset.arm = 1; e.currentTarget.textContent = 'Tap again to erase'; }
           } }, 'New game'))),

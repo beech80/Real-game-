@@ -483,3 +483,6 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .clockwrap { display: flex; justify-content: center; margin: 6px 0; }
 .opts.decode .opt { font-size: 24px; font-weight: 700; }
 .rubric .starter { color: #ffd27a; display: block; margin-left: 18px; font-size: 13px; }
+.statgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 6px 0 12px; }
+.statgrid .stat { background: rgba(255, 255, 255, .07); border-radius: 12px; padding: 8px 6px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+.statgrid .stat b { font-size: 22px; line-height: 1.1; } .statgrid .stat small { font-size: 11px; color: rgba(255, 255, 255, .7); }

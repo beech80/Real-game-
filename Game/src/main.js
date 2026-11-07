@@ -7,7 +7,7 @@ import { Input, FollowCamera, Player } from './controls.js';
 import { Traffic, populate, StoryNPC } from './city.js';
 import { UI, Minimap, h, $, wait, setSfx, money } from './ui.js';
 import { Audio } from './audio.js';
-import { Game, newState, loadSave, openPhone } from './game.js';
+import { Game, newState, loadSave, openPhone, saveFromText } from './game.js';
 import { buildWilderness, wildHeight, WILD, buildClub, CLUB, setGate } from './scenes.js';
 import { DISTRICTS, buildDistrict, clampToWalk, districtHeight } from './districts.js';
 import { installExpansion, HOMES, VEHICLES, PET_TYPES, FRIENDS } from './expansion.js';
@@ -50,6 +50,9 @@ engine.onContextLost = () => { try { game && game.save(); } catch (e) {} fatal('
 const audio = new Audio();
 setSfx((n) => audio.play(n));
 UI.init();
+const saveNow = () => { try { if (game && mode === 'play' && player && !game.state.ending) { if (!game.busy) { game.state.pos = { ...player.pos }; game.state.heading = player.heading; } game.save(); } } catch (e) {} };
+document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); });
+window.addEventListener('pagehide', saveNow);
 initReadAlong(() => game && game.state);
 // 🔊 on the goal bar, and the "Read to me" switch on the title screen
 document.getElementById('obj-say').onclick = (e) => { e.stopPropagation(); readEls([document.getElementById('obj-text')]); };
@@ -171,6 +174,14 @@ function title() {
   $('#btn-continue').hidden = !save;
   if (save) $('#btn-continue').querySelector('small').textContent = `${save.name} · Day ${save.day} · ${money(save.money)}`;
   $('#btn-teacher').onclick = () => { audio.play('click'); teacherDashboard(); };
+  $('#btn-load').onclick = () => { audio.play('click'); UI.sheet('Load a save', (close) => {
+    const ta = h('textarea', { class: 'writebox', rows: 4, placeholder: 'Paste a save code (REALSAVE1:…), or choose a save file.' });
+    const file = h('input', { type: 'file', accept: '.txt,text/plain', onchange: async () => { const f = file.files[0]; if (f) ta.value = await f.text(); } });
+    return h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Bring your game from another device.'), file, ta,
+      h('button', { class: 'primary', onclick: () => { const st = saveFromText(ta.value); if (!st) return UI.toast('That isn’t a REAL save. Check the code or file.', 'warn');
+        const cur = loadSave(); if (cur && cur.name && !confirm(`Replace ${cur.name}'s game (Day ${cur.day}) with ${st.name}'s game (Day ${st.day})?`)) return;
+        try { localStorage.setItem('real.save.v2', JSON.stringify(st)); } catch (e) {} close(); UI.toast(`Loaded ${st.name}, Day ${st.day}.`, 'good'); title(); } }, 'Load this game'));
+  }, { icon: '📂' }); };
   $('#btn-new').onclick = () => { audio.start(); audio.play('click'); T.hidden = true; creator(); };
   $('#btn-continue').onclick = () => { audio.start(); audio.play('click'); T.hidden = true; startGame(save, false); };
 }
