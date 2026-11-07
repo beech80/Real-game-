@@ -458,9 +458,10 @@ export class Game {
     for (const b of s.bills.filter((x) => x.paid && !x.renewed && (x.recur || /^(rent|util|phone)/.test(x.id)) && x.due <= s.day)) {
       b.renewed = true; const kind = b.id.replace(/\d+$/, ''), n = parseInt(b.id.replace(/\D/g, ''), 10) + 1;
       if (kind === 'bizloan' && s.biz) s.biz.loan = Math.max(0, Math.round((s.biz.loan - b.amount) * 100) / 100);
+      if (kind === 'studentloan' && s.studentLoans) { const interest = s.studentLoans * (b.loanRate || 0.065 / 52); s.studentLoans = Math.max(0, Math.round((s.studentLoans + interest - b.amount) * 100) / 100); }
       if (kind === 'rent' && s.home === 'owned' && s.mortgage && s.mortgage.bal > 0) {   // each payment: interest first, the rest pays down the loan
         const M = s.mortgage, interest = Math.round(M.bal * M.apr / 100 / 52 * 100) / 100; M.bal = Math.max(0, Math.round((M.bal - (M.pi - interest)) * 100) / 100);
-        if (M.bal <= 0) { s.rent = 60; this.message('Heights Bank', 'Your mortgage is paid off! You own your home. You still pay property tax and insurance (about $60 a week).'); }
+        if (M.bal <= 0) { s.rent = 145; this.message('Heights Bank', 'Your mortgage is paid off! You own your home. You still pay property tax, insurance and condo fees (about $145 a week).'); }
       }
       if (b.left === 0) continue;
       if (kind === 'rent' && !s.home && (s.subsidyWeeks ?? 3) > 0) s.subsidyWeeks = (s.subsidyWeeks ?? 3) - 1;
@@ -557,7 +558,7 @@ export function openPhone(G) {
             h('div', { class: 'bill' }, h('div', {}, h('b', {}, '2. Register it'), h('small', {}, 'At the Small Business Center in the Opportunity District (Life Level 5).'))),
             h('button', { class: 'primary', onclick: () => { close(); A.businessPlan(G); } }, s.achievements.plan ? 'Revise the plan' : 'Start the plan')),
         Home: () => { const H = G.hooks.HOMES[s.home || 'starter'], v = s.vehicle && G.hooks.VEHICLES[s.vehicle.type]; return h('div', { class: 'act' },
-          h('div', { class: 'bill' }, h('div', {}, h('b', {}, '🏠 ' + H.name), h('small', {}, s.home === 'owned' ? (s.mortgage && s.mortgage.bal > 0 ? `Mortgage + tax & insurance ${money(s.rent)}/week · loan left ${money(s.mortgage.bal)} · your equity ${money(120000 - s.mortgage.bal)}` : 'Paid off! Property tax & insurance $60/week') : `Rent ${money(s.rent || ((s.subsidyWeeks ?? 3) > 0 ? 150 : 300))}/week`))),
+          h('div', { class: 'bill' }, h('div', {}, h('b', {}, '🏠 ' + H.name), h('small', {}, s.home === 'owned' ? (s.mortgage && s.mortgage.bal > 0 ? `Mortgage + tax, insurance & fees ${money(s.rent)}/week · loan left ${money(s.mortgage.bal)} · your equity ${money((s.mortgage.price || 240000) - s.mortgage.bal)}` : 'Paid off! Tax, insurance & fees about $145/week') : `Rent ${money(s.rent || ((s.subsidyWeeks ?? 3) > 0 ? 150 : 300))}/week`))),
           h('div', { class: 'bill' }, h('div', {}, h('b', {}, v ? `${v.icon} ${v.name}` : '🚌 Bus rider'), h('small', {}, v ? (s.vehicle.type === 'bike' ? 'No running costs.' : `Last service: Day ${s.vehicle.service}${s.day - s.vehicle.service >= 10 ? ' · SERVICE DUE at Midtown Motors' : ''}`) : 'Vehicles are sold at Midtown Motors.'))),
           s.pet ? h('div', { class: 'bill' }, h('div', {}, h('b', {}, `${G.hooks.PET_TYPES[s.pet.type].icon} ${s.pet.name}`), h('small', {}, `Bond ${'♥'.repeat(Math.max(1, Math.round(s.pet.bond / 2)))} · ${s.pet.fed === s.day ? 'Fed today' : 'Hungry: feed at home'}`)), h('button', { class: 'primary sm', onclick: () => { G.petCare('play'); open('Home'); } }, 'Play')) : h('div', { class: 'bill' }, h('div', {}, h('b', {}, '🐾 No pet yet'), h('small', {}, 'Paws & Friends shelter in Midtown.'))),
           s.savings ? h('div', { class: 'bill' }, h('div', {}, h('b', {}, '🏦 Savings'), h('small', {}, `${money(s.savings)} earning 1% a week`))) : null); },

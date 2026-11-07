@@ -3,7 +3,7 @@
 import { UI, h, money, wait } from './ui.js';
 import * as A from './activities.js';
 import { CAREERS, careerStatus } from './life.js';
-import { WORK, T, runTask, workShift, apply, school, COURSES } from './careers.js';
+import { WORK, T, runTask, workShift, apply, school, COURSES, loanGrace } from './careers.js';
 import { DISTRICTS } from './districts.js';
 import { readCode } from './plush.js';
 import { askNPC } from './voice.js';
@@ -28,8 +28,8 @@ export const VEHICLES = {
 export const HOMES = {
   starter: { name: 'The Starter Apartments', district: 'district', rent: 300, door: 'Door_ApartmentLobby' },
   loft: { name: 'Midtown Lofts', district: 'midtown', rent: 450, door: 'lofts', life: 4 },
-  heights: { name: 'Heights Residences', district: 'heights', rent: 700, door: 'residences', life: 8 },
-  owned: { name: 'Your condo in The Heights', district: 'heights', rent: 0, door: 'residences', price: 120000, down: 12000, mortgage: 226, pi: 166, life: 10 },   // 30-year loan of $108,000 at 7%: ≈ $166/week, plus ≈ $60/week property tax & insurance
+  heights: { name: 'Heights Residences', district: 'heights', rent: 520, door: 'residences', life: 8 },
+  owned: { name: 'Your condo in The Heights', district: 'heights', rent: 0, door: 'residences', price: 240000, down: 24000, mortgage: 475, pi: 330, life: 10 },   // $216,000 at 7% for 30 years ≈ $1,437/month ≈ $330/week; + tax, insurance, PMI and condo fees ≈ $145/week   // 30-year loan of $108,000 at 7%: ≈ $166/week, plus ≈ $60/week property tax & insurance
 };
 export const PET_TYPES = { puppy: { name: 'Puppy', icon: '🐶', color: 0xc98a4a }, kitten: { name: 'Kitten', icon: '🐱', color: 0x8a8d96 }, bunny: { name: 'Bunny', icon: '🐰', color: 0xf1ece4 } };
 export const PET_NAMES = ['Biscuit', 'Pepper', 'Mochi', 'Scout', 'Juniper', 'Pip', 'Waffles', 'Luna'];
@@ -293,7 +293,7 @@ export function installExpansion(Game) {
       h('div', { class: 'opts' },
         h('button', { class: 'opt', disabled: s.money < v.price, onclick: () => close('cash') }, `Pay ${money(v.price)} in full`),
         finance ? h('button', { class: 'opt', disabled: s.money < 300, onclick: () => close('loan') }, 'Finance: $300 down + $55/week for 45 weeks') : null),
-      finance ? h('p', { class: 'tip' }, `Financing total: $300 + 45 × $55 = ${money(300 + 45 * 55)}. That’s ${money(300 + 45 * 55 - v.price)} more than the price: the cost of borrowing. This loan’s APR is about 27%, which is high. Car loans from a bank or credit union are often 5–10% APR. Always compare the APR.`) : null,
+      finance ? h('p', { class: 'tip' }, `Financing total: $300 + 45 × $55 = ${money(300 + 45 * 55)}. That’s ${money(300 + 45 * 55 - v.price)} more than the price: the cost of borrowing. This loan’s APR is about 27%, which is high. New-car loans from a bank or credit union are often about 6–10% APR, and used-car loans usually cost more. Always compare the APR.`) : null,
       s.money < v.price && !finance ? h('p', { class: 'warnline' }, `You need ${money(v.price - s.money)} more. Save up and come back.`) : null), { icon: v.icon });
     if (!how) return;
     if (how === 'loan') { await runTask(G, { skill: 'fin.credit', q: 'Financing costs $2,775 in total. The cash price is $2,500. How much is the interest?', a: '$275', o: ['$275', '$2,775', '$55', '$300'], why: '$2,775 − $2,500 = $275. That extra is the cost of borrowing.' }, 'vehicle', 'Read the loan', '📄'); this.spend(300, 'Car down payment'); s.bills.push({ id: 'carloan1', name: 'Car loan payment', amount: 55, due: s.day + 7, paid: false, recur: 55, period: 7, left: 44 }); }
@@ -319,12 +319,14 @@ export function installExpansion(Game) {
     if (ll < H.life) { UI.toast(`Grow to Life Level ${H.life} first.`, 'info'); return; }
     const weekIncome = s.bank.filter((t) => t.amt > 0 && t.day > s.day - 7).reduce((a, t) => a + t.amt, 0);
     if (id === 'owned') {
-      await UI.say('Agent · Heights Residences', `A condo of your own: ${money(H.price)}. You need 10% down (${money(H.down)}). The bank lends the other ${money(H.price - H.down)} at 7% APR for 30 years: about ${money(H.pi)} a week, plus about $60 a week for property tax and insurance. Save for repairs too: owners pay for them, not a landlord.`);
+      await UI.say('Agent · Heights Residences', `A condo of your own: ${money(H.price)}. You need 10% down (${money(H.down)}) plus about 3% in closing costs. The bank lends the other ${money(H.price - H.down)} at 7% APR for 30 years: about ${money(H.pi)} a week. Add property tax, insurance, PMI (required with less than 20% down) and condo fees: about ${money(H.mortgage - H.pi)} more. Owners also pay for repairs.`);
       await runTask(G, { skill: 'math.percent', q: `10% of ${money(H.price)} is the down payment. How much?`, a: money(H.down), o: [money(H.down), money(H.price / 100), money(H.down * 2), money(H.price - H.down)] }, 'home', 'Down payment', '🧮');
-      if (s.money < H.down) { UI.toast(`Save ${money(H.down - s.money)} more for the down payment.`, 'warn'); return; }
-      this.spend(H.down, 'Home down payment'); s.mortgage = { bal: H.price - H.down, apr: 7, pi: H.pi };
+      const pay = s.bank.filter((t) => t.amt > 0 && t.day > s.day - 14 && !/withdraw|sold|loan|refund|investments/i.test(t.desc)).reduce((a, t) => a + t.amt, 0) / 2;
+      if (pay * 0.28 < H.mortgage) { await UI.say('Agent · Heights Residences', `Lenders usually want the full housing payment under about 28% of your income. That needs about ${money(Math.ceil(H.mortgage / 0.28))} a week; you’ve been earning about ${money(pay)}.`); return; }
+      const closing = Math.round(H.price * 0.03); if (s.money < H.down + closing) { UI.toast(`Save ${money(H.down + closing - s.money)} more for the down payment and closing costs.`, 'warn'); return; }
+      this.spend(H.down, 'Home down payment'); this.spend(closing, 'Closing costs'); s.mortgage = { bal: H.price - H.down, apr: 7, pi: H.pi, price: H.price };
     } else {
-      await UI.say(`Leasing office · ${H.name}`, `Rent is ${money(H.rent)} a week. Like most landlords, we ask that you earn at least 2.5 times the rent (many ask for 3 times). You earned ${money(weekIncome)} in the last 7 days. (Spending more than 30% of income on rent is called being rent-burdened.)`);
+      await UI.say(`Leasing office · ${H.name}`, `Rent is ${money(H.rent)} a week. Like many landlords, we ask that you earn at least 2.5 times the rent. Financial planners suggest keeping rent under about 30% of income, which is closer to 3.3 times. You earned ${money(weekIncome)} in the last 7 days. (Spending more than 30% of income on rent is called being rent-burdened.)`);
       if (weekIncome < H.rent * 2.5) { await UI.say(`Leasing office · ${H.name}`, `Come back when you earn ${money(H.rent * 2.5)} a week. A second job or a better career will get you there.`); return; }
       await runTask(G, T.clause, 'lease', 'Read the lease', '📄');
       if (s.money < H.rent) { UI.toast(`You need a deposit of ${money(H.rent)}.`, 'warn'); return; }
@@ -405,11 +407,11 @@ export function installExpansion(Game) {
   // ---------------------------------------------------------------------------------- savings & interest (Heights Bank)
   P.savings = async function () {
     const s = this.state, G = this; s.savings = s.savings || 0;
-    if (!s.flags.savingsOpen) { await runTask(G, { skill: 'math.percent', q: 'A real savings account pays 4% interest a year. You save $500. How much interest after one year?', a: '$20', o: ['$20', '$200', '$4', '$2'], why: '4% of $500 = 0.04 × 500 = $20. In this game interest is sped up (1% each game week) so you can watch it grow. In real life, 1% a week would be about 68% a year: anyone promising that is running a scam.' }, 'bank', 'How interest works', '🏦'); s.flags.savingsOpen = true; this.achieve('investor'); }
+    if (!s.flags.savingsOpen) { await runTask(G, { skill: 'math.percent', q: 'A real savings account pays 4% interest a year. You save $500. How much interest after one year?', a: '$20', o: ['$20', '$200', '$4', '$2'], why: '4% of $500 = 0.04 × 500 = $20 in a year. Anyone promising much more, with no risk, is probably running a scam.' }, 'bank', 'How interest works', '🏦'); s.flags.savingsOpen = true; this.achieve('investor'); }
     const act = await UI.sheet('Heights Bank · Savings', (close) => h('div', { class: 'act' },
-      h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'CHECKING'), h('b', {}, money(s.money))), h('div', {}, h('small', {}, 'SAVINGS'), h('b', { class: 'pos' }, money(s.savings))), h('div', {}, h('small', {}, 'RATE'), h('b', {}, '1% / game week'))),
+      h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'CHECKING'), h('b', {}, money(s.money))), h('div', {}, h('small', {}, 'SAVINGS'), h('b', { class: 'pos' }, money(s.savings))), h('div', {}, h('small', {}, 'RATE'), h('b', {}, '4% / year (APY)'))),
       h('div', { class: 'opts' }, [50, 100, 500].map((v) => h('button', { class: 'opt', disabled: s.money < v, onclick: () => close(v) }, `Deposit ${money(v)}`)), h('button', { class: 'opt', disabled: s.savings <= 0, onclick: () => close(-1) }, 'Withdraw everything')),
-      h('p', { class: 'tip' }, 'Interest is paid every 7 game days on what’s in savings. Interest earns interest: that’s compounding. Sped up for the game: real savings accounts pay about 0–5% a year.')), { icon: '🏦' });
+      h('p', { class: 'tip' }, 'Interest is added every week on what’s in savings, at 4% a year. Interest earns interest: that’s compounding. APY (annual percentage yield) includes that compounding, so it’s the rate to compare for savings.')), { icon: '🏦' });
     if (!act) return;
     if (act === -1) { this.earn(s.savings, 'Savings withdrawal'); s.stats.earned -= s.savings; s.savings = 0; }
     else { this.spend(act, 'Savings deposit'); s.stats.spent -= act; s.savings = r2(s.savings + act); }
@@ -451,16 +453,17 @@ export function installExpansion(Game) {
   P.nightly = function () {
     const s = this.state, notes = [];
     const bz = this.bizOvernight(); if (bz) notes.push(bz);
+    loanGrace(this);
     if (s.portfolio) {   // simulated markets: safe barely moves, risky can swing a lot either way
       const P = s.portfolio, before = P.safe + P.mixed + P.risky;
-      // each night = one simulated month. Yearly averages about 4% (bond fund), 6% (mixed), 8% (stock fund); swings grow with risk
+      // each night = one simulated week (the same clock as rent and loans). Yearly averages about 4% (bond fund), 6% (mixed), 8% (stock fund)
       const gauss = () => { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
       const move = (v, mean, sd) => Math.max(0, Math.round(v * (1 + (mean + sd * gauss()) / 100) * 100) / 100);
-      P.safe = move(P.safe, 0.33, 1.2); P.mixed = move(P.mixed, 0.5, 3); P.risky = move(P.risky, 0.65, 5);
+      P.safe = move(P.safe, 0.077, 0.6); P.mixed = move(P.mixed, 0.115, 1.4); P.risky = move(P.risky, 0.154, 2.4);
       const after = P.safe + P.mixed + P.risky;
-      if (before > 0) notes.push(`Investments: ${after >= before ? '+' : '−'}${money(Math.abs(after - before))} (one simulated month). Values go up and down.`);
+      if (before > 0) notes.push(`Investments: ${after >= before ? '+' : '−'}${money(Math.abs(after - before))} (one simulated week). Values go up and down.`);
     }
-    if (s.savings > 0 && s.day % 7 === 0) { const i = r2(s.savings * 0.01); s.savings = r2(s.savings + i); notes.push(`Savings interest: +${money(i)}`); }
+    if (s.savings > 0) { s.savInt = (s.savInt || 0) + s.savings * 0.04 / 52; if (s.savInt >= 0.01 && s.day % 7 === 0) { const i = r2(s.savInt); s.savInt = 0; s.savings = r2(s.savings + i); notes.push(`Savings interest (4% a year): +${money(i)}`); } }
     if (s.vehicle && s.vehicle.type !== 'bike' && s.day - s.vehicle.service > 12 && !s.vehicle.broken) { s.vehicle.broken = true; s.bills.push({ id: 'repair' + s.day, name: 'Vehicle repair (skipped maintenance)', amount: 250, due: s.day + 5, paid: false }); notes.push('Your vehicle broke down. Skipped maintenance turned into a $250 repair. Service it at Midtown Motors every 10 days.'); }
     if (s.pet) { const p = s.pet; if (s.day - p.fed >= 2) { p.bond = Math.max(0, p.bond - 0.5); s.mood = Math.max(0, s.mood - 8); notes.push(`${p.name} is hungry. Feed your pet at home every day.`); } }
     return notes;
@@ -549,7 +552,7 @@ export function installExpansion(Game) {
     if (c === 'save') return this.savings();
     if (c === 'score') {
       // only credit accounts (loans) are reported; rent and phone bills usually aren't. No credit history → no score yet.
-      const credit = s.bills.filter((b) => /^(veh|carloan|bizloan)/.test(b.id) && (b.amount > 0)), onTime = credit.filter((b) => b.paid && !b.lateFee).length + (s.stats.creditOnTime || 0), late = credit.filter((b) => b.lateFee).length + (s.stats.creditLate || 0);
+      const credit = s.bills.filter((b) => (/^(carloan|bizloan|studentloan)/.test(b.id) || (/^rent/.test(b.id) && s.home === 'owned')) && (b.amount > 0)), onTime = credit.filter((b) => b.paid && !b.lateFee).length + (s.stats.creditOnTime || 0), late = credit.filter((b) => b.lateFee).length + (s.stats.creditLate || 0);
       if (!credit.length && !s.stats.creditOnTime) { await UI.say('Advisor · Heights Bank', 'You don’t have a credit score yet: you have no loans or credit cards, so there’s nothing for the credit bureaus to report. Rent and phone bills usually aren’t reported. Paying them on time still matters: late or unpaid bills can be sent to collections, and that hurts your credit.'); }
       else {
         const months = Math.max(1, Math.round((s.day - (s.vehicle ? s.vehicle.bought : s.day)) / 30));
@@ -568,7 +571,7 @@ export function installExpansion(Game) {
     await runActivity(G, gen('fin.investing'), 'bank', 'Before you invest', '📈');
     const P2 = s.portfolio;
     const c = await UI.sheet('Investing simulator', (close) => h('div', { class: 'act' },
-      h('p', { class: 'tip' }, 'Simulated money only. Each night is one month of market time. Bond fund (safe): about 4% a year on average, small ups and downs. Mixed: about 6%. Stock fund (risky): about 8%, with big swings. Any of them can lose money. Real stock funds have averaged roughly 7–10% a year over long periods, but have dropped 20–50% in bad years.'),
+      h('p', { class: 'tip' }, 'Simulated money only. Each night is one week of market time, the same clock as your rent and loans. Bond fund (safe): about 4% a year on average, small ups and downs. Mixed: about 6%. Stock fund (risky): about 8%, with big swings. Any of them can lose money. Real stock funds have averaged roughly 7–10% a year over long periods, but have dropped 20–50% in bad years.'),
       h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'SAFE'), h('b', {}, money(P2.safe))), h('div', {}, h('small', {}, 'MIXED'), h('b', {}, money(P2.mixed))), h('div', {}, h('small', {}, 'RISKY'), h('b', {}, money(P2.risky)))),
       h('div', { class: 'opts' }, ['safe', 'mixed', 'risky'].map((k) => h('button', { class: 'opt', disabled: s.money < 50, onclick: () => close(k) }, `Put $50 in ${k}`)), h('button', { class: 'opt', onclick: () => close('sell') }, 'Sell everything back to checking'))), { icon: '📈' });
     if (!c) return;

@@ -30,7 +30,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       if (!clicked) { const x = await p.$('#modal .modal:last-child .sh-x'); if (x) await x.click(); else return; }
     }
   };
-  const college = () => ev(() => { window.__t = window.REAL.game().districtInteraction('heights', { key: 'college', sign: 'HEIGHTS COLLEGE', menu: true }).run(); });
+  const college = () => ev(() => { window.__done = false; Promise.resolve(window.REAL.game().districtInteraction('heights', { key: 'college', sign: 'HEIGHTS COLLEGE', menu: true }).run()).then(() => { window.__done = true; }); });
+  const finish = async (opts) => { for (let k = 0; k < 12 && !(await ev(() => window.__done)); k++) { await flow(opts); await sleep(600); } };
   await p.goto(`http://localhost:${srv.address().port}/index.html`, { timeout: 240000, waitUntil: 'domcontentloaded' });
   await ev(() => { try { localStorage.clear(); } catch (e) {} });
   await p.waitForFunction(() => window.REAL && window.REAL.mode === 'title', null, { timeout: 180000 });
@@ -52,17 +53,17 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   if (!pre.fafsa) fail('no FAFSA step'); if (!pre.course || !pre.course.loan) fail('pre-med enrollment with a student loan did not work');
   // 2) finish pre-med (last session) → loan repayment starts
   await ev(() => { const st = window.REAL.state.courses.med; st.n = 5; st.last = 0; });
-  await college(); await flow({ pick: ['Classes', 'css:.bill:has-text("Pre-medical") button'], rounds: 40 });
+  await college(); await finish({ pick: ['Classes', 'css:.bill:has-text("Pre-medical") button'], rounds: 40 });
   const med = await S(() => ({ done: window.REAL.state.courses.med.done, loanBill: window.REAL.state.bills.some((x) => /Student loan/.test(x.name)) }));
   console.log('pre-med finished:', JSON.stringify(med));
   if (!med.done) fail('pre-med did not finish'); if (!med.loanBill) fail('student loan repayment did not start after finishing');
   // 3) medical school opens; classes done → licensing exam: fail first, retake later and pass
   await ev(() => { const s = window.REAL.state; s.money = 9000; s.courses.medschool = { n: 8, last: 0 }; s.day = 25; });
-  await college(); await flow({ pick: ['Classes', 'css:.bill:has-text("Medical school") button'], wrong: true, rounds: 50 });
+  await college(); await finish({ pick: ['Classes', 'css:.bill:has-text("Medical school") button'], wrong: true, rounds: 50 });
   const f1 = await S(() => window.REAL.state.courses.medschool); console.log('after a failed exam:', JSON.stringify(f1));
   if (f1.done || !f1.examDay) fail('a failed licensing exam should not pass and should set a retake day');
   await ev(() => { window.REAL.state.day = window.REAL.state.courses.medschool.examDay; });
-  await college(); await flow({ pick: ['Classes', 'css:.bill:has-text("Medical school") button'], rounds: 50 });
+  await college(); await finish({ pick: ['Classes', 'css:.bill:has-text("Medical school") button'], rounds: 50 });
   const f2 = await S(() => window.REAL.state.courses.medschool); console.log('after the retake:', JSON.stringify(f2));
   if (!f2.done) fail('passing the licensing exam did not complete medical school');
   // 4) a job application with weak answers is turned down, with feedback and a reapply day

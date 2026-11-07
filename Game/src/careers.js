@@ -212,18 +212,23 @@ export const COURSES = {
   code: { name: 'Intro to Programming', school: 'City Tech Institute', place: ['opportunity', 'bootcamp'], cost: 200, sessions: 4, tasks: ['solve', 'loop', 'bug', 'algebraQ'] },
   trades: { name: 'Electrical Safety & Basics', school: 'City Tech Institute', place: ['opportunity', 'bootcamp'], cost: 150, sessions: 3, tasks: ['ohm', 'breaker', 'wire'] },
   acct: { name: 'Accounting Basics', school: 'City Tech Institute', place: ['opportunity', 'bootcamp'], cost: 150, sessions: 3, tasks: ['tax', 'ledger', 'growth'] },
-  eng: { name: 'Engineering degree (B.S.)', school: 'Heights College', place: ['heights', 'college'], cost: 2400, sessions: 6, tasks: ['load', 'tests', 'efficiency', 'solve'], exam: 'Fundamentals of Engineering exam', real: 'In real life: a 4-year engineering degree, then the FE exam. Many engineers later earn a PE license after 4 years of work.' },
-  med: { name: 'Pre-medical studies (B.S.)', school: 'Heights College', place: ['heights', 'college'], cost: 2400, sessions: 6, tasks: ['vitals', 'weightDose', 'nextQ', 'allergy', 'dose'], real: 'In real life: a 4-year college degree with science classes, then the MCAT exam to apply to medical school.' },
-  medschool: { name: 'Medical school (M.D.)', school: 'Heights College of Medicine', place: ['heights', 'college'], cost: 6000, sessions: 8, after: 'med', tasks: ['vitals', 'weightDose', 'nextQ', 'allergy', 'dose'], exam: 'medical licensing exam', real: 'In real life: 4 years of medical school, licensing exams, then 3–7 years of residency training before practising on your own.' },
+  eng: { name: 'Engineering degree (B.S.)', school: 'Heights College', place: ['heights', 'college'], cost: 2400, sessions: 6, tasks: ['load', 'tests', 'efficiency', 'solve'], exam: 'Fundamentals of Engineering (FE) exam', real: 'In real life: a 4-year engineering degree, then the FE exam to become an Engineer in Training. A Professional Engineer (PE) license comes after about 4 years of work and another exam.' },
+  med: { name: 'Bachelor’s degree, pre-med track', school: 'Heights College', place: ['heights', 'college'], cost: 2400, sessions: 6, tasks: ['vitals', 'weightDose', 'nextQ', 'allergy', 'dose'], exam: 'MCAT (medical school entrance exam)', real: 'In real life: a 4-year college degree with science classes, then the MCAT exam to apply to medical school.' },
+  medschool: { name: 'Medical school (M.D.)', school: 'Heights College of Medicine', place: ['heights', 'college'], cost: 6000, sessions: 8, after: 'med', tasks: ['vitals', 'weightDose', 'nextQ', 'allergy', 'dose'], exam: 'medical licensing exam', real: 'In real life: 4 years of medical school, licensing exams, then 3–7 years of residency training. In the game you start as a resident doctor.' },
   arch: { name: 'Architecture degree (B.Arch.)', school: 'Heights College', place: ['heights', 'college'], cost: 2000, sessions: 5, tasks: ['room', 'scale', 'client'], exam: 'architecture registration exam', real: 'In real life: a 5-year architecture degree, about 3 years of supervised work, then the registration exams.' },
-  law: { name: 'Pre-law studies (B.A.)', school: 'Heights College', place: ['heights', 'college'], cost: 2000, sessions: 5, tasks: ['clause', 'evidence', 'brief'], real: 'In real life: a 4-year college degree in any subject, then the LSAT exam to apply to law school.' },
+  law: { name: 'Bachelor’s degree, pre-law track', school: 'Heights College', place: ['heights', 'college'], cost: 2000, sessions: 5, tasks: ['clause', 'evidence', 'brief'], exam: 'LSAT (law school entrance exam)', real: 'In real life: a 4-year college degree in any subject, then the LSAT exam to apply to law school.' },
   lawschool: { name: 'Law school (J.D.)', school: 'Heights College of Law', place: ['heights', 'college'], cost: 5000, sessions: 7, after: 'law', tasks: ['clause', 'evidence', 'brief'], exam: 'bar exam', real: 'In real life: 3 years of law school, then the state bar exam before you can practise law.' },
 };
 /** student loan repayment starts after you finish: 20 weekly payments */
-function finishLoan(G, st) {
-  if (!st.loan) return; const s = G.state, pay = Math.round(st.loan / 20 * 100) / 100;
-  s.bills.push({ id: 'studentloan' + s.day, name: 'Student loan payment', amount: pay, due: s.day + 7, paid: false, recur: pay, period: 7, left: 19 });
-  UI.toast(`Student loan repayment starts next week: ${money(pay)} a week for 20 weeks.`, 'info', 4200);
+export function finishLoan(G, st) {   // 6.5% APR, paid back in 52 weekly payments (real loans usually run 10 years; the game shortens it)
+  if (!st.loan || st.repaying) return; st.repaying = true; const s = G.state, i = 0.065 / 52, n = 52;
+  const pay = Math.round(st.loan * i / (1 - (1 + i) ** -n) * 100) / 100;
+  s.bills.push({ id: 'studentloan' + s.day, name: 'Student loan payment (6.5% APR)', amount: pay, due: s.day + 7, paid: false, recur: pay, period: 7, left: n - 1, loanRate: i });
+  UI.toast(`Student loan repayment starts next week: ${money(pay)} a week for 52 weeks (6.5% APR).`, 'info', 4600);
+}
+/** nightly: a student loan on a course you stopped attending starts repayment after a 3-week grace period */
+export function loanGrace(G) {
+  const s = G.state; for (const st of Object.values(s.courses || {})) if (st.loan && !st.repaying && !st.done && s.day - Math.max(st.last || 0, st.enrolled || 0) >= 21) { finishLoan(G, st); G.message('Student aid office', 'You haven’t attended class in 3 weeks, so your student loan has entered repayment. Loans must be repaid even if you don’t finish.'); }
 }
 export async function school(G, where) {
   const s = G.state; s.courses = s.courses || {};
@@ -243,8 +248,8 @@ export async function school(G, where) {
       await runTask(G, { skill: 'fin.planning', q: 'Which kind of college aid do you have to pay back?', a: 'A student loan', o: ['A student loan', 'A Pell grant', 'A scholarship'], why: 'Grants and scholarships are gifts. Loans must be paid back, with interest.' }, 'college', 'FAFSA', '📝');
       s.flags.fafsa = s.day;
     }
-    const weekly = s.bank.filter((t) => t.amt > 0 && t.day > s.day - 7).reduce((a, t) => a + t.amt, 0);
-    const need = weekly < 500 ? 0.4 : weekly < 900 ? 0.2 : 0;                    // need-based grant (like a Pell grant)
+    const weekly = s.bank.filter((t) => t.amt > 0 && t.day > s.day - 14 && !/withdraw|sold|loan|refund|investments/i.test(t.desc)).reduce((a, t) => a + t.amt, 0) / 2;   // average weekly pay
+    const need = c.after ? 0 : weekly < 500 ? 0.4 : weekly < 900 ? 0.2 : 0;   // need-based grant (like a Pell grant): college only, not graduate school
     const edu = G.life().scores.education, merit = edu >= 6 ? 0.25 : edu >= 3 ? 0.1 : 0;   // merit scholarship from the learning record
     const aid = Math.min(0.65, need + merit), cost = Math.round(c.cost * (1 - aid));
     const loanAmt = Math.max(0, cost - Math.max(0, Math.floor(s.money - 200)));
@@ -252,14 +257,14 @@ export async function school(G, where) {
       h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'TUITION'), h('b', {}, money(c.cost))), h('div', {}, h('small', {}, 'GRANT (NEED)'), h('b', { class: 'pos' }, need ? `−${money(c.cost * need)}` : '—')), h('div', {}, h('small', {}, 'SCHOLARSHIP'), h('b', { class: 'pos' }, merit ? `−${money(c.cost * merit)}` : '—'))),
       h('p', {}, `You pay ${money(cost)}. ${merit ? 'Your learning record earned a scholarship.' : 'A stronger learning record earns scholarships.'}`),
       h('button', { class: 'primary', disabled: s.money < cost, onclick: () => close('cash') }, `Pay ${money(cost)} from savings`),
-      cost > 0 ? h('button', { class: 'ghost', onclick: () => close('loan') }, `Federal student loan for ${money(loanAmt || cost)} (6.5% interest, paid back after you finish)`) : null,
+      cost > 0 ? h('button', { class: 'ghost', onclick: () => close('loan') }, `Federal student loan for ${money(loanAmt || cost)} (6.5% APR, paid back after you finish)`) : null,
       h('button', { class: 'ghost', onclick: () => close(false) }, 'Not yet')), { icon: '🎓' });
     if (ok === 'loan') {
       const L = loanAmt || cost, paidNow = cost - L; if (s.money < paidNow) { UI.toast(`You need ${money(paidNow)} for the part the loan doesn’t cover.`, 'warn'); return; }
       if (paidNow > 0) G.spend(paidNow, `${c.school}: ${c.name} (part)`);
-      s.studentLoans = (s.studentLoans || 0) + Math.round(L * 1.065); s.loanStart = s.loanStart || null;
-      UI.toast(`Student loan: ${money(L)}. You’ll repay about ${money(Math.round(L * 1.065))} in weekly payments after you finish.`, 'info', 4200);
-      s.courses[pickId] = { n: 0, last: 0, loan: Math.round(L * 1.065) };
+      s.studentLoans = Math.round(((s.studentLoans || 0) + L) * 100) / 100;
+      UI.toast(`Federal student loan: ${money(L)} at 6.5% APR. Payments start when you finish, or 3 weeks after you stop attending.`, 'info', 4600);
+      s.courses[pickId] = { n: 0, last: 0, loan: L, enrolled: s.day };
     }
     else {
     if (ok !== 'cash') return;

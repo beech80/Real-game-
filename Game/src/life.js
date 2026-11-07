@@ -13,8 +13,9 @@ export function lifeScores(s, edu) {
   const st = s.stats, f = s.flags;
   const paidOnTime = s.bills.filter((b) => b.paid && !b.lateFee).length + (st.billsOnTime || 0);
   // net worth: everything you have minus everything you owe (saving or investing never lowers it)
-  const P = s.portfolio || {}, owe = s.bills.filter((b) => !b.paid).reduce((a, b) => a + b.amount, 0) + ((s.biz && s.biz.loan) || 0);
-  const equity = s.home === 'owned' && s.mortgage ? 120000 - s.mortgage.bal : 0;   // what you'd keep if you sold the home
+  const latest = s.bills.filter((b) => !b.renewed && b.left > 0 && !/^(bizloan|studentloan)/.test(b.id));   // car loan and other payment plans still to come
+  const P = s.portfolio || {}, owe = s.bills.filter((b) => !b.paid).reduce((a, b) => a + b.amount, 0) + latest.reduce((a, b) => a + b.amount * b.left, 0) + ((s.biz && s.biz.loan) || 0) + (s.studentLoans || 0);
+  const equity = s.home === 'owned' && s.mortgage ? (s.mortgage.price || 240000) - s.mortgage.bal : 0;   // what you'd keep if you sold the home
   const savings = s.money + (s.savings || 0) + (P.safe || 0) + (P.mixed || 0) + (P.risky || 0) + equity - owe;
   const friends = Object.values(s.friends || {}).reduce((a, v) => a + v, 0);
   return {
@@ -56,9 +57,9 @@ export const CAREERS = [
   { id: 'health', tier: 2, title: 'Healthcare aide', employer: 'City Clinic', rate: 25, where: 'Midtown', req: { life: 7, skills: { 'read.documents': 3 } }, desc: 'Care for patients, read charts, follow procedures.' },
   { id: 'electrician', tier: 2, title: 'Electrician apprentice', employer: 'Volt Works', rate: 27, where: 'Opportunity District', req: { course: 'trades', life: 7, skills: { 'math.algebra': 2, 'read.instructions': 3 } }, desc: 'Wiring, safety codes and measurement.' },
   { id: 'engineer', tier: 3, title: 'Engineer', employer: 'Heights Engineering', rate: 45, where: 'The Heights', req: { course: 'eng', life: 10, skills: { 'math.algebra': 3 } }, desc: 'Design and test real-world systems.' },
-  { id: 'doctor', tier: 3, title: 'Medical professional', employer: 'Heights Medical', rate: 60, where: 'The Heights', req: { course: 'medschool', life: 11, skills: { 'read.documents': 3 } }, desc: 'Years of study to care for others.' },
+  { id: 'doctor', tier: 3, title: 'Resident doctor', employer: 'Heights Medical', rate: 32, where: 'The Heights', req: { course: 'medschool', life: 11, skills: { 'read.documents': 3 } }, desc: 'Years of study to care for others.' },
   { id: 'architect', tier: 3, title: 'Architect', employer: 'Form Studio', rate: 48, where: 'The Heights', req: { course: 'arch', life: 10, skills: { 'math.multiply': 3 } }, desc: 'Buildings, geometry and clients.' },
-  { id: 'lawyer', tier: 3, title: 'Lawyer', employer: 'Heights Legal', rate: 55, where: 'The Heights', req: { course: 'lawschool', life: 11, skills: { 'read.documents': 3 } }, desc: 'Contracts, evidence and argument.' },
+  { id: 'lawyer', tier: 3, title: 'Associate lawyer', employer: 'Heights Legal', rate: 62, where: 'The Heights', req: { course: 'lawschool', life: 11, skills: { 'read.documents': 3 } }, desc: 'Contracts, evidence and argument.' },
   // careers that grow out of adventures (the adventure character becomes your boss)
   { id: 'racemech', tier: 1, title: 'Race mechanic', employer: 'Rita’s Garage', rate: 19, where: 'Starting District', adv: 'race', req: { life: 3, flag: 'adv_race_1' }, desc: 'Tune cars, fix engines, prep racers.' },
   { id: 'firefighter', tier: 1, title: 'Firefighter cadet', employer: 'Station 7', rate: 18, where: 'Starting District', adv: 'rescue', req: { life: 3, flag: 'adv_rescue_2' }, desc: 'Safety checks, drills and community rescues.' },
@@ -71,7 +72,7 @@ export const CAREERS = [
   { id: 'contractor', tier: 2, title: 'Contractor', employer: 'Build Right Co', rate: 30, where: 'Opportunity District', adv: 'construction', req: { life: 7, flag: 'adv_construction_3' }, desc: 'Plan and lead building projects.' },
   { id: 'owner', tier: 4, title: 'Business owner', employer: 'Your own company', rate: 0, where: 'Business app', req: { life: 6, skills: { 'fin.budget': 3 } }, desc: 'Build something that’s yours. Start with a business plan in the Business app.' },
 ];
-export const COURSE_NAMES = { code: 'Intro to Programming (City Tech)', trades: 'Electrical Safety (City Tech)', acct: 'Accounting Basics (City Tech)', eng: 'Engineering Design (Heights College)', med: 'Pre-Medicine (Heights College)', arch: 'Architecture Studio (Heights College)', law: 'Law Foundations (Heights College)' };
+export const COURSE_NAMES = { code: 'Intro to Programming (City Tech)', trades: 'Electrical Safety (City Tech)', acct: 'Accounting Basics (City Tech)', eng: 'Engineering degree (Heights College)', med: 'Bachelor’s degree, pre-med track (Heights College)', medschool: 'Medical school (Heights College of Medicine)', lawschool: 'Law school (Heights College of Law)', arch: 'Architecture degree (Heights College)', law: 'Bachelor’s degree, pre-law track (Heights College)' };
 export const TIER_NAMES = ['Starter work', 'Skilled work', 'Careers', 'Professional careers', 'Entrepreneurship'];
 
 export function careerStatus(c, s, edu, ll) {

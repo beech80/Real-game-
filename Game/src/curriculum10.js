@@ -40,7 +40,7 @@ export const BANKS_B = {
     ['An ice cube melts in your hand. What changed?', 'It went from solid to liquid', ['It went from gas to solid', 'It became a new material', 'Nothing changed'], 'Heat from your hand melted it. It’s still water, just a different state.', 2],
     ['What happens to water when it boils?', 'It turns into a gas (water vapor)', ['It turns into ice', 'It disappears forever', 'It becomes juice'], 'Boiling turns liquid water into a gas.', 1],
     ['A puddle and an ice cube are both made of…', 'Water', ['Glass', 'Air', 'Two different materials'], 'Ice, liquid water and steam are all the same stuff in different states.', 2],
-    ['Why does a balloon get bigger when you blow air in?', 'Gas spreads out to fill the space it’s in', ['Air is a solid', 'The balloon grows by itself', 'Gas has no amount'], 'Gas particles spread out to fill any container.', 3],
+    ['Why does a balloon get bigger when you blow air in?', 'You add more air, and the air pushes out on the stretchy balloon', ['Air is a solid', 'The balloon grows by itself', 'Air has no weight or amount'], 'Gas takes up space. More air inside pushes out on the walls, so the balloon stretches.', 3],
   ]),
   'sci.water': bank('sci.water', [
     ['What is it called when water falls from clouds as rain or snow?', 'Precipitation', ['Evaporation', 'Condensation', 'Collection'], 'Precipitation is any water that falls from the sky.', 1],
@@ -124,7 +124,7 @@ export const BANKS_B = {
     ['Why do plant cells have a cell wall but animal cells don’t?', 'The wall gives plants stiff support since they have no skeleton', ['Animals are softer', 'Plants are older', 'Walls make food'], 'Cell walls help plants stand upright.', 3],
   ]),
   'sci.health': bank('sci.health', [
-    ['Why do doctors say to finish your whole antibiotic prescription?', 'Stopping early can leave strong bacteria alive, so the illness returns', ['To use up the medicine', 'Antibiotics taste good', 'It doesn’t matter'], 'Finishing the course kills the bacteria fully.', 3],
+    ['Why should you take an antibiotic exactly as your doctor says?', 'Taking it right helps clear the infection and lowers the chance of resistant bacteria', ['To use up the medicine', 'More is always better', 'It doesn’t matter'], 'Take antibiotics only when a doctor prescribes them, and follow their directions on how long. Ask before stopping early.', 3],
     ['Antibiotics work against…', 'Bacteria, not viruses like the common cold', ['Every illness', 'Only viruses', 'Broken bones'], 'Colds and flu are viruses; antibiotics don’t help them.', 2, { 'Every illness': 'Antibiotics only kill bacteria. They don’t work on viruses like colds.' }],
   ]),
   'sci.design': bank('sci.design', [
@@ -182,7 +182,7 @@ export const BANKS_B = {
   ]),
   'think.planning': bank('think.planning', [
     ['You have a project due Friday. What is the best plan?', 'Break it into small parts and do a little each day', ['Do it all Thursday night', 'Wait for Friday', 'Skip it'], 'Planning ahead lowers stress and gives time to fix mistakes.', 2],
-    ['Your bus leaves at 8:00 and it takes 15 minutes to walk to the stop. When should you leave?', 'By 7:45', ['At 8:00', 'At 8:15', 'At 7:00 exactly'], '8:00 − 15 minutes = 7:45. Leave a little earlier to be safe.', 2],
+    ['Your bus leaves at 8:00 and it takes 15 minutes to walk to the stop. When should you leave, at the latest?', 'By 7:45', ['At 8:00', 'At 8:15', 'At 7:00 exactly'], '8:00 − 15 minutes = 7:45. Leave a little earlier to be safe.', 2],
     ['Why make a list before going to the store?', 'So you buy what you need and don’t forget or overspend', ['Lists are only for adults', 'To make shopping take longer', 'It doesn’t help'], 'A list keeps you focused on your plan.', 1],
   ]),
   'think.opportunity': bank('think.opportunity', [

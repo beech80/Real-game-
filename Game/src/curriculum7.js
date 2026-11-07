@@ -39,7 +39,7 @@ export const MORE_TOPICS = {
   // ------------------------------------------------------------------ high school money
   'fin.taxes': [
     () => { const inc = pick([15000, 20000, 30000]); const t1 = Math.min(inc, 11600) * 0.10, t2 = Math.max(0, Math.min(inc, 47150) - 11600) * 0.12, tax = Math.round(t1 + t2);
-      return num('fin.taxes', `Tax brackets: 10% on the first $11,600 of taxable income, 12% on income from $11,600 to $47,150. Taxable income is $${inc.toLocaleString()}. What is the tax?`, tax,
+      return num('fin.taxes', `2024 federal brackets for a single filer: 10% on the first $11,600 of taxable income, 12% from $11,600 to $47,150. Taxable income is $${inc.toLocaleString()}. What is the tax?`, tax,
         `Brackets tax each slice at its own rate: 10% × $11,600 = $1,160, plus 12% × $${(inc - 11600).toLocaleString()} = $${Math.round(t2).toLocaleString()}. Total $${tax.toLocaleString()}. Moving into a higher bracket never taxes all your income at the higher rate.`, { prefix: '$' }); },
     bank('fin.taxes', [
       ['What is a W-4?', 'A form you give your employer so they know how much tax to hold back from each paycheck', ['A form showing your total pay for the year', 'Your tax refund check', 'A bank account form'], 'You fill out a W-4 when you start a job. Your employer sends you a W-2 after the year ends, showing what you earned and what was withheld.', { 'A form showing your total pay for the year': 'That’s the W-2, which your employer sends after the year ends.' }],
@@ -59,7 +59,7 @@ export const MORE_TOPICS = {
       ['Prices rise 3% a year (inflation). Your savings earn 1% a year. What happens to what your money can buy?', 'It falls about 2% a year', ['It grows 1% a year', 'It stays the same', 'It grows 4% a year'], 'Real growth = interest − inflation ≈ 1% − 3% = −2%. To keep up, savings for the long term need to earn more than inflation.', { 'It grows 1% a year': 'The number in the account grows, but prices grow faster, so it buys less.' }],
       ['Rule of 72: at 8% a year, about how long until money doubles?', 'About 9 years', ['About 8 years', 'About 72 years', 'About 2 years'], '72 ÷ 8 = 9. The rule of 72 is a quick way to estimate doubling time for compound growth.'],
       ['What is the FAFSA?', 'The free federal form that decides your grants, work-study and student loans for college', ['A college entrance exam', 'A private bank loan', 'A scholarship you have to win'], 'Fill out the FAFSA every year you’re in college. Grants (like Pell) don’t have to be paid back; loans do.'],
-      ['Your job matches 401(k) savings up to 4% of your pay. You earn $40,000. If you save 4%, how much does your employer add?', '$1,600', ['$0', '$400', '$16,000'], '4% × $40,000 = $1,600 from you, and the match adds another $1,600: free money for retirement. Not taking a match leaves pay on the table.'],
+      ['Your job matches 100% of your 401(k) savings, up to 4% of your pay. You earn $40,000. If you save 4%, how much does your employer add?', '$1,600', ['$0', '$400', '$16,000'], '4% × $40,000 = $1,600 from you, and the match adds another $1,600: free money for retirement. Not taking a match leaves pay on the table.'],
     ])],
   'fin.fraud': [
     bank('fin.fraud', [
