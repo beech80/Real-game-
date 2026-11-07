@@ -1,4 +1,4 @@
-import { speakerBtn, autoRead, readEls, stopReading, readToMe } from './readalong.js';
+import { speakerBtn, autoRead, readEls, stopReading, readToMe, markWords } from './readalong.js';
 // REAL — UI: tiny DOM helper, HUD, dialogue, modal sheets, toasts, minimap, captions.
 export function h(tag, attrs = {}, ...kids) {
   const el = document.createElement(tag);
@@ -85,7 +85,7 @@ export const UI = {
       const done = (v) => { click(); stopReading(); D.hidden = true; res(v); };
       const list = choices ? h('div', { class: 'd-choices' }, choices.map((c, i) => h('button', { class: 'd-choice', onclick: () => done(i) }, h('span', { class: 'd-key' }, letters[i]), h('span', { class: 'd-ctext' }, c)))) : null;
       const next = !choices ? h('button', { class: 'd-next', onclick: () => done() }, 'Continue ›') : null;
-      const finishType = () => { cancelAnimationFrame(this._tw); body.textContent = text; body.dataset.typing = '0'; };
+      const finishType = () => { cancelAnimationFrame(this._tw); if (body.dataset.typing !== '0') { body.textContent = text; body.dataset.typing = '0'; markWords(body); } };
       const readAll = () => { finishType(); return [body, ...(list ? [...list.querySelectorAll('.d-ctext')] : [])]; };
       const spk = speakerBtn(readAll);
       const voice = this.voiceHooks;
@@ -94,7 +94,7 @@ export const UI = {
       if (voice && !opts.silent) voice.speak(text, speaker);
       // typewriter
       let i = 0; const full = text;
-      const tick = () => { i += 2; body.textContent = full.slice(0, i); if (i < full.length) this._tw = requestAnimationFrame(tick); else body.dataset.typing = '0'; };
+      const tick = () => { i += 2; body.textContent = full.slice(0, i); if (i < full.length) this._tw = requestAnimationFrame(tick); else { body.dataset.typing = '0'; markWords(body); } };
       cancelAnimationFrame(this._tw); body.dataset.typing = '1';
       if (readToMe()) { finishType(); autoRead(readAll); } else tick();
       body.onclick = () => { if (body.dataset.typing === '1') finishType(); };

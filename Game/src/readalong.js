@@ -7,7 +7,7 @@
 //    Every tapped word is saved to My Words, which has its own listening practice.
 // Characters still never talk: this is the narrator reading what's on screen, only when the player asks for it.
 import { h } from './ui.js';
-import { lookup } from './glossary.js';
+import { lookup, splitWords } from './glossary.js';
 
 let getState = () => null;
 export function initReadAlong(stateFn) { getState = stateFn; installTaps(); }
@@ -135,6 +135,13 @@ export function wordCard(rawWord) {
   say(word, { rate: 0.75 });
 }
 
+/** Underline the words worth learning (from the glossary) inside an element's plain text, so kids know to tap them. */
+export function markWords(el, band = 2) {
+  if (!el || el.dataset.marked) return; el.dataset.marked = '1';
+  const parts = splitWords(el.textContent, band);
+  if (!parts.some((p) => typeof p !== 'string')) return;
+  el.replaceChildren(...parts.map((p) => typeof p === 'string' ? p : h('span', { class: 'gloss-soft' }, p.word)));
+}
 // ------------------------------------------------------------------------------------------- tap any word
 function wordAt(x, y) {
   let node, off;

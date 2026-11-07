@@ -1,6 +1,7 @@
 // REAL — game director: chapters, needs, time, Jax, careers, Life Level, phone, save/load.
 import { UI, h, money, clock, wait } from './ui.js';
 import * as A from './activities.js';
+import { markWords } from './readalong.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
 import { lifeLevel, LIFE_CATS, CAREERS, TIER_NAMES, careerStatus, setSkillNames, ACHIEVEMENTS, INVITE_LEVEL, INVITE_MIN_DAY } from './life.js';
 setSkillNames(SKILLS);
@@ -75,7 +76,7 @@ export class Game {
     }
     if (ll >= INVITE_LEVEL && s.day >= INVITE_MIN_DAY && s.flags.hired && !s.flags.invited && s.chapter !== 'prologue') {
       s.flags.invited = s.day; s.quest = 'invite'; this.achieve('invited');
-      this.message('The Club', `${s.name}, the Council has followed your progress. You have shown independence, responsibility, knowledge and personal achievement. The Club is prepared to reconsider your membership. Take the bus to The Club when you are ready.`);
+      this.message('The Club', `${s.name}, the Council has watched you grow. You showed independence, responsibility, knowledge and achievement. The Club wants to talk about letting you back in. Take the bus to The Club when you are ready.`);
       setTimeout(() => this.message('Jax', 'Heard The Club’s calling you back. Funny. I never left… and I’m still not sure I belong there.'), 4000);
     }
     if ((s.jobs || []).length >= 2) this.achieve('two_jobs');
@@ -254,7 +255,7 @@ export class Game {
     } else {
       const lead = CAREERS.find((c) => c.id === 'shiftlead');
       if (!s.jobs.includes('shiftlead') && careerStatus(lead, s, this.edu, this.life().level).ready) {
-        const c = await UI.say(N, `${s.name}, you’ve been reliable and your register is always right. I want to make you Shift Lead: $17 an hour, more responsibility. Interested?`, ['Yes, I’m ready.', 'Not yet.']);
+        const c = await UI.say(N, `${s.name}, you’ve been reliable and your register is always right. I want to make you Shift Lead: $17 an hour, and more to look after. Want it?`, ['Yes, I’m ready.', 'Not yet.']);
         if (c === 0) { s.jobs = s.jobs.filter((j) => j !== 'cashier').concat('shiftlead'); s.job = { id: 'shiftlead', title: 'Shift Lead', employer: 'Fresh Mart', rate: 17, hours: 4 }; s.stats.promotions = (s.stats.promotions || 0) + 1; this.achieve('promoted'); this.save(); }
         return;
       }
@@ -364,7 +365,7 @@ export class Game {
       this.spend(25, 'Penalty: Thread & Co'); s.flags.bannedClothing = s.day + 2; s.mood = Math.max(0, s.mood - 15);
       this.hooks.npcExpr('Jax', 'Surprised');
       await UI.say(J, 'Whoa. I didn’t think you’d actually do it.', null, { tone: 'jax' });
-      await UI.sheet('What happened', (close) => h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Taking something without paying cost you $25, a store ban and some of your reputation, all to avoid paying $25.'),
+      await UI.sheet('What happened', (close) => h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Taking it without paying cost you $25 anyway, plus a store ban and your good name.'),
         h('p', { class: 'tip' }, 'Mistakes don’t define you. The penalty is short, and you can rebuild trust by doing the right thing next time.'), h('button', { class: 'primary', onclick: () => close() }, 'I understand')), { icon: '⚖️', noClose: true });
     } else if (c === 1) {
       s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1; this.edu.record('think.consequence', true, { ctx: 'jax' }); this.achieve('honest'); this.befriend('Jax', 0.5);
@@ -520,7 +521,7 @@ export function openPhone(G) {
         Map: () => h('div', { class: 'act' }, h('div', { class: 'tier-h' }, 'Starting District'), h('ul', { class: 'list' }, h('li', {}, '🏠 The Starter Apartments · 🛒 Fresh Mart · 🤝 Community Center'), h('li', {}, '☕ Daily Grind · 🍔 Diner · 🧥 Thread & Co · 🏋️ Grow Gym'), h('li', {}, '🌳 Brighter Park and the 🚌 bus stop: southeast'), h('li', {}, '🛣️ The old road south · ♛ The Club on the hill')),
           ...Object.entries(G.hooks.DISTRICTS).map(([id, d]) => h('div', {}, h('div', { class: 'tier-h' }, `${d.name} ${ll.level >= d.life ? '' : '· Life Level ' + d.life}`), h('ul', { class: 'list' }, h('li', {}, d.buildings.map((x) => x.sign ? x.sign[0].replace(/\b(\w)(\w*)/g, (m, p, q) => p + q.toLowerCase()) : 'Overlook Park').join(' · '))))),
           h('p', { class: 'tip' }, 'Ride the bus from any bus stop. Districts open as your Life Level grows, never by wealth.')),
-        Messages: () => { s.messages.forEach((m) => (m.read = true)); return h('div', { class: 'msgs' }, s.messages.map((m) => h('div', { class: 'msg' }, h('b', {}, m.from), h('small', {}, `Day ${m.day}`), h('p', {}, m.text)))); },
+        Messages: () => { s.messages.forEach((m) => (m.read = true)); return h('div', { class: 'msgs' }, s.messages.map((m) => h('div', { class: 'msg' }, h('b', {}, m.from), h('small', {}, `Day ${m.day}`), (() => { const p = h('p', {}, m.text); markWords(p); return p; })()))); },
         Calendar: () => h('div', {}, h('button', { class: 'primary', onclick: () => { close(); G.planWeek(); } }, '🗓️ Plan my week'), h('div', { class: 'bill-list' }, [...Array(7)].map((_, i) => { const d = s.day + i; const ev = [];
           if (s.flags.hired) ev.push('Fresh Mart shift available (7 AM–5 PM)');
           if (s.jobs.includes('barista') && [6, 0].includes(d % 7)) ev.push('Daily Grind weekend shift');

@@ -460,3 +460,4 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .wchip b { font-size: 18px; } .wchip small { color: rgba(255, 255, 255, .7); font-size: 13px; }
 .big-say { font-size: 20px; min-height: 60px; width: 100%; margin: 6px 0 10px; }
 .wp-opt { font-size: 26px; font-weight: 700; min-height: 64px; }
+.gloss-soft { text-decoration: underline dotted rgba(233, 169, 58, .9); text-underline-offset: 3px; text-decoration-thickness: 2px; }

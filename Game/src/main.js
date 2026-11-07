@@ -346,7 +346,7 @@ async function prologue() {
   player.pos = { ...CLUB.hallStart }; player.heading = 0; player.apply();
   fcam.yaw = 0; fcam.pitch = 0.22; fcam.cur.set(0, 1e4, 0);
   mode = 'play'; UI.showHUD(true); $('#hud').classList.add('prologue');
-  await UI.caption(['THE CLUB.', 'Where wealth, influence and opportunity were simply part of everyday life.'], 2600);
+  await UI.caption(['THE CLUB.', 'Where money, power and big chances were part of every day.'], 2600);
   UI.toast('Drag the left side to move · drag the right side to look', 'info', 5000);
 }
 async function councilScene() {
@@ -361,17 +361,17 @@ async function councilScene() {
   const R = 'Council Representative';
   W.rep.play('Talk', 0.3);
   await UI.say(R, `${game.state.name}. Thank you for coming. Please, sit.`);
-  await UI.say(R, 'Membership in The Club carries a responsibility. It isn’t enough to be associated with successful people.');
-  await UI.say(R, 'A member must demonstrate independence, responsibility, knowledge and personal achievement. You have enjoyed the benefits of The Club without developing those qualities.');
+  await UI.say(R, 'Being in The Club comes with a responsibility. Knowing successful people is not enough.');
+  await UI.say(R, 'A member must show four things: independence, responsibility, knowledge and achievement. You enjoyed The Club, but you never built those things yourself.');
   shot([CLUB.ox + 3.4, CLUB.rep.y - 1.2, 1.75], [CLUB.ox, CLUB.rep.y, 1.3]);
   W.rep.expression('Focused', 6);
-  await UI.say(R, 'You’ve experienced what success looks like. But have you ever experienced what it takes?');
+  await UI.say(R, 'You have seen what success looks like. But do you know what it takes?');
   shot([CLUB.ox + 1.4, CLUB.seat.y + 1.6, 1.4], [CLUB.ox, CLUB.seat.y, 1.15]);
   player.ch.expression('Surprised', 4);
   const c = await UI.say(game.state.name, '…', ['But I belong here.', 'What did I do wrong?', 'What happens now?']);
   shot([CLUB.ox + 3.4, CLUB.rep.y - 1.2, 1.75], [CLUB.ox, CLUB.rep.y, 1.3]);
-  await UI.say(R, ['Belonging isn’t something you are handed. It is something you build.', 'Nothing wrong. Nothing at all. That is the problem. You never had to do anything.', 'Your privileged access ends tonight.'][c]);
-  await UI.say(R, 'You will have an opportunity to return, but only after you prove you can build a meaningful life on your own.');
+  await UI.say(R, ['Belonging isn’t something you are handed. It is something you build.', 'Nothing wrong. Nothing at all. That is the problem. You never had to do anything.', 'Your special pass ends tonight.'][c]);
+  await UI.say(R, 'You can come back one day. First, show that you can build a good life on your own.');
   // card revoked
   player.ch.expression('Sad', 6);
   const card = h('div', { class: 'clubcard' }, h('div', { class: 'cc-top' }, h('span', {}, '♛'), h('b', {}, 'THE CLUB')), h('div', { class: 'cc-name' }, game.state.name.toUpperCase()), h('div', { class: 'cc-num' }, 'MEMBER · 0047-REAL'), h('div', { class: 'cc-stamp' }, 'ACCESS REVOKED'));

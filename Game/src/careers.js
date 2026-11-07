@@ -185,7 +185,7 @@ export async function workShift(G, career) {
 export async function apply(G, career) {
   const W = WORK[career.id], boss = `${W.boss[0]} · ${W.boss[1]}`;
   await UI.say(boss, `Thanks for coming in. Let’s see your application for ${career.title}.`);
-  const r1 = G.state.flags.resume ? (UI.toast('Your résumé from the Community Center made the application easy.', 'good', 2600), { ok: true }) : await runTask(G, { skill: 'write.professional', q: 'Your application ends with one sentence about you. Which is best?', a: `I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, o: [`I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, 'i need money lol', 'Hire me or else.'] }, 'application', 'Application', '📝');
+  const r1 = G.state.flags.resume ? (UI.toast('Your résumé from the Community Center made it easy to apply.', 'good', 2600), { ok: true }) : await runTask(G, { skill: 'write.professional', q: 'Your application ends with one sentence about you. Which is best?', a: `I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, o: [`I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, 'i need money lol', 'Hire me or else.'] }, 'application', 'Application', '📝');
   const r2 = await runTask(G, T[W.tasks[0]], 'interview', 'Interview question', '🤝');
   await speakTask(G, { prompt: `${W.boss[0]} asks: “Why do you want to work at ${career.employer}?” Answer out loud.`, goals: ['say why the job interests you', 'mention a skill or quality you bring', 'sound positive and polite'], keywords: [['Say why it interests you', /\b(because|interest|love|enjoy|want|like|learn)\b/i], ['Mention a skill you bring', /\b(good at|skill|reliable|careful|friendly|hard[- ]?work|learn|team|honest|on time)\b/i], ['Sound positive', /\b(excited|happy|glad|thank|great|proud)\b/i]] }, `${W.boss[0]} · ${W.boss[1]}`);
   await UI.say(boss, r1.ok && r2.ok ? 'That’s exactly what I was hoping to hear. You’re hired.' : 'You worked through that carefully. That matters more than getting it instantly. You’re hired. We’ll train you.');
@@ -233,7 +233,7 @@ export async function school(G, where) {
   await UI.say(`Professor · ${c.school}`, pick(['Today we build on last time. Questions are welcome.', 'Mistakes are how we learn. Let’s begin.', 'Real professionals check their work. So will we.']));
   for (const k of shuffle(c.tasks).slice(0, 3)) await runTask(G, T[k], 'class', c.name, '🎓');
   G.advance(3); st.n++; st.last = s.day; s.stats.classes = (s.stats.classes || 0) + 1;
-  if (st.n >= c.sessions) { st.done = true; G.sfx('level'); G.achieve('graduate'); await UI.say(`Professor · ${c.school}`, `Congratulations, ${s.name}. You’ve completed ${c.name}. Your certificate opens new careers.`); }
+  if (st.n >= c.sessions) { st.done = true; G.sfx('level'); G.achieve('graduate'); await UI.say(`Professor · ${c.school}`, `Well done, ${s.name}. You’ve completed ${c.name}. Your certificate opens new jobs.`); }
   else UI.toast(`Session ${st.n} of ${c.sessions} complete.`, 'good');
   G.save();
 }

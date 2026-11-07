@@ -434,7 +434,7 @@ export function installAdventureHelpers(Game) {
       };
       btn.onclick = () => { if (doing) { doing = false; score++; clearTimeout(timer); log.textContent = `Perfect timing! ${pet.name} wags happily.`; i++; setTimeout(next, 700); } else { log.textContent = 'Wait for the behavior first, then reward. Rewarding too early is confusing.'; } };
       next();
-      return h('div', { class: 'act center' }, face, lead, btn, log, h('p', { class: 'tip' }, 'Positive reinforcement: reward what you want. Never yell or punish.'));
+      return h('div', { class: 'act center' }, face, lead, btn, log, h('p', { class: 'tip' }, 'Reward the good things your pet does. Never yell or punish.'));
     }, { icon: '🐾', noClose: true });
   };
   P.cookRound = async function (ids, who) {
@@ -521,7 +521,7 @@ export function installAdventureHelpers(Game) {
   };
   P.bizUpgrade = async function (who) {
     const s = this.state, b = s.biz; b.upgrades = b.upgrades || [];
-    const ups = [['☕ Better equipment ($400): +quality, +reputation', 'equip', 400], ['🪑 Cozy interior ($300): customers stay and return', 'interior', 300], ['📋 Bigger menu ($250): more customers', 'menu', 250], ['📍 Move to a busier location ($600 deposit)', 'location', 600]].filter(([, k]) => !b.upgrades.includes(k));
+    const ups = [['☕ Better equipment ($400): +quality, +reputation', 'equip', 400], ['🪑 Cozy seats inside ($300): customers stay longer and come back', 'interior', 300], ['📋 Bigger menu ($250): more customers', 'menu', 250], ['📍 Move to a busier location ($600 deposit)', 'location', 600]].filter(([, k]) => !b.upgrades.includes(k));
     if (!ups.length) { await UI.say(who, 'You’ve upgraded everything! Now it’s about running it well.'); return; }
     const c = await UI.sheet('Upgrade', (close) => h('div', { class: 'act' }, h('p', { class: 'lead' }, `Balance ${money(s.money)}. Each upgrade should pay for itself. Will it?`), h('div', { class: 'opts' }, ups.map(([l, k, cost]) => h('button', { class: 'opt', disabled: s.money < cost, onclick: () => close([k, cost]) }, l)))), { icon: '🏪' });
     if (!c) return;
