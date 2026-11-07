@@ -31,5 +31,5 @@ export function difficulty(Q) {
   const nums = (String(Q.q).match(/\d[\d,.]*/g) || []).map((n) => parseFloat(n.replace(/,/g, ''))).filter(Number.isFinite);
   const big = nums.length ? Math.log10(1 + Math.max(...nums.map(Math.abs))) : 0;
   const steps = (Q.items ? Q.items.length : 0) + (Q.type === 'budget' ? 3 : 0) + (Q.type === 'number' ? 1 : 0) + (Q.type === 'trace' && Q.word ? Q.word.length * 0.4 : 0);
-  return grade(t) + big * 1.5 + steps * 0.3 + hardWords(t).length * 0.8;
+  return grade(t) + big * 1.5 + steps * 0.3 + hardWords(t).length * 0.8 + (Q.dok ? (Q.dok - 1) * 3 : 0);   // depth: recall < apply < reason
 }
