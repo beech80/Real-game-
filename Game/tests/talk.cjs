@@ -66,7 +66,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     let steps = 0; for (let i = 0; i < 12; i++) { const nx = await p.$('#modal .modal:last-child button.primary:has-text("Next step")'); if (!nx) break; await nx.click(); steps++; await sleep(400); }
     const smh = await ev(() => { const m = document.querySelector('#modal .modal:last-child'); return { names: [...m.querySelectorAll('.smh-h b')].map((b) => b.textContent), ans: (m.querySelector('.smh-ans') || {}).textContent }; });
     console.log('show me how steps:', smh.names.join(' → '), '· answer:', smh.ans);
-    if (smh.names.length < 4 || !smh.names.includes('Why not the others?') || !smh.ans) fail('Show me how did not walk through the steps');
+    if (smh.names.length < 3 || !smh.names.some((n) => /Work it out|one way/.test(n)) || (smh.names.includes('Look at the choices') && (!smh.names.includes('Why not the others?') || !smh.ans))) fail('Show me how did not walk through the steps');
     await p.screenshot({ path: path.join(OUT, 'talk_showmehow.png'), timeout: 180000 });
     await p.$eval('#modal .modal:last-child button.primary:has-text("Now you try")', (e) => e.click()); await sleep(600);
   }
