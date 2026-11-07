@@ -214,7 +214,7 @@ async function creator() {
 }
 
 // ------------------------------------------------------------------------------------------ game start
-function applyA11y(st) { if (game) window.__playerName = game.state.name; window.__voiceOff = st.voices === false; window.__smartOff = st.smart === false; if (window.__voiceOff) Voice.stop(); document.body.classList.toggle('a11y-large', !!st.large); document.body.classList.toggle('a11y-contrast', !!st.contrast); document.body.classList.toggle('a11y-calm', !!st.calm); }
+function applyA11y(st) { if (game) window.__playerName = game.state.name; window.__voiceOff = st.voices === false; window.__smartOff = st.smart === false; window.__micOff = st.mic === false; if (window.__voiceOff) Voice.stop(); document.body.classList.toggle('a11y-large', !!st.large); document.body.classList.toggle('a11y-contrast', !!st.contrast); document.body.classList.toggle('a11y-calm', !!st.calm); }
 function startLoader(on, p, label) {
   const L = $('#loading'); if (!L) return;
   L.hidden = !on; if (on) progress(p, label);

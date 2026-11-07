@@ -27,7 +27,7 @@ export const Voice = {
     } catch (e) {}
   },
   stop() { try { speechSynthesis.cancel(); } catch (e) {} },
-  canListen: () => !!(window.SpeechRecognition || window.webkitSpeechRecognition) && !window.__micBroken,
+  canListen: () => !!(window.SpeechRecognition || window.webkitSpeechRecognition) && !window.__micBroken && !window.__micOff,
   /** Listen once. Shows words live through onText; resolves with everything heard (string) or null.
    *  Uses interim results because iPhones often never send a "final" result otherwise. */
   listen({ onStatus, onText } = {}) {

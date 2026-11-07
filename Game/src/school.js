@@ -25,7 +25,7 @@ export const isSchool = (s) => !!(s && s.school && s.school.on);
 export function enableSchool(G, classCode, pin) {
   const s = G.state; s.settings = s.settings || {};
   s.school = { ...(s.school || {}), on: true, cls: (classCode || (s.school && s.school.cls) || '').toUpperCase().slice(0, 20), pin: pin || (s.school && s.school.pin) || '' };
-  s.settings.smart = false; s.settings.noNeighbors = true;
+  s.settings.smart = false; s.settings.noNeighbors = true; s.settings.mic = false;
   G.hooks.applyA11y(s.settings); G.save();
 }
 export function disableSchool(G) { const s = G.state; if (s.school) s.school.on = false; G.save(); }
@@ -37,9 +37,11 @@ export function reportData(G) {
     m: Math.round((s.stats.playSecs || 0) / 60), l: s.stats.lessons || 0, w: (s.words || []).length,
     k: IDS.map((id) => Math.min(4, G.edu.state(id))).join(''), t: new Date().toISOString().slice(0, 10) };
 }
-export const reportCode = (G) => 'REAL1-' + b64(JSON.stringify(reportData(G)));
+// a checksum makes casual edits to a report code visible on the teacher's dashboard (it is not cryptographic security)
+const sum = (t) => { let h1 = 0x811c9dc5; for (const c of 'REAL·report·' + t) { h1 ^= c.charCodeAt(0); h1 = Math.imul(h1, 16777619) >>> 0; } return h1.toString(36); };
+export const reportCode = (G) => { const d = reportData(G); d.s = sum(JSON.stringify({ ...d, s: undefined })); return 'REAL1-' + b64(JSON.stringify(d)); };
 export function parseCode(code) {
-  try { const m = String(code).trim().match(/^REAL1-([A-Za-z0-9_-]+)$/); if (!m) return null; const d = JSON.parse(unb64(m[1])); return d && d.v === 1 && typeof d.k === 'string' ? d : null; } catch (e) { return null; }
+  try { const m = String(code).trim().match(/^REAL1-([A-Za-z0-9_-]+)$/); if (!m) return null; const d = JSON.parse(unb64(m[1])); if (!(d && d.v === 1 && typeof d.k === 'string')) return null; d.edited = !d.s || d.s !== sum(JSON.stringify({ ...d, s: undefined, edited: undefined })); return d; } catch (e) { return null; }
 }
 const skillStates = (d) => Object.fromEntries(IDS.map((id, i) => [id, +(d.k[i] || 0)]));
 function subjectRows(states) {
@@ -65,10 +67,10 @@ export function reportView(G) {
       h('button', { class: 'primary sm', onclick: async () => { try { await navigator.clipboard.writeText(code); UI.toast('Report code copied.', 'good'); } catch (e) { const t = box.querySelector('.codebox'); t.select(); UI.toast('Select the code and copy it.', 'info'); } } }, 'Copy code'),
       h('button', { class: 'ghost sm', onclick: () => printReport(d) }, '🖨️ Print report')),
     h('div', { class: 'tier-h' }, 'Skills and standards'),
-    h('div', { class: 'rskills' }, IDS.filter((id) => states[id] >= 1).sort((a, b) => states[b] - states[a]).map((id) => skillLine(id, states[id]))));
+    h('div', { class: 'rskills' }, IDS.filter((id) => states[id] >= 1).sort((a, b) => states[b] - states[a]).map((id) => skillLine(id, states[id], false))));
   return box;
 }
-const skillLine = (id, st) => h('div', { class: 'rskill st' + st }, h('b', {}, SKILLS[id].name), h('span', { class: 'rst' }, ST[st]), h('small', {}, `${SUBJECTS[SKILLS[id].subj].name} · grades ${GRADES[SKILLS[id].band]} · ${(STANDARDS[id] || []).join(', ')}`));
+const skillLine = (id, st, teacher = true) => h('div', { class: 'rskill st' + st }, h('b', {}, SKILLS[id].name), h('span', { class: 'rst' }, ST[st]), h('small', {}, `${SUBJECTS[SKILLS[id].subj].name}${teacher ? ' · typical grades ' + GRADES[SKILLS[id].band] : ''} · ${(STANDARDS[id] || []).join(', ')}`));   // students never see grade labels
 
 function printReport(d) {
   const states = skillStates(d);
@@ -108,11 +110,11 @@ export function teacherDashboard() {
       const subj = Object.entries(SUBJECTS);
       const table = list.length ? h('div', { class: 'tscroll' }, h('table', { class: 'rtable tdash' },
         h('tr', {}, h('th', {}, 'Student'), h('th', {}, 'Class'), h('th', {}, 'Mins'), h('th', {}, 'Lessons'), h('th', {}, 'Words'), ...subj.map(([, s]) => h('th', { title: s.name }, s.icon))),
-        all.map(({ d, st }) => h('tr', { class: 'trow', onclick: () => student(d) }, h('td', {}, h('b', {}, d.n)), h('td', {}, d.c || ''), h('td', {}, d.m), h('td', {}, d.l), h('td', {}, d.w),
+        all.map(({ d, st }) => h('tr', { class: 'trow', onclick: () => student(d) }, h('td', {}, h('b', {}, d.n), d.edited ? h('span', { class: 'warnline', title: 'This report code was changed after the game made it.' }, ' ⚠ edited') : null), h('td', {}, d.c || ''), h('td', {}, d.m), h('td', {}, d.l), h('td', {}, d.w),
           ...subjectRows(st).map((r) => h('td', { class: 'heat' + (r.proficient ? ' on' : ''), style: r.proficient ? { background: `rgba(80,190,120,${(0.35 + 0.6 * r.proficient / r.total).toFixed(2)})` } : null, title: `${r.name}: ${r.proficient} of ${r.total} proficient` }, `${r.proficient}/${r.total}`)))))) : h('p', { class: 'tip' }, 'No students yet. Each student opens 📱 Settings › For grown-ups › Progress report and copies their report code.');
       // standards: how many students are proficient in skills aligned to each standard
       const std = {}; for (const id of IDS) for (const c of STANDARDS[id] || []) { std[c] = std[c] || { ids: [], n: 0 }; std[c].ids.push(id); }
-      for (const c of Object.keys(std)) std[c].n = all.filter(({ st }) => std[c].ids.some((id) => st[id] >= 3)).length;
+      for (const c of Object.keys(std)) std[c].n = all.filter(({ st }) => std[c].ids.every((id) => st[id] >= 3)).length;   // met only when every aligned skill is proficient
       const stdRows = Object.entries(std).filter(([, v]) => v.n > 0).sort((a, b) => b[1].n - a[1].n).slice(0, 60);
       body.replaceChildren(h('div', { class: 'act' },
         h('p', { class: 'lead' }, `Class progress: ${list.length} student${list.length === 1 ? '' : 's'}`),
@@ -123,7 +125,7 @@ export function teacherDashboard() {
           list.length ? h('button', { class: 'danger sm', onclick: (e) => { if (e.currentTarget.dataset.arm) { saveClass([]); draw(); } else { e.currentTarget.dataset.arm = 1; e.currentTarget.textContent = 'Tap again to clear'; } } }, 'Clear class') : null),
         table,
         list.length ? h('div', { class: 'tier-h' }, 'Standards: students proficient') : null,
-        list.length ? h('div', { class: 'tscroll' }, h('table', { class: 'rtable' }, h('tr', {}, h('th', {}, 'Standard'), h('th', {}, 'Skills'), h('th', {}, 'Students')),
+        list.length ? h('div', { class: 'tscroll' }, h('table', { class: 'rtable' }, h('tr', {}, h('th', {}, 'Standard'), h('th', {}, 'Skills'), h('th', {}, 'Students proficient in all its skills')),
           stdRows.map(([c, v]) => h('tr', {}, h('td', {}, c), h('td', {}, v.ids.map((id) => SKILLS[id].name).join(', ')), h('td', {}, `${v.n}/${list.length}`))))) : null,
         h('details', { class: 'tip' }, h('summary', {}, 'About the standards'), h('ul', { class: 'list' }, Object.values(FRAMEWORKS).map((f) => h('li', {}, f))), h('p', {}, 'Each skill is aligned to the standard(s) it practises. This is a draft alignment for educator review.')),
         h('div', { class: 'tier-h' }, 'School mode'),
@@ -151,7 +153,7 @@ export function schoolSettings(G, reopen) {
   const pin = h('input', { class: 'writebox', maxlength: 6, inputmode: 'numeric', placeholder: on ? 'Teacher PIN to turn off' : 'Teacher PIN (optional, 4–6 digits)' });
   return h('div', { class: 'school-set' },
     h('div', { class: 'tier-h' }, 'School'),
-    h('p', { class: 'tip' }, on ? `School mode is ON${s.school.cls ? ' · class ' + s.school.cls : ''}. AI replies and live neighbors are off.` : 'School mode turns off AI character replies and live neighbors. A teacher PIN keeps it on.'),
+    h('p', { class: 'tip' }, on ? `School mode is ON${s.school.cls ? ' · class ' + s.school.cls : ''}. AI replies, the microphone and live neighbors are off.` : 'School mode turns off AI character replies, the microphone (speech goes through the browser’s speech service) and live neighbors. A teacher PIN keeps it on.'),
     nick, cls, pin,
     h('div', { class: 'row' },
       h('button', { class: 'primary sm', onclick: () => {

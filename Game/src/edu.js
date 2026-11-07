@@ -163,7 +163,7 @@ export class Edu {
     const day = this.hooks.day ? this.hooks.day() : 1;
     const k = this.get(id);
     if (k.st === 0) k.st = 1;
-    k.n++; k.lastSeenDay = day;
+    k.n++; k.lastSeenDay = day; k.last5 = [...(k.last5 || []), correct && !hinted ? 1 : 0].slice(-5);
     const before = k.st;
     if (correct) {
       k.ok++;
@@ -173,7 +173,7 @@ export class Edu {
         if (!k.ctx.includes(ctx)) k.ctx.push(ctx);
         if (k.st === 5) { k.st = 4; k.reviews = (k.reviews || 0) + 1; }   // review passed → next review later
         else if (k.st <= 1 && k.streak >= 1) k.st = 2;                   // Learning → Practicing
-        else if (k.st === 2 && k.streak >= 2) k.st = 3;                  // Practicing → Proficient (independent, repeated)
+        else if (k.st === 2 && k.streak >= 3 && k.last5.reduce((a, v) => a + v, 0) >= 4) k.st = 3;   // Practicing → Proficient: 3 in a row without hints, 4 of the last 5
         else if (k.st === 3 && k.ctx.length >= 2 && day > (k.firstProfDay || day)) k.st = 4;  // Mastered: new context, later day
         if (k.st === 3 && !k.firstProfDay) k.firstProfDay = day;
         k.lastOkDay = day;
