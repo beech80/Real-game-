@@ -15,7 +15,7 @@ export function h(tag, attrs = {}, ...kids) {
 }
 export const $ = (s) => document.querySelector(s);
 const fill = (el, ...kids) => el.replaceChildren(...kids.flat().filter((k) => k !== null && k !== undefined && k !== false));
-export const money = (v) => (v < 0 ? '−$' : '$') + Math.abs(v).toFixed(2);
+export const money = (v) => (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 export function clock(t) {
   const H = Math.floor(t) % 24, M = Math.floor((t % 1) * 60);
   return `${((H + 11) % 12) + 1}:${String(M).padStart(2, '0')} ${H < 12 ? 'AM' : 'PM'}`;
