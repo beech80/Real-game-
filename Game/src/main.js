@@ -58,10 +58,14 @@ initReadAlong(() => game && game.state);
 document.getElementById('obj-say').onclick = (e) => { e.stopPropagation(); readEls([document.getElementById('obj-text')]); };
 { const b = document.getElementById('btn-readtome'); const show = () => { b.querySelector('b').textContent = readToMe() ? 'On' : 'Off'; b.setAttribute('aria-pressed', readToMe()); b.classList.toggle('primary', readToMe()); b.classList.toggle('ghost', !readToMe()); };
   b.onclick = () => { setReadToMe(!readToMe()); show(); if (readToMe()) sayText('Okay! I will read everything to you. You can also tap any word to hear it.'); }; show(); }
-// press and hold any button to hear what it says (for players who can't read it yet)
-{ let t = null, held = false; document.addEventListener('pointerdown', (e) => { const b = e.target.closest && e.target.closest('button'); if (!b || b.closest('#btn-sprint, #btn-interact, .joy, #joystick, [data-noread], .decode')) return; held = false; clearTimeout(t); t = setTimeout(() => { const txt = (b.getAttribute('aria-label') || b.innerText || '').trim(); if (txt) { held = true; sayText(txt); } }, 600); }, true);
-  const cancel = () => clearTimeout(t); document.addEventListener('pointerup', cancel, true); document.addEventListener('pointercancel', cancel, true); document.addEventListener('pointermove', (e) => { if (Math.abs(e.movementX) + Math.abs(e.movementY) > 6) cancel(); }, true);
-  document.addEventListener('click', (e) => { if (held && e.target.closest && e.target.closest('button')) { held = false; e.stopPropagation(); e.preventDefault(); } }, true); }
+// press and hold any button to hear what it says (for players who can't read it yet). Hold vs tap is decided from the
+// real press and release times, so a quick tap on a slow device is never mistaken for a hold.
+{ let t = null, held = false, down = null;
+  document.addEventListener('pointerdown', (e) => { const b = e.target.closest && e.target.closest('button'); held = false; down = null; if (!b || b.closest('#btn-sprint, #btn-interact, .joy, #joystick, [data-noread], .decode')) return; down = { b, ts: e.timeStamp, x: e.clientX, y: e.clientY }; clearTimeout(t);
+    t = setTimeout(() => { const txt = (b.getAttribute('aria-label') || b.innerText || '').trim(); if (txt && down && down.b === b) sayText(txt); }, 600); }, true);
+  document.addEventListener('pointerup', (e) => { clearTimeout(t); held = !!down && e.timeStamp - down.ts >= 600 && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 12; down = null; }, true);
+  document.addEventListener('pointercancel', () => { clearTimeout(t); down = null; held = false; }, true);
+  document.addEventListener('click', (e) => { if (held && e.target.closest && e.target.closest('button')) { held = false; e.stopPropagation(); e.preventDefault(); } else held = false; }, true); }
 UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.ask({ prompt: q }); if (!said) return null; UI.toast(`Heard “${said}” — checking…`, 'info', 1600); const i = await Brain.pick(q, choices, said); if (i == null) UI.toast(`I heard “${said}”. Which answer did you mean? Tap it, or say it again.`, 'info', 4200); return i; } };
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;

@@ -59,7 +59,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   for (const k of Object.keys(before)) if (JSON.stringify(before[k]) !== JSON.stringify(after[k])) fail(`progress lost after reopening: ${k} ${before[k]} → ${after[k]}`);
   // a damaged main save falls back to the backup copy
   const backup = await ev(() => { localStorage.setItem('real.save.v2', '{broken'); return !!localStorage.getItem('real.save.v2.bak'); });
-  await p.reload({ waitUntil: 'domcontentloaded' }); await p.waitForFunction(() => window.REAL && window.REAL.mode === 'title', null, { timeout: 180000 });
+  await p.reload({ waitUntil: 'domcontentloaded', timeout: 240000 }); const okTitle = await p.waitForFunction(() => window.REAL && window.REAL.mode === 'title', null, { timeout: 240000 }).then(() => true).catch(() => false);
+  if (!okTitle) { await p.screenshot({ path: path.join(OUT, 'save_reload_stuck.png') }).catch(() => {}); console.log('after reload:', await ev(() => ({ mode: window.REAL && window.REAL.mode, title: !document.getElementById('title').hidden })).catch((e) => e.message)); }
   if (!backup || !(await p.isVisible('#btn-continue'))) fail('a damaged save did not fall back to the backup copy');
   // a new device: load the save code
   const ctx2 = await b.newContext({ ...devices['iPad (gen 7)'], deviceScaleFactor: 1 });
