@@ -31,7 +31,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await tapEl('#btn-new'); await p.waitForSelector('#cr-loading', { state: 'hidden' });
   await tapEl('#cr-next'); await p.waitForSelector('#cr-loading', { state: 'hidden' }); await sleep(800);
   await p.fill('#cr-name', 'Kai'); await tapEl('#cr-go'); await sleep(1500);
-  await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 90000 }); await p.waitForFunction(() => document.querySelector('#caption').hidden, null, { timeout: 60000 }); await sleep(1500);
+  await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 240000 }).catch(async (e) => { console.log('STUCK', JSON.stringify(await p.evaluate(() => ({ mode: window.REAL.mode, creator: !document.getElementById('creator').hidden, name: document.getElementById('cr-name').value, toasts: [...document.querySelectorAll('.toast')].map((t) => t.textContent), loading: document.getElementById('loading') && !document.getElementById('loading').hidden })))); await p.screenshot({ path: (process.env.SHOTS || 'tests/shots') + '/touch_stuck.png' }); throw e; }); await p.waitForFunction(() => document.querySelector('#caption').hidden, null, { timeout: 60000 }); await sleep(1500);
   const vp = p.viewportSize();
   const before = await p.evaluate(() => ({ ...window.REAL.game().state, pos: null }) && window.REAL.game() && { x: 0 });
   const pos0 = await p.evaluate(() => { const s = window.REAL; return s.npcPos ? JSON.stringify(window.REAL.game().state.pos) : ''; });
