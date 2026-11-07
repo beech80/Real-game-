@@ -52,7 +52,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   console.log('after enrolling in pre-med:', JSON.stringify(pre));
   if (!pre.fafsa) fail('no FAFSA step'); if (!pre.course || !pre.course.loan) fail('pre-med enrollment with a student loan did not work');
   // 2) finish pre-med (last session) → loan repayment starts
-  await ev(() => { const st = window.REAL.state.courses.med; st.n = 6; st.last = 0;   // classes done: next is the MCAT });
+  await ev(() => { const st = window.REAL.state.courses.med; st.n = 6; st.last = 0; });   // classes done: next is the MCAT
   await college(); await finish({ pick: ['Classes', 'css:.bill:has-text("pre-med track") button'], rounds: 40 });
   const med = await S(() => ({ done: window.REAL.state.courses.med.done, loanBill: window.REAL.state.bills.some((x) => /Student loan/.test(x.name)) }));
   console.log('pre-med finished:', JSON.stringify(med));
