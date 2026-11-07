@@ -24,9 +24,9 @@ function patch(m, key, colorGLSL, extra = {}) {
   m.onBeforeCompile = (sh, r) => {
     if (prev) prev(sh, r);
     Object.assign(sh.uniforms, { lkTime: LOOK.time, lkSkyTop: LOOK.skyTop, lkSkyMid: LOOK.skyMid, lkRim: LOOK.rimCol, lkRimStr: LOOK.rimStr });
-    sh.vertexShader = 'varying vec3 lkW; varying vec3 lkN;\n' + sh.vertexShader.replace('#include <project_vertex>',
-      '#include <project_vertex>\n  lkW = (modelMatrix * vec4(transformed, 1.0)).xyz;\n  lkN = normalize(mat3(modelMatrix) * objectNormal);');
-    sh.fragmentShader = 'varying vec3 lkW; varying vec3 lkN; uniform float lkTime; uniform vec3 lkSkyTop; uniform vec3 lkSkyMid; uniform vec3 lkRim; uniform float lkRimStr;\n' + LK_NOISE + sh.fragmentShader;
+    sh.vertexShader = 'varying vec3 lkW; varying vec3 lkN; varying vec3 lkO;\n' + sh.vertexShader.replace('#include <project_vertex>',
+      '#include <project_vertex>\n  lkW = (modelMatrix * vec4(transformed, 1.0)).xyz;\n  lkN = normalize(mat3(modelMatrix) * objectNormal);\n  lkO = position;');
+    sh.fragmentShader = 'varying vec3 lkW; varying vec3 lkN; varying vec3 lkO; uniform float lkTime; uniform vec3 lkSkyTop; uniform vec3 lkSkyMid; uniform vec3 lkRim; uniform float lkRimStr;\n' + LK_NOISE + sh.fragmentShader;
     if (colorGLSL) sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n' + colorGLSL);
     if (extra.emissive) sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n' + extra.emissive);
     if (extra.out) sh.fragmentShader = sh.fragmentShader.replace('#include <opaque_fragment>', extra.out + '\n#include <opaque_fragment>');
@@ -69,7 +69,13 @@ export function lookMaterial(m) {
       float up = clamp(reflect(-normalize(cameraPosition - lkW), lkN).y * 0.5 + 0.5, 0.0, 1.0);
       vec3 sky = mix(lkSkyMid, lkSkyTop, up) * 0.95;
       float streak = smoothstep(0.45, 0.5, fract((lkW.x + lkW.z) * 0.35 + lkW.y * 0.2)) * 0.12;
-      outgoingLight = mix(outgoingLight, sky * 0.7 + streak, 0.18 + 0.4 * f); diffuseColor.a = max(diffuseColor.a, 0.35 + 0.4 * f); }` });
+      vec2 cell = floor(vec2((lkW.x + lkW.z) / 2.6, lkW.y / 3.1)); float h1 = lk_h(cell), h2 = lk_h(cell + 17.3);
+      vec2 inCell = fract(vec2((lkW.x + lkW.z) / 2.6, lkW.y / 3.1));
+      vec3 room = mix(vec3(0.05, 0.07, 0.1), vec3(0.75, 0.58, 0.36), smoothstep(0.5, 0.75, h1));          // dark office or warm lamp-lit room
+      room = mix(room, room * 0.6 + vec3(0.02), smoothstep(0.0, 0.5, 1.0 - inCell.y) * 0.5);              // floor darker than ceiling
+      if (h2 > 0.62) room = mix(room, mix(vec3(0.55, 0.42, 0.36), vec3(0.32, 0.44, 0.5), fract(h2 * 7.0)), step(abs(inCell.x - 0.5), 0.5 - 0.22 * fract(h2 * 3.0)) * 0.85);   // curtains
+      float diag = smoothstep(0.0, 0.08, abs(fract((lkW.x + lkW.z) * 0.18 - lkW.y * 0.12) - 0.5) - 0.32) * 0.25;
+      outgoingLight = mix(room, sky * (0.85 + diag) + streak, 0.3 + 0.5 * f); diffuseColor.a = max(diffuseColor.a, 0.82); }` });
   }
 }
 
@@ -79,12 +85,22 @@ export function lookCharacter(root) {
   root.traverse((o) => {
     if (!o.isMesh || !o.material || o.userData.lkOutline) return;
     const m = o.material, n = m.name || '';
+    if (/Eye_(Sclera|Iris|Pupil)/.test(n)) { m.roughness = 0.12; m.envMapIntensity = 1.6; }
+    if (/Eye_Highlight/.test(n)) { m.emissive = new THREE.Color(0xffffff); m.emissiveIntensity = 0.9; }
+    if (/Clothing_Gold|Gold$/.test(n)) { m.metalness = 0.75; m.roughness = 0.32; m.envMapIntensity = 1.4; }
+    if (/Clothing|Shoe/.test(n)) m.roughness = Math.max(0.62, m.roughness * 0.92);
     if (!m.userData.lkRim && m.isMeshStandardMaterial && !/Eye|Mouth|Highlight/.test(n)) {
       m.userData.lkRim = true;
-      patch(m, 'rim', null, { emissive: `{ float r = pow(1.0 - abs(dot(normalize(vViewPosition), normal)), 2.5); totalEmissiveRadiance += lkRim * r * lkRimStr * (0.6 + 0.4 * diffuseColor.r); }` });
+      const tone = /Fur_/.test(n) ? 'diffuseColor.rgb *= mix(vec3(1.06, 1.0, 0.94), vec3(0.86, 0.85, 0.9), smoothstep(0.25, 1.45, lkO.y));'   // fur: warmer below, deeper on top
+        : /Clothing|Shoe/.test(n) ? 'diffuseColor.rgb = max(diffuseColor.rgb, vec3(0.022, 0.022, 0.027)) * (0.94 + 0.12 * lk_n(lkO.xy * 9.0 + lkO.z * 5.0));' : '';   // charcoal, never flat black; soft fabric variation
+      patch(m, 'rim' + (tone ? (/Fur_/.test(n) ? 'F' : 'C') : ''), tone || null, { emissive: `{ float r = pow(1.0 - abs(dot(normalize(vViewPosition), normal)), 2.5); totalEmissiveRadiance += lkRim * r * lkRimStr * (0.6 + 0.4 * diffuseColor.r); }` });
     }
     if (o.isSkinnedMesh && /Body|Head|Jacket|Pants|Tail|Hands|Shoes/.test(o.name)) add.push(o);
   });
+  if (!root.getObjectByName('LK_contact')) {
+    const blob = new THREE.Mesh(new THREE.PlaneGeometry(0.95, 0.95), CONTACT()); blob.name = 'LK_contact';
+    blob.rotation.x = -Math.PI / 2; blob.position.y = 0.012; blob.renderOrder = 1; blob.userData.lkOutline = true; root.add(blob);
+  }
   for (const o of add) {
     const ol = new THREE.SkinnedMesh(o.geometry, OUTLINE());
     ol.bind(o.skeleton, o.bindMatrix);
@@ -92,6 +108,15 @@ export function lookCharacter(root) {
     ol.frustumCulled = false; ol.castShadow = false; ol.receiveShadow = false; ol.userData.lkOutline = true; ol.name = o.name + '_outline';
     o.parent.add(ol); ol.position.copy(o.position); ol.quaternion.copy(o.quaternion); ol.scale.copy(o.scale);
   }
+}
+let contactMat = null;
+function CONTACT() {
+  if (contactMat) return contactMat;
+  const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 2, 32, 32, 31); gr.addColorStop(0, 'rgba(0,0,0,0.55)'); gr.addColorStop(0.6, 'rgba(0,0,0,0.22)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+  contactMat = new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 });
+  return contactMat;
 }
 let outlineMat = null, lkQuality = 'medium';
 export function setLookQuality(q) { lkQuality = q; if (outlineMat) outlineMat.visible = q !== 'low'; }
