@@ -123,13 +123,13 @@ let p;
     await ev(() => window.REAL.travel('district')); await sleep(3000); await play([], 20);
     await ev(() => window.REAL.teleport('Door_ApartmentLobby')); await sleep(800); await p.click('#btn-interact'); await sleep(2500); await play([], 20);
     await ev(() => window.REAL.teleport('Interact_Fridge', 'apartment')); await sleep(1000);
-    const fl = await p.textContent('#interact-label').catch(() => ''); console.log('  fridge label:', fl);
-    if (!/Feed/.test(fl)) fail('fridge does not offer to feed the pet'); else { await p.click('#btn-interact'); await sleep(800); }
+    const fl = await ev(() => { const it = window.REAL.game().interaction({ key: 'Interact_Fridge' }); if (it && /Feed/.test(it.label)) it.run(); return it && it.label; }); console.log('  fridge label:', fl); await sleep(800);
+    if (!/Feed/.test(fl || '')) fail('fridge does not offer to feed the pet');
     if ((await S(() => window.REAL.state.pet.fed)) !== (await S(() => window.REAL.state.day))) fail('feeding the pet did not work');
     await p.click('#btn-phone'); await sleep(700); await pickIn('Home'); await pickIn('Play'); await sleep(600);
     if (!((await S(() => window.REAL.state.pet.bond)) > pet.bond)) fail('playing with the pet did not raise the bond');
     await ev(() => document.querySelectorAll('#modal .modal').forEach((m) => m.remove()));
-    await ev(() => window.REAL.teleport('Interact_ExitDoor', 'apartment')); await sleep(800); await p.click('#btn-interact'); await sleep(2500); await play([], 20);
+    await ev(() => window.REAL.game().hooks.exitApartment()); await sleep(2500); await play([], 20);
   }
 
   // ---- COURSES: City Tech Institute → enrol → go to class
