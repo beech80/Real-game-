@@ -43,7 +43,11 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await p.$$eval('.wcard-wrap button', (bs) => { const c = bs.find((x) => x.textContent === 'Close'); if (c) c.click(); });
   if (await p.isVisible('.wcard-wrap')) fail('the word card did not close');
   await p.$eval('#dialog .d-next', (e) => e.click()); await sleep(400);
-  // 2) a wrong pick → a reason, from Rosa
+  // 1b) your own replies go in the Talk log too
+  await ev(() => { window.__said2 = window.REAL.say('Rosa · Manager', 'Are you ready for your first shift?', ['Yes, I am ready.', 'Not yet.']); });
+  await p.waitForSelector('#dialog .d-choice'); await sleep(800);
+  await p.$eval('#dialog .d-choice', (e) => e.click()); await sleep(500);
+    // 2) a wrong pick → a reason, from Rosa
   await ev(() => { window.__pr = window.REAL.practice('sci.plants'); }); await sleep(900);
   for (let i = 0; i < 4 && await p.isVisible('.learn-card'); i++) { await p.$eval('.learn-card button.primary', (e) => e.click()).catch(() => {}); await sleep(500); }
   await p.waitForSelector('#modal .activity .opt', { timeout: 30000 });
@@ -79,7 +83,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   if (!lines.length) console.log('screen:', await ev(() => (document.querySelector('#modal .modal:last-child') || document.body).innerText.slice(0, 300)), errors);
   console.log('talk log lines:', lines.length, '· newest:', lines[0]);
   if (!lines.includes(line)) fail('the Talk log is missing the conversation line');
-  if (lines.length < 3) fail('the Talk log has too few lines from the story');
+  const mine = await ev(() => [...document.querySelectorAll('.talk-line.me .talk-t')].map((e) => e.textContent));
+  if (!mine.includes('Yes, I am ready.')) fail('your own reply is missing from the Talk log');
   await p.fill('.talklog input[type=search]', 'change'); await sleep(500);
   const found = await ev(() => [...document.querySelectorAll('.talk-line .talk-t')].map((e) => [e.textContent, (e.querySelector('b') || {}).textContent]));
   console.log('find “change”:', JSON.stringify(found.slice(0, 3)));
