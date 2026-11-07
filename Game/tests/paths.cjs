@@ -47,13 +47,13 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const locked = await ev(() => { const r = [...document.querySelectorAll('#modal .modal:last-child .bill')].find((x) => /Medical school/.test(x.textContent)); return r && /First finish/.test(r.textContent); });
   console.log('med school locked before pre-med:', locked);
   if (!locked) fail('medical school was not locked before pre-med');
-  await flow({ pick: ['Federal student loan', 'css:.bill:has-text("Pre-medical") button'], rounds: 30 });
+  await flow({ pick: ['Federal student loan', 'css:.bill:has-text("pre-med track") button'], rounds: 30 });
   const pre = await S(() => ({ fafsa: !!window.REAL.state.flags.fafsa, course: window.REAL.state.courses.med, money: window.REAL.state.money }));
   console.log('after enrolling in pre-med:', JSON.stringify(pre));
   if (!pre.fafsa) fail('no FAFSA step'); if (!pre.course || !pre.course.loan) fail('pre-med enrollment with a student loan did not work');
   // 2) finish pre-med (last session) → loan repayment starts
-  await ev(() => { const st = window.REAL.state.courses.med; st.n = 5; st.last = 0; });
-  await college(); await finish({ pick: ['Classes', 'css:.bill:has-text("Pre-medical") button'], rounds: 40 });
+  await ev(() => { const st = window.REAL.state.courses.med; st.n = 6; st.last = 0;   // classes done: next is the MCAT });
+  await college(); await finish({ pick: ['Classes', 'css:.bill:has-text("pre-med track") button'], rounds: 40 });
   const med = await S(() => ({ done: window.REAL.state.courses.med.done, loanBill: window.REAL.state.bills.some((x) => /Student loan/.test(x.name)) }));
   console.log('pre-med finished:', JSON.stringify(med));
   if (!med.done) fail('pre-med did not finish'); if (!med.loanBill) fail('student loan repayment did not start after finishing');
