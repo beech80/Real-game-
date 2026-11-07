@@ -30,6 +30,7 @@ export const STANDARDS = {
   'write.analytical': ['CCSS.ELA-LITERACY.W.8.2', 'CCSS.ELA-LITERACY.W.9-10.9'], 'write.research': ['CCSS.ELA-LITERACY.W.8.7', 'CCSS.ELA-LITERACY.W.9-10.7'],
   'write.bizplan': ['CCSS.ELA-LITERACY.WHST.11-12.2'], 'write.argument': ['CCSS.ELA-LITERACY.W.11-12.1'],
   // ---- cursive (many states require it; Common Core does not)
+  'write.print': ['CCSS.ELA-LITERACY.L.K.1.A', 'CCSS.ELA-LITERACY.L.1.1.A'],
   'curs.strokes': ['State cursive standards (e.g. CA EC 49866, TX TEKS 2.9(A))'], 'curs.lower': ['TX TEKS 2.9(A)', 'State cursive standards'], 'curs.upper': ['TX TEKS 3.9(A)'],
   'curs.words': ['TX TEKS 3.9(A)'], 'curs.signature': ['State cursive standards: signature'], 'curs.reading': ['State cursive standards: read cursive'],
   'curs.fluent': ['TX TEKS 4.9(A)'], 'curs.styles': ['State cursive standards: legibility'], 'curs.documents': ['State cursive standards: documents'], 'curs.varied': ['State cursive standards: historical documents'],

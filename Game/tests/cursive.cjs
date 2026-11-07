@@ -37,11 +37,12 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   res.word = await run('curs.words', 'word');
   res.letter = await run('curs.lower', 'letter');
   res.sentence = await run('curs.fluent', 'sentence');
+  res.print = await run('write.print', 'print');
   console.log(JSON.stringify(res, null, 1));
   const w = res.word, l = res.letter, s = res.sentence;
   const ok = w.cont && JSON.stringify(w.steps) === JSON.stringify([...w.word, w.word]) && w.strip[0].endsWith(':now')
     && l.cont && l.steps.length === 1 && l.strip.length === 0
-    && s.cont && JSON.stringify(s.steps) === JSON.stringify([...s.word.split(' '), s.word]) && !errors.length;
+    && res.print.cont && s.cont && JSON.stringify(s.steps) === JSON.stringify([...s.word.split(' '), s.word]) && !errors.length;
   console.log(ok ? 'CURSIVE PASSED' : 'CURSIVE FAILED', errors.slice(0, 3));
   await b.close(); srv.close(); process.exit(ok ? 0 : 1);
 })().catch((e) => { console.error('FAIL', e); process.exit(2); });

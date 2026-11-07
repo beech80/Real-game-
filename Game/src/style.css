@@ -490,3 +490,5 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .passage .doc-h { font-weight: 800; margin-bottom: 6px; color: #1c2148; }
 .passage .doc-l { margin: 0 0 8px; }
 @media (min-width: 700px) and (min-height: 700px) { .passage { font-size: 18px; max-height: 46vh; } }
+
+.activity.lv1 .lead, .activity.lv1 .opt, .activity.lv1 .bigpic, .wc-word { font-family: 'Andika', 'Barlow', sans-serif; }

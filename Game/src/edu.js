@@ -33,7 +33,7 @@ const S = [
   ['write.sentences', 'writing', 1, 'Complete sentences', 'Write sentences with a capital letter, a subject and a verb, and end punctuation.', [],
     'A sentence starts with a capital letter, says who does something and what they do, and ends with . ! or ?',
     'Try reading it aloud. If it sounds like a full thought, and starts with a capital, it is a sentence.'],
-  ['curs.strokes', 'cursive', 1, 'Cursive strokes', 'Make the basic cursive strokes and simple joins.', [],
+  ['curs.strokes', 'cursive', 1, 'Cursive strokes', 'Make the basic cursive strokes and simple joins.', ['write.print'],
     'Cursive letters are made of loops, waves and slants that flow into each other without lifting the pen.',
     'Trace slowly. Keep your finger down and let each letter lead into the next.'],
   ['math.add', 'math', 1, 'Adding', 'Add numbers within 20 and solve adding stories.', [],

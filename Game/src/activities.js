@@ -167,7 +167,8 @@ export async function interview(G) {
 
 /** Cursive tracing pad (signature, letter practice). Builds up step by step: each letter on its own first,
  *  then the whole word joined. (A sentence goes word by word, then the whole sentence.) */
-export function cursivePad(G, text, skill, prompt, done) {
+export function cursivePad(G, text, skill, prompt, done, opts = {}) {
+  const PRINT = opts.style === 'print';
   G.edu.discover(skill);
   text = String(text || '').trim() || 'a';
   const sentence = /\s/.test(text);
@@ -186,7 +187,7 @@ export function cursivePad(G, text, skill, prompt, done) {
     strip.replaceChildren(...parts.map((t, i) => h('span', { class: st.final ? 'now' : i < st.i ? 'done' : i === st.i ? 'now' : '' }, t)));
     strip.classList.toggle('sentence', sentence);
     stepLbl.textContent = st.final
-      ? `Now join them! Trace the whole ${sentence ? 'sentence' : 'word'} “${text}” in one smooth line.`
+      ? (PRINT ? `Now the whole ${sentence ? 'sentence' : 'word'}: trace “${text}”. Leave a small space between letters.` : `Now join them! Trace the whole ${sentence ? 'sentence' : 'word'} “${text}” in one smooth line.`)
       : `${sentence ? 'Word' : 'Letter'} ${st.i + 1} of ${parts.length}: trace “${st.t}”.`;
   };
   const show = () => {
@@ -203,14 +204,14 @@ export function cursivePad(G, text, skill, prompt, done) {
     const gg = guide.getContext('2d');
     const fit = t.length === 1 ? 150 : Math.min(110, 560 / Math.max(3, t.length * 0.55));
     cv.dataset.fit = String(fit);
-    const font = `${fit}px "Dancing Script", "Segoe Script", cursive`;
+    const font = PRINT ? `${fit}px "Andika", "Comic Sans MS", sans-serif` : `${fit}px "Dancing Script", "Segoe Script", cursive`;
     const drawTarget = () => { gg.clearRect(0, 0, 640, 220); gg.font = font; gg.textAlign = 'center'; gg.textBaseline = 'middle'; gg.lineWidth = 26; gg.lineJoin = 'round'; gg.strokeStyle = '#000'; gg.strokeText(t, 320, 115); gg.fillText(t, 320, 115); };
     drawTarget();
     const g = cv.getContext('2d');
     // the cursive font may still be loading: redraw the gold letters in cursive as soon as it arrives
-    if (document.fonts && document.fonts.load) document.fonts.load(`${fit}px "Dancing Script"`).then(() => { if (!cv.isConnected && !holder.isConnected) return; drawTarget(); if (!inked) drawGuide(); }).catch(() => {});
+    if (document.fonts && document.fonts.load) document.fonts.load(PRINT ? `${fit}px "Andika"` : `${fit}px "Dancing Script"`).then(() => { if (!cv.isConnected && !holder.isConnected) return; drawTarget(); if (!inked) drawGuide(); }).catch(() => {});
     let inked = false;
-    const drawGuide = () => { g.clearRect(0, 0, 640, 220); g.font = gg.font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(233,169,58,.32)'; g.fillText(t, 320, 115); g.strokeStyle = 'rgba(233,169,58,.15)'; g.lineWidth = 1; g.beginPath(); g.moveTo(40, 160); g.lineTo(600, 160); g.stroke(); };
+    const drawGuide = () => { g.clearRect(0, 0, 640, 220); if (PRINT) { g.save(); g.strokeStyle = 'rgba(120,160,255,.45)'; g.lineWidth = 2; for (const [y, dash] of [[115 - fit * 0.42, []], [115 - fit * 0.05, [10, 10]], [115 + fit * 0.3, []]]) { g.setLineDash(dash); g.beginPath(); g.moveTo(16, y); g.lineTo(624, y); g.stroke(); } g.restore(); } g.font = gg.font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(233,169,58,.32)'; g.fillText(t, 320, 115); g.strokeStyle = 'rgba(233,169,58,.15)'; g.lineWidth = 1; g.beginPath(); g.moveTo(40, 160); g.lineTo(600, 160); g.stroke(); };
     drawGuide();
     const ink = document.createElement('canvas'); ink.width = 640; ink.height = 220; const ig = ink.getContext('2d');
     let drawing = false, last = null;
@@ -235,7 +236,7 @@ export function cursivePad(G, text, skill, prompt, done) {
         // the skill is recorded once, on the whole word; single letters are warm-up steps
         if (final) G.edu.record(skill, good, { ctx: skill === 'curs.signature' ? 'application' : 'practice', hinted: hp.hinted() });
         if (good) ok();
-        else { G.sfx('bad'); hp.box.hidden = false; UI.toast(s.cover <= 0.42 ? (final ? 'Follow the gold letters more closely. Cursive letters connect.' : 'Follow the gold letter more closely.') : 'Try to stay on the letters.', 'warn'); }
+        else { G.sfx('bad'); hp.box.hidden = false; UI.toast(s.cover <= 0.42 ? (final ? (PRINT ? 'Follow the gold letters more closely. Start at the top.' : 'Follow the gold letters more closely. Cursive letters connect.') : 'Follow the gold letter more closely.') : 'Try to stay on the letters.', 'warn'); }
       } }, final ? 'Done' : 'Next ›')));
   };
   show();
