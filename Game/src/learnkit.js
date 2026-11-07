@@ -10,6 +10,7 @@ import { splitWords } from './glossary.js';
 import { difficulty } from './readlevel.js';
 import { say } from './readalong.js';
 import { WW } from './ww/index.js';
+import { likes } from './learnstyle.js';
 
 /** Who answers a wrong pick: the person you were just talking to (Rosa at work, Mr. Okafor at the center…), else the coach. */
 function coachName(G) {
@@ -98,6 +99,53 @@ function wordful(G, text, band, card) {
     card.hidden = false; card.replaceChildren(h('b', {}, `📖 ${p.word}`), ` — ${p.entry.meaning}`, fresh ? h('small', {}, ` · new word! You know ${words.length}`) : null);
   } }, p.word));
 }
+const sentences = (t) => String(t || '').split(/(?<=[.!?])\s+(?=[A-Z0-9“"$(])/).map((x) => x.trim()).filter(Boolean);
+/** “Show me how”: work a problem like this one together, one step at a time, then it's your turn.
+ *  The same routine for every subject: read it → find the clues → use the rule → work it out → check the others → answer. */
+export function showMeHow(G, id, make, { title = 'Show me how' } = {}) {
+  const sk = SKILLS[id] || { name: '', explain: '' };
+  let W = null; try { W = make(); } catch (e) {}
+  if (!W) return Promise.resolve();
+  W.type = W.type || 'choice';
+  const ans = W.type === 'number' ? fmt(W, W.a) : W.type === 'choice' ? String(W.a) : null;
+  const nums = (String(W.q).match(/\$?\d[\d,.]*%?/g) || []).slice(0, 6);
+  const steps = [];
+  steps.push(['📖', 'Read it', [h('p', { class: 'lead readable' }, W.q), visual(W.v)], `First, read the question. ${W.q}`]);
+  if (W.type === 'choice') steps.push(['🔎', 'Look at the choices', [h('div', { class: 'smh-opts' }, ...W.o.map((o) => h('span', { class: 'smh-chip' }, String(o))))], 'Next, look at every choice before you pick one.']);
+  else if (nums.length) steps.push(['🔎', 'Find the numbers', [h('div', { class: 'smh-opts' }, ...nums.map((n) => h('span', { class: 'smh-chip' }, n)))], `Next, find the numbers: ${nums.join(', ')}.`]);
+  if (sk.explain) steps.push(['🧠', 'Use the rule', [h('p', { class: 'readable' }, sk.explain)], sk.explain]);
+  const work = W.type === 'order' ? W.items.slice() : W.type === 'sort' ? W.items.map(([t, b]) => `${t} → ${b}`) : W.type === 'budget' ? W.cats.filter((c) => c.min).map((c) => `${c.name} needs $${c.min} first.`) : W.type === 'write' ? [W.model].filter(Boolean) : [];
+  if (work.length) steps.push(['✍️', W.type === 'write' ? 'Here is one way to write it' : 'Work it out', [h('ol', { class: 'smh-steps readable' }, ...work.map((t) => h('li', {}, t)))], work.join('. ')]);
+  const why = sentences(W.why);
+  why.forEach((t, i) => steps.push(['✍️', why.length > 1 ? `Work it out · step ${i + 1}` : (work.length ? 'Why it works' : 'Work it out'), [h('p', { class: 'readable' }, t)], t]));
+  if (W.type === 'choice') {
+    const others = W.o.filter((o) => String(o) !== String(W.a)).slice(0, 3);
+    if (others.length) steps.push(['🧐', 'Why not the others?', [h('ul', { class: 'smh-why readable' }, ...others.map((o) => h('li', {}, h('b', {}, `${o}: `), reasonFor(W, o, sk))))], others.map((o) => `${o}: ${reasonFor(W, o, sk)}`).join(' ')]);
+  }
+  if (ans) steps.push(['✅', 'The answer', [h('p', { class: 'smh-ans' }, ans)], `The answer is ${ans}.`]);
+  return UI.sheet(title, (close) => {
+    let i = 0; const list = h('div', { class: 'smh' }), nav = h('div', { class: 'row' });
+    const hear = likes(G, 'hear') || (G.state.settings || {}).readAloud;
+    const show = () => {
+      list.replaceChildren(...steps.slice(0, i + 1).map(([ic, name, els, said], k) => h('div', { class: 'smh-step' + (k === i ? ' now' : '') },
+        h('div', { class: 'smh-h' }, h('span', { class: 'smh-ic' }, ic), h('b', {}, name), h('button', { class: 'say-btn', 'aria-label': 'Read this step', onclick: () => speak(said) }, '🔊')), ...els.filter(Boolean))));
+      nav.replaceChildren(i < steps.length - 1 ? h('button', { class: 'primary', onclick: () => { i++; show(); } }, 'Next step ›') : h('button', { class: 'primary', onclick: () => close(true) }, 'Now you try one!'),
+        i < steps.length - 1 ? h('button', { class: 'ghost sm', onclick: () => { i = steps.length - 1; show(); } }, 'Show all steps') : null);
+      if (hear) speak(steps[i][3]);
+      const last = list.lastChild; if (last && last.scrollIntoView) setTimeout(() => last.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 30);
+    };
+    show();
+    return h('div', { class: 'act' }, h('p', { class: 'tip' }, `🧑‍🏫 Let’s do one together: ${sk.name}. Tap “Next step” when you’re ready.`), list, nav);
+  }, { icon: '🧑‍🏫' });
+}
+/** a fresh problem like Q (same skill), for “Show me how” */
+export function sibling(gen, Q) {
+  const id = Q.skill, pool = typeof gen === 'function' ? gen : GEN[id] && (() => GEN[id][Math.floor(Math.random() * GEN[id].length)]());
+  if (!pool) return null;
+  for (let k = 0; k < 10; k++) { let n; try { n = pool(); } catch (e) { continue; } if (n && (!n.skill || n.skill === id) && n.q !== Q.q) return { skill: id, ...n }; }
+  return null;
+}
+
 /** Run one activity. Resolves { ok: correct on the first try }. */
 export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩') {
   let Q;
@@ -129,7 +177,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
   G.edu.discover(id);
   if (ctx !== 'check') G.state.stats.lessons = (G.state.stats.lessons || 0) + 1;
   const settings = G.state.settings || {};
-  let tries = 0, usedExample = false; const CHECK = ctx === 'check';
+  let tries = 0, usedExample = false, stuck = () => {}; const CHECK = ctx === 'check';
   return UI.sheet(title, (close) => {
     const hp = helpFor(G, id);
     const why = h('div', { class: 'whybox', hidden: true });
@@ -140,7 +188,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       if (CHECK) { G.sfx(ok ? 'good' : 'bad'); finish(ok); return ok; }   // pre/post check: one try, no help, not counted as practice
       G.edu.record(id, ok, { ctx, hinted: hp.hinted() || tries > 1 || usedExample, err });
       if (ok) { G.sfx('good'); finish(true); return true; }
-      G.sfx('bad'); G.state.stats.mistakes = (G.state.stats.mistakes || 0) + 1; hp.show();
+      G.sfx('bad'); G.state.stats.mistakes = (G.state.stats.mistakes || 0) + 1; hp.show(); stuck();
       const pre = G.edu.struggling(id);
       if (pre) {   // step back to the skill this one builds on, right now, with one tap
         const g = GEN[pre];
@@ -226,8 +274,14 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       body = h('div', {}, pad, typeAlt);
       Q.why = Q.why || 'Cursive letters join with smooth upward swings. Neat comes before fast.';
     }
-    if (settings.readAloud || Voice.enabled() && Q.say) setTimeout(() => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q), 250);   // decoding items: only the instruction is read, never the word to decode
-    if (CHECK) { hp.box.hidden = true; hp.btn.hidden = true; }
-    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') + (CHECK ? ' check' : '') }, CHECK ? h('p', { class: 'tip' }, '📋 Check: one try, no hints. Just do your best.') : null, ...head.filter(Boolean), hp.card, hp.box, body, wwBox, hint2, why, h('div', { class: 'row' }, hp.btn), done);
+    if (settings.readAloud || likes(G, 'hear') || Voice.enabled() && Q.say) setTimeout(() => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q), 250);   // decoding items: only the instruction is read, never the word to decode
+    const howBtn = h('button', { class: 'ghost sm how', onclick: async () => { howBtn.className = 'ghost sm how'; const shown = await showMeHow(G, id, () => sibling(gen, Q)); if (shown !== undefined) usedExample = true; } }, '🧑‍🏫 Show me how');
+    if (!sibling(gen, Q)) howBtn.hidden = true;
+    stuck = () => {
+      if (likes(G, 'other') && sk.alt && tries === 1) { hp.box.hidden = false; hp.box.lastChild.replaceChildren(h('b', {}, '🔄 Another way: '), ...wordful(G, sk.alt, sk.band || 1, hp.card)); }
+      if (howBtn.hidden) return; howBtn.className = 'ghost sm how pulse'; if (likes(G, 'steps') && tries === 1) howBtn.click();
+    };
+    if (CHECK) { hp.box.hidden = true; hp.btn.hidden = true; howBtn.hidden = true; }
+    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') + (CHECK ? ' check' : '') }, CHECK ? h('p', { class: 'tip' }, '📋 Check: one try, no hints. Just do your best.') : null, ...head.filter(Boolean), hp.card, hp.box, body, wwBox, hint2, why, h('div', { class: 'row' }, hp.btn, howBtn), done);
   }, { icon, noClose: true });
 }

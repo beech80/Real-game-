@@ -59,7 +59,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     else { const os = await top.$$('.opt:not([disabled])'); for (const o of os) { const tx = (await o.textContent()).trim(); if ((tx === String(Q.a)) !== wrong) { await o.click(); break; } } }
     if (wrong) for (let k = 0; k < 3; k++) { const os = await top.$$('.opt:not([disabled])'); const c2 = await top.$('button.primary:text-is("Continue")'); if (c2 && await c2.isVisible()) break; if (os.length) await os[0].click(); else { const ok = await top.$('.key.ok'); if (ok) await ok.click(); } await sleep(300); }
   } };
-  await phoneApp('Assignment'); await p.click('button:has-text("Start")'); await answerAll(true, 30);
+  await phoneApp('Assignment');
+  await p.click('button:has-text("Start")', { timeout: 90000 }).catch(async (e) => { console.log('screen:', await ev(() => (document.querySelector('#modal .modal:last-child') || document.body).innerText.slice(0, 500))); throw e; });
+  await answerAll(true, 30);
   const pre = await ev(() => window.REAL.state.assign.pre); console.log('pre-check:', JSON.stringify(pre));
   if (!pre || pre.n !== A.q) fail(`pre-check did not record ${A.q} questions`);
   // practise each skill until practised

@@ -513,3 +513,25 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .talk-line.me { background: rgba(47,91,210,.18); margin-left: 24px; }
 .talk-who small { color: var(--muted); }
 .talk-t { font-size: 17px; line-height: 1.5; margin: 4px 0 6px; }
+/* Show me how: a worked example, one step at a time */
+.smh { display: flex; flex-direction: column; gap: 10px; margin: 8px 0 12px; }
+.smh-step { background: rgba(255,255,255,.05); border-radius: 12px; padding: 10px 12px; opacity: .75; }
+.smh-step.now { opacity: 1; background: rgba(90,63,210,.22); box-shadow: inset 4px 0 0 #8f7bff; }
+.smh-h { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.smh-ic { font-size: 20px; }
+.smh-step p, .smh-step li { font-size: 17px; line-height: 1.5; }
+.smh-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.smh-chip { background: rgba(255,255,255,.1); border-radius: 10px; padding: 5px 10px; font-size: 16px; }
+.smh-why { padding-left: 18px; margin: 4px 0; }
+.smh-ans { font-size: 22px; font-weight: 700; color: #7fe0a5; margin: 2px 0; }
+.how.pulse { animation: howpulse 1.2s ease-in-out 3; border-color: var(--gold); color: var(--gold); }
+@keyframes howpulse { 50% { transform: scale(1.06); box-shadow: 0 0 0 4px rgba(233,169,58,.3); } }
+@media (prefers-reduced-motion: reduce) { .how.pulse { animation: none; } }
+/* lessons: every way to learn it */
+.ways { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin: 10px 0; }
+.way { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); color: inherit; cursor: pointer; min-height: 64px; }
+.way span { font-size: 22px; } .way small { color: var(--muted); }
+.lc-alt { border-left: 4px solid #8f7bff; }
+.styles { margin: 8px 0 12px; } .styles .chips { gap: 6px; margin-top: 6px; }
+.chip.style { font-size: 14px; padding: 6px 10px; border: 1px solid rgba(255,255,255,.15); color: inherit; cursor: pointer; min-height: 34px; }
+.chip.style.on { background: rgba(63,191,122,.25); border-color: #3fbf7a; }

@@ -53,6 +53,20 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   if (!ww) fail('a wrong pick showed no reason');
   else { if (!/^🗨️ Rosa: /.test(ww)) fail('the reason did not come from Rosa'); if (/doesn’t fit what the question asks/.test(ww)) fail('the reason was the general one'); }
   await p.screenshot({ path: path.join(OUT, 'talk_reason.png'), timeout: 180000 });
+  // 2b) Show me how: a worked example of a problem like this one, step by step
+  const how = await p.$('#modal .modal:last-child button.how:not([hidden])');
+  if (!how) fail('no “Show me how” button on the problem');
+  else {
+    await how.click(); await sleep(900);
+    let steps = 0; for (let i = 0; i < 12; i++) { const nx = await p.$('#modal .modal:last-child button.primary:has-text("Next step")'); if (!nx) break; await nx.click(); steps++; await sleep(400); }
+    const smh = await ev(() => { const m = document.querySelector('#modal .modal:last-child'); return { names: [...m.querySelectorAll('.smh-h b')].map((b) => b.textContent), ans: (m.querySelector('.smh-ans') || {}).textContent }; });
+    console.log('show me how steps:', smh.names.join(' → '), '· answer:', smh.ans);
+    if (smh.names.length < 4 || !smh.names.includes('Why not the others?') || !smh.ans) fail('Show me how did not walk through the steps');
+    await p.screenshot({ path: path.join(OUT, 'talk_showmehow.png'), timeout: 180000 });
+    await p.$eval('#modal .modal:last-child button.primary:has-text("Now you try")', (e) => e.click()); await sleep(600);
+  }
+  await ev(() => { const o = [...document.querySelectorAll('#modal .modal:last-child .opt')].find((x) => x.textContent === String(window.__lastQ.a)); if (o) o.click(); }); await sleep(700);
+  await p.$eval('#modal .modal:last-child button.primary:text-is("Continue")', (e) => e.click()).catch(() => {}); await sleep(800);
   for (let i = 0; i < 4 && await p.isVisible('#modal .modal'); i++) { await p.$eval('#modal .modal:last-child .sh-x', (e) => e.click()).catch(() => {}); await sleep(600); }
   // 3) the Talk log keeps the line; choosing a word finds it
   await ev(() => document.getElementById('btn-phone').click()); await sleep(1500);
