@@ -103,7 +103,7 @@ let p;
   await pickIn('Look'); await play(['Pay'], 40);
   if (await vis('#modal .modal')) { await pickIn('Pay'); await play([], 30); }
   const veh = await S(() => window.REAL.state.vehicle); console.log('vehicle:', JSON.stringify(veh));
-  if (!veh) fail('could not buy a vehicle'); else if (!(await S(() => window.REAL.state.bills.some((x) => /fuel/.test(x.name))))) fail('vehicle has no running-cost bill');
+  if (!veh) fail('could not buy a vehicle'); else if (veh.type !== 'bike' && !(await S(() => window.REAL.state.bills.some((x) => /fuel/.test(x.name))))) fail('vehicle has no running-cost bill');
   await shot('1_vehicle'); await leave();
   await ev(() => { window.REAL.state.day += 11; window.REAL.state.time = 10; });
   await usePlace('midtown', 'motors'); await pickIn('Service my vehicle'); await play([], 30);
@@ -111,8 +111,9 @@ let p;
   await leave();
 
   // ---- PET: Paws & Friends → adopt → name → feed at home → play from the Home app
-  await usePlace('midtown', 'shelter'); await pickIn('Adopt'); await play(['Adopt'], 20);
-  if (await vis('#modal .modal')) { await pickIn('Puppy').catch(() => {}); await play([], 40); }
+  await usePlace('midtown', 'shelter'); await pickIn('Adopt');
+  for (let k = 0; k < 10 && await vis('#dialog'); k++) { await p.click('#dialog .d-next').catch(() => {}); await sleep(400); }
+  await pickIn('Puppy'); await play([], 40);
   if (await vis('#modal .modal')) { const top = (await p.$$('#modal .modal')).pop(); const o = await top.$('.opt'); if (o) await o.click(); await play([], 20); }
   const pet = await S(() => window.REAL.state.pet); console.log('pet:', JSON.stringify(pet));
   if (!pet) fail('could not adopt a pet');
@@ -144,7 +145,8 @@ let p;
   // ---- BUSINESS: write the plan in the Business app → register at the SBC → run it in Brighter Park → hire → plan the week
   await ev(() => { window.REAL.state.time = 9; });
   await p.click('#btn-phone'); await sleep(700); await pickIn('Business'); await sleep(500);
-  await play(['plan', 'Plan', 'Write'], 100);
+  await pickIn('plan'); await sleep(500); await play([], 10);
+  for (let k = 0; k < 6; k++) { const a = await S(() => window.__planAns); if (!a || !(await vis('.sheet .opt'))) break; await ev((t) => { const b = [...document.querySelectorAll('#modal .modal:last-child .opt')].find((x) => x.textContent === t); if (b) b.click(); }, a); await sleep(700); }
   await ev(() => document.querySelectorAll('#modal .modal').forEach((m) => m.remove()));
   console.log('  plan written:', await S(() => !!window.REAL.state.achievements.plan));
   if (!(await S(() => window.REAL.state.achievements.plan))) fail('could not write a business plan in the Business app');

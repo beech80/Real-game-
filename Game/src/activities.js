@@ -587,14 +587,15 @@ export async function businessPlan(G) {
   await teach(G, 'fin.business', 'Business app');
   const steps = [
     { q: 'Coffee cart idea. Who are your customers? Pick the best research step.', a: 'Count how many people pass the park each morning', o: ['Count how many people pass the park each morning', 'Guess', 'Ask Jax'], skill: 'think.evaluate' },
-    { q: 'Startup costs: cart $300 + supplies $120 + permit $50. Total?', a: '$470', o: ['$470', '$420', '$370', '$520'], skill: 'math.add' },
-    { q: 'Each cup sells for $3.00 and costs $1.10 to make. Profit per cup?', a: '$1.90', o: ['$1.90', '$4.10', '$1.10', '$2.10'], skill: 'math.decimals' },
-    { q: 'At $1.90 profit per cup, about how many cups to earn back $470?', a: 'About 250 cups', o: ['About 250 cups', 'About 25 cups', 'About 2,500 cups'], skill: 'math.multiply' },
+    { q: 'Startup costs: cart $1,400 + espresso machine $600 + license $50. Total?', a: '$2,050', o: ['$2,050', '$2,000', '$1,450', '$2,500'], skill: 'math.add' },
+    { q: 'Each cup sells for $3.50 and costs $1.20 to make. Profit per cup?', a: '$2.30', o: ['$2.30', '$4.70', '$1.20', '$3.50'], skill: 'math.decimals' },
+    { q: 'At $2.30 profit per cup, about how many cups to earn back $2,050?', a: 'About 900 cups', o: ['About 900 cups', 'About 90 cups', 'About 9,000 cups'], skill: 'math.multiply' },
   ];
   return UI.sheet('Business plan: coffee cart', (close, body) => {
     let i = 0;
     const render = () => {
       const st = steps[i];
+      forBot('__planAns', st.a);
       body.replaceChildren(h('div', { class: 'act' }, h('p', { class: 'tip' }, `Step ${i + 1} of ${steps.length}`), h('p', { class: 'lead' }, st.q),
         h('div', { class: 'opts' }, shuffle(st.o).map((o) => h('button', { class: 'opt', onclick: (e) => {
           const ok = o === st.a; G.edu.record(st.skill, ok, { ctx: 'business' });
