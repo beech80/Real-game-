@@ -482,3 +482,4 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .bigpic { font-size: clamp(44px, 13vw, 72px); text-align: center; line-height: 1.15; margin: 6px 0 4px; letter-spacing: .04em; word-break: break-word; }
 .clockwrap { display: flex; justify-content: center; margin: 6px 0; }
 .opts.decode .opt { font-size: 24px; font-weight: 700; }
+.rubric .starter { color: #ffd27a; display: block; margin-left: 18px; font-size: 13px; }

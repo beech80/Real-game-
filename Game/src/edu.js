@@ -104,7 +104,7 @@ const S = [
   ['math.fractions', 'math', 3, 'Fractions', 'Use fractions in recipes and measurements.', ['math.multiply'],
     'Half a recipe means every amount ÷ 2. Double means × 2.',
     'Draw it: a cup split into 2 parts, then 4 parts. Which piece is bigger?'],
-  ['math.percent', 'math', 3, 'Percentages', 'Work out discounts and taxes.', ['math.decimals', 'math.multiply'],
+  ['math.percent', 'math', 4, 'Percentages', 'Work out discounts and taxes.', ['math.decimals', 'math.multiply'],
     '10% of a price = move the decimal one place left. 20% = double that.',
     'Percent means “out of 100”. 25% is a quarter. 50% is half.'],
   ['fin.bills', 'finance', 3, 'Bills & due dates', 'Pay bills on time and avoid fees.', ['fin.budget'],

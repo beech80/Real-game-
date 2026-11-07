@@ -139,15 +139,17 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       render(); body = h('div', {}, h('p', { class: 'tip' }, 'Tap an item, then tap where it belongs.'), wrap);
     } else if (Q.type === 'write') {
       const ta = h('textarea', { class: 'writebox', rows: 4, placeholder: 'Write here…', maxlength: 600 });
-      const fb = h('ul', { class: 'rubric' });
+      const fb = h('ul', { class: 'rubric' }); let revised = false;
       body = h('div', {}, ta, fb, h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => { ta.value = Q.model; } }, 'See an example'),
         h('button', { class: 'primary sm', onclick: () => {
           if (!done.hidden) return;
           const t = ta.value.trim(), words = t.split(/\s+/).filter(Boolean).length;
           const checks = [['Long enough (' + Q.minWords + '+ words)', words >= Q.minWords], ['Starts with a capital letter', /^[A-Z“"]/.test(t)], ['Ends with punctuation', /[.!?]["”]?$/.test(t)],
             ...Q.rubric.map(([label, test]) => [label, typeof test === 'function' ? test(t) : test.test(t)])];
-          fb.replaceChildren(...checks.map(([l, ok]) => h('li', { class: ok ? 'ok' : 'todo' }, (ok ? '✓ ' : '○ ') + l)));
+          const starters = Object.fromEntries((Q.rubric || []).filter((r) => r[2]).map((r) => [r[0], r[2]]));
+          fb.replaceChildren(...checks.map(([l, ok]) => h('li', { class: ok ? 'ok' : 'todo' }, (ok ? '✓ ' : '○ ') + l, !ok && starters[l] ? h('small', { class: 'starter' }, ` Try: “${starters[l]}”`) : null)));
           const passed = checks.filter((c) => c[1]).length, ok = passed === checks.length;
+          if (!ok && !revised) { revised = true; UI.toast('Good start! Add what’s missing (○), then check again.', 'info', 3200); return; }   // one revision round before it counts
           if (ok || passed >= checks.length - 1) { tries++; G.edu.record(id, ok, { ctx, hinted: hp.hinted() || ta.value === Q.model }); G.sfx('good'); finish(true); why.firstChild.textContent = ok ? '✓ ' : '✓ Almost there. '; why.lastChild && why.append(h('div', { class: 'tip' }, 'Example: ' + Q.model)); }
           else { tries++; G.edu.record(id, false, { ctx, err: 'rubric' }); G.sfx('bad'); hp.show(); }
         } }, 'Check my writing')));

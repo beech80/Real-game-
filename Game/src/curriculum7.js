@@ -9,6 +9,32 @@ const num = (skill, q, a, why, extra = {}) => ({ type: 'number', skill, q, a, wh
 /** a bank of [q, a, [wrong…], why, {wrong: feedback}] rows */
 const bank = (skill, rows) => () => { const [q, a, w, why, ww] = pick(rows); return ch(skill, q, a, w, why, ww ? { whyWrong: ww } : {}); };
 
+const sentences = (t) => t.split(/[.!?]+/).map((x) => x.trim()).filter((x) => x.split(/\s+/).length >= 3);
+const copied = (t, src) => { const w = src.toLowerCase().replace(/[^a-z ]/g, '').split(/\s+/); const tw = t.toLowerCase().replace(/[^a-z ]/g, ''); for (let i = 0; i + 6 <= w.length; i++) if (tw.includes(w.slice(i, i + 6).join(' '))) return true; return false; };
+const PASSAGE = 'Brighter Park used to close at sunset. Families said there was nowhere to play after work. The city added bright lights along the paths and by the playground. Now the park stays open until 9 PM. More people walk there in the evening, and the snack cart sells twice as much. Some neighbors worry about noise, so the playground closes at 8.';
+const WRITE_MORE = {
+  'read.summarize': [() => ({ type: 'write', skill: 'read.summarize', v: { title: 'NEWS: LATER PARK HOURS', lines: PASSAGE.split(/(?<=\.) /) }, q: 'Write a 1–2 sentence summary of this article in your own words.',
+    rubric: [['Says the main change (lights, later hours)', /\b(light|lights|later|9|open)\b/i, 'The park now stays open later because…'], ['Says why or what happened because of it', /\b(because|so|families|more people|busier)\b/i, '…so more people…'],
+      ['In your own words (no long copied phrases)', (t) => !copied(t, PASSAGE)], ['Short: 40 words or fewer', (t) => t.split(/\s+/).length <= 40]], minWords: 12,
+    model: 'Brighter Park added lights and now stays open until 9 PM, so more families can visit after work.' })],
+  'write.persuasive': [() => ({ type: 'write', skill: 'write.persuasive', q: 'Should Brighter Park add a fenced dog area? Write your opinion and give two reasons.',
+    rubric: [['States an opinion (should / I think / I believe)', /\b(should|I think|I believe|in my opinion)\b/i, 'I think the park should…'], ['Two reasons', (t) => (t.match(/\b(because|also|another reason|first|second|since)\b/gi) || []).length >= 2, 'Another reason is…'],
+      ['A linking phrase (for example, in addition…)', /\b(for example|in addition|also|for instance)\b/i, 'For example,…'], ['A closing sentence', /\b(so|that is why|in conclusion|this is why)\b/i, 'That is why…']], minWords: 30,
+    model: 'I think Brighter Park should add a fenced dog area. First, dogs could run safely without bothering kids on the playground. Another reason is that owners would meet each other, for example on weekend mornings. That is why a dog area would help everyone.' })],
+  'write.report': [() => { const d = [['Mon', 30], ['Tue', 28], ['Wed', 31], ['Sat', 58], ['Sun', 61]];
+    return { type: 'write', skill: 'write.report', v: { title: 'COFFEE CUPS SOLD', lines: d.map(([a, b]) => `${a}: ${b} cups`) }, q: 'Write a short report: one finding, the evidence from the table, and a recommendation.',
+      rubric: [['A finding with a comparison (more, fewer, twice…)', /\b(more|fewer|less|twice|double|higher|lower|increase)\b/i, 'Weekends sold more cups than…'], ['Uses a number from the table', /\b(28|30|31|58|61)\b/, 'On Saturday we sold 58 cups…'], ['A recommendation (should / recommend / next)', /\b(should|recommend|next|plan to)\b/i, 'We should…']], minWords: 20,
+      model: 'Weekends sold about twice as many cups as weekdays: 58 on Saturday and 61 on Sunday, but only about 30 on weekdays. We should buy more supplies and add a helper on weekends.' }; }],
+  'write.argument': [() => ({ type: 'write', skill: 'write.argument', v: { title: 'TWO SOURCES', lines: ['Source A (sleep researchers): Teens who start school after 8:30 AM sleep about 30 minutes more.', 'Source B (bus company): Later start times cost more for buses and push sports later.'] },
+    q: 'Should school start later? Make a claim, cite a source, answer the other side (counterclaim), and explain why your claim still holds.',
+    rubric: [['A clear claim', /\b(should|should not|shouldn’t|I believe|I argue)\b/i, 'School should…'], ['Cites a source', /\b(according to|source a|source b|researchers|the bus company)\b/i, 'According to Source A,…'],
+      ['Names the other side (counterclaim)', /\b(some people|others|however|although|on the other hand|opponents)\b/i, 'Some people say…'], ['Answers it (rebuttal)', /\b(but|still|even so|yet|nevertheless)\b/i, 'But…']], minWords: 40,
+    model: 'School should start after 8:30 AM. According to Source A, teens sleep about 30 more minutes with a later start, and rested students learn better. Some people say later starts cost more for buses and push sports later. But better sleep helps health and grades, and schedules can be adjusted, so the benefit is worth the cost.' })],
+  'write.paragraph': [() => ({ type: 'write', skill: 'write.paragraph', q: 'Write a short story about the day the register at Fresh Mart broke. Use time-order words and a line someone says.',
+    rubric: [['A character’s name', /\b[A-Z][a-z]+\b.*\b[A-Z][a-z]+\b/, 'Rosa…'], ['Time-order words (first, then, after, finally)', (t) => (t.match(/\b(first|then|next|after|later|finally|suddenly)\b/gi) || []).length >= 2, 'First,… Then,…'],
+      ['Someone speaks (use “quotation marks”)', /[“"][^”"]{3,}[”"]/, 'Rosa said, “…”'], ['A feeling word', /\b(happy|worried|nervous|calm|surprised|proud|scared|relieved|upset|glad)\b/i, 'I felt…']], minWords: 35,
+    model: 'First, the register screen went black just as a long line formed. Rosa looked worried. Then she said, “Let’s add the prices by hand.” I wrote each price on paper and added them carefully. Finally, the register turned back on, and I felt proud that no customer had to wait long.' })],
+};
 export const MORE_TOPICS = {
   // ------------------------------------------------------------------ high school money
   'fin.taxes': [
@@ -108,3 +134,4 @@ export const MORE_TOPICS = {
   ])],
   'math.precalc': [() => { const m = pick([2, 3, 4]), b = pick([1, 5, 10]); return num('math.precalc', `A line goes through (0, ${b}) and (2, ${b + 2 * m}). What is its slope?`, m, `Slope = change in y ÷ change in x = (${b + 2 * m} − ${b}) ÷ (2 − 0) = ${2 * m} ÷ 2 = ${m}.`); }],
 };
+for (const [k, g] of Object.entries(WRITE_MORE)) MORE_TOPICS[k] = (MORE_TOPICS[k] || []).concat(g);
