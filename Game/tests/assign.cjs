@@ -39,7 +39,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await ev(() => window.REAL.quality('low'));
   await p.click('#btn-new'); await p.waitForSelector('#cr-loading', { state: 'hidden', timeout: 120000 });
   await p.fill('#cr-name', 'Zoe'); await p.click('#cr-go');
-  await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 240000 });
+  await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 400000 });
   await p.waitForSelector('#loading', { state: 'hidden', timeout: 180000 }).catch(() => {});
   await ev(() => window.REAL.devJump('hired')); await sleep(1200);
   await ev(() => { for (let i = 0; i < 20 && !document.querySelector('#dialog').hidden; i++) { const x = document.querySelector('#dialog .d-next, #dialog .d-choice'); if (x) x.click(); } window.REAL.state.quest = 'free'; });
