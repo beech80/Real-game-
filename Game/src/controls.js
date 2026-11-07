@@ -1,3 +1,4 @@
+import { screenOpen } from './keyboard.js';
 // REAL — input (touch joystick + camera drag, keyboard/mouse), third-person camera, player controller.
 import * as THREE from 'three';
 import { P2W } from './world.js';
@@ -20,7 +21,8 @@ export class Input {
     addEventListener('pointerup', (e) => this._up(e));
     addEventListener('pointercancel', (e) => this._up(e));
     el.addEventListener('wheel', (e) => { this.zoom += Math.sign(e.deltaY); e.preventDefault(); }, { passive: false });
-    addEventListener('keydown', (e) => { if (e.target.tagName === 'INPUT') return; this.keys.add(e.code); if (e.code === 'KeyE' || e.code === 'Space') this.onInteract && this.onInteract(); if (e.code === 'KeyP' || e.code === 'Tab') { e.preventDefault(); this.onPhone && this.onPhone(); } });
+    addEventListener('keydown', (e) => { if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return; if (screenOpen()) { this.keys.clear(); return; }   // menus get the keyboard first
+      this.keys.add(e.code); if (e.code === 'KeyE' || e.code === 'Space') { e.preventDefault(); this.onInteract && this.onInteract(); } if (e.code === 'KeyP' || e.code === 'Tab') { e.preventDefault(); this.onPhone && this.onPhone(); } });
     addEventListener('keyup', (e) => this.keys.delete(e.code));
     addEventListener('blur', () => this.keys.clear());
   }

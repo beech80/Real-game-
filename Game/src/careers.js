@@ -5,6 +5,7 @@ import { paystub, PRACTICE, teach } from './activities.js';
 import { runActivity } from './learnkit.js';
 import { speakTask, SPEAK_TASKS } from './voice.js';
 import { GEN, K2_REPLACE } from './curriculum.js';
+import { SKILLS } from './edu.js';
 
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -185,11 +186,20 @@ export async function workShift(G, career) {
 /** Applying for a job in a new district: requirements check, a professional application, a short interview. */
 export async function apply(G, career) {
   const W = WORK[career.id], boss = `${W.boss[0]} · ${W.boss[1]}`;
+  if (G.state.flags['reapply_' + career.id] > G.state.day) { await UI.say(boss, `Thanks for your interest. You can apply again on Day ${G.state.flags['reapply_' + career.id]}.`); return; }
   await UI.say(boss, `Thanks for coming in. Let’s see your application for ${career.title}.`);
   const r1 = G.state.flags.resume ? (UI.toast('Your résumé from the Community Center made it easy to apply.', 'good', 2600), { ok: true }) : await runTask(G, { skill: 'write.professional', q: 'Your application ends with one sentence about you. Which is best?', a: `I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, o: [`I am reliable, I keep learning, and I would be proud to work at ${career.employer}.`, 'i need money lol', 'Hire me or else.'] }, 'application', 'Application', '📝');
   const r2 = await runTask(G, T[W.tasks[0]], 'interview', 'Interview question', '🤝');
   await speakTask(G, { prompt: `${W.boss[0]} asks: “Why do you want to work at ${career.employer}?” Answer out loud.`, goals: ['say why the job interests you', 'mention a skill or quality you bring', 'sound positive and polite'], keywords: [['Say why it interests you', /\b(because|interest|love|enjoy|want|like|learn)\b/i], ['Mention a skill you bring', /\b(good at|skill|reliable|careful|friendly|hard[- ]?work|learn|team|honest|on time)\b/i], ['Sound positive', /\b(excited|happy|glad|thank|great|proud)\b/i]] }, `${W.boss[0]} · ${W.boss[1]}`);
-  await UI.say(boss, r1.ok && r2.ok ? 'That’s exactly what I was hoping to hear. You’re hired.' : 'You worked through that carefully. That matters more than getting it instantly. You’re hired. We’ll train you.');
+  const s = G.state, strong = r1.ok && r2.ok, okay = r1.ok || r2.ok;
+  if (!(career.tier >= 2 ? strong : okay)) {   // not hired this time: real feedback and a date to try again
+    s.flags['reapply_' + career.id] = s.day + 2;
+    const fb = [!r1.ok ? 'make your application statement specific: what you do well, and proof of it' : null, !r2.ok ? `practise the skills this job uses (${(SKILLS[T[W.tasks[0]]().skill] || { name: 'the job skills' }).name}) in your Learn app` : null].filter(Boolean);
+    await UI.say(boss, `Thank you for applying. We’ve chosen another candidate this time. To be stronger next time: ${fb.join(', and ')}. You’re welcome to apply again on Day ${s.day + 2}.`);
+    UI.toast('Not hired this time. Most people apply to several jobs before getting one. Use the feedback.', 'info', 4200);
+    G.save(); return;
+  }
+  await UI.say(boss, strong ? 'That’s exactly what I was hoping to hear. You’re hired.' : 'You worked through that carefully. That matters more than getting it instantly. You’re hired. We’ll train you.');
   G.state.jobs.push(career.id); G.sfx('level'); G.achieve('hired');
   if (career.tier >= 2) G.achieve('career');
   if (career.tier >= 3) G.achieve('professional');
@@ -202,39 +212,77 @@ export const COURSES = {
   code: { name: 'Intro to Programming', school: 'City Tech Institute', place: ['opportunity', 'bootcamp'], cost: 200, sessions: 4, tasks: ['solve', 'loop', 'bug', 'algebraQ'] },
   trades: { name: 'Electrical Safety & Basics', school: 'City Tech Institute', place: ['opportunity', 'bootcamp'], cost: 150, sessions: 3, tasks: ['ohm', 'breaker', 'wire'] },
   acct: { name: 'Accounting Basics', school: 'City Tech Institute', place: ['opportunity', 'bootcamp'], cost: 150, sessions: 3, tasks: ['tax', 'ledger', 'growth'] },
-  eng: { name: 'Engineering Design', school: 'Heights College', place: ['heights', 'college'], cost: 500, sessions: 5, tasks: ['load', 'tests', 'efficiency', 'solve'] },
-  med: { name: 'Pre-Medicine', school: 'Heights College', place: ['heights', 'college'], cost: 600, sessions: 6, tasks: ['vitals', 'weightDose', 'nextQ', 'allergy', 'dose'] },
-  arch: { name: 'Architecture Studio', school: 'Heights College', place: ['heights', 'college'], cost: 400, sessions: 4, tasks: ['room', 'scale', 'client'] },
-  law: { name: 'Law Foundations', school: 'Heights College', place: ['heights', 'college'], cost: 500, sessions: 5, tasks: ['clause', 'evidence', 'brief'] },
+  eng: { name: 'Engineering degree (B.S.)', school: 'Heights College', place: ['heights', 'college'], cost: 2400, sessions: 6, tasks: ['load', 'tests', 'efficiency', 'solve'], exam: 'Fundamentals of Engineering exam', real: 'In real life: a 4-year engineering degree, then the FE exam. Many engineers later earn a PE license after 4 years of work.' },
+  med: { name: 'Pre-medical studies (B.S.)', school: 'Heights College', place: ['heights', 'college'], cost: 2400, sessions: 6, tasks: ['vitals', 'weightDose', 'nextQ', 'allergy', 'dose'], real: 'In real life: a 4-year college degree with science classes, then the MCAT exam to apply to medical school.' },
+  medschool: { name: 'Medical school (M.D.)', school: 'Heights College of Medicine', place: ['heights', 'college'], cost: 6000, sessions: 8, after: 'med', tasks: ['vitals', 'weightDose', 'nextQ', 'allergy', 'dose'], exam: 'medical licensing exam', real: 'In real life: 4 years of medical school, licensing exams, then 3–7 years of residency training before practising on your own.' },
+  arch: { name: 'Architecture degree (B.Arch.)', school: 'Heights College', place: ['heights', 'college'], cost: 2000, sessions: 5, tasks: ['room', 'scale', 'client'], exam: 'architecture registration exam', real: 'In real life: a 5-year architecture degree, about 3 years of supervised work, then the registration exams.' },
+  law: { name: 'Pre-law studies (B.A.)', school: 'Heights College', place: ['heights', 'college'], cost: 2000, sessions: 5, tasks: ['clause', 'evidence', 'brief'], real: 'In real life: a 4-year college degree in any subject, then the LSAT exam to apply to law school.' },
+  lawschool: { name: 'Law school (J.D.)', school: 'Heights College of Law', place: ['heights', 'college'], cost: 5000, sessions: 7, after: 'law', tasks: ['clause', 'evidence', 'brief'], exam: 'bar exam', real: 'In real life: 3 years of law school, then the state bar exam before you can practise law.' },
 };
+/** student loan repayment starts after you finish: 20 weekly payments */
+function finishLoan(G, st) {
+  if (!st.loan) return; const s = G.state, pay = Math.round(st.loan / 20 * 100) / 100;
+  s.bills.push({ id: 'studentloan' + s.day, name: 'Student loan payment', amount: pay, due: s.day + 7, paid: false, recur: pay, period: 7, left: 19 });
+  UI.toast(`Student loan repayment starts next week: ${money(pay)} a week for 20 weeks.`, 'info', 4200);
+}
 export async function school(G, where) {
   const s = G.state; s.courses = s.courses || {};
   const list = Object.entries(COURSES).filter(([, c]) => c.place[1] === where);
   const pickId = await UI.sheet(list[0][1].school, (close) => h('div', { class: 'act' },
     h('p', { class: 'lead' }, 'Study opens professional careers. One class session per course per day. No grades, no timers.'),
-    h('div', { class: 'bill-list' }, list.map(([id, c]) => { const st = s.courses[id]; return h('div', { class: 'bill' + (st && st.done ? ' paid' : '') },
-      h('div', {}, h('b', {}, c.name), h('small', {}, st ? (st.done ? 'Completed ✓ Certificate earned' : `Session ${st.n + 1} of ${c.sessions}`) : `${money(c.cost)} tuition · ${c.sessions} sessions`)),
-      st && st.done ? h('span', { class: 'ok' }, '✓') : h('button', { class: 'primary sm', onclick: () => close(id) }, st ? 'Attend' : 'Enroll')); })),
-    h('p', { class: 'tip' }, 'Tuition is an investment: you pay now so you can earn more later. Financial aid lowers the cost if you’ve been building your education.')), { icon: '🎓' });
+    h('div', { class: 'bill-list' }, list.map(([id, c]) => { const st = s.courses[id], locked = c.after && !(s.courses[c.after] && s.courses[c.after].done); return h('div', { class: 'bill' + (st && st.done ? ' paid' : '') },
+      h('div', {}, h('b', {}, c.name), h('small', {}, st ? (st.done ? 'Completed ✓ Certificate earned' : st.n >= c.sessions && c.exam ? `Classes done · pass the ${c.exam}` : `Session ${st.n + 1} of ${c.sessions}`) : locked ? `First finish ${COURSES[c.after].name}` : `${money(c.cost)} tuition · ${c.sessions} sessions${c.exam ? ' · ' + c.exam : ''}`), c.real ? h('small', { class: 'realpath' }, '🌎 ' + c.real) : null),
+      st && st.done ? h('span', { class: 'ok' }, '✓') : locked ? h('span', { class: 'tip' }, '🔒') : h('button', { class: 'primary sm', onclick: () => close(id) }, st ? (st.n >= c.sessions && c.exam ? 'Take exam' : 'Attend') : 'Enroll')); })),
+    h('p', { class: 'tip' }, 'Tuition is an investment: you pay now so you can earn more later. Fill out the FAFSA for grants (free money based on need), scholarships (for your learning record) and student loans (paid back with interest).')), { icon: '🎓' });
   if (!pickId) return;
   const c = COURSES[pickId];
   if (!s.courses[pickId]) {
-    const edu = G.life().scores.education, aid = edu >= 4 ? 0.5 : edu >= 2 ? 0.25 : 0, cost = Math.round(c.cost * (1 - aid));
+    if (c.after && !(s.courses[c.after] && s.courses[c.after].done)) { UI.toast(`First finish ${COURSES[c.after].name}.`, 'info', 3200); return; }
+    if (!s.flags.fafsa) {   // the free federal aid form, once
+      await UI.say('Financial aid office', 'Before you pay, fill out the FAFSA: the free federal form for college aid. It looks at what you earn to decide grants, which you never pay back, and offers student loans, which you do.');
+      await runTask(G, { skill: 'fin.planning', q: 'Which kind of college aid do you have to pay back?', a: 'A student loan', o: ['A student loan', 'A Pell grant', 'A scholarship'], why: 'Grants and scholarships are gifts. Loans must be paid back, with interest.' }, 'college', 'FAFSA', '📝');
+      s.flags.fafsa = s.day;
+    }
+    const weekly = s.bank.filter((t) => t.amt > 0 && t.day > s.day - 7).reduce((a, t) => a + t.amt, 0);
+    const need = weekly < 500 ? 0.4 : weekly < 900 ? 0.2 : 0;                    // need-based grant (like a Pell grant)
+    const edu = G.life().scores.education, merit = edu >= 6 ? 0.25 : edu >= 3 ? 0.1 : 0;   // merit scholarship from the learning record
+    const aid = Math.min(0.65, need + merit), cost = Math.round(c.cost * (1 - aid));
+    const loanAmt = Math.max(0, cost - Math.max(0, Math.floor(s.money - 200)));
     const ok = await UI.sheet('Enrollment', (close) => h('div', { class: 'act' },
-      h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'TUITION'), h('b', {}, money(c.cost))), h('div', {}, h('small', {}, 'FINANCIAL AID'), h('b', { class: 'pos' }, aid ? `−${aid * 100}%` : '—')), h('div', {}, h('small', {}, 'YOU PAY'), h('b', {}, money(cost)))),
-      h('p', {}, aid ? 'Your learning record earned you financial aid.' : 'Keep practising in the Learn app: a stronger education record unlocks financial aid next time.'),
-      h('button', { class: 'primary', onclick: () => close(true) }, `Pay ${money(cost)} and enroll`), h('button', { class: 'ghost', onclick: () => close(false) }, 'Not yet')), { icon: '🎓' });
-    if (!ok) return;
-    if (s.money < cost) { UI.toast(`You need ${money(cost)}. Save up and come back.`, 'warn'); return; }
+      h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'TUITION'), h('b', {}, money(c.cost))), h('div', {}, h('small', {}, 'GRANT (NEED)'), h('b', { class: 'pos' }, need ? `−${money(c.cost * need)}` : '—')), h('div', {}, h('small', {}, 'SCHOLARSHIP'), h('b', { class: 'pos' }, merit ? `−${money(c.cost * merit)}` : '—'))),
+      h('p', {}, `You pay ${money(cost)}. ${merit ? 'Your learning record earned a scholarship.' : 'A stronger learning record earns scholarships.'}`),
+      h('button', { class: 'primary', disabled: s.money < cost, onclick: () => close('cash') }, `Pay ${money(cost)} from savings`),
+      cost > 0 ? h('button', { class: 'ghost', onclick: () => close('loan') }, `Federal student loan for ${money(loanAmt || cost)} (6.5% interest, paid back after you finish)`) : null,
+      h('button', { class: 'ghost', onclick: () => close(false) }, 'Not yet')), { icon: '🎓' });
+    if (ok === 'loan') {
+      const L = loanAmt || cost, paidNow = cost - L; if (s.money < paidNow) { UI.toast(`You need ${money(paidNow)} for the part the loan doesn’t cover.`, 'warn'); return; }
+      if (paidNow > 0) G.spend(paidNow, `${c.school}: ${c.name} (part)`);
+      s.studentLoans = (s.studentLoans || 0) + Math.round(L * 1.065); s.loanStart = s.loanStart || null;
+      UI.toast(`Student loan: ${money(L)}. You’ll repay about ${money(Math.round(L * 1.065))} in weekly payments after you finish.`, 'info', 4200);
+      s.courses[pickId] = { n: 0, last: 0, loan: Math.round(L * 1.065) };
+    }
+    else {
+    if (ok !== 'cash') return;
+    if (s.money < cost) { UI.toast(`You need ${money(cost)}. Save up, or use a student loan.`, 'warn'); return; }
     G.spend(cost, `${c.school}: ${c.name}`); s.courses[pickId] = { n: 0, last: 0 };
+    }
   }
   const st = s.courses[pickId];
+  if (st.n >= c.sessions && c.exam && !st.done) {   // classes finished: the licensing exam
+    if (st.examDay && s.day < st.examDay) { UI.toast(`You can retake the ${c.exam} on Day ${st.examDay}. Practise the topics in your Learn app.`, 'info', 3600); return; }
+    await UI.say(`Exam proctor · ${c.school}`, `This is the ${c.exam}. Five questions. You need four right on the first try. Take your time.`);
+    let right = 0; for (const k of [...shuffle(c.tasks), ...shuffle(c.tasks)].slice(0, 5)) { const r = await runTask(G, T[k], 'exam', c.exam, '📝'); if (r && r.ok) right++; }
+    if (right >= 4) { st.done = true; G.sfx('level'); G.achieve('graduate'); await UI.say(`Exam proctor · ${c.school}`, `${right} of 5. You passed the ${c.exam}! Your license opens new jobs.`); finishLoan(G, st); }
+    else { st.examDay = s.day + 2; await UI.say(`Exam proctor · ${c.school}`, `${right} of 5. Not this time: you need 4. Many people retake licensing exams. Study the topics and come back on Day ${st.examDay}.`); }
+    G.save(); return;
+  }
   if (st.last === s.day) { UI.toast('You already attended this class today. Come back tomorrow.', 'info'); return; }
   if (s.time > 21) { UI.toast('Classes are over for tonight.', 'info'); return; }
   await UI.say(`Professor · ${c.school}`, pick(['Today we build on last time. Questions are welcome.', 'Mistakes are how we learn. Let’s begin.', 'Real professionals check their work. So will we.']));
   for (const k of shuffle(c.tasks).slice(0, 3)) await runTask(G, T[k], 'class', c.name, '🎓');
   G.advance(3); st.n++; st.last = s.day; s.stats.classes = (s.stats.classes || 0) + 1;
-  if (st.n >= c.sessions) { st.done = true; G.sfx('level'); G.achieve('graduate'); await UI.say(`Professor · ${c.school}`, `Well done, ${s.name}. You’ve completed ${c.name}. Your certificate opens new jobs.`); }
+  if (st.n >= c.sessions && c.exam) { await UI.say(`Professor · ${c.school}`, `That’s the last class, ${s.name}. Next: the ${c.exam}. Come back when you’re ready to take it.`); }
+  else if (st.n >= c.sessions) { st.done = true; G.sfx('level'); G.achieve('graduate'); await UI.say(`Professor · ${c.school}`, `Well done, ${s.name}. You’ve completed ${c.name}. Your certificate opens new jobs.`); finishLoan(G, st); }
   else UI.toast(`Session ${st.n} of ${c.sessions} complete.`, 'good');
   G.save();
 }

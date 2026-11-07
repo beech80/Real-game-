@@ -1,7 +1,8 @@
 // REAL — game director: chapters, needs, time, Jax, careers, Life Level, phone, save/load.
 import { UI, h, money, clock, wait } from './ui.js';
 import * as A from './activities.js';
-import { schoolSettings, isSchool, reportView } from './school.js';
+import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
+import { runActivity } from './learnkit.js';
 import { markWords } from './readalong.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
 import { lifeLevel, LIFE_CATS, CAREERS, TIER_NAMES, careerStatus, setSkillNames, ACHIEVEMENTS, INVITE_LEVEL, INVITE_MIN_DAY } from './life.js';
@@ -518,7 +519,7 @@ export function openPhone(G) {
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
+      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -606,6 +607,14 @@ export function openPhone(G) {
             list, h('button', { class: 'ghost sm', onclick: () => { if (confirm('Delete all notes?')) { try { localStorage.removeItem(KEY); } catch (e) {} draw(); } } }, 'Clear notes'));
         },
         Words: () => A.myWords(G),
+        Assignment: () => assignmentView(G, async (what, id) => {
+          const As = s.assign; close();
+          if (what === 'skill') { await runActivity(G, () => ({ skill: id, ...A.PRACTICE[id]() }), 'assignment', As.n, '📋'); return; }
+          let right = 0; const n = As.q || 5;
+          for (let i = 0; i < n; i++) { const id2 = As.k[i % As.k.length]; const r = await runActivity(G, () => ({ skill: id2, ...A.PRACTICE[id2]() }), 'check', `${what === 'pre' ? 'Pre' : 'Post'}-check · ${i + 1} of ${n}`, '📋'); if (r === undefined) return; if (r && r.ok) right++; }
+          As[what] = { right, n, day: s.day }; G.save();
+          UI.toast(what === 'pre' ? `Pre-check: ${right} of ${n}. Now practise each skill.` : `Post-check: ${right} of ${n} (pre-check ${As.pre ? As.pre.right : '–'}).`, 'good', 3600);
+        }, () => open('Assignment')),
         Settings: () => h('div', { class: 'act' },
           h('div', { class: 'row' }, h('span', {}, 'Graphics'), ...['low', 'medium', 'high'].map((q) => h('button', { class: G.hooks.quality() === q ? 'primary sm' : 'ghost sm', onclick: () => { G.hooks.setQuality(q); open('Settings'); } }, q))),
           h('div', { class: 'row' }, h('span', {}, 'Time'), ...[[1, 'Normal'], [3, 'Fast']].map(([v, n]) => h('button', { class: (s.timeScale || 1) === v ? 'primary sm' : 'ghost sm', onclick: () => { s.timeScale = v; open('Settings'); } }, n))),

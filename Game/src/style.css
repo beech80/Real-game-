@@ -492,3 +492,9 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 @media (min-width: 700px) and (min-height: 700px) { .passage { font-size: 18px; max-height: 46vh; } }
 
 .activity.lv1 .lead, .activity.lv1 .opt, .activity.lv1 .bigpic, .wc-word { font-family: 'Andika', 'Barlow', sans-serif; }
+.realpath { display: block; color: #9fd3ff; font-size: 12px; margin-top: 2px; }
+
+/* keyboard focus: always visible */
+.kbd-ready :focus-visible { outline: 3px solid var(--gold, #e9a93a); outline-offset: 3px; border-radius: 10px; }
+.kbd-hint { font-size: 12px; color: rgba(255,255,255,.6); }
+.pickrow { cursor: pointer; grid-template-columns: auto 1fr auto; align-items: center; } .pickrow input { width: 22px; height: 22px; } .row.wrap { flex-wrap: wrap; gap: 6px; }

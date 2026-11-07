@@ -53,6 +53,7 @@ export function installExpansion(Game) {
   const P = Game.prototype;
 
   // ---------------------------------------------------------------------------------- district doors
+  P.applyFor = function (career) { return apply(this, career); };   // used by the Jobs app and tests
   P.districtInteraction = function (loc, pt) {
     const s = this.state, G = this;
     if (pt.key === 'bus') return { label: 'Bus stop', run: () => this.bus() };

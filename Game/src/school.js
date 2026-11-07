@@ -35,7 +35,8 @@ export function reportData(G) {
   const s = G.state;
   return { v: 1, n: (s.school && s.school.nick) || s.name || 'Student', c: (s.school && s.school.cls) || '', d: s.day, ll: G.life().level,
     m: Math.round((s.stats.playSecs || 0) / 60), l: s.stats.lessons || 0, w: (s.words || []).length,
-    k: IDS.map((id) => Math.min(4, G.edu.state(id))).join(''), t: new Date().toISOString().slice(0, 10) };
+    k: IDS.map((id) => Math.min(4, G.edu.state(id))).join(''), t: new Date().toISOString().slice(0, 10),
+    a: s.assign ? { n: s.assign.n, pre: s.assign.pre && s.assign.pre.right, post: s.assign.post && s.assign.post.right, q: s.assign.q } : undefined };
 }
 // a checksum makes casual edits to a report code visible on the teacher's dashboard (it is not cryptographic security)
 const sum = (t) => { let h1 = 0x811c9dc5; for (const c of 'REAL·report·' + t) { h1 ^= c.charCodeAt(0); h1 = Math.imul(h1, 16777619) >>> 0; } return h1.toString(36); };
@@ -109,8 +110,8 @@ export function teacherDashboard() {
       const all = list.map((d) => ({ d, st: skillStates(d) }));
       const subj = Object.entries(SUBJECTS);
       const table = list.length ? h('div', { class: 'tscroll' }, h('table', { class: 'rtable tdash' },
-        h('tr', {}, h('th', {}, 'Student'), h('th', {}, 'Class'), h('th', {}, 'Mins'), h('th', {}, 'Lessons'), h('th', {}, 'Words'), ...subj.map(([, s]) => h('th', { title: s.name }, s.icon))),
-        all.map(({ d, st }) => h('tr', { class: 'trow', onclick: () => student(d) }, h('td', {}, h('b', {}, d.n), d.edited ? h('span', { class: 'warnline', title: 'This report code was changed after the game made it.' }, ' ⚠ edited') : null), h('td', {}, d.c || ''), h('td', {}, d.m), h('td', {}, d.l), h('td', {}, d.w),
+        h('tr', {}, h('th', {}, 'Student'), h('th', {}, 'Class'), h('th', {}, 'Mins'), h('th', {}, 'Lessons'), h('th', {}, 'Words'), h('th', { title: 'Assignment pre-check → post-check' }, 'Pre → Post'), ...subj.map(([, s]) => h('th', { title: s.name }, s.icon))),
+        all.map(({ d, st }) => h('tr', { class: 'trow', onclick: () => student(d) }, h('td', {}, h('b', {}, d.n), d.edited ? h('span', { class: 'warnline', title: 'This report code was changed after the game made it.' }, ' ⚠ edited') : null), h('td', {}, d.c || ''), h('td', {}, d.m), h('td', {}, d.l), h('td', {}, d.w), h('td', { title: d.a ? d.a.n : '' }, d.a ? `${d.a.pre ?? '–'} → ${d.a.post ?? '–'} /${d.a.q || 5}` : ''),
           ...subjectRows(st).map((r) => h('td', { class: 'heat' + (r.proficient ? ' on' : ''), style: r.proficient ? { background: `rgba(80,190,120,${(0.35 + 0.6 * r.proficient / r.total).toFixed(2)})` } : null, title: `${r.name}: ${r.proficient} of ${r.total} proficient` }, `${r.proficient}/${r.total}`)))))) : h('p', { class: 'tip' }, 'No students yet. Each student opens 📱 Settings › For grown-ups › Progress report and copies their report code.');
       // standards: how many students are proficient in skills aligned to each standard
       const std = {}; for (const id of IDS) for (const c of STANDARDS[id] || []) { std[c] = std[c] || { ids: [], n: 0 }; std[c].ids.push(id); }
@@ -120,6 +121,7 @@ export function teacherDashboard() {
         h('p', { class: 'lead' }, `Class progress: ${list.length} student${list.length === 1 ? '' : 's'}`),
         h('p', { class: 'tip' }, 'Saved only on this device. Students share a short report code with you; no names or accounts are needed.'),
         ta, h('div', { class: 'row' },
+          h('button', { class: 'ghost sm', onclick: () => assignmentBuilder() }, '📋 New assignment'),
           h('button', { class: 'primary sm', onclick: () => { const n = addCodes(ta.value); UI.toast(n ? `Added ${n} report${n === 1 ? '' : 's'}.` : 'No report codes found in that text.', n ? 'good' : 'warn'); draw(); } }, 'Add reports'),
           list.length ? h('button', { class: 'ghost sm', onclick: () => download('REAL-class.csv', toCSV(list), 'text/csv') }, '⬇️ CSV') : null,
           list.length ? h('button', { class: 'danger sm', onclick: (e) => { if (e.currentTarget.dataset.arm) { saveClass([]); draw(); } else { e.currentTarget.dataset.arm = 1; e.currentTarget.textContent = 'Tap again to clear'; } } }, 'Clear class') : null),
@@ -155,6 +157,8 @@ export function schoolSettings(G, reopen) {
     h('div', { class: 'tier-h' }, 'School'),
     h('p', { class: 'tip' }, on ? `School mode is ON${s.school.cls ? ' · class ' + s.school.cls : ''}. AI replies, the microphone and live neighbors are off.` : 'School mode turns off AI character replies, the microphone (speech goes through the browser’s speech service) and live neighbors. A teacher PIN keeps it on.'),
     nick, cls, pin,
+    (() => { const ac = h('input', { class: 'writebox', placeholder: s.assign ? `Assignment: ${s.assign.n}` : 'Assignment code from your teacher (REALA1-…)' });
+      return h('div', { class: 'row' }, ac, h('button', { class: 'ghost sm', onclick: () => { const a = parseAssign(ac.value); if (!a) return UI.toast('That isn’t an assignment code.', 'warn'); setAssignment(G, a); UI.toast(`Assignment added: ${a.n}. Open 📋 Assignment on your phone.`, 'good', 3600); reopen(); } }, 'Add')); })(),
     h('div', { class: 'row' },
       h('button', { class: 'primary sm', onclick: () => {
         s.school = { ...(s.school || {}), nick: nick.value.trim().slice(0, 24), cls: cls.value.trim().toUpperCase().slice(0, 20) };
@@ -163,4 +167,49 @@ export function schoolSettings(G, reopen) {
         reopen();
       } }, on ? 'Turn school mode off' : 'Turn school mode on'),
       h('button', { class: 'ghost sm', onclick: () => { s.school = { ...(s.school || {}), nick: nick.value.trim().slice(0, 24), cls: cls.value.trim().toUpperCase().slice(0, 20) }; G.save(); UI.sheet('Progress report', () => reportView(G), { icon: '📋' }); } }, '📋 Progress report')));
+}
+
+// ------------------------------------------------------------------------------------------- assignments with pre/post checks
+// A teacher picks skills and gets a short assignment code (or a link with #assign=CODE). The student's 📋 Assignment app
+// walks them through: a 5-question pre-check (no hints, just to see where they start), practice on each skill, then
+// a post-check with different questions. Both scores travel in the student's report code to the teacher dashboard.
+export const assignCode = (a) => 'REALA1-' + b64(JSON.stringify(a));
+export function parseAssign(t) { try { const m = String(t).trim().match(/REALA1-([A-Za-z0-9_-]+)/); if (!m) return null; const a = JSON.parse(unb64(m[1])); return a && Array.isArray(a.k) && a.k.every((id) => SKILLS[id]) ? a : null; } catch (e) { return null; } }
+export function assignFromLink() { const m = (location.hash + '&' + location.search).match(/[#?&]assign=(REALA1-[A-Za-z0-9_-]+)/); return m ? parseAssign(m[1]) : null; }
+export function setAssignment(G, a) { const s = G.state; s.assign = { ...a, day: s.day, pre: null, post: null }; G.save(); }
+/** builder for teachers: pick a subject and stage, tick skills, name it */
+export function assignmentBuilder() {
+  return UI.sheet('New assignment', (close, body) => {
+    let subj = 'math', band = 2; const chosen = new Set();
+    const name = h('input', { class: 'writebox', maxlength: 40, placeholder: 'Assignment name (e.g. Unit 3: Making change)' });
+    const draw = () => body.replaceChildren(h('div', { class: 'act' },
+      h('p', { class: 'tip' }, 'Pick the skills to practise. Students take a 5-question pre-check, practise each skill, then a post-check.'), name,
+      h('div', { class: 'row wrap' }, Object.entries(SUBJECTS).map(([k, sb]) => h('button', { class: k === subj ? 'primary sm' : 'ghost sm', onclick: () => { subj = k; draw(); } }, `${sb.icon} ${sb.name}`))),
+      h('div', { class: 'row wrap' }, Object.entries(GRADES).map(([b, g]) => h('button', { class: +b === band ? 'primary sm' : 'ghost sm', onclick: () => { band = +b; draw(); } }, `Grades ${g}`))),
+      h('div', { class: 'rskills' }, IDS.filter((id) => SKILLS[id].subj === subj && Math.abs(SKILLS[id].band - band) <= 1).map((id) => h('label', { class: 'rskill pickrow' },
+        h('input', { type: 'checkbox', checked: chosen.has(id) || null, onchange: (e) => { if (e.target.checked) chosen.add(id); else chosen.delete(id); } }), h('b', {}, SKILLS[id].name), h('small', {}, `${SKILLS[id].objective} · grades ${GRADES[SKILLS[id].band]} · ${(STANDARDS[id] || []).slice(0, 2).join(', ')}`)))),
+      h('button', { class: 'primary', onclick: () => {
+        if (!chosen.size) return UI.toast('Pick at least one skill.', 'warn');
+        const a = { v: 1, n: name.value.trim() || `${SUBJECTS[subj].name} practice`, k: [...chosen].slice(0, 8), q: 5 }, code = assignCode(a);
+        body.replaceChildren(h('div', { class: 'act' }, h('p', { class: 'lead' }, `“${a.n}” is ready`), h('p', { class: 'tip' }, 'Give students this code (they enter it in 📱 Settings › For grown-ups › School), or add it to the game link.'),
+          h('textarea', { class: 'writebox codebox', rows: 3, readonly: true }, code),
+          h('p', { class: 'tip' }, 'Link: add ', h('b', {}, '#assign=' + code.slice(0, 18) + '…'), ' to the end of the game link.'),
+          h('div', { class: 'row' }, h('button', { class: 'primary sm', onclick: async () => { try { await navigator.clipboard.writeText(code); UI.toast('Assignment code copied.', 'good'); } catch (e) { UI.toast('Select the code and copy it.', 'info'); } } }, 'Copy code'), h('button', { class: 'ghost sm', onclick: () => close() }, 'Done'))));
+      } }, 'Create assignment')));
+    draw(); return h('div');
+  }, { icon: '📋', cls: 'wide' });
+}
+/** the student's assignment page (phone app) */
+export function assignmentView(G, run, reopen) {
+  const s = G.state, A = s.assign;
+  if (!A) return h('div', { class: 'act' }, h('p', { class: 'lead' }, 'No assignment yet.'), h('p', { class: 'tip' }, 'If your teacher gave you an assignment code, enter it in Settings › For grown-ups › School.'));
+  const st = (id) => Math.min(4, G.edu.state(id)), practised = A.k.filter((id) => st(id) >= 2).length;
+  const step = (n, label, done, btn) => h('div', { class: 'bill' + (done ? ' paid' : '') }, h('div', {}, h('b', {}, `${n}. ${label}`), done ? h('small', {}, done) : null), btn || h('span', { class: 'ok' }, '✓'));
+  return h('div', { class: 'act' }, h('p', { class: 'lead' }, A.n),
+    step(1, 'Pre-check: 5 questions, no hints', A.pre && `${A.pre.right} of ${A.pre.n} right`, A.pre ? null : h('button', { class: 'primary sm', onclick: () => run('pre') }, 'Start')),
+    step(2, `Practise each skill (${practised}/${A.k.length})`, practised === A.k.length && 'All practised', null),
+    h('div', { class: 'rskills' }, A.k.map((id) => h('div', { class: 'rskill st' + st(id) }, h('b', {}, SKILLS[id].name), h('span', { class: 'rst' }, ST[st(id)]), h('button', { class: 'ghost sm', disabled: !A.pre || null, onclick: () => run('skill', id) }, 'Practise')))),
+    step(3, 'Post-check: 5 new questions', A.post && `${A.post.right} of ${A.post.n} right${A.pre ? ` (pre-check ${A.pre.right})` : ''}`, A.post ? null : h('button', { class: 'primary sm', disabled: !(A.pre && practised === A.k.length) || null, onclick: () => run('post') }, A.pre && practised === A.k.length ? 'Start' : 'Practise first')),
+    A.post ? h('p', { class: 'tip' }, A.post.right > A.pre.right ? `You grew by ${A.post.right - A.pre.right}! 🌱` : 'Keep practising: every try builds the skill.') : null,
+    h('button', { class: 'ghost sm', onclick: () => UI.sheet('Progress report', () => reportView(G), { icon: '📋' }) }, '📋 Report code for your teacher'));
 }

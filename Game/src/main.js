@@ -20,7 +20,8 @@ import { buildInterior, BUILDING_ROOMS, ROOM } from './interiors.js';
 import { MapView } from './mapview.js';
 import { installEvents } from './events.js';
 import { scatterFlora, updateLook } from './lookfx.js';
-import { schoolFromLink, enableSchool, teacherDashboard } from './school.js';
+import { schoolFromLink, enableSchool, teacherDashboard, assignFromLink, setAssignment } from './school.js';
+import { installKeyboard } from './keyboard.js';
 import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
@@ -54,6 +55,7 @@ const saveNow = () => { try { if (game && mode === 'play' && player && !game.sta
 document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); });
 window.addEventListener('pagehide', saveNow);
 initReadAlong(() => game && game.state);
+installKeyboard();
 // 🔊 on the goal bar, and the "Read to me" switch on the title screen
 document.getElementById('obj-say').onclick = (e) => { e.stopPropagation(); readEls([document.getElementById('obj-text')]); };
 { const b = document.getElementById('btn-readtome'); const show = () => { b.querySelector('b').textContent = readToMe() ? 'On' : 'Off'; b.setAttribute('aria-pressed', readToMe()); b.classList.toggle('primary', readToMe()); b.classList.toggle('ghost', !readToMe()); };
@@ -274,6 +276,7 @@ async function startGameInner(state, isNew) {
     peers: () => (game.state.settings && game.state.settings.noNeighbors ? null : neighbors && neighbors.room ? neighbors.count : null), emote: (i) => { if (neighbors) neighbors.emote(i); player.ch.oneShot && player.ch.oneShot('Wave'); UI.toast(['👋', '🎉', '👍', '💡'][i], 'info', 1200); },
   });
   { const sc = schoolFromLink(); if (sc && !(state.school && state.school.on)) enableSchool(game, sc); }   // #school=CLASS in the link
+  { const a = assignFromLink(); if (a && !(state.assign && state.assign.n === a.n)) setAssignment(game, a); }   // #assign=CODE in the link
   neighbors = new Neighbors(scene); if (!(state.settings && state.settings.noNeighbors)) neighbors.connect();
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();

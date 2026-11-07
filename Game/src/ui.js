@@ -79,7 +79,7 @@ export const UI = {
     return new Promise((res) => {
       const D = this.els.dialog;
       D.hidden = false;
-      D.className = 'dialog ' + (opts.tone || '');
+      D.className = 'dialog ' + (opts.tone || ''); D.setAttribute('role', 'dialog'); D.setAttribute('aria-live', 'polite'); D.setAttribute('aria-label', speaker);
       const body = h('div', { class: 'd-text' });
       const letters = ['A', 'B', 'C', 'D'];
       const done = (v) => { click(); stopReading(); D.hidden = true; res(v); };
@@ -105,7 +105,7 @@ export const UI = {
     // each sheet is its own stacked layer, so a "New skill" card can open on top of an activity without destroying it
     return new Promise((res) => {
       const host = this.els.modal;
-      const layer = h('div', { class: 'modal' });
+      const layer = h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': title || 'Screen' });
       host.append(layer);
       const close = (v) => { layer.remove(); res(v); };
       const head = h('div', { class: 'sh-head' }, h('div', { class: 'sh-title' }, opts.icon ? h('span', { class: 'sh-icon' }, opts.icon) : null, title),
