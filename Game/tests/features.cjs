@@ -161,7 +161,7 @@ let p;
   if (!biz) fail('could not register a business');
   await shot('4_business'); await leave();
   if (biz) {
-    await ev(() => { const s = window.REAL.state; s.quest = 'free'; s.flags.invited = s.flags.invited || s.day; s.time = 9; });   // the Club invitation can wait: check the business goal
+    await ev(() => { const s = window.REAL.state; s.quest = 'free'; s.flags.invited = s.flags.invited || s.day; s.flags['worked' + s.day] = true; s.time = 9; });   // the Club invitation can wait: check the business goal
     await ev(() => window.REAL.travel('district')); await sleep(3000); await play([], 20);
     const goal = await S(() => (window.REAL.objective() || {}).text); console.log('  goal:', goal);
     const cart = await S(() => window.REAL.objective() && window.REAL.objective().pos);
