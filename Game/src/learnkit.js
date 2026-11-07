@@ -108,7 +108,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     let body;
     if (Q.type === 'choice') {
       const optsShown = shuffle([...new Set(Q.o)]);
-      body = h('div', { class: 'opts' + (Q.decode ? ' decode' : '') }, optsShown.map((o) => h('button', { class: 'opt', 'data-noread': Q.decode ? '1' : null, onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; } else e.currentTarget.classList.add('right'); } }, o)));
+      body = h('div', { class: 'opts' + (Q.decode ? ' decode' : '') }, optsShown.map((o) => h('button', { class: 'opt', 'data-noread': Q.decode ? '1' : null, onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; if (Q.whyWrong && Q.whyWrong[o]) { hint2.hidden = false; hint2.textContent = '💡 ' + Q.whyWrong[o]; } } else e.currentTarget.classList.add('right'); } }, o)));
     } else if (Q.type === 'number') {
       let val = '';
       const disp = h('div', { class: 'keypad-disp' }, fmt(Q, 0));
