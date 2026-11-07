@@ -55,11 +55,13 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await p.screenshot({ path: path.join(OUT, 'talk_reason.png'), timeout: 180000 });
   for (let i = 0; i < 4 && await p.isVisible('#modal .modal'); i++) { await p.$eval('#modal .modal:last-child .sh-x', (e) => e.click()).catch(() => {}); await sleep(600); }
   // 3) the Talk log keeps the line; choosing a word finds it
-  await ev(() => { if (document.activeElement) document.activeElement.blur(); }); await p.keyboard.press('KeyP'); await sleep(1500);
+  await ev(() => document.getElementById('btn-phone').click()); await sleep(1500);
+  if (!(await p.isVisible('#modal .ph-grid'))) { fail('phone did not open'); console.log('state', await ev(() => [window.REAL.game().busy, !!document.querySelector('#modal .modal'), document.querySelector('#dialog').hidden])); }
   if (!(await p.isVisible('#modal .phone'))) fail('phone did not open');
   await p.$$eval('#modal .app', (els) => { const a = els.find((e) => /Talks/.test(e.textContent)); if (a) a.click(); });
   await sleep(1000);
   const lines = await ev(() => [...document.querySelectorAll('.talk-line .talk-t')].map((e) => e.textContent));
+  if (!lines.length) console.log('screen:', await ev(() => (document.querySelector('#modal .modal:last-child') || document.body).innerText.slice(0, 300)), errors);
   console.log('talk log lines:', lines.length, '· newest:', lines[0]);
   if (!lines.includes(line)) fail('the Talk log is missing the conversation line');
   if (lines.length < 3) fail('the Talk log has too few lines from the story');
