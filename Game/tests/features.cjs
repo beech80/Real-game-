@@ -74,7 +74,9 @@ let p;
     if (!ok) { fail(`no ${key} in ${loc}`); return false; }
     await sleep(1200);
     const label = await p.textContent('#interact-label').catch(() => '');
-    await p.click('#btn-interact', { timeout: 20000 }); await sleep(1500);
+    const okBtn = await p.click('#btn-interact', { timeout: 20000 }).then(() => true).catch(() => false);
+    if (!okBtn) { await shot('stuck_' + key); console.log('  no action button at', loc, key, JSON.stringify(await S(() => ({ loc: window.REAL.state.location, pos: window.REAL.playerPos(), dlg: !document.querySelector('#dialog').hidden, sheet: !!document.querySelector('#modal .modal'), mode: window.REAL.mode, busy: window.REAL.game().busy })))); fail(`no action at ${loc}/${key}`); return false; }
+    await sleep(1500);
     if (await S(() => window.REAL.state.location) === 'interior') {   // walked in: go to the counter
       await ev(() => { const q = window.REAL.roomPoints().find((pt) => pt.act === 'counter'); if (q) window.REAL.teleportXY(q.x, q.y - 0.4); }); await sleep(1200);
       await p.click('#btn-interact', { timeout: 20000 }); await sleep(900);
