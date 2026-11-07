@@ -40,7 +40,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   if (!card || !/change/.test(card.word.replace(/·/g, ''))) fail('tapping a word did not open its card');
   else { if (card.sent !== 'Count your change back out loud.') fail('the word card did not show the whole sentence'); if (!card.btn) fail('no “Say the whole sentence” button'); }
   await p.screenshot({ path: path.join(OUT, 'talk_wordcard.png'), timeout: 180000 });
-  await p.$eval('.wcard-wrap button.ghost.sm:last-child', (e) => e.click()).catch(() => {});
+  await p.$$eval('.wcard-wrap button', (bs) => { const c = bs.find((x) => x.textContent === 'Close'); if (c) c.click(); });
+  if (await p.isVisible('.wcard-wrap')) fail('the word card did not close');
   await p.$eval('#dialog .d-next', (e) => e.click()); await sleep(400);
   // 2) a wrong pick → a reason, from Rosa
   await ev(() => { window.__pr = window.REAL.practice('sci.plants'); }); await sleep(900);
