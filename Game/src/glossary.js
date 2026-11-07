@@ -34,6 +34,7 @@ export const GLOSSARY = [
   [3, 'agility', 'moving quickly and easily'],
   [2, 'molecules?', 'the tiny pieces that everything is made of, too small to see'],
   [2, 'invisible', 'not able to be seen'],
+  [2, 'echolocation', 'finding things by sending out sounds and listening for the echo'],
   [3, 'probability', 'how likely something is to happen, from 0 (never) to 1 (always)'],
   [3, 'analytical', 'looking closely at why and how, not just what'],
   [3, 'popularity', 'how many people like something'],

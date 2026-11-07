@@ -524,12 +524,14 @@ export function installExpansion(Game) {
     const titles = { 'read.letters': 'ABC City Walk', 'read.phonics': 'Sounds Around Town', 'read.sentences': 'A Day at Fresh Mart', 'read.paragraph': 'Community Notices', 'read.multistep': 'How Things Work', 'read.inference': 'The Mystery of Aisle 5', 'read.compare': 'Which Way to Go?', 'read.technical': 'The Fix-It Manual', 'read.evidence': 'City Stories', 'read.factopinion': 'Ads and Facts', 'read.purpose': 'Why Did They Write That?', 'read.summarize': 'News in Brief', 'read.contracts': 'The Fine Print', 'read.bias': 'Two Sides', 'read.sources': 'Trust the Source', 'read.research': 'The Research Desk' };
     const NF = { social: ['🌍', 'History & the world'], science: ['🔬', 'Science'], tech: ['💻', 'Technology'], health: ['🩺', 'Health'] };
     const pickId = await UI.sheet('Midtown Library', (close) => h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Pick a book. These are picked for where you are right now, but every shelf is open to you.'),
-      h('div', { class: 'opts' }, shelf.slice(0, 3).map((k) => h('button', { class: 'opt', onclick: () => close(k.id) }, `📕 ${titles[k.id] || k.name}`)),
+      h('div', { class: 'opts' }, A.PASSAGES.filter((P) => Math.abs(P.band - b) <= 1).slice(0, 4).map((P) => h('button', { class: 'opt', onclick: () => close('p:' + P.id) }, `${P.icon} ${P.title}`)),
+        h('div', { class: 'tier-h' }, 'Practice books'), ...shelf.slice(0, 2).map((k) => h('button', { class: 'opt', onclick: () => close(k.id) }, `📕 ${titles[k.id] || k.name}`)),
         h('div', { class: 'tier-h' }, 'Nonfiction shelf'), ...Object.entries(NF).map(([k, [ic, nm]]) => h('button', { class: 'opt', onclick: () => close('nf:' + k) }, `${ic} ${nm}`)),
         h('button', { class: 'opt', onclick: () => close('all') }, '📚 Browse every subject (Learn)'))), { icon: '📚' });
     if (!pickId) return;
     if (pickId === 'all') return A.learn(this);
     if (pickId.startsWith('nf:')) { const k = pickId.slice(3); for (let i = 0; i < 2; i++) await this.lessonIn(k, 'library', NF[k][1], NF[k][0]); s.stats.booksRead = (s.stats.booksRead || 0) + 1; s.mood = Math.min(100, s.mood + 5); this.advance(0.75); this.save(); return; }
+    if (pickId.startsWith('p:')) { await A.readPassage(this, pickId.slice(2)); s.stats.booksRead = (s.stats.booksRead || 0) + 1; s.mood = Math.min(100, s.mood + 5); this.advance(0.75); this.save(); return; }
     for (let i = 0; i < 2; i++) await runActivity(this, gen(pickId), 'library', titles[pickId] || 'Reading', '📕');
     s.stats.booksRead = (s.stats.booksRead || 0) + 1; s.mood = Math.min(100, s.mood + 5); this.advance(0.75); this.save();
   };

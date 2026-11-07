@@ -6,6 +6,7 @@ import { SKILLS, SUBJECTS, STATES } from './edu.js';
 import { runActivity } from './learnkit.js';
 import { lookup as lookupWord } from './glossary.js';
 import { wordCard, wordPractice, say as sayWord } from './readalong.js';
+import { PASSAGES, passagesNear } from './curriculum8.js';
 
 // automated playtests only (navigator.webdriver): expose the expected keypad answer so a test bot can play like a person
 const forBot = (k, v) => { try { if (navigator.webdriver) window[k] = v; } catch (e) {} };
@@ -543,6 +544,20 @@ export function myWords(G) {
   list();
   return box;
 }
+/** Read one whole passage and answer its questions in order. Picks a passage near the reader's level they haven't read lately. */
+export async function readPassage(G, id) {
+  const s = G.state, done = s.passagesRead || (s.passagesRead = {});
+  const P = id ? PASSAGES.find((x) => x.id === id) : (() => { const near = passagesNear(G.edu.band('reading')); return near.sort((a, b) => (done[a.id] || 0) - (done[b.id] || 0))[0]; })();
+  if (!P) return;
+  let right = 0;
+  for (const [i, Q] of P.qs.entries()) {
+    const r = await runActivity(G, { type: 'choice', skill: Q.skill, q: `Question ${i + 1} of ${P.qs.length}: ${Q.q}`, a: Q.a, o: [Q.a, ...Q.o], why: Q.why, whyWrong: Q.ww, v: { title: `${P.icon} ${P.title}`, lines: P.text } }, 'reading', P.title, P.icon);
+    if (r && r.ok) right++;
+    if (r === undefined) break;   // closed the passage
+  }
+  done[P.id] = (done[P.id] || 0) + 1; s.stats.passages = (s.stats.passages || 0) + 1; G.save();
+  UI.toast(`📖 ${P.title}: ${right} of ${P.qs.length} on the first try`, right === P.qs.length ? 'gold' : 'good', 3200);
+}
 export function learn(G) {
   return UI.sheet('Learn', (close, body) => {
     const menu = () => body.replaceChildren(h('div', { class: 'act' },
@@ -555,6 +570,7 @@ export function learn(G) {
       }))));
     const subject = (k) => body.replaceChildren(h('div', { class: 'act' },
       h('p', { class: 'tip' }, 'Every skill is open to you. Start anywhere: the game adapts to what you show it.'),
+      k === 'reading' ? h('button', { class: 'primary', onclick: () => { close(); readPassage(G); } }, '📖 Read a passage (with questions)') : null,
       h('div', { class: 'skilllist' }, Object.values(SKILLS).filter((s) => s.subj === k).sort((a, b) => a.band - b.band).map((s) =>
         h('button', { class: 'skillrow' + (s.band > G.edu.band(k) + 1 ? ' later' : '') + (s.band === G.edu.band(k) ? ' now' : ''), onclick: () => skill(s.id) }, h('div', {}, h('b', {}, s.name), h('small', {}, s.objective)), stateChip(G, s.id)))),
       h('button', { class: 'ghost', onclick: menu }, '‹ Subjects')));
@@ -615,3 +631,5 @@ export function menuBuy(G, title, icon, items) {
       G.spend(it.price, it.name); G.sfx('cash'); it.apply(); close(it);
     } }, h('span', { class: 'f-ic' }, it.icon), h('div', { class: 'f-txt' }, h('b', {}, it.name), h('small', {}, it.note)), h('span', { class: 'amt' }, money(it.price)))))), { icon });
 }
+
+export { PASSAGES };

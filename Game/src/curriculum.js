@@ -11,6 +11,7 @@ import { EXTRA_GEN2 } from './curriculum4.js';
 import { TOPUP_GEN } from './curriculum5.js';
 import { K2_SKILLS, K2_REPLACE } from './curriculum6.js';
 import { MORE_TOPICS } from './curriculum7.js';
+import { PASSAGE_GEN } from './curriculum8.js';
 
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -286,4 +287,6 @@ for (const extra of [EXTRA_GEN, EXTRA_GEN2, TOPUP_GEN, MORE_TOPICS]) for (const 
 // K–2 foundations (teacher-reviewed) replace the older early items for those skills
 NEW_SKILLS.push(...K2_SKILLS);
 for (const [k, g] of Object.entries(K2_REPLACE)) GEN[k] = g.slice();
+// reading passages with linked questions (each tagged with its own band)
+for (const [k, g] of Object.entries(PASSAGE_GEN)) GEN[k] = (GEN[k] || []).concat(g);
 export { K2_REPLACE };

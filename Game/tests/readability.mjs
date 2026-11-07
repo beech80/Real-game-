@@ -32,9 +32,10 @@ for (const s of Object.values(SKILLS)) {
   const g = PRACTICE[s.id]; if (!g) continue;
   for (let i = 0; i < 150; i++) {
     let Q; try { Q = g(); } catch (e) { continue; } if (!Q) continue;
-    check(s, 'question', Q.q, qMax);
-    for (const o of Q.o || []) check(s, 'answer', String(o), qMax);
-    check(s, 'explanation', Q.why, exMax);
+    const sb = Q.band ? { ...s, band: Q.band } : s, [qM, eM] = RULES[sb.band];   // passage items are written for their own band
+    check(sb, 'question', Q.q, qM);
+    for (const o of Q.o || []) check(sb, 'answer', String(o), qM);
+    check(sb, 'explanation', Q.why, eM);
   }
 }
 const uniq = [...new Set(problems)];

@@ -29,6 +29,7 @@ function visual(v) {
   if (!v) return null;
   if (v instanceof Node) return v;
   if (v.big) return h('div', { class: 'bigpic', 'aria-hidden': 'true' }, v.big);
+  if (v.lines && v.lines.length >= 3 && v.lines.join(' ').length > 160) return h('div', { class: 'passage readable' }, v.title ? h('div', { class: 'doc-h' }, v.title) : null, ...v.lines.map((l) => h('p', { class: 'doc-l' }, ...String(l).split(' / ').flatMap((x, i) => i ? [h('br'), x] : [x]))));
   if (v.clock) return clockSVG(v.clock[0], v.clock[1]);
   if (v.row) return h('div', { class: 'row2' }, ...v.row.map(visual));
   return h('div', { class: 'doc' }, v.title ? h('div', { class: 'doc-h' }, v.title) : null, ...(v.lines || []).map((l) => h('div', { class: 'doc-l' }, l)));
@@ -65,8 +66,11 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       for (let tries = 0; tries < 8 && seen.includes(key(Q)); tries++) { const n = gen(); if (n && n.skill === Q.skill) Q = n; }
       // grow with the learner: easier versions while a skill is new, harder ones (more reading, bigger numbers,
       // more steps) as they get better. Draw a few fresh candidates and pick the one that fits.
-      const st = G.edu.state(Q.skill), pool = [Q];
+      const st = G.edu.state(Q.skill); let pool = [Q];
       for (let k = 0; k < 6; k++) { const n = gen(); if (n && n.skill === Q.skill && !seen.includes(key(n)) && !pool.some((p) => key(p) === key(n))) pool.push(n); }
+      // items written for a specific band (reading passages…) only go to learners within one band of it
+      const lb = G.edu.band((SKILLS[Q.skill] || {}).subj || 'reading'), fits = pool.filter((p) => !p.band || Math.abs(p.band - lb) <= 1);
+      if (fits.length) pool = fits; else for (let k = 0; k < 10 && pool.every((p) => p.band && Math.abs(p.band - lb) > 1); k++) { const n = gen(); if (n && n.skill === Q.skill && (!n.band || Math.abs(n.band - lb) <= 1)) pool = [n]; }
       if (pool.length > 1) {
         pool.sort((a, b) => difficulty(a) - difficulty(b));
         const at = st <= 1 ? 0 : st === 2 ? 0.5 : 1;   // new → easiest, practising → middle, proficient+ → hardest
