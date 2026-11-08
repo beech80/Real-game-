@@ -81,7 +81,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     if (id === 'think.persuasion') { await shot('teen_question'); R.teenHintBehindButton = await (await top()).$eval('.helpbox', (e) => e.hidden).catch(() => false) && !!(await (await top()).$('button:text-is("Show a hint")')); }
     if (Q.type === 'choice') { const o = await (await top()).$(`.opt:text-is(${JSON.stringify(String(Q.a))})`); if (o) await o.click(); }
     else if (Q.type === 'number') { for (const d of String(Q.a)) await (await (await top()).$(`.key:text-is("${d}")`)).click(); await (await (await top()).$('.key.ok')).click(); }
-    await sleep(500); const c = await (await top()).$('button.primary:text-is("Continue")'); if (c) await c.click(); await sleep(500);
+    await sleep(500); const c = await (await top()).$('button.primary:text-is("Continue")'); if (c && await c.isVisible()) await c.click(); await sleep(500);
     await ev(() => window.__pr);
     R.teenAnswers.push([id, Q.q.slice(0, 70), await ev((sk) => window.REAL.game().edu.state(sk), id)]);
   }

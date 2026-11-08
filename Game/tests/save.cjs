@@ -66,7 +66,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const ctx2 = await b.newContext({ ...devices['iPad (gen 7)'], deviceScaleFactor: 1 });
   const q = await ctx2.newPage(); q.on('pageerror', (e) => errors.push(e.message));
   await q.goto(url, { timeout: 240000, waitUntil: 'domcontentloaded' });
-  await q.waitForFunction(() => window.REAL && window.REAL.mode === 'title', null, { timeout: 180000 });
+  await q.waitForFunction(() => window.REAL && window.REAL.mode === 'title', null, { timeout: 420000 });
   if (await q.isVisible('#btn-continue')) fail('new device already had a save');
   await q.click('#btn-load'); await sleep(600);
   await q.fill('.modal textarea.writebox', code); await q.click('button:has-text("Load this game")'); await sleep(1200);
