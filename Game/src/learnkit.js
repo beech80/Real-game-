@@ -205,7 +205,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     const explainWrong = (text) => { wwBox.hidden = false; wwBox.replaceChildren(h('b', { class: 'ww-who' }, coach ? `🗨️ ${coach}: ` : '💡 '), h('span', { class: 'ww-say' }, text)); if (settings.readAloud) speak(text); };
     const head = [h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj] ? SUBJECTS[sk.subj].icon + ' ' + SUBJECTS[sk.subj].name : ''} · ${sk.name || ''}`),
       visual(Q.v), Q.cursive ? h('div', { class: 'cursive-note' }, ...Q.cursive.map((l) => h('div', {}, l))) : null,
-      h('div', { class: 'qrow' }, h('p', { class: 'lead' }, ...wordful(G, Q.q, sk.band || 1, hp.card)), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
+      h('div', { class: 'qrow' }, h('p', { class: 'lead', 'data-en': '1' }, ...wordful(G, Q.q, sk.band || 1, hp.card)), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
     let body, speakRow = null;
     if (Q.type === 'choice') {
       const optsShown = shuffle([...new Set(Q.o)]);

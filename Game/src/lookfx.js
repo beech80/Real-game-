@@ -91,8 +91,9 @@ export function lookCharacter(root) {
     if (/Clothing|Shoe/.test(n)) m.roughness = Math.max(0.62, m.roughness * 0.92);
     if (!m.userData.lkRim && m.isMeshStandardMaterial && !/Eye|Mouth|Highlight/.test(n)) {
       m.userData.lkRim = true;
-      const tone = /Fur_/.test(n) ? 'diffuseColor.rgb *= mix(vec3(1.06, 1.0, 0.94), vec3(0.86, 0.85, 0.9), smoothstep(0.25, 1.45, lkO.y));'   // fur: warmer below, deeper on top
-        : /Clothing|Shoe/.test(n) ? 'diffuseColor.rgb = max(diffuseColor.rgb, vec3(0.022, 0.022, 0.027)) * (0.94 + 0.12 * lk_n(lkO.xy * 9.0 + lkO.z * 5.0));' : '';   // charcoal, never flat black; soft fabric variation
+      const POP = 'diffuseColor.rgb = mix(vec3(dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114))), diffuseColor.rgb, 1.18);';   // bolder: richer colour that reads on a small screen
+      const tone = /Fur_/.test(n) ? POP + 'diffuseColor.rgb *= mix(vec3(1.06, 1.0, 0.94), vec3(0.86, 0.85, 0.9), smoothstep(0.25, 1.45, lkO.y));'   // fur: warmer below, deeper on top
+        : /Clothing|Shoe/.test(n) ? POP + 'diffuseColor.rgb = max(diffuseColor.rgb, vec3(0.022, 0.022, 0.027)) * (0.94 + 0.12 * lk_n(lkO.xy * 9.0 + lkO.z * 5.0));' : '';   // charcoal, never flat black; soft fabric variation
       patch(m, 'rim' + (tone ? (/Fur_/.test(n) ? 'F' : 'C') : ''), tone || null, { emissive: `{ float r = pow(1.0 - abs(dot(normalize(vViewPosition), normal)), 2.5); totalEmissiveRadiance += lkRim * r * lkRimStr * (0.6 + 0.4 * diffuseColor.r); }` });
     }
     if (o.isSkinnedMesh && /Body|Head|Jacket|Pants|Tail|Hands|Shoes/.test(o.name)) add.push(o);
@@ -109,6 +110,25 @@ export function lookCharacter(root) {
     o.parent.add(ol); ol.position.copy(o.position); ol.quaternion.copy(o.quaternion); ol.scale.copy(o.scale);
   }
 }
+/** Bolder buildings: thin ink lines on the corners and edges of walls, roofs, trim and signs, so every building reads
+ *  like a clear illustration from far away. Ground, glass, plants and small props are left alone. */
+let inkMat = null;
+const INK_OK = /Brick|Plaster|Concrete|Navy|Teal|Red$|Cream|White$|Wood|FreshMartGreen|Gold$|Metal|Tile|Roof|Wall|Trim|Awning/i;
+const INK_SKIP = /Asphalt|Sidewalk|Grass|Road|Glass|Leaf|Bark|Emit|Food|Pack|Rubber|Fabric|Lamp|Screen|Sign/i;
+export function inkEdges(group, { angle = 30, maxTris = 60000 } = {}) {
+  if (!group) return 0;
+  if (!inkMat) { inkMat = new THREE.LineBasicMaterial({ color: 0x241c2c, transparent: true, opacity: 0.55, depthWrite: false }); inkMat.visible = lkQuality !== 'low'; }
+  let n = 0; const list = [];
+  group.traverse((o) => { if (o.isMesh && !o.isSkinnedMesh && !o.userData.lkInk && o.geometry && o.material && !Array.isArray(o.material)) { const nm = o.material.name || ''; if (INK_OK.test(nm) && !INK_SKIP.test(nm)) list.push(o); } });
+  for (const o of list) {
+    const g = o.geometry, tris = (g.index ? g.index.count : g.attributes.position.count) / 3;
+    if (tris > maxTris) continue;
+    const e = new THREE.LineSegments(new THREE.EdgesGeometry(g, angle), inkMat);
+    e.userData.lkInk = true; e.renderOrder = 2; e.frustumCulled = o.frustumCulled; e.raycast = () => {};
+    o.add(e); o.userData.lkInk = true; n++;
+  }
+  return n;
+}
 let contactMat = null;
 function CONTACT() {
   if (contactMat) return contactMat;
@@ -119,12 +139,12 @@ function CONTACT() {
   return contactMat;
 }
 let outlineMat = null, lkQuality = 'medium';
-export function setLookQuality(q) { lkQuality = q; if (outlineMat) outlineMat.visible = q !== 'low'; }
+export function setLookQuality(q) { lkQuality = q; if (outlineMat) outlineMat.visible = true; if (inkMat) inkMat.visible = q !== 'low'; }
 function OUTLINE() {
   if (outlineMat) return outlineMat;
-  outlineMat = new THREE.MeshBasicMaterial({ color: 0x1a1420, side: THREE.BackSide }); outlineMat.visible = lkQuality !== 'low';
+  outlineMat = new THREE.MeshBasicMaterial({ color: 0x1a1420, side: THREE.BackSide }); outlineMat.visible = true;   // bold outline at every quality: characters are few
   outlineMat.onBeforeCompile = (sh) => {
-    sh.vertexShader = sh.vertexShader.replace('#include <skinning_vertex>', '#include <skinning_vertex>\n  #ifdef USE_SKINNING\n  transformed += normalize(objectNormal) * 0.011;\n  #endif');
+    sh.vertexShader = sh.vertexShader.replace('#include <skinning_vertex>', '#include <skinning_vertex>\n  #ifdef USE_SKINNING\n  transformed += normalize(objectNormal) * 0.017;\n  #endif');
   };
   outlineMat.customProgramCacheKey = () => 'lk-outline';
   return outlineMat;

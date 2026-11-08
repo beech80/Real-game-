@@ -19,7 +19,7 @@ import { Voice, Brain, askNPC } from './voice.js';
 import { buildInterior, BUILDING_ROOMS, ROOM } from './interiors.js';
 import { MapView } from './mapview.js';
 import { installEvents } from './events.js';
-import { scatterFlora, updateLook } from './lookfx.js';
+import { scatterFlora, updateLook, inkEdges } from './lookfx.js';
 import { schoolFromLink, enableSchool, teacherDashboard, assignFromLink, setAssignment } from './school.js';
 import { installKeyboard } from './keyboard.js';
 import { initLang, lang, setLang } from './i18n.js';
@@ -77,6 +77,7 @@ document.getElementById('obj-say').onclick = (e) => { e.stopPropagation(); readE
 UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.ask({ prompt: q }); if (!said) return null; UI.toast(`Heard “${said}” — checking…`, 'info', 1600); const i = await Brain.pick(q, choices, said); if (i == null) UI.toast(`I heard “${said}”. Which answer did you mean? Tap it, or say it again.`, 'info', 4200); return i; } };
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
+try { if (navigator.webdriver) window.__scene = scene; } catch (e) {}   // automated tests only
 
 const W = { district: null, apartment: null, wild: null, club: null, data: null, lamps: [], d: {}, rooms: {} };
 let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60, mini = null, race = null, petCourse = null, arena = null, markT = 0;
@@ -115,6 +116,7 @@ async function boot() {
   await wait(30);
   roomierFreshMart(g.scene, data.district);
   W.district = mergeStatic(g.scene, textures, 40);
+  try { inkEdges(W.district); } catch (e) { console.warn('ink off', e); }
   scene.add(W.district);
   try { const fl = scatterFlora(W.district, isMobile ? { tufts: 2200, flowers: 450 } : {}); if (fl) W.district.add(W.flora = fl); } catch (e) { console.warn('flora off', e); }
   W.lamps = W.district.userData.lamps;
@@ -506,6 +508,7 @@ async function ensureDistrict(id) {
   UI.toast(`Arriving in ${DISTRICTS[id].name}…`, 'info', 1500);
   await wait(30);
   const D = buildDistrict(id, textures);
+  try { inkEdges(D.root || D.group || D.scene); } catch (e) { console.warn('ink off', e); }
   D.coll = new Collision(D.colliders); D.peds = []; D.friends = [];
   D.pools = makeLightPools(D.lamps); D.group.add(D.pools);
   try { const fl = scatterFlora(D.group, { tufts: isMobile ? 1500 : 2500, flowers: isMobile ? 300 : 500, seed: id.length * 7 }); if (fl) D.group.add(fl); } catch (e) { console.warn('flora off', e); }

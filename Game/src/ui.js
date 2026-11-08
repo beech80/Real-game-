@@ -11,7 +11,10 @@ export function h(tag, attrs = {}, ...kids) {
     else if (k === 'html') el.innerHTML = v;
     else el.setAttribute(k, v === true ? '' : (k === 'placeholder' || k === 'aria-label' || k === 'title') ? tr(v) : v);
   }
-  for (const c of kids.flat()) if (c !== null && c !== undefined && c !== false) el.append(c.nodeType ? c : document.createTextNode(typeof c === 'string' ? tr(c) : String(c)));
+  // lesson content stays in English (questions, answer choices, passages): many players are learning English, and the
+  // 🌎 button shows a Spanish version on request. Everything around the lesson follows the language setting.
+  const keepEn = attrs && (attrs['data-en'] || /\b(opt|smh-chip|passage|doc-l|wc-part|wc-word|sort-items)\b/.test(attrs.class || ''));
+  for (const c of kids.flat()) if (c !== null && c !== undefined && c !== false) el.append(c.nodeType ? c : document.createTextNode(typeof c === 'string' && !keepEn ? tr(c) : String(c)));
   return el;
 }
 export const $ = (s) => document.querySelector(s);

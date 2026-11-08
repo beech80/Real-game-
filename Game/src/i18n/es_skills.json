@@ -1,1 +1,1268 @@
-{}
+{
+  "read.signs": {
+    "name": "Letreros y etiquetas",
+    "objective": "Lee letreros y etiquetas para ubicarte y encontrar cosas.",
+    "explain": "Los letreros responden una pregunta: ¿dónde está?, ¿qué es?, ¿qué tan lejos? Lee primero las palabras grandes y luego las flechas.",
+    "alt": "Busca la palabra que dice lo que necesitas (como “DISTRICT” o “RICE”). La flecha o el número que está al lado te dice dónde."
+  },
+  "read.vocab": {
+    "name": "Palabras de todos los días",
+    "objective": "Reconoce palabras comunes del trabajo y de la ciudad.",
+    "explain": "Muchos trabajos usan las mismas palabras: turno, pasillo, recibo, total. Apréndelas una vez y te ayudarán siempre.",
+    "alt": "Di la palabra en voz alta y piensa dónde la viste en la ciudad."
+  },
+  "write.sentences": {
+    "name": "Oraciones completas",
+    "objective": "Escribe oraciones con mayúscula, sujeto, verbo y un signo al final.",
+    "explain": "Una oración empieza con mayúscula, dice quién hace algo y qué hace, y termina con . ! o ?",
+    "alt": "Léela en voz alta. Si suena como una idea completa y empieza con mayúscula, es una oración."
+  },
+  "curs.strokes": {
+    "name": "Trazos de cursiva",
+    "objective": "Haz los trazos básicos de la letra cursiva y uniones simples.",
+    "explain": "Las letras cursivas se hacen con lazos, ondas y líneas inclinadas que se unen sin levantar el lápiz.",
+    "alt": "Traza despacio. No levantes el dedo y deja que cada letra lleve a la siguiente."
+  },
+  "math.add": {
+    "name": "Sumar",
+    "objective": "Suma números hasta 20 y resuelve problemas de suma.",
+    "explain": "Empieza con el número más grande y sigue contando. O forma una decena: 8 + 5 → 8 + 2 = 10, y 3 más = 13.",
+    "alt": "Forma decenas: busca números que sumen 10 (como 6 y 4) y luego suma lo que queda."
+  },
+  "math.sub": {
+    "name": "Quitar",
+    "objective": "Resta para saber cuánto queda.",
+    "explain": "Restar te da la diferencia. Cuenta desde el número más pequeño hasta el más grande.",
+    "alt": "Empieza con todos, tacha los que se quitan y cuenta los que quedan."
+  },
+  "math.count": {
+    "name": "Contar",
+    "objective": "Cuenta grupos de objetos sin errores.",
+    "explain": "Toca cada cosa una vez al contar. El último número que dices te dice cuántos hay.",
+    "alt": "Cuenta de diez en diez los grupos completos de diez y luego sigue con las unidades."
+  },
+  "fin.money": {
+    "name": "Billetes y monedas",
+    "objective": "Reconoce billetes y monedas y lo que valen.",
+    "explain": "Billetes: $1, $5, $10, $20. Monedas: quarter 25¢, dime 10¢, nickel 5¢, penny 1¢. 100¢ = $1.",
+    "alt": "Cuatro quarters hacen un dólar. Diez dimes hacen un dólar."
+  },
+  "fin.needs": {
+    "name": "Necesidades y deseos",
+    "objective": "Distingue las necesidades (lo que necesitas para vivir y trabajar) de los deseos (lo que es bueno tener).",
+    "explain": "Una necesidad te mantiene a salvo, sano o listo para trabajar: comida, vivienda, ropa básica. Un deseo es algo extra.",
+    "alt": "Pregúntate: “¿Qué pasa si no compro esto?” Si no pasa nada malo, es un deseo."
+  },
+  "think.observe": {
+    "name": "Observar",
+    "objective": "Fíjate en los detalles a tu alrededor antes de decidir.",
+    "explain": "Las buenas decisiones empiezan con buena información. Mira a tu alrededor antes de elegir.",
+    "alt": "Detente y busca letreros, personas y pistas. ¿Qué te dicen?"
+  },
+  "think.compare": {
+    "name": "Comparar opciones",
+    "objective": "Compara dos opciones con lo que sabes.",
+    "explain": "Haz una lista de lo que te da cada opción y lo que te cuesta. Luego decide.",
+    "alt": "Imagínate después de cada opción. ¿Qué futuro te gusta más?"
+  },
+  "read.instructions": {
+    "name": "Seguir instrucciones",
+    "objective": "Lee y sigue instrucciones de varios pasos.",
+    "explain": "Las instrucciones son pasos en orden. Léelas todas primero y luego haz el paso 1.",
+    "alt": "Señala cada paso mientras lo haces. Marca lo que ya terminaste."
+  },
+  "read.main": {
+    "name": "Idea principal",
+    "objective": "Encuentra la idea principal de un texto corto.",
+    "explain": "La idea principal es lo que el escritor más quiere que sepas.",
+    "alt": "Pregúntate: si se lo contara a un amigo en una sola oración, ¿qué diría?"
+  },
+  "write.forms": {
+    "name": "Formularios y solicitudes",
+    "objective": "Llena formularios de forma clara y correcta.",
+    "explain": "Los formularios piden respuestas cortas, claras y correctas. Llena todas las casillas obligatorias.",
+    "alt": "Lee la etiqueta arriba de cada casilla. Te dice exactamente qué escribir."
+  },
+  "curs.signature": {
+    "name": "Firma",
+    "objective": "Firma tu nombre en cursiva unida.",
+    "explain": "Tu firma es tu nombre en cursiva. Muestra que estás de acuerdo con lo que firmaste.",
+    "alt": "Traza la guía despacio, letra por letra, sin separar las letras."
+  },
+  "math.decimals": {
+    "name": "Dólares y centavos",
+    "objective": "Suma y resta cantidades con centavos.",
+    "explain": "Alinea los puntos. Suma primero los centavos y luego los dólares. 100 centavos hacen 1 dólar.",
+    "alt": "Redondea a dólares enteros para estimar primero y luego calcula los centavos exactos."
+  },
+  "math.change": {
+    "name": "Dar el cambio",
+    "objective": "Da el cambio correcto contando hacia arriba.",
+    "explain": "Empieza en el total y cuenta hasta lo que pagó el cliente. Lo que contaste es el cambio.",
+    "alt": "Usa los billetes y monedas más grandes que quepan, luego los más pequeños, hasta llegar a lo que pagaron."
+  },
+  "math.multiply": {
+    "name": "Multiplicar",
+    "objective": "Multiplica para contar grupos rápido.",
+    "explain": "Multiplicar es sumar rápido: 5 cajas de 12 = 12 + 12 + 12 + 12 + 12 = 60.",
+    "alt": "Sepáralo en partes: 6 × 12 = 6 × 10 + 6 × 2 = 60 + 12."
+  },
+  "math.time": {
+    "name": "La hora",
+    "objective": "Calcula el tiempo entre dos horas del reloj.",
+    "explain": "Cuenta los minutos hasta la siguiente hora y luego suma las horas.",
+    "alt": "Imagina la manecilla del reloj avanzando. Cuenta los pasos."
+  },
+  "fin.paycheck": {
+    "name": "Cheques de pago",
+    "objective": "Entiende el pago bruto, las deducciones y el pago neto.",
+    "explain": "Pago bruto = horas × pago por hora. Una parte se retiene para impuestos. Lo que te quedas es el pago neto.",
+    "alt": "Piensa en el pago bruto como la pizza entera y en las deducciones como rebanadas que te quitan. El neto es lo que queda en tu plato."
+  },
+  "fin.budget": {
+    "name": "Presupuesto",
+    "objective": "Planea tus gastos para cubrir primero las cuentas.",
+    "explain": "Un presupuesto es un plan: dinero que entra, dinero que sale. Primero las necesidades, luego el ahorro, luego los deseos.",
+    "alt": "Escribe lo que tienes que pagar y cuándo. Lo que sobra es lo que puedes gastar."
+  },
+  "think.consequence": {
+    "name": "Causa y consecuencia",
+    "objective": "Predice a qué te llevará una decisión.",
+    "explain": "Cada decisión causa algo. Pregúntate: ¿qué pasa después, y luego qué?",
+    "alt": "Sigue la decisión dos pasos hacia adelante: hoy y la próxima semana."
+  },
+  "read.documents": {
+    "name": "Leer documentos",
+    "objective": "Entiende contratos de alquiler, facturas y acuerdos.",
+    "explain": "Los documentos esconden detalles importantes en oraciones pequeñas: fechas, cargos y reglas. Lee cada línea.",
+    "alt": "Busca primero los números y las fechas, y luego lee la oración alrededor de cada uno."
+  },
+  "write.professional": {
+    "name": "Mensajes profesionales",
+    "objective": "Escribe mensajes profesionales claros y amables.",
+    "explain": "Saluda a la persona, di claramente lo que necesitas, dale las gracias y firma con tu nombre.",
+    "alt": "Imagina que tu gerente lo lee. ¿Es amable, claro y breve?"
+  },
+  "curs.reading": {
+    "name": "Leer letra a mano",
+    "objective": "Lee notas escritas a mano en cursiva.",
+    "explain": "Para leer cursiva, busca primero las letras altas y los lazos, y luego completa el resto.",
+    "alt": "Lee las palabras de las que estás seguro y usa la oración para adivinar la difícil."
+  },
+  "math.fractions": {
+    "name": "Fracciones",
+    "objective": "Usa fracciones en recetas y medidas.",
+    "explain": "Media receta significa cada cantidad ÷ 2. El doble significa × 2.",
+    "alt": "Dibújalo: una taza dividida en 2 partes y luego en 4 partes. ¿Qué pedazo es más grande?"
+  },
+  "math.percent": {
+    "name": "Porcentajes",
+    "objective": "Calcula descuentos e impuestos.",
+    "explain": "El 10% de un precio = mueve el punto decimal un lugar a la izquierda. El 20% = el doble de eso.",
+    "alt": "Por ciento significa “de cada 100”. El 25% es un cuarto. El 50% es la mitad."
+  },
+  "fin.bills": {
+    "name": "Facturas y fechas límite",
+    "objective": "Paga tus cuentas a tiempo y evita cargos.",
+    "explain": "Las facturas tienen fecha límite. Pagar tarde cuesta más (un cargo por pago atrasado). Paga primero las necesidades, antes de la fecha límite.",
+    "alt": "Anota las fechas límite en tu calendario y revísalo cada mañana."
+  },
+  "fin.credit": {
+    "name": "Crédito e intereses",
+    "objective": "Entiende los préstamos, los intereses y las deudas.",
+    "explain": "Pedir prestado cuesta dinero: los intereses. Mientras más tiempo debas, más pagas.",
+    "alt": "Si pides $100 prestados al 20% anual, deberás unos $120 después de un año."
+  },
+  "think.opportunity": {
+    "name": "Costo de oportunidad",
+    "objective": "Ve lo que dejas ir cuando eliges.",
+    "explain": "El costo de oportunidad es lo que dejas ir. Gastar $40 ahora significa $40 menos para la renta.",
+    "alt": "Pregúntate: si le digo que sí a esto, ¿a qué le estoy diciendo que no?"
+  },
+  "think.evaluate": {
+    "name": "Evaluar consejos",
+    "objective": "Juzga consejos y afirmaciones por la evidencia, no por la presión.",
+    "explain": "Un buen consejo resiste las preguntas. Pregunta por qué, pide pruebas y fíjate en la presión, como “¡solo hoy!”.",
+    "alt": "¿Quién gana si sigues el consejo? Eso te dice mucho."
+  },
+  "math.algebra": {
+    "name": "Álgebra",
+    "objective": "Usa variables para resolver problemas del trabajo.",
+    "explain": "Una letra representa un número que todavía no conoces. Haz lo mismo en ambos lados para encontrarlo.",
+    "alt": "Deshaz los pasos al revés: si 3 cajas más 2 = 14, quita 2 y luego divide entre 3."
+  },
+  "fin.taxes": {
+    "name": "Impuestos y seguros",
+    "objective": "Entiende los impuestos, los seguros y la planificación.",
+    "explain": "Los impuestos pagan los servicios públicos. El seguro te protege de gastos grandes e inesperados.",
+    "alt": "Seguro: paga un poco con regularidad para que un mal día no te cueste mucho."
+  },
+  "fin.business": {
+    "name": "Finanzas de un negocio",
+    "objective": "Ingresos, costos, ganancias, nómina y flujo de efectivo.",
+    "explain": "Ganancia = ingresos − costos. El flujo de efectivo es cuándo entra y sale realmente el dinero.",
+    "alt": "Registra cada dólar que entra y sale cada semana. La ganancia es lo que queda."
+  },
+  "think.leadership": {
+    "name": "Liderazgo y ética",
+    "objective": "Toma decisiones que creen oportunidades para los demás.",
+    "explain": "Los líderes consideran los efectos a largo plazo en las personas, no solo la ganancia inmediata.",
+    "alt": "Pregúntate: ¿a quién ayuda esta decisión, a quién perjudica y puedo hacerla más justa?"
+  },
+  "read.letters": {
+    "name": "Letras y sonidos",
+    "objective": "Reconoce las letras y los sonidos que hacen.",
+    "explain": "Cada letra tiene una forma grande (mayúscula), una forma pequeña y un sonido. A y a son la misma letra. La S suena “sss”, como una serpiente.",
+    "alt": "Di la palabra despacio: “sssun”. El primer sonido que oyes es la primera letra."
+  },
+  "read.phonics": {
+    "name": "Fonética y decodificación",
+    "objective": "Une sonidos para leer palabras nuevas.",
+    "explain": "Para leer una palabra, di cada sonido y luego júntalos: c-a-t → cat.",
+    "alt": "Señala debajo de cada letra y di su sonido. Luego dilos más rápido hasta que oigas una palabra."
+  },
+  "read.sentences": {
+    "name": "Oraciones simples",
+    "objective": "Lee y entiende oraciones cortas.",
+    "explain": "Una oración te dice quién y qué pasa. Busca la persona o cosa, y luego busca lo que hace.",
+    "alt": "Léela dos veces. Imagínala en tu cabeza. ¿La imagen coincide?"
+  },
+  "read.paragraph": {
+    "name": "Párrafos y detalles",
+    "objective": "Encuentra los detalles de apoyo en un párrafo.",
+    "explain": "La idea principal es el punto grande. Los detalles son los datos que la apoyan: quién, qué, cuándo, dónde, cuánto.",
+    "alt": "Haz una pregunta (¿Cuándo? ¿Cuánto?) y busca la oración que la responde."
+  },
+  "read.multistep": {
+    "name": "Instrucciones de varios pasos",
+    "objective": "Sigue instrucciones de varios pasos en orden.",
+    "explain": "Numera los pasos. Hazlos en orden y marca cada uno antes de empezar el siguiente.",
+    "alt": "Busca palabras de orden: primero, después, luego, más tarde, por último."
+  },
+  "read.inference": {
+    "name": "Inferencia",
+    "objective": "Descubre lo que el texto quiere decir pero no dice directamente.",
+    "explain": "Inferencia = pistas del texto + lo que ya sabes. El escritor deja pistas; tú las conectas.",
+    "alt": "Pregúntate: ¿qué haría que esto fuera cierto? ¿Qué respuesta encaja con todas las pistas?"
+  },
+  "read.compare": {
+    "name": "Comparar información",
+    "objective": "Compara dos fuentes de información para tomar una decisión.",
+    "explain": "Pon los mismos datos lado a lado (precio, tiempo, reglas) y compáralos uno por uno.",
+    "alt": "Haz una tablita en tu cabeza: Opción A contra Opción B en cada detalle."
+  },
+  "read.technical": {
+    "name": "Lectura técnica",
+    "objective": "Lee manuales, especificaciones e instrucciones técnicas.",
+    "explain": "El texto técnico es preciso. Lee primero las advertencias y luego los números y las unidades con cuidado.",
+    "alt": "Encuentra el valor exacto y la unidad (amperios, pulgadas, °F). Las unidades cambian el significado."
+  },
+  "read.evidence": {
+    "name": "Evidencia en el texto",
+    "objective": "Usa líneas exactas de un texto para apoyar una respuesta.",
+    "explain": "La evidencia es la oración que prueba tu respuesta. Si puedes señalarla, tu respuesta es sólida.",
+    "alt": "Tapa las respuestas. Encuentra la línea que responde la pregunta y luego elige la opción que coincide."
+  },
+  "read.factopinion": {
+    "name": "Hecho u opinión",
+    "objective": "Distingue los hechos (se pueden comprobar) de las opiniones (creencias).",
+    "explain": "Un hecho se puede comprobar y demostrar. Una opinión es lo que alguien cree o siente.",
+    "alt": "Busca palabras de sentimiento: mejor, peor, increíble, debería. Muchas veces indican una opinión."
+  },
+  "read.purpose": {
+    "name": "Propósito del autor",
+    "objective": "Reconoce por qué se escribió un texto: informar, persuadir o entretener.",
+    "explain": "Pregúntate por qué el escritor lo hizo: para informar (enseñar datos), persuadir (cambiar tu opinión) o entretener.",
+    "alt": "Los anuncios persuaden. Los manuales informan. Los cuentos entretienen."
+  },
+  "read.summarize": {
+    "name": "Resumir",
+    "objective": "Cuenta las ideas más importantes en pocas palabras.",
+    "explain": "Un resumen conserva la idea principal y los detalles clave, y deja fuera lo demás.",
+    "alt": "¿Puedes decirlo en una oración? Quién, qué hizo y por qué importa."
+  },
+  "read.contracts": {
+    "name": "Contratos y análisis",
+    "objective": "Lee contratos con atención: obligaciones, plazos, costos y penalidades.",
+    "explain": "Los contratos dicen quién debe hacer qué, para cuándo y qué pasa si no lo hace. Encuentra cada una de esas partes.",
+    "alt": "Subraya cada número y cada “debe” o “hará”. Esas son las promesas."
+  },
+  "read.bias": {
+    "name": "Sesgo",
+    "objective": "Nota cuando una fuente se inclina hacia un lado o deja cosas fuera.",
+    "explain": "Las fuentes sesgadas muestran un solo lado, usan palabras cargadas o ganan algo si les crees.",
+    "alt": "Pregúntate: ¿qué falta? ¿Quién se beneficia? ¿Estaría de acuerdo alguien del otro lado?"
+  },
+  "read.sources": {
+    "name": "Evaluar fuentes",
+    "objective": "Juzga qué tan confiable es una fuente.",
+    "explain": "Las fuentes confiables están actualizadas, muestran evidencia, tienen experiencia y no tienen razones para engañar.",
+    "alt": "Revisa: quién lo escribió, cuándo, cómo lo sabe y si otros están de acuerdo."
+  },
+  "read.research": {
+    "name": "Investigación independiente",
+    "objective": "Combina varias fuentes para responder una pregunta real.",
+    "explain": "Una buena investigación reúne varias fuentes confiables, las compara y llega a una conclusión cuidadosa.",
+    "alt": "Donde las fuentes coinciden, puedes tener confianza. Donde no coinciden, averigua por qué."
+  },
+  "write.letters": {
+    "name": "Letras y ortografía",
+    "objective": "Escribe correctamente palabras comunes en inglés.",
+    "explain": "Escribe guiándote por los sonidos y luego revisa las partes difíciles que debes recordar (como la e muda en “make”).",
+    "alt": "Dila despacio, escribe cada sonido y compárala con cómo se ve en letreros y etiquetas."
+  },
+  "write.caps": {
+    "name": "Mayúsculas y puntuación",
+    "objective": "Empieza las oraciones con mayúscula y termínalas con un signo de puntuación.",
+    "explain": "Las mayúsculas van al inicio de las oraciones y en los nombres. Termina con . para contar algo, ? para preguntar y ! para un sentimiento fuerte.",
+    "alt": "Léela en voz alta: donde tu voz se detiene, va el punto."
+  },
+  "write.messages": {
+    "name": "Mensajes",
+    "objective": "Escribe mensajes claros y amables.",
+    "explain": "Un buen mensaje dice para quién es, qué necesitas y para cuándo, con un tono amable.",
+    "alt": "Hola + el motivo + el detalle + gracias."
+  },
+  "write.paragraph": {
+    "name": "Párrafos",
+    "objective": "Escribe un párrafo con una oración temática y detalles de apoyo.",
+    "explain": "Empieza con una oración temática, agrega 2–3 detalles y termina con una oración de cierre.",
+    "alt": "Piensa en una hamburguesa: el pan de arriba (idea principal), el relleno (detalles), el pan de abajo (cierre)."
+  },
+  "write.email": {
+    "name": "Correos electrónicos",
+    "objective": "Escribe correos organizados con un asunto y un propósito claros.",
+    "explain": "Asunto claro, saludo, propósito en la primera oración, detalles y una despedida amable.",
+    "alt": "Si solo leyeran el asunto y la primera línea, ¿sabrían lo que necesitas?"
+  },
+  "write.resume": {
+    "name": "Currículums",
+    "objective": "Presenta tu experiencia y tus habilidades para que los empleadores vean lo que puedes hacer.",
+    "explain": "Un currículum muestra dónde trabajaste, qué hiciste ahí y tus habilidades. Empieza cada línea con un verbo de acción.",
+    "alt": "En lugar de “Estuve en Fresh Mart”, escribe “Atendí a clientes y cuadré la caja registradora en Fresh Mart.”"
+  },
+  "write.report": {
+    "name": "Informes",
+    "objective": "Escribe informes cortos que presenten hallazgos y evidencia.",
+    "explain": "Los informes dicen lo que encontraste, la evidencia y lo que debería pasar después.",
+    "alt": "Hallazgo → prueba → recomendación."
+  },
+  "write.persuasive": {
+    "name": "Escritura persuasiva",
+    "objective": "Defiende una postura con razones y evidencia, con respeto.",
+    "explain": "Di tu postura, da razones con evidencia, responde al otro lado y cierra con amabilidad.",
+    "alt": "La persuasión sólida usa hechos y beneficios para el lector, no presión."
+  },
+  "write.proposal": {
+    "name": "Propuestas de negocio",
+    "objective": "Propón un plan con costos, beneficios y calendario.",
+    "explain": "Una propuesta presenta el problema, tu solución, lo que cuesta y lo que gana el lector.",
+    "alt": "Problema → solución → costo → beneficio → siguiente paso."
+  },
+  "write.analytical": {
+    "name": "Escritura analítica",
+    "objective": "Explica cómo y por qué funciona algo usando evidencia.",
+    "explain": "El análisis explica causas y efectos con evidencia, no solo describe lo que pasó.",
+    "alt": "Usa “porque” y “lo que significa que” para conectar la evidencia con tu idea."
+  },
+  "write.research": {
+    "name": "Escritura de investigación",
+    "objective": "Escribe a partir de varias fuentes y dales crédito.",
+    "explain": "Combina fuentes, di de dónde vino cada idea y saca tu propia conclusión.",
+    "alt": "Di quién lo descubrió: “Según el informe de la City Clinic, …”"
+  },
+  "write.bizplan": {
+    "name": "Planes de negocio",
+    "objective": "Escribe un plan completo: mercado, costos, precios, riesgos y crecimiento.",
+    "explain": "Un plan de negocio explica quiénes son tus clientes, los costos, los precios, los riesgos y cómo vas a crecer.",
+    "alt": "¿Podría un prestamista leerlo y entender cómo gana dinero el negocio?"
+  },
+  "write.argument": {
+    "name": "Argumentos basados en investigación",
+    "objective": "Construye un argumento con evidencia y responde con justicia al otro lado.",
+    "explain": "Un argumento sólido nombra el mejor contraargumento y lo responde con evidencia.",
+    "alt": "Si no puedes explicar el otro lado con justicia, todavía no entiendes el debate."
+  },
+  "curs.lower": {
+    "name": "Cursiva minúscula",
+    "objective": "Forma las letras minúsculas en cursiva.",
+    "explain": "La mayoría de las letras minúsculas en cursiva empiezan en la línea de abajo y suben.",
+    "alt": "Primero traza despacio. La rapidez viene después; primero, la limpieza."
+  },
+  "curs.upper": {
+    "name": "Cursiva mayúscula",
+    "objective": "Forma las letras mayúsculas en cursiva para nombres y oraciones.",
+    "explain": "Las mayúsculas en cursiva son más altas y muchas empiezan con un lazo arriba.",
+    "alt": "Tu nombre empieza con una. Practica esa letra primero."
+  },
+  "curs.words": {
+    "name": "Palabras en cursiva",
+    "objective": "Une las letras con suavidad para formar palabras.",
+    "explain": "No levantes el lápiz y une cada letra con la siguiente con un pequeño trazo curvo.",
+    "alt": "Levanta el lápiz solo al final de la palabra (y para poner el punto de la i y cruzar la t)."
+  },
+  "curs.fluent": {
+    "name": "Cursiva fluida",
+    "objective": "Escribe oraciones cortas en cursiva con comodidad.",
+    "explain": "La fluidez es un ritmo constante y un espacio parejo, no la rapidez.",
+    "alt": "Deja entre palabras el ancho de una o pequeña."
+  },
+  "curs.styles": {
+    "name": "Estilos de letra",
+    "objective": "Lee los distintos estilos de letra de otras personas.",
+    "explain": "La letra a mano cambia de persona a persona. Usa las formas de letras que conoces y el sentido de la oración para leer palabras poco claras.",
+    "alt": "Si una palabra no se entiende, lee el resto de la oración. El contexto llena el hueco."
+  },
+  "curs.documents": {
+    "name": "Documentos escritos a mano",
+    "objective": "Lee con precisión notas, formularios y registros escritos a mano.",
+    "explain": "Los registros escritos a mano también tienen números y nombres exactos. Léelos dos veces.",
+    "alt": "Compara los números con lo impreso cerca, como los totales."
+  },
+  "curs.varied": {
+    "name": "Letras muy diferentes",
+    "objective": "Interpreta letra a mano antigua, apurada o poco común.",
+    "explain": "Compara las letras dentro de la misma nota: una letra confusa suele parecerse a otra que está escrita con claridad en otra parte.",
+    "alt": "Arma una clave: encuentra cada letra donde se vea clara y luego descifra el resto."
+  },
+  "math.numbers": {
+    "name": "Reconocer números",
+    "objective": "Lee y compara números enteros.",
+    "explain": "Los números más grandes tienen más dígitos, o un primer dígito mayor si tienen la misma cantidad de dígitos.",
+    "alt": "Compara de izquierda a derecha: 47 y 52 → 4 decenas y 5 decenas, así que 52 es mayor."
+  },
+  "math.place": {
+    "name": "Valor posicional",
+    "objective": "Entiende unidades, decenas, centenas y millares.",
+    "explain": "Cada lugar vale 10 veces lo que vale el lugar de su derecha: unidades, decenas, centenas, millares.",
+    "alt": "$305 son 3 centenas, 0 decenas y 5 unidades. El 0 ocupa el lugar de las decenas."
+  },
+  "math.divide": {
+    "name": "División",
+    "objective": "Reparte y agrupa cantidades en partes iguales.",
+    "explain": "Dividir separa un total en grupos iguales. 24 ÷ 4 pregunta: ¿cuántos hay en cada uno de 4 grupos?",
+    "alt": "Piensa en la multiplicación al revés: 4 × ? = 24 → 6."
+  },
+  "math.ratio": {
+    "name": "Razones y tasas",
+    "objective": "Compara cantidades y ajústalas a escala.",
+    "explain": "Una razón compara dos cantidades. 2 tazas de arroz : 3 tazas de agua. Si duplicas una, duplica la otra.",
+    "alt": "Encuentra la cantidad “por uno” (tasa unitaria) y luego multiplica."
+  },
+  "math.measure": {
+    "name": "Medición",
+    "objective": "Mide longitud, peso y volumen, y convierte unidades.",
+    "explain": "Conoce las conversiones clave: 12 pulgadas = 1 pie, 100 cm = 1 m, 16 oz = 1 lb.",
+    "alt": "Al convertir a una unidad más pequeña, el número se hace más grande (pies → pulgadas: multiplica)."
+  },
+  "math.geometry": {
+    "name": "Geometría básica",
+    "objective": "Encuentra el perímetro y el área de rectángulos.",
+    "explain": "El perímetro recorre el borde (suma todos los lados). El área cubre el interior (largo × ancho).",
+    "alt": "Cerca = perímetro. Alfombra = área."
+  },
+  "math.prealgebra": {
+    "name": "Preálgebra",
+    "objective": "Usa el orden de las operaciones y ecuaciones sencillas.",
+    "explain": "Orden de las operaciones: primero los paréntesis, luego multiplicar y dividir, luego sumar y restar, de izquierda a derecha.",
+    "alt": "Haz las operaciones “fuertes” (× ÷) antes que las “débiles” (+ −)."
+  },
+  "math.geometry2": {
+    "name": "Geometría",
+    "objective": "Volumen, círculos y triángulos rectángulos.",
+    "explain": "Volumen = largo × ancho × alto. En un triángulo rectángulo: a² + b² = c².",
+    "alt": "Para un triángulo 3-4-5: 9 + 16 = 25, y √25 = 5."
+  },
+  "math.stats": {
+    "name": "Introducción a la estadística",
+    "objective": "Encuentra la media, la mediana y el rango de un conjunto de datos.",
+    "explain": "Media = suma de todos los valores ÷ cuántos son. Mediana = el valor del medio cuando están ordenados. Rango = el mayor − el menor.",
+    "alt": "Un valor muy grande sube la media; la mediana se mantiene estable."
+  },
+  "math.algebra2": {
+    "name": "Álgebra II",
+    "objective": "Exponentes, crecimiento y sistemas de ecuaciones.",
+    "explain": "Los exponentes repiten la multiplicación: 2⁴ = 2×2×2×2 = 16. El crecimiento que multiplica es exponencial.",
+    "alt": "Lo lineal suma la misma cantidad en cada paso; lo exponencial multiplica por la misma cantidad."
+  },
+  "math.probability": {
+    "name": "Probabilidad",
+    "objective": "Describe qué tan probable es que ocurra algo.",
+    "explain": "Probabilidad = casos favorables ÷ todos los casos posibles. Va de 0 (nunca) a 1 (siempre).",
+    "alt": "Una probabilidad de 1 en 4 = 1/4 = 25%."
+  },
+  "math.statsadv": {
+    "name": "Estadística",
+    "objective": "Interpreta datos, tendencias y muestras.",
+    "explain": "Mira el tamaño de la muestra y la tendencia, no solo un número. Las muestras justas y más grandes son más confiables.",
+    "alt": "Una encuesta a 5 amigos te dice menos que una encuesta a 500 clientes."
+  },
+  "math.finmath": {
+    "name": "Matemática financiera",
+    "objective": "Interés compuesto y totales de préstamos.",
+    "explain": "El interés compuesto gana interés sobre el interés: en cada período multiplica por (1 + tasa).",
+    "alt": "$100 al 10% anual: $110 después de 1 año, $121 después de 2 (el 10% de $110 es $11)."
+  },
+  "math.modeling": {
+    "name": "Modelación matemática",
+    "objective": "Convierte una situación real en una ecuación y úsala.",
+    "explain": "Un modelo es una ecuación sencilla que se comporta como la situación real: costo = fijo + costo por artículo × artículos.",
+    "alt": "Nombra la incógnita, escribe en lenguaje matemático lo que sabes, resuelve y comprueba que tenga sentido."
+  },
+  "math.forecast": {
+    "name": "Proyecciones",
+    "objective": "Proyecta valores futuros a partir de tendencias.",
+    "explain": "Una proyección extiende una tendencia con cuidado e indica su incertidumbre.",
+    "alt": "Si las ventas crecieron unas 20 cada semana, la próxima semana serán aproximadamente 20 más, pero no está garantizado."
+  },
+  "math.optimize": {
+    "name": "Optimización",
+    "objective": "Encuentra la mejor opción dentro de ciertos límites.",
+    "explain": "Optimizar es probar opciones frente a una meta (la mayor ganancia, el menor costo) respetando los límites.",
+    "alt": "Haz una lista de las opciones, calcula el resultado de cada una y elige la mejor que cumpla los límites."
+  },
+  "math.precalc": {
+    "name": "Tasas de cambio",
+    "objective": "Entiende qué tan rápido cambian las cantidades.",
+    "explain": "Tasa de cambio = cambio en la salida ÷ cambio en la entrada (como millas por hora o dólares por semana).",
+    "alt": "Elige dos puntos, resta y divide. Esa es la pendiente."
+  },
+  "fin.prices": {
+    "name": "Precios",
+    "objective": "Lee etiquetas de precio y compara costos sencillos.",
+    "explain": "La etiqueta de precio dice cuánto cuesta algo. Compara los números para encontrar lo más barato.",
+    "alt": "El número más pequeño es el precio más bajo. Fíjate que compares la misma cantidad."
+  },
+  "fin.saving": {
+    "name": "Ahorrar",
+    "objective": "Guarda dinero para después.",
+    "explain": "Ahorrar es guardar algo de dinero ahora para usarlo después en algo importante.",
+    "alt": "Aunque sea poco cada semana, se va sumando: $5 por semana son $260 al año."
+  },
+  "fin.goals": {
+    "name": "Metas de ahorro",
+    "objective": "Calcula cuánto tiempo tardas en ahorrar para algo.",
+    "explain": "Meta ÷ lo que ahorras cada semana = semanas que necesitas.",
+    "alt": "Si ahorras $25 por semana para una bicicleta de $150: 150 ÷ 25 = 6 semanas."
+  },
+  "fin.records": {
+    "name": "Registro de gastos",
+    "objective": "Lleva la cuenta del dinero que entra y sale.",
+    "explain": "Saldo inicial + dinero que entra − dinero que sale = lo que tienes ahora.",
+    "alt": "Anota cada compra. Las sorpresas en tu saldo casi siempre vienen de gastos pequeños que olvidaste."
+  },
+  "fin.banking": {
+    "name": "El banco",
+    "objective": "Usa depósitos, retiros y saldos.",
+    "explain": "Un depósito agrega dinero a tu cuenta. Un retiro saca dinero. Tu saldo es lo que queda.",
+    "alt": "Depósito = entra. Retiro = sale."
+  },
+  "fin.interest": {
+    "name": "Intereses",
+    "objective": "Entiende los intereses que ganas y los que pagas.",
+    "explain": "El interés de los ahorros te paga por dejar tu dinero en el banco. El interés de un préstamo es lo que te cuesta pedir prestado.",
+    "alt": "Ganar intereses: bueno para ti. Pagar intereses: el costo de pedir prestado."
+  },
+  "fin.debt": {
+    "name": "Conciencia sobre las deudas",
+    "objective": "Reconoce cómo crece una deuda y cómo manejarla.",
+    "explain": "Una deuda es dinero que debes. Los pagos mínimos la mantienen viva; los pagos extra la reducen más rápido.",
+    "alt": "Paga primero la deuda con el interés más alto."
+  },
+  "fin.loans": {
+    "name": "Préstamos",
+    "objective": "Compara préstamos por su costo total, no solo por el pago mensual.",
+    "explain": "Costo total = pago × número de pagos (+ el pago inicial). Pagos más bajos durante más semanas pueden costar más.",
+    "alt": "Siempre haz la multiplicación: $90 × 45 semanas son $4,050."
+  },
+  "fin.score": {
+    "name": "Puntaje de crédito",
+    "objective": "Conoce lo que mejora o perjudica un puntaje de crédito.",
+    "explain": "El puntaje de crédito les muestra a los prestamistas qué tan cumplido eres al pagar. Los pagos a tiempo lo suben; los atrasados lo bajan.",
+    "alt": "Paga a tiempo, usa menos de tu límite y mantén tus cuentas al día."
+  },
+  "fin.insurance": {
+    "name": "Seguros",
+    "objective": "Entiende las primas, los deducibles y por qué el seguro ayuda.",
+    "explain": "Pagas una prima con regularidad. Si pasa algo malo, tú pagas el deducible y el seguro paga el resto.",
+    "alt": "El seguro convierte un gasto grande y aterrador en gastos pequeños y predecibles."
+  },
+  "fin.planning": {
+    "name": "Planificación financiera",
+    "objective": "Planea con meses de anticipación: fondo de emergencia, metas y cuentas.",
+    "explain": "Arma un fondo de emergencia inicial ($500–$1,000), luego junta 3–6 meses de gastos esenciales, después ahorra para tus metas y al final gasta en deseos.",
+    "alt": "Primero las necesidades, segundo el fondo de emergencia, tercero las metas, al final la diversión."
+  },
+  "fin.fraud": {
+    "name": "Cuidado con el fraude",
+    "objective": "Reconoce estafas y protege tu dinero.",
+    "explain": "Las estafas crean urgencia, piden secretos (PIN, códigos) o prometen dinero fácil. Los bancos de verdad nunca piden tu PIN.",
+    "alt": "Haz una pausa, no hagas clic y consulta con el banco real usando un número que ya conoces."
+  },
+  "fin.investing": {
+    "name": "Invertir (simulado)",
+    "objective": "Entiende la inversión, el riesgo y que las ganancias nunca están garantizadas.",
+    "explain": "Las inversiones pueden crecer o bajar. Las ganancias posibles más altas vienen con más riesgo. Nada está garantizado.",
+    "alt": "Invierte solo dinero que no vas a necesitar pronto, y nunca todo en una sola cosa."
+  },
+  "fin.cashflow": {
+    "name": "Flujo de efectivo",
+    "objective": "Registra cuándo entra y sale realmente el dinero.",
+    "explain": "El flujo de efectivo es cuestión de tiempo. Un negocio con ganancias puede quedarse sin efectivo si las cuentas llegan antes que las ventas.",
+    "alt": "Dinero que entra esta semana − dinero que sale esta semana = flujo de efectivo de esta semana."
+  },
+  "fin.payroll": {
+    "name": "Nómina",
+    "objective": "Calcula salarios, horas y retenciones de los empleados.",
+    "explain": "Nómina = horas × salario de cada empleado; luego se retienen los impuestos antes de pagarles.",
+    "alt": "Primero el pago bruto, después las deducciones, al final el pago neto."
+  },
+  "fin.margins": {
+    "name": "Márgenes de ganancia",
+    "objective": "Calcula la ganancia por artículo y el porcentaje de margen.",
+    "explain": "Margen de ganancia = ganancia ÷ precio. Un café de $4 que cuesta $1 hacer deja $3 de ganancia, un margen del 75%.",
+    "alt": "El margen te dice cuánto de cada venta te quedas."
+  },
+  "fin.expansion": {
+    "name": "Expansión del negocio",
+    "objective": "Decide cuándo y cómo debe crecer un negocio.",
+    "explain": "Expande cuando la demanda sea estable, el flujo de efectivo esté sano y las ventas esperadas cubran los nuevos costos.",
+    "alt": "Prueba en pequeño primero. Un local nuevo antes que cinco."
+  },
+  "fin.forecast": {
+    "name": "Proyecciones financieras",
+    "objective": "Proyecta ingresos y costos hacia el futuro.",
+    "explain": "Una proyección estima el dinero futuro con las tendencias pasadas y los cambios planeados, con un margen de seguridad.",
+    "alt": "Planea para un caso realista y un caso malo, no solo para el mejor caso."
+  },
+  "fin.diversify": {
+    "name": "Diversificación",
+    "objective": "Reparte el riesgo entre distintas inversiones.",
+    "explain": "Diversificar significa no poner todo en un solo lugar, para que una pérdida no te hunda.",
+    "alt": "No pongas todos los huevos en la misma canasta."
+  },
+  "fin.assets": {
+    "name": "Gestión de activos",
+    "objective": "Entiende los activos, los pasivos y el patrimonio neto.",
+    "explain": "Patrimonio neto = lo que tienes (activos) − lo que debes (pasivos).",
+    "alt": "Un auto que vale $4,000 con $3,000 pendientes del préstamo suma $1,000 a tu patrimonio neto."
+  },
+  "think.directions": {
+    "name": "Seguir indicaciones",
+    "objective": "Sigue indicaciones sencillas en orden.",
+    "explain": "Escucha cada paso y el orden: primero, luego, al final.",
+    "alt": "Repite las indicaciones con tus propias palabras antes de empezar."
+  },
+  "think.planning": {
+    "name": "Planear con tiempo",
+    "objective": "Planea tu tiempo y tus tareas antes de empezar.",
+    "explain": "Planear es hacer una lista de lo que tiene que pasar, cuánto tarda y cuándo empezar.",
+    "alt": "Trabaja hacia atrás desde la fecha límite."
+  },
+  "think.risk": {
+    "name": "Riesgo y recompensa",
+    "objective": "Compara lo que podrías ganar con lo que podrías perder.",
+    "explain": "Las grandes recompensas suelen traer grandes riesgos. Pregúntate: ¿qué es lo peor que puede pasar y puedo soportarlo?",
+    "alt": "Si perder te haría mucho daño, el riesgo es demasiado grande por ahora."
+  },
+  "think.evidence": {
+    "name": "Evaluar la evidencia",
+    "objective": "Decide si la evidencia realmente apoya una afirmación.",
+    "explain": "La buena evidencia es pertinente, confiable y suficiente. Una sola historia no es prueba.",
+    "alt": "Pregúntate: ¿esta evidencia de verdad se relaciona con la afirmación, o solo suena convincente?"
+  },
+  "think.ethics": {
+    "name": "Razonamiento ético",
+    "objective": "Toma decisiones justas y honestas.",
+    "explain": "Las decisiones éticas toman en cuenta a todos los afectados y siguen siendo honestas aunque nadie esté mirando.",
+    "alt": "¿Te sentirías cómodo si todos supieran lo que elegiste y por qué?"
+  },
+  "think.problem": {
+    "name": "Resolver problemas complejos",
+    "objective": "Divide los problemas grandes en pasos y prueba soluciones.",
+    "explain": "Define el problema, haz una lista de posibles causas, prueba la más probable y revisa el resultado.",
+    "alt": "Cambia una cosa a la vez para saber qué lo arregló."
+  },
+  "think.longterm": {
+    "name": "Planear a largo plazo",
+    "objective": "Elige pensando en el futuro.",
+    "explain": "Algunas decisiones cuestan más ahora pero dan frutos después (clases, ahorros). Otras se sienten bien ahora y cuestan después.",
+    "alt": "Pregúntate: ¿cómo se verá esto en un mes? ¿Y en un año?"
+  },
+  "think.persuasion": {
+    "name": "Reconocer la persuasión",
+    "objective": "Nota las técnicas de persuasión y la presión.",
+    "explain": "Quienes quieren persuadirte usan urgencia (“¡solo hoy!”), halagos, miedo a perderte algo y “todos lo están haciendo”.",
+    "alt": "Cuando sientas prisa, ve más despacio. Las buenas ofertas siguen ahí después de dormir una noche."
+  },
+  "think.negotiate": {
+    "name": "Negociación",
+    "objective": "Llega a acuerdos justos donde ambas partes ganen.",
+    "explain": "Negociar bien es conocer tu límite, entender lo que necesita la otra parte y buscar que ambos ganen.",
+    "alt": "Pregunta qué es lo que más les importa. Intercambia cosas que te cuestan poco pero valen mucho para ellos."
+  },
+  "think.strategy": {
+    "name": "Decisiones estratégicas",
+    "objective": "Elige planes que se ajusten a tus metas, recursos y competencia.",
+    "explain": "La estrategia une tus fortalezas con una oportunidad, con un plan para lo que pueda salir mal.",
+    "alt": "Meta → recursos → opciones → riesgos → elegir."
+  },
+  "think.systems": {
+    "name": "Pensamiento sistémico",
+    "objective": "Ve cómo las partes de un sistema se afectan entre sí.",
+    "explain": "En un sistema, cambiar una parte cambia otras: subir precios → menos clientes → menos recomendaciones de boca en boca.",
+    "alt": "Dibuja flechas: esto causa aquello, que causa esto otro."
+  },
+  "think.uncertainty": {
+    "name": "Decidir con incertidumbre",
+    "objective": "Toma buenas decisiones cuando el futuro es desconocido.",
+    "explain": "Cuando no puedes saber el resultado, compara los resultados probables, protégete del peor caso y mantente flexible.",
+    "alt": "Elige la opción que sea suficientemente buena en la mayoría de los futuros, no perfecta en uno solo."
+  },
+  "sci.safety": {
+    "name": "Seguridad y peligros",
+    "objective": "Detecta peligros y mantente a salvo.",
+    "explain": "Un peligro es cualquier cosa que puede lastimar a alguien: fuego, pisos mojados, herramientas filosas. Encuéntralo, avisa a los demás y aléjate.",
+    "alt": "Para, mira, piensa: ¿hay algo caliente, filoso, resbaloso o alto?"
+  },
+  "sci.animals": {
+    "name": "Lo que necesitan los animales",
+    "objective": "Conoce lo que los animales necesitan para estar sanos y felices.",
+    "explain": "Los animales necesitan comida, agua fresca, descanso, ejercicio, un hogar seguro y cariño.",
+    "alt": "Pregúntate: ¿mi mascota ya comió, tomó agua, descansó y jugó hoy?"
+  },
+  "sci.observe": {
+    "name": "Observación científica",
+    "objective": "Nota y describe lo que ves, oyes y mides.",
+    "explain": "Los científicos observan con cuidado y anotan lo que notan antes de decidir qué significa.",
+    "alt": "Primero descríbelo (color, tamaño, sonido), después explícalo."
+  },
+  "sci.motion": {
+    "name": "Rapidez y movimiento",
+    "objective": "Relaciona la rapidez, la distancia y el tiempo.",
+    "explain": "Rapidez = distancia ÷ tiempo. Avanzar 30 metros cada segundo durante 10 segundos recorre 300 metros.",
+    "alt": "Distancia = rapidez × tiempo. Tiempo = distancia ÷ rapidez."
+  },
+  "sci.method": {
+    "name": "Pruebas justas",
+    "objective": "Haz un experimento justo cambiando una sola cosa a la vez.",
+    "explain": "Una prueba justa cambia una variable y deja todo lo demás igual, así sabes qué causó el cambio.",
+    "alt": "Si cambias las llantas Y el motor, no puedes saber cuál ayudó."
+  },
+  "sci.nutrition": {
+    "name": "Nutrición",
+    "objective": "Elige comida balanceada para personas y mascotas.",
+    "explain": "Las comidas balanceadas tienen proteína, verduras o fruta, y cereales. Los dulces son pequeños extras.",
+    "alt": "Medio plato de verduras, un cuarto de proteína y un cuarto de cereales."
+  },
+  "sci.body": {
+    "name": "El cuerpo humano",
+    "objective": "Nombra los sistemas del cuerpo y lo que hacen.",
+    "explain": "El corazón bombea la sangre, los pulmones meten aire, los huesos te sostienen y los músculos te mueven.",
+    "alt": "Une cada parte con su trabajo: bombear, respirar, sostener, mover."
+  },
+  "sci.friction": {
+    "name": "Fricción y agarre",
+    "objective": "Explica cómo la fricción afecta el movimiento y las vueltas.",
+    "explain": "La fricción es el agarre entre dos superficies. Más agarre deja que las llantas den vuelta a más velocidad sin derrapar.",
+    "alt": "El hielo tiene poca fricción, por eso te resbalas. El hule sobre el camino seco tiene mucha, por eso se agarra."
+  },
+  "sci.energy": {
+    "name": "Energía",
+    "objective": "Entiende cómo se guarda y se usa la energía.",
+    "explain": "La energía se guarda en el combustible, la comida y las baterías, y se usa para mover, calentar e iluminar cosas. Usar más potencia la gasta más rápido.",
+    "alt": "Una batería más grande dura más, pero pesa más."
+  },
+  "sci.machines": {
+    "name": "Máquinas simples",
+    "objective": "Usa palancas, ruedas, poleas y rampas para facilitar el trabajo.",
+    "explain": "Las máquinas simples cambian distancia por fuerza: es más fácil subir algo por una rampa larga que por una corta y empinada.",
+    "alt": "Brazo de palanca más largo = menos esfuerzo."
+  },
+  "sci.heat": {
+    "name": "Calor y cocina",
+    "objective": "Entiende la temperatura y cómo el calor cambia la comida.",
+    "explain": "El calor cocina la comida y mata los gérmenes. Cada comida tiene una temperatura segura, que se mide con un termómetro.",
+    "alt": "El pollo es seguro a 165°F. Menos es riesgoso; mucho más lo quema."
+  },
+  "sci.materials": {
+    "name": "Materiales",
+    "objective": "Elige materiales según su resistencia, peso y costo.",
+    "explain": "Los materiales tienen propiedades: el acero es fuerte y pesado, la madera es ligera y fácil de cortar, el plástico es barato e impermeable.",
+    "alt": "Elige el material cuya resistencia vaya con el trabajo, no siempre el más fuerte."
+  },
+  "sci.forces": {
+    "name": "Fuerzas y equilibrio",
+    "objective": "Predice cómo las fuerzas, el peso y el equilibrio afectan estructuras y vehículos.",
+    "explain": "El peso jala hacia abajo; los soportes empujan hacia arriba. Una base ancha y el peso abajo hacen que las cosas sean estables.",
+    "alt": "Los vehículos más pesados necesitan más fuerza para acelerar, girar y frenar."
+  },
+  "sci.circuits": {
+    "name": "Circuitos",
+    "objective": "Arma circuitos sencillos con fuente de energía, cables, interruptores y cargas.",
+    "explain": "La electricidad fluye en un circuito cerrado desde la batería, pasa por el aparato y regresa. Un interruptor abre o cierra el circuito.",
+    "alt": "Si el circuito no está completo, no hay energía."
+  },
+  "sci.health": {
+    "name": "Salud y cuidados",
+    "objective": "Lee señales sencillas de salud y sabe cuándo pedir ayuda.",
+    "explain": "Los signos vitales (temperatura, ritmo cardíaco, respiración) muestran cómo está el cuerpo. Los cambios grandes significan que hay que pedir ayuda.",
+    "alt": "Si no estás seguro, pregúntale a un adulto capacitado o a un profesional."
+  },
+  "sci.design": {
+    "name": "Diseño de ingeniería",
+    "objective": "Usa el ciclo de diseño: definir, construir, probar, mejorar.",
+    "explain": "Los ingenieros definen el problema, construyen un prototipo, lo prueban, aprenden de los resultados y lo mejoran.",
+    "alt": "Cada prueba fallida te dice algo que arreglar."
+  },
+  "sci.ecosystems": {
+    "name": "Ecosistemas y medio ambiente",
+    "objective": "Ve cómo los seres vivos y el medio ambiente se afectan entre sí.",
+    "explain": "Las plantas, los animales y las personas dependen unos de otros. La contaminación o el uso excesivo en un lugar afecta todo lo que está conectado.",
+    "alt": "Sigue la cadena: ¿quién come qué y qué pasa si se rompe un eslabón?"
+  },
+  "sci.data": {
+    "name": "Datos científicos",
+    "objective": "Usa medidas y gráficas para sacar conclusiones.",
+    "explain": "Repite las pruebas y saca el promedio de los resultados; una sola prueba puede ser suerte.",
+    "alt": "Tres pruebas son mejores que una."
+  },
+  "sci.innovation": {
+    "name": "Innovación",
+    "objective": "Combina ideas de distintos campos para resolver problemas nuevos.",
+    "explain": "Muchos inventos combinan partes conocidas de una forma nueva para cubrir una necesidad real.",
+    "alt": "Empieza por la necesidad, no por el aparato."
+  },
+  "sci.systems": {
+    "name": "Sistemas complejos",
+    "objective": "Entiende sistemas con muchas partes que interactúan.",
+    "explain": "En los sistemas complejos (motores, cuerpos, ciudades), las partes se afectan unas a otras en ciclos. Cambia una y observa las demás.",
+    "alt": "Haz un mapa de las partes y luego sigue lo que causa cada cambio."
+  },
+  "sci.ethics": {
+    "name": "Ciencia y responsabilidad",
+    "objective": "Considera la seguridad, la justicia y la honestidad en la ciencia y la tecnología.",
+    "explain": "Los buenos científicos hacen pruebas honestas, informan sus resultados con la verdad y piensan en quién podría salir perjudicado.",
+    "alt": "¿Te sentirías cómodo explicando tu prueba a todas las personas a las que afecta?"
+  },
+  "soc.community": {
+    "name": "Ayudantes de la comunidad",
+    "objective": "Conoce los trabajos que mantienen una comunidad segura y funcionando.",
+    "explain": "Una comunidad funciona porque mucha gente ayuda: bomberos, enfermeras, maestros, choferes de autobús, bibliotecarios y trabajadores de tiendas.",
+    "alt": "Pregúntate: ¿a quién iría para esto? Un incendio → bomberos. Un libro → bibliotecario."
+  },
+  "soc.rules": {
+    "name": "Reglas y justicia",
+    "objective": "Entiende por qué las comunidades tienen reglas.",
+    "explain": "Las reglas protegen a las personas y hacen que las cosas sean justas. Los semáforos, las filas y las reglas de la escuela ayudan a que todos tengan su turno de forma segura.",
+    "alt": "Imagina que no hay regla: ¿qué podría salir mal? Por eso existe la regla."
+  },
+  "soc.maps": {
+    "name": "Mapas y direcciones",
+    "objective": "Lee un mapa usando norte, sur, este, oeste y la clave del mapa.",
+    "explain": "Los mapas muestran los lugares vistos desde arriba. El norte casi siempre está arriba. La clave (leyenda) te dice qué significa cada símbolo.",
+    "alt": "Gira como las manecillas del reloj: Norte, Este, Sur, Oeste. Recuérdalo con “Nunca Estés Sin Orden”."
+  },
+  "soc.geography": {
+    "name": "Continentes y océanos",
+    "objective": "Nombra los continentes y océanos de la Tierra y encuéntralos en un mapa.",
+    "explain": "La Tierra tiene 7 continentes (Asia, África, América del Norte, América del Sur, Antártida, Europa, Australia) y 5 océanos; el Pacífico es el más grande.",
+    "alt": "Los continentes son enormes extensiones de tierra; los océanos son enormes extensiones de agua salada entre ellos."
+  },
+  "soc.timeline": {
+    "name": "Líneas de tiempo",
+    "objective": "Ordena sucesos y calcula hace cuánto tiempo pasaron.",
+    "explain": "Una línea de tiempo ordena los sucesos del más antiguo al más reciente. Resta los años para saber hace cuánto pasó algo.",
+    "alt": "Los años más antiguos están a la izquierda. 2026 − 1969 = hace 57 años."
+  },
+  "soc.cultures": {
+    "name": "Culturas y tradiciones",
+    "objective": "Aprende cómo vive, celebra y se comunica la gente en el mundo.",
+    "explain": "La cultura es la forma de vida de un grupo: comida, idioma, música, ropa y celebraciones. Aprender sobre otros crea respeto.",
+    "alt": "Diferente no es malo. Pregunta, escucha y ten curiosidad."
+  },
+  "soc.government": {
+    "name": "Gobierno y leyes",
+    "objective": "Conoce lo que hacen los gobiernos y cómo se hacen y se cumplen las leyes.",
+    "explain": "Los gobiernos hacen leyes, protegen a las personas y dan servicios como calles y escuelas. En los Estados Unidos, el poder se divide en tres ramas.",
+    "alt": "El Congreso hace las leyes, el Presidente las pone en práctica y los tribunales deciden qué significan."
+  },
+  "soc.rights": {
+    "name": "Derechos y responsabilidades",
+    "objective": "Conoce tus derechos como ciudadano y las responsabilidades que vienen con ellos.",
+    "explain": "Los derechos son libertades que todos tienen, como la libertad de expresión. Las responsabilidades son lo que los ciudadanos deben hacer, como cumplir las leyes y respetar los derechos de los demás.",
+    "alt": "Cada derecho trae un deber: puedes hablar con libertad, y también dejas hablar a los demás."
+  },
+  "soc.economics": {
+    "name": "Oferta y demanda",
+    "objective": "Explica cómo la oferta y la demanda afectan los precios.",
+    "explain": "Cuando mucha gente quiere algo y hay poco, el precio sube. Cuando hay mucho y pocos lo quieren, el precio baja.",
+    "alt": "Los paraguas cuestan más durante una tormenta porque la demanda se dispara."
+  },
+  "soc.history": {
+    "name": "Momentos clave de la historia",
+    "objective": "Conoce inventos y sucesos clave que cambiaron la forma de vivir.",
+    "explain": "Inventos como la imprenta, la luz eléctrica, los aviones e internet cambiaron la vida diaria. Los movimientos por la igualdad de derechos cambiaron las leyes.",
+    "alt": "Para cada suceso pregúntate: ¿cómo era la vida antes y qué cambió después?"
+  },
+  "soc.sources": {
+    "name": "Fuentes primarias y secundarias",
+    "objective": "Distingue las fuentes de primera mano de las que se escribieron después sobre ellas.",
+    "explain": "Una fuente primaria viene de esa época (un diario, una foto, una carta). Una fuente secundaria se escribió después sobre el tema (un libro de texto).",
+    "alt": "¿El escritor estuvo ahí? Entonces es primaria."
+  },
+  "soc.civics": {
+    "name": "Elecciones y creación de leyes",
+    "objective": "Entiende el voto, las elecciones y cómo un proyecto se convierte en ley.",
+    "explain": "Los ciudadanos votan por sus líderes. Un proyecto de ley es una idea para una ley; se convierte en ley cuando los legisladores la aprueban y el líder la firma.",
+    "alt": "Idea → proyecto de ley → debate y votación → firma → ley."
+  },
+  "soc.trade": {
+    "name": "El comercio y la economía mundial",
+    "objective": "Ve cómo los países comercian y dependen unos de otros.",
+    "explain": "Los países intercambian lo que producen bien por lo que necesitan. Tu teléfono puede tener piezas de muchos países.",
+    "alt": "Las importaciones entran; las exportaciones salen."
+  },
+  "soc.policy": {
+    "name": "Decisiones públicas y sus costos",
+    "objective": "Evalúa quién gana y quién paga cuando una comunidad toma una decisión.",
+    "explain": "Las decisiones públicas implican sacrificios: un parque nuevo cuesta dinero que podría pagar autobuses. Las buenas decisiones toman en cuenta a todos los afectados.",
+    "alt": "Haz una lista de quién se beneficia, quién paga y qué más se podría hacer con ese dinero."
+  },
+  "soc.citizenship": {
+    "name": "Ciudadanía activa",
+    "objective": "Marca la diferencia: haz voluntariado, vota y trabaja con otros por el cambio.",
+    "explain": "Los ciudadanos activos se mantienen informados, votan, hacen voluntariado y trabajan en paz con otros para mejorar su comunidad.",
+    "alt": "Empieza en pequeño: encuentra un problema cerca, infórmate y únete a otros para ayudar."
+  },
+  "hl.hygiene": {
+    "name": "Higiene",
+    "objective": "Mantente limpio para estar sano: manos, dientes y cuerpo.",
+    "explain": "Lávate las manos con jabón durante 20 segundos, cepíllate los dientes 2 minutos dos veces al día y báñate seguido. Así no se pasan los gérmenes.",
+    "alt": "Canta “Feliz cumpleaños” dos veces mientras te lavas: son unos 20 segundos."
+  },
+  "hl.feelings": {
+    "name": "Nombrar sentimientos",
+    "objective": "Reconoce y nombra tus sentimientos y los de los demás.",
+    "explain": "Sentirse feliz, triste, enojado, asustado o preocupado es normal. Ponerle nombre a un sentimiento es el primer paso para manejarlo.",
+    "alt": "Fíjate en tu cuerpo: el pecho apretado o la cara caliente pueden ser pistas de cómo te sientes."
+  },
+  "hl.safety": {
+    "name": "Seguridad personal",
+    "objective": "Mantente a salvo en casa, afuera y con personas que no conoces.",
+    "explain": "Cruza por el paso peatonal y usa casco en la bicicleta. Nunca vayas a ningún lado con un desconocido. Aprende a llamar al 911.",
+    "alt": "Si algo se siente mal, vete y díselo a un adulto de confianza."
+  },
+  "hl.sleep": {
+    "name": "Sueño y descanso",
+    "objective": "Sabe cuánto necesitas dormir y cómo dormir bien.",
+    "explain": "Los niños de 6 a 12 años necesitan unas 9–12 horas de sueño; los adolescentes, 8–10. Ayuda apagar las pantallas antes de dormir y acostarte siempre a la misma hora.",
+    "alt": "Mientras duermes, tu cuerpo se repara y tu cerebro guarda lo que aprendiste."
+  },
+  "hl.exercise": {
+    "name": "Ejercicio y movimiento",
+    "objective": "Mantente activo y sabe por qué es importante.",
+    "explain": "Los niños y adolescentes deben moverse unos 60 minutos al día. El ejercicio fortalece el corazón, los músculos y los huesos, y mejora tu ánimo.",
+    "alt": "Todo lo que te haga respirar más fuerte cuenta: correr, bailar, andar en bicicleta, jugar."
+  },
+  "hl.kindness": {
+    "name": "Amistad y bondad",
+    "objective": "Sé un buen amigo y sabe qué hacer ante el acoso.",
+    "explain": "Los buenos amigos escuchan, comparten y son amables. El acoso es lastimar a alguien a propósito una y otra vez: habla y díselo a un adulto de confianza.",
+    "alt": "Pregúntate: ¿cómo me sentiría si me pasara a mí?"
+  },
+  "hl.firstaid": {
+    "name": "Primeros auxilios básicos",
+    "objective": "Sabe qué hacer con heridas pequeñas y cuándo pedir ayuda.",
+    "explain": "Cortada pequeña: límpiala y presiona con un trapo limpio. Quemadura pequeña: agua fría corriendo por varios minutos (sin hielo). Herida grave: llama al 911.",
+    "alt": "Mantén la calma, asegúrate de estar a salvo, luego ayuda y busca a un adulto."
+  },
+  "hl.foodsafety": {
+    "name": "Seguridad de los alimentos",
+    "objective": "Maneja y guarda la comida para que no enferme a nadie.",
+    "explain": "Lávate las manos, separa la carne cruda de la comida lista para comer, mantén el refrigerador a 40°F (4°C) o menos y cocina la comida a una temperatura segura.",
+    "alt": "Limpiar, separar, cocinar, enfriar."
+  },
+  "hl.stress": {
+    "name": "Manejar el estrés",
+    "objective": "Usa formas sanas de calmarte y salir adelante.",
+    "explain": "El estrés es la reacción de tu cuerpo ante la presión. Respirar despacio, caminar un rato, tomar un descanso o hablar con alguien de confianza ayudan.",
+    "alt": "Prueba la respiración en caja: inhala 4, sostén 4, exhala 4, sostén 4."
+  },
+  "hl.medicine": {
+    "name": "Uso seguro de medicinas",
+    "objective": "Usa medicinas solo de forma segura y con un adulto de confianza.",
+    "explain": "Toma solo las medicinas que te dé un adulto de confianza o un médico, en la dosis de la etiqueta. Nunca compartas medicinas recetadas.",
+    "alt": "Lee la etiqueta: para quién es, cuánto, cada cuánto y las advertencias."
+  },
+  "hl.habits": {
+    "name": "Hábitos y metas",
+    "objective": "Crea hábitos sanos y ponte metas que puedas alcanzar.",
+    "explain": "Las buenas metas son específicas y medibles: “caminar 20 minutos después de cenar, 5 días a la semana”. Los pequeños hábitos diarios se van sumando.",
+    "alt": "Hazlo fácil, hazlo rutina, lleva la cuenta."
+  },
+  "hl.mental": {
+    "name": "Salud mental y pedir ayuda",
+    "objective": "Cuida tu mente y sabe dónde encontrar apoyo.",
+    "explain": "La salud mental es tan importante como la salud física. Si la tristeza o la preocupación duran mucho tiempo, habla con un adulto de confianza, un consejero o un médico.",
+    "alt": "Pedir ayuda es una decisión valiente e inteligente."
+  },
+  "hl.relationships": {
+    "name": "Relaciones sanas y límites",
+    "objective": "Reconoce el respeto, pon límites y resiste la presión de grupo.",
+    "explain": "Las relaciones sanas tienen respeto, honestidad y confianza. Puedes decir que no, y los demás deben respetar tu no, así como tú respetas el suyo.",
+    "alt": "Un verdadero amigo no te presiona a hacer algo que se siente mal."
+  },
+  "hl.wellbeing": {
+    "name": "Bienestar para toda la vida",
+    "objective": "Equilibra el trabajo, el descanso, la salud y las relaciones a lo largo de la vida.",
+    "explain": "El bienestar es equilibrio: sueño, movimiento, buena comida, personas que te importan, un propósito y chequeos médicos regulares.",
+    "alt": "Si un área está fallando, los pequeños cambios ahí también ayudan a las demás."
+  },
+  "hl.publichealth": {
+    "name": "Salud pública",
+    "objective": "Entiende cómo las comunidades mantienen sana a toda la gente.",
+    "explain": "La salud pública protege a comunidades enteras: el agua limpia, las vacunas, las reglas de seguridad de los alimentos y el lavado de manos frenan la propagación de enfermedades.",
+    "alt": "Cuando mucha gente da pequeños pasos, todos están más seguros."
+  },
+  "tech.basics": {
+    "name": "Lo básico de los aparatos",
+    "objective": "Conoce las partes de una computadora o un teléfono y lo que hacen.",
+    "explain": "Las entradas (teclado, ratón, pantalla táctil, micrófono) meten información. Las salidas (pantalla, bocinas) la muestran. El almacenamiento la guarda.",
+    "alt": "Pregúntate: ¿esta parte me deja decirle algo al aparato, o deja que el aparato me diga algo a mí?"
+  },
+  "tech.sequence": {
+    "name": "Instrucciones paso a paso",
+    "objective": "Escribe instrucciones en el orden exacto que seguiría una computadora.",
+    "explain": "Un algoritmo es una lista de pasos en orden. Las computadoras siguen los pasos exactamente, por eso el orden importa.",
+    "alt": "Prueba actuarlo: ¿cada paso tiene sentido después del anterior?"
+  },
+  "tech.safety": {
+    "name": "Seguridad en internet",
+    "objective": "Protégete en internet y sabe cuándo avisarle a un adulto.",
+    "explain": "Nunca compartas en internet tu nombre completo, dirección, escuela, número de teléfono ni contraseñas. Si algo en internet te molesta o te preocupa, díselo a un adulto de confianza.",
+    "alt": "Pregúntate: ¿le diría esto a un desconocido en la calle? Si no, no lo publiques."
+  },
+  "tech.passwords": {
+    "name": "Contraseñas seguras",
+    "objective": "Crea contraseñas seguras y mantenlas en privado.",
+    "explain": "Las contraseñas seguras son largas y mezclan palabras, números y símbolos. Usa una diferente para cada cuenta y nunca las compartas, excepto con tu mamá o tu papá.",
+    "alt": "Una frase larga como “Purple-Bus-Jumps-42!” es segura y fácil de recordar."
+  },
+  "tech.loops": {
+    "name": "Bucles y patrones",
+    "objective": "Usa bucles para repetir pasos sin volver a escribirlos.",
+    "explain": "Un bucle repite pasos. “Repetir 4 veces: avanzar 10 pasos” avanza 40 pasos en total.",
+    "alt": "Pasos dentro del bucle × número de repeticiones = total."
+  },
+  "tech.search": {
+    "name": "Buscar con inteligencia",
+    "objective": "Usa buenas palabras de búsqueda y revisa lo que encuentras.",
+    "explain": "Usa pocas palabras clave y claras. Revisa quién hizo el sitio, cuándo y si otros sitios confiables dicen lo mismo.",
+    "alt": "Busca “horario autobús Midtown” en lugar de una pregunta larga completa."
+  },
+  "tech.citizenship": {
+    "name": "Ciudadanía digital",
+    "objective": "Sé amable, honesto y responsable en internet.",
+    "explain": "Lo que publicas puede durar para siempre y compartirse. Sé amable, da crédito por el trabajo de otros y piensa antes de publicar.",
+    "alt": "Si no lo dirías en persona, no lo publiques."
+  },
+  "tech.conditionals": {
+    "name": "Lógica si-entonces",
+    "objective": "Usa condiciones para que los programas tomen decisiones.",
+    "explain": "Un condicional ejecuta código solo cuando algo es verdadero: SI está lloviendo ENTONCES lleva paraguas SI NO usa lentes de sol.",
+    "alt": "Revisa primero la condición y luego sigue solo la rama que corresponde."
+  },
+  "tech.debug": {
+    "name": "Depuración",
+    "objective": "Encuentra y corrige errores en instrucciones y código.",
+    "explain": "Depurar es encontrar el paso que sale mal. Prueba un paso a la vez y compara lo que pasó con lo que esperabas.",
+    "alt": "¿Dónde es la primera vez que el resultado es diferente de lo que esperabas? Ahí está el error."
+  },
+  "tech.variables": {
+    "name": "Variables",
+    "objective": "Guarda y cambia valores en un programa.",
+    "explain": "Una variable es una caja con nombre que guarda un valor, como score = 10. Cambiarla (score = score + 5) actualiza lo que hay adentro.",
+    "alt": "Sigue la caja: anota su valor después de cada línea."
+  },
+  "tech.privacy": {
+    "name": "Datos y privacidad",
+    "objective": "Entiende qué datos recogen las aplicaciones y cómo protegerlos.",
+    "explain": "Las aplicaciones y los sitios web recogen datos sobre lo que haces. Revisa los permisos, comparte solo lo necesario y usa la configuración de privacidad.",
+    "alt": "Pregúntate: ¿una aplicación de linterna de verdad necesita mi ubicación?"
+  },
+  "tech.internet": {
+    "name": "Cómo funciona internet",
+    "objective": "Sabe cómo viaja la información entre aparatos.",
+    "explain": "Internet es una red enorme de computadoras conectadas. La información se divide en paquetes pequeños, se envía por la red y se vuelve a armar.",
+    "alt": "Es como mandar una carta larga en muchas postales que luego se vuelven a juntar."
+  },
+  "tech.ai": {
+    "name": "IA y automatización",
+    "objective": "Entiende lo que la IA puede y no puede hacer, y úsala con sabiduría.",
+    "explain": "La IA aprende patrones a partir de muchísimos datos. Puede ser útil, pero también puede equivocarse o tener sesgos, así que revisa las respuestas importantes y piensa por ti mismo.",
+    "alt": "Trata a la IA como un asistente útil, no como un experto que lo sabe todo."
+  },
+  "tech.design": {
+    "name": "Diseñar tecnología para las personas",
+    "objective": "Planea, construye y prueba tecnología que cubra necesidades reales.",
+    "explain": "La buena tecnología empieza por el usuario: ¿qué necesita? Construye una versión sencilla, pruébala con personas reales y mejórala.",
+    "alt": "Observa a alguien usarla. Donde se atora es lo que hay que arreglar."
+  },
+  "read.story": {
+    "name": "Elementos del cuento",
+    "objective": "Encuentra los personajes, el escenario, el problema y la solución de un cuento.",
+    "explain": "Los cuentos tienen personajes (quién), un escenario (dónde y cuándo), un problema y una solución.",
+    "alt": "Pregúntate: ¿de quién trata, dónde pasa, qué sale mal y cómo se arregla?"
+  },
+  "read.wordparts": {
+    "name": "Prefijos, sufijos y sinónimos",
+    "objective": "Usa las partes de las palabras y sus relaciones para entender palabras nuevas.",
+    "explain": "Los prefijos van al inicio (un- = no, re- = otra vez) y los sufijos al final (-ful = lleno de, -less = sin). Los sinónimos significan lo mismo; los antónimos, lo contrario.",
+    "alt": "Separa la palabra en partes: un + happy = not happy (no feliz)."
+  },
+  "read.context": {
+    "name": "Pistas del contexto",
+    "objective": "Descubre palabras nuevas con ayuda de las palabras que las rodean.",
+    "explain": "Las pistas del contexto son ayudas en las oraciones cercanas: una definición, un ejemplo o una palabra que significa lo mismo o lo contrario.",
+    "alt": "Tapa la palabra difícil, lee la oración y adivina qué palabra encajaría."
+  },
+  "read.figurative": {
+    "name": "Lenguaje figurado y poesía",
+    "objective": "Entiende símiles, metáforas, modismos y poemas.",
+    "explain": "Un símil compara usando “como” (rápido como un rayo). Una metáfora dice que una cosa es otra (el tiempo es oro). Los poemas usan ritmo, rima e imágenes.",
+    "alt": "Pregúntate qué significa de verdad la comparación, no lo que dice al pie de la letra."
+  },
+  "write.grammar": {
+    "name": "Clases de palabras",
+    "objective": "Conoce los sustantivos, verbos, adjetivos y adverbios.",
+    "explain": "Los sustantivos nombran personas, lugares o cosas. Los verbos son acciones. Los adjetivos describen sustantivos. Los adverbios describen verbos (en inglés, muchos terminan en -ly).",
+    "alt": "Sustantivo = cosa, verbo = acción, adjetivo = cómo es, adverbio = cómo se hace."
+  },
+  "write.homophones": {
+    "name": "Palabras engañosas",
+    "objective": "Elige la palabra correcta en inglés: their/there/they’re, your/you’re, to/too/two.",
+    "explain": "Los homófonos suenan igual pero significan cosas distintas: their (que es de ellos), there (un lugar), they’re (they are, “ellos son/están”).",
+    "alt": "Prueba a escribirla completa: si “they are” encaja, usa they’re."
+  },
+  "write.tense": {
+    "name": "Tiempos verbales y concordancia",
+    "objective": "Usa los verbos en inglés en el tiempo correcto y de acuerdo con su sujeto.",
+    "explain": "Pasado (walked), presente (walks), futuro (will walk). Un sujeto singular lleva verbo singular: “She runs”, “They run”.",
+    "alt": "Encuentra el sujeto y luego revisa que el verbo concuerde con él y con el tiempo."
+  },
+  "write.commas": {
+    "name": "Comas y oraciones claras",
+    "objective": "Usa comas en listas, fechas, saludos y después de introducciones.",
+    "explain": "Las comas separan los elementos de una lista, van entre el día y el año, después de los saludos (Hi Rosa,) y después de palabras de introducción (However, ...).",
+    "alt": "Lee en voz alta: una coma es una pausa pequeña."
+  },
+  "math.shapes": {
+    "name": "Figuras",
+    "objective": "Nombra figuras planas y cuerpos geométricos, y cuenta sus lados y esquinas.",
+    "explain": "Un triángulo tiene 3 lados; el cuadrado y el rectángulo, 4; el pentágono, 5; el hexágono, 6. Los cuerpos geométricos incluyen cubos, esferas, cilindros y conos.",
+    "alt": "Cuenta los lados con el dedo, uno por uno."
+  },
+  "math.patterns": {
+    "name": "Patrones",
+    "objective": "Encuentra y continúa patrones de números y figuras.",
+    "explain": "Un patrón se repite o crece siguiendo una regla. 2, 4, 6, 8 crece de 2 en 2.",
+    "alt": "Encuentra el salto entre cada número y luego haz el mismo salto otra vez."
+  },
+  "math.rounding": {
+    "name": "Redondear y estimar",
+    "objective": "Redondea números y estima para revisar tus respuestas.",
+    "explain": "Para redondear a la decena más cercana, mira el dígito de las unidades: 5 o más sube, 4 o menos baja. 47 → 50, 43 → 40.",
+    "alt": "Primero estima y luego revisa que tu respuesta exacta esté cerca."
+  },
+  "math.graphs": {
+    "name": "Gráficas y tablas",
+    "objective": "Lee gráficas de barras, tablas y gráficas de líneas.",
+    "explain": "Las gráficas muestran datos con dibujos. Lee el título, las etiquetas y la escala, y luego compara las barras o los puntos.",
+    "alt": "Busca la barra más alta para lo que más hay y la más baja para lo que menos hay."
+  },
+  "math.negatives": {
+    "name": "Números negativos",
+    "objective": "Usa números menores que cero para temperaturas, dinero y altura.",
+    "explain": "Los números negativos son menores que cero. En la recta numérica están a la izquierda del 0. Si subes 5 desde −3, llegas a 2.",
+    "alt": "Piensa en un termómetro: bajo cero es negativo."
+  },
+  "math.coords": {
+    "name": "Plano de coordenadas",
+    "objective": "Encuentra y marca puntos en una cuadrícula usando (x, y).",
+    "explain": "Para encontrar un punto (x, y), primero avanza x hacia la derecha y luego sube y. (3, 5) es 3 a la derecha y 5 hacia arriba.",
+    "alt": "Primero por el pasillo y luego por las escaleras: x y luego y."
+  },
+  "sci.weather": {
+    "name": "El tiempo y las estaciones",
+    "objective": "Describe el tiempo, las estaciones y cómo vestirte para cada uno.",
+    "explain": "El tiempo es cómo está el aire hoy: soleado, lluvioso, con viento, con nieve. Las estaciones (primavera, verano, otoño, invierno) cambian durante el año.",
+    "alt": "Mira afuera y revisa la temperatura antes de elegir tu ropa."
+  },
+  "sci.plants": {
+    "name": "Las plantas y los ciclos de vida",
+    "objective": "Conoce lo que necesitan las plantas y cómo crecen los seres vivos.",
+    "explain": "Las plantas necesitan luz del sol, agua, aire y tierra. Una planta crece de una semilla a un brote y luego a una planta con flores que da semillas nuevas.",
+    "alt": "Semilla → brote → planta → flor → semillas otra vez."
+  },
+  "sci.matter": {
+    "name": "Sólidos, líquidos y gases",
+    "objective": "Describe los estados de la materia y cómo cambian.",
+    "explain": "Los sólidos mantienen su forma, los líquidos toman la forma de su recipiente y los gases se esparcen. El agua se congela a 32°F (0°C) y hierve a 212°F (100°C).",
+    "alt": "Hielo (sólido) → agua (líquido) → vapor (gas) al calentarse."
+  },
+  "sci.water": {
+    "name": "El ciclo del agua",
+    "objective": "Explica cómo se mueve el agua entre la tierra, el mar y el cielo.",
+    "explain": "El sol calienta el agua y esta se evapora. El vapor se enfría y forma nubes (condensación). Cae como lluvia o nieve (precipitación) y se junta en ríos y océanos.",
+    "alt": "Se evapora → se condensa → cae como lluvia o nieve → se junta, y vuelta a empezar."
+  },
+  "sci.space": {
+    "name": "La Tierra, la Luna y el Sol",
+    "objective": "Explica el día y la noche, los años y las fases de la Luna.",
+    "explain": "La Tierra gira sobre sí misma una vez al día (día y noche) y le da la vuelta al Sol una vez al año. La Luna le da la vuelta a la Tierra más o menos una vez al mes y refleja la luz del Sol.",
+    "alt": "Girar = día. Vuelta al Sol = año."
+  },
+  "sci.planets": {
+    "name": "El sistema solar",
+    "objective": "Nombra los planetas y lo que hace diferente a cada uno.",
+    "explain": "Ocho planetas giran alrededor del Sol: Mercurio, Venus, Tierra, Marte, Júpiter, Saturno, Urano y Neptuno. Júpiter es el más grande.",
+    "alt": "Mi Vieja Tía Marta Jamás Sale Un Nublado."
+  },
+  "sci.magnets": {
+    "name": "Imanes",
+    "objective": "Predice cómo los imanes se atraen y se repelen.",
+    "explain": "Los imanes tienen polo norte y polo sur. Los polos opuestos se atraen; los polos iguales se repelen. Los imanes atraen el hierro y el acero, no la madera ni el plástico.",
+    "alt": "Los opuestos se atraen, los iguales se empujan."
+  },
+  "sci.sound": {
+    "name": "El sonido y la luz",
+    "objective": "Explica cómo viajan el sonido y la luz.",
+    "explain": "El sonido es una vibración que viaja por el aire, el agua y los sólidos. La luz viaja mucho más rápido y en línea recta; se refleja en los espejos.",
+    "alt": "Ves el relámpago antes de oír el trueno porque la luz es más rápida."
+  },
+  "sci.cells": {
+    "name": "Las células y los seres vivos",
+    "objective": "Sabe que los seres vivos están hechos de células.",
+    "explain": "Las células son los pequeñísimos bloques que forman a todos los seres vivos. Las células vegetales tienen pared celular y cloroplastos para fabricar alimento con la luz del sol; las células animales no.",
+    "alt": "Célula = la unidad viva más pequeña, como un ladrillo en una pared."
+  },
+  "sci.chem": {
+    "name": "Mezclas y reacciones",
+    "objective": "Distingue las mezclas de las reacciones químicas.",
+    "explain": "En una mezcla, las cosas se combinan pero siguen siendo las mismas (una ensalada, arena en agua). En una reacción química se forma una sustancia nueva: burbujas, calor, cambio de color u óxido.",
+    "alt": "Sustancia nueva, propiedades nuevas → reacción."
+  },
+  "write.print": {
+    "name": "Letra de molde",
+    "objective": "Forma letras de molde con limpieza sobre los renglones, y luego palabras y oraciones.",
+    "explain": "Las letras altas tocan la línea de arriba. Las letras pequeñas llegan a la línea punteada. Las letras se apoyan en la línea de abajo. g, j, p, q y y bajan de ella.",
+    "alt": "Di los pasos mientras escribes: arriba, baja, vuelve a subir y da la vuelta."
+  },
+  "read.sounds": {
+    "name": "Escuchar sonidos",
+    "objective": "Escucha rimas, sílabas y los sonidos dentro de las palabras en inglés.",
+    "explain": "Las palabras están hechas de sonidos. Escucha el principio, el medio y el final, y da una palmada por cada parte (sílaba).",
+    "alt": "Di la palabra despacio, como si estiraras una liga: sssuuunnn. Luego dila rápido otra vez."
+  }
+}
