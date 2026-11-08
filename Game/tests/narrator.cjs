@@ -1,5 +1,5 @@
 // The recorded narrator: a recorded sentence plays from the voice packs (not the device voice), a sentence with no
-// recording (random numbers) uses the device voice, and choosing a device voice in Settings turns the narrator off.
+// recording (random numbers) is read by Heart word by word, never by the device voice.
 const { chromium } = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
 const DIST = path.join(__dirname, '..', 'dist-hosted');
@@ -37,7 +37,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await ev(() => window.__narrate('You have 7319 apples and 4271 pears.')); await sleep(1500);
   const st2 = await ev(() => ({ played: window.__played.length, synth: window.__synth.length }));
   console.log('unrecorded sentence →', JSON.stringify(st2));
-  if (st2.played || !st2.synth) fail('a sentence without a recording should use the device voice');
+  if (!st2.played || st2.synth) fail('a sentence without a whole recording should still be Heart, word by word (never the device voice)');
   if (errors.length) fail('page errors: ' + errors.slice(0, 3).join(' | '));
   console.log(bad.length ? 'NARRATOR FAILED' : 'NARRATOR PASSED');
   await b.close(); srv.close(); process.exit(bad.length ? 1 : 0);

@@ -3,7 +3,7 @@ import { UI, h, money, clock, wait } from './ui.js';
 import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
-import { markWords, talkLog, SPEEDS, speedName, setSpeed, say as sayIt, loadNatural } from './readalong.js';
+import { markWords, talkLog, SPEEDS, speedName, setSpeed, say as sayIt, loadNatural, readToMe, setReadToMe } from './readalong.js';
 import { familyView } from './family.js';
 import { LANGS, lang, setLang } from './i18n.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
@@ -521,6 +521,14 @@ export class Game {
 
 // ---------------------------------------------------------------------------------------- reading voice
 /** Settings › Reading voice: the device's best voices (natural/enhanced first), each with a Try button, and a speed. */
+/** The 🗣️ button on the game screen: Heart's settings in one tap. */
+export function voicePanel() {
+  return UI.sheet('Reading voice', () => h('div', { class: 'act' },
+    h('p', { class: 'lead' }, '✨ Heart reads the game to you: the story, lessons, questions and answers.'),
+    voiceBox(),
+    h('div', { class: 'row' }, h('span', {}, '🔊 Read everything to me'), ...[[true, 'On'], [false, 'Off']].map(([v, n]) => h('button', { class: readToMe() === v ? 'primary sm' : 'ghost sm', onclick: (e) => { setReadToMe(v); e.currentTarget.parentElement.querySelectorAll('button').forEach((b, i) => { b.className = (i === 0) === v ? 'primary sm' : 'ghost sm'; }); } }, n))),
+    h('p', { class: 'tip' }, 'Tap 🔊 next to any text, or tap a word, to hear it any time.')), { icon: '🗣️' });
+}
 function voiceBox() {
   // one voice for the whole game: Heart, a natural voice recorded for REAL. (Lines that can't be recorded ahead,
   // like random-number questions, a player's own writing, or Spanish, are read by this device's best voice.)

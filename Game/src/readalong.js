@@ -96,7 +96,51 @@ export const naturalReady = () => !!NAT;
 const pack = (n) => { if (!PACKS.has(n)) PACKS.set(n, fetch(`voice/p${n}.mp3`).then((r) => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }).catch((e) => { PACKS.delete(n); throw e; })); return PACKS.get(n); };
 let natAudio = null, natTimers = [];
 function stopNatural() { natTimers.forEach(clearTimeout); natTimers = []; if (natAudio) { try { natAudio.pause(); } catch (e) {} natAudio = null; } }
-/** play recorded clips for every sentence; resolves false if any is missing (caller falls back to the device voice) */
+// ---- Heart, word by word: for English lines with no whole-sentence recording (random numbers, a player's writing)
+const ONEW = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+const TENW = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+function numWords(n) {
+  if (n < 20) return [ONEW[n]];
+  if (n < 100) return [TENW[Math.floor(n / 10)], ...(n % 10 ? [ONEW[n % 10]] : [])];
+  if (n < 1000) return [ONEW[Math.floor(n / 100)], 'hundred', ...(n % 100 ? numWords(n % 100) : [])];
+  if (n < 1e6) return [...numWords(Math.floor(n / 1000)), 'thousand', ...(n % 1000 ? numWords(n % 1000) : [])];
+  return [...numWords(Math.floor(n / 1e6)), 'million', ...(n % 1e6 ? numWords(n % 1e6) : [])];
+}
+/** the words Heart says for a line, each with where it sits in the text (for highlighting) and the pause after it */
+function heartWords(spoken) {
+  const out = [];
+  for (const m of String(spoken).matchAll(/[A-Za-z]+(?:['’][A-Za-z]+)?|\d[\d,]*(?:\.\d+)?|[.!?;:]|,/g)) {
+    const t = m[0];
+    if (/^[.!?;:]$/.test(t)) { if (out.length) out[out.length - 1].pause = 380; continue; }
+    if (t === ',') { if (out.length) out[out.length - 1].pause = 190; continue; }
+    if (/^\d/.test(t)) { const [int, dec] = t.replace(/,/g, '').split('.'); const ws = [...numWords(Math.min(+int, 999999999)), ...(dec ? ['point', ...dec.split('').map((d) => ONEW[+d])] : [])]; ws.forEach((w) => out.push({ w, at: m.index, pause: 40 })); continue; }
+    out.push({ w: t.toLowerCase().replace(/’/g, "'"), at: m.index, pause: 40 });
+  }
+  return out;
+}
+function playWords(spoken, { onWord, onEnd, rate }) {
+  if (!NAT) return false;
+  const items = heartWords(spoken).map((x) => ({ ...x, clip: NAT.c[voiceId('w:' + x.w)] })).filter((x) => x.clip);
+  if (!items.length) return false;
+  let fin = false; const done = () => { if (fin) return; fin = true; stopNatural(); if (onEnd) onEnd(); };
+  current = { done };
+  const speed = Math.max(0.55, Math.min(1.35, (rate || 0.92) / 0.92 * speedMul()));
+  Promise.all([...new Set(items.map((x) => x.clip[0]))].map(pack)).then(() => {
+    const step = async (i) => {
+      if (fin) return; if (i >= items.length) return done();
+      const { clip: [p, off, len], at, pause } = items[i]; const buf = await pack(p); if (fin) return;
+      const url = URL.createObjectURL(new Blob([buf.slice(off, off + len)], { type: 'audio/mpeg' }));
+      const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true;
+      const next = () => { URL.revokeObjectURL(url); natTimers.push(setTimeout(() => step(i + 1), pause / speed)); };
+      a.onended = next; a.onerror = next;
+      if (onWord && (i === 0 || items[i - 1].at !== at)) onWord(at);
+      a.play().catch(() => done());
+    };
+    step(0);
+  }).catch(() => done());
+  return true;
+}
+/** play recorded clips for every sentence; resolves false if any is missing (caller falls back to Heart word by word) */
 function playNatural(spoken, { onWord, onEnd, rate, fallback }) {
   if (!NAT) return false;
   const sents = speechSentences(spoken), clips = sents.map((s) => NAT.c[voiceId(voiceKey(s))]);
@@ -145,7 +189,13 @@ export function say(text, { rate = 0.92, onWord, onEnd, en = false, raw = false 
   const spanish = !en && lang() === 'es' && isSpanish(text);
   const spoken = raw ? String(text) : speakable(text, spanish);
   if (!spoken || !/[\p{L}\p{N}]/u.test(spoken)) { if (onEnd) onEnd(); return false; }
-  if (!spanish && naturalOn() && !window.__deviceOnly) { loadNatural(); if (playNatural(spoken, { onWord, onEnd, rate, fallback: () => { window.__deviceOnly = true; say(text, { rate, onWord, onEnd, en, raw }); window.__deviceOnly = false; } })) return true; }
+  // English is always Heart: whole recorded sentences when they exist, otherwise Heart word by word. (Spanish uses the
+  // device's Spanish voice: Heart speaks English only. The one-file offline copy has no recordings.)
+  if (!spanish && !window.__deviceOnly && !window.__REAL_OFFLINE) {
+    const go = () => playNatural(spoken, { onWord, onEnd, rate, fallback: () => { window.__deviceOnly = true; say(text, { rate, onWord, onEnd, en, raw }); window.__deviceOnly = false; } }) || playWords(spoken, { onWord, onEnd, rate });
+    if (NAT) { if (go()) return true; }
+    else { let fin2 = false; current = { done: () => { fin2 = true; } }; loadNatural().then(() => { if (fin2) return; current = null; if (!NAT || !go()) { window.__deviceOnly = true; say(text, { rate, onWord, onEnd, en, raw }); window.__deviceOnly = false; } }); return true; }
+  }
   let fin = false; const done = () => { if (fin) return; fin = true; clearInterval(keep); if (onEnd) onEnd(); };
   current = { done };
   const pieces = speechPieces(spoken); let base = 0;
@@ -268,6 +318,7 @@ export function sounds(word) {
 const SOUND = { a: 'ah', e: 'eh', i: 'ih', o: 'aw', u: 'uh', b: 'buh', c: 'kuh', d: 'duh', f: 'fff', g: 'guh', h: 'huh', j: 'juh', k: 'kuh', l: 'lll', m: 'mmm', n: 'nnn', p: 'puh', q: 'kwuh', r: 'rrr',
   s: 'sss', t: 'tuh', v: 'vvv', w: 'wuh', x: 'ks', y: 'yuh', z: 'zzz', sh: 'shh', ch: 'chuh', th: 'thh', wh: 'wuh', ph: 'fff', ck: 'kuh', ng: 'ng', qu: 'kwuh', tch: 'chuh', dge: 'juh', igh: 'eye',
   ai: 'ay', ay: 'ay', ee: 'ee', ea: 'ee', oa: 'oh', oo: 'oo', ow: 'oh', ou: 'ow', oi: 'oy', oy: 'oy', ar: 'ar', or: 'or', er: 'er', ir: 'er', ur: 'er', ew: 'oo', aw: 'aw', au: 'aw', ll: 'lll', ss: 'sss', ff: 'fff', zz: 'zzz' };
+export const soundSay = (p) => sayPart(p);
 const sayPart = (p) => SOUND[p] || (/[^aeiou]e$/.test(p) && SOUND[p.slice(0, -1)]) || p.replace(/y$/, 'ee').replace(/le$/, 'ul');
 
 /** the sentence with the chosen word in bold */
