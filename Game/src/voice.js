@@ -111,7 +111,7 @@ function answerBox(prompt) {
 
 // ------------------------------------------------------------------------------------------- the brain
 let sampleP = null;
-const sampler = () => {
+export const sampler = () => {
   if (window.__smartOff) return Promise.resolve(null);
   if (!sampleP) sampleP = (window.claude && typeof window.claude.use === 'function') ? Promise.race([window.claude.use('sample'), new Promise((r) => setTimeout(() => r(null), 6000))]).catch(() => null) : Promise.resolve(null);
   return sampleP;

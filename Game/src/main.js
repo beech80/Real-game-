@@ -22,6 +22,7 @@ import { installEvents } from './events.js';
 import { scatterFlora, updateLook } from './lookfx.js';
 import { schoolFromLink, enableSchool, teacherDashboard, assignFromLink, setAssignment } from './school.js';
 import { installKeyboard } from './keyboard.js';
+import { initLang, lang, setLang } from './i18n.js';
 import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
@@ -55,6 +56,8 @@ const saveNow = () => { try { if (game && mode === 'play' && player && !game.sta
 document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); });
 window.addEventListener('pagehide', saveNow);
 initReadAlong(() => game && game.state);
+initLang();
+{ const tb = document.getElementById('btn-lang'); if (tb) { const lab = () => { tb.textContent = lang() === 'es' ? '🌎 English' : '🌎 Español'; }; lab(); tb.onclick = () => { setLang(lang() === 'es' ? 'en' : 'es'); lab(); }; } }
 addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); window.__installPrompt = e; });   // offer Install from Settings › Play offline
 UI.onLine = (who, text) => logLine(who, text);   // the Talk log in the phone
 installKeyboard();

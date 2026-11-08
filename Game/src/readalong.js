@@ -16,19 +16,22 @@ export const readToMe = () => !!settings().readAloud || (() => { try { return lo
 export function setReadToMe(on) { try { localStorage.setItem('real.readToMe', on ? '1' : '0'); } catch (e) {} const s = getState(); if (s) { s.settings = s.settings || {}; s.settings.readAloud = !!on; } }
 
 // ------------------------------------------------------------------------------------------- narrator voice
-let voice = null;
-const pickVoice = () => { try { const v = speechSynthesis.getVoices().filter((x) => /^en/i.test(x.lang)); voice = v.find((x) => /Samantha|Google US English|Aria|Jenny|Karen/i.test(x.name)) || v.find((x) => /en-US/i.test(x.lang)) || v[0] || null; } catch (e) {} };
+import { lang, isSpanish } from './i18n.js';
+let voice = null, esVoice = null;
+const pickVoice = () => { try { const all = speechSynthesis.getVoices(), es = all.filter((x) => /^es/i.test(x.lang)); esVoice = es.find((x) => /es-(US|MX|419)/i.test(x.lang)) || es[0] || null; const v = all.filter((x) => /^en/i.test(x.lang)); voice = v.find((x) => /Samantha|Google US English|Aria|Jenny|Karen/i.test(x.name)) || v.find((x) => /en-US/i.test(x.lang)) || v[0] || null; } catch (e) {} };
 try { pickVoice(); speechSynthesis.addEventListener('voiceschanged', pickVoice); } catch (e) {}
 const clean = (t) => String(t || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}★☆♛✓✕›‹•·]/gu, ' ').replace(/\$(\d+)\.(\d\d)\b/g, '$$$1 and $2 cents').replace(/\s+/g, ' ').trim();
 export const canSpeak = () => 'speechSynthesis' in window && !window.__voiceOff;
 let current = null;
 export function stopReading() { try { speechSynthesis.cancel(); } catch (e) {} if (current) { current.done(); current = null; } }
 /** Say text. onWord(charIndex) is called as each word starts (when the device reports it). */
-export function say(text, { rate = 0.88, onWord, onEnd } = {}) {
+export function say(text, { rate = 0.88, onWord, onEnd, en = false } = {}) {
   if (!canSpeak()) { if (onEnd) onEnd(); return false; }
   stopReading();
   const u = new SpeechSynthesisUtterance(clean(text));
-  if (voice) u.voice = voice; u.lang = 'en-US'; u.rate = rate; u.pitch = 1.05;
+  const spanish = !en && lang() === 'es' && isSpanish(text);
+  if (spanish) { u.lang = 'es-US'; if (esVoice) u.voice = esVoice; } else { if (voice) u.voice = voice; u.lang = 'en-US'; }
+  u.rate = rate; u.pitch = 1.05;
   let fin = false; const done = () => { if (fin) return; fin = true; if (onEnd) onEnd(); };
   current = { done };
   if (onWord) u.onboundary = (e) => { if (e.name === 'word' || e.name === undefined) onWord(e.charIndex); };
@@ -169,14 +172,14 @@ export function wordCard(rawWord, sentence) {
   const partEls = parts.map((p) => h('span', { class: 'wc-part' }, p));
   const big = h('div', { class: 'wc-word', style: { fontSize: `min(${word.length > 9 ? 38 : word.length > 6 ? 48 : 64}px, ${Math.floor(150 / Math.max(4, word.length + parts.length))}vw)` } }, ...partEls.flatMap((p, i) => i ? [h('i', { class: 'wc-dot' }, '·'), p] : [p]));
   const sound = async () => {
-    for (const [i, p] of parts.entries()) { partEls.forEach((x) => x.classList.remove('lit')); partEls[i].classList.add('lit'); await sayAsync(one ? sayPart(p) : p.replace(/y$/, 'ee'), { rate: 0.6 }); await sleep(one ? 260 : 180); }
-    partEls.forEach((x) => x.classList.add('lit')); await sayAsync(word, { rate: 0.75 }); partEls.forEach((x) => x.classList.remove('lit'));
+    for (const [i, p] of parts.entries()) { partEls.forEach((x) => x.classList.remove('lit')); partEls[i].classList.add('lit'); await sayAsync(one ? sayPart(p) : p.replace(/y$/, 'ee'), { rate: 0.6, en: true }); await sleep(one ? 260 : 180); }
+    partEls.forEach((x) => x.classList.add('lit')); await sayAsync(word, { rate: 0.75, en: true }); partEls.forEach((x) => x.classList.remove('lit'));
   };
   const wrap = h('div', { class: 'wcard-wrap', onclick: (ev) => { if (ev.target === wrap) close(); } },
     h('div', { class: 'wcard' },
       big,
       h('div', { class: 'row wc-btns' },
-        h('button', { class: 'primary', onclick: () => say(word, { rate: 0.75 }) }, '🔊 Say it'),
+        h('button', { class: 'primary', onclick: () => say(word, { rate: 0.75, en: true }) }, '🔊 Say it'),
         parts.length > 1 ? h('button', { class: 'ghost', onclick: sound }, '🧩 Sound it out') : null,
         h('button', { class: 'ghost sm', onclick: () => say(word.toUpperCase().split('').join(', ') + '. ' + word, { rate: 0.7 }) }, '🔤 Spell it')),
       sentence ? h('div', { class: 'wc-sent' }, h('p', { class: 'wc-sline' }, ...sentenceWith(sentence, word)), h('button', { class: 'primary sm', onclick: () => readSentence(sentence, word) }, '🔊 Say the whole sentence')) : null,
@@ -185,7 +188,7 @@ export function wordCard(rawWord, sentence) {
       h('button', { class: 'ghost sm', onclick: () => close() }, 'Close')));
   const close = () => { stopReading(); wrap.remove(); };
   document.body.append(wrap);
-  say(word, { rate: 0.75 });
+  say(word, { rate: 0.75, en: true });
 }
 
 /** Underline the words worth learning (from the glossary) inside an element's plain text, so kids know to tap them. */

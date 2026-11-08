@@ -17,6 +17,7 @@ const cents = (v) => Math.round(v * 100);
 
 import { STYLES, likes, toggleStyle } from './learnstyle.js';
 import { writingWorkshop } from './writing.js';
+import { skT } from './i18n.js';
 // ------------------------------------------------------------------------------------ teaching helpers
 /** Discover → Understand: first time a skill appears, an NPC/visual explanation card. */
 export async function teach(G, id, who = 'Tip') {
@@ -25,8 +26,8 @@ export async function teach(G, id, who = 'Tip') {
   if (likes(G, 'hear')) setTimeout(() => speak(`${sk.name}. ${sk.objective} ${sk.explain}`), 300);
   await UI.sheet('New skill', (close) => h('div', { class: 'act learn-card' },
     h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj].icon} ${SUBJECTS[sk.subj].name}`),
-    h('h3', {}, sk.name), h('p', { class: 'lead' }, sk.objective),
-    h('div', { class: 'lc-explain' }, h('b', {}, who + ': '), sk.explain),
+    h('h3', {}, skT(sk, 'name')), h('p', { class: 'lead' }, skT(sk, 'objective')),
+    h('div', { class: 'lc-explain' }, h('b', {}, who + ': '), skT(sk, 'explain')),
     h('p', { class: 'tip' }, 'You’ll practise this with help first. There’s no timer and no grade, only progress.'),
     h('div', { class: 'row' }, PRACTICE[id] ? h('button', { class: likes(G, 'see') || likes(G, 'steps') ? 'primary' : 'ghost', onclick: async () => { await showMeHow(G, id, () => ({ skill: id, ...PRACTICE[id]() }), { title: 'Watch one done' }); } }, '🧑‍🏫 Show me one first') : null,
       h('button', { class: likes(G, 'see') || likes(G, 'steps') ? 'ghost' : 'primary', onclick: () => close() }, likes(G, 'try') ? 'Let me try' : 'Got it'))), { icon: '💡' });
@@ -612,7 +613,7 @@ export function learn(G) {
       k === 'reading' ? h('button', { class: 'primary', onclick: () => { close(); readPassage(G); } }, '📖 Read a passage (with questions)') : null,
       k === 'writing' ? h('button', { class: 'primary', onclick: () => { close(); writingWorkshop(G); } }, '✍️ Writing workshop: plan, draft, revise') : null,
       h('div', { class: 'skilllist' }, Object.values(SKILLS).filter((s) => s.subj === k).sort((a, b) => a.band - b.band).map((s) =>
-        h('button', { class: 'skillrow' + (s.band > G.edu.band(k) + 1 ? ' later' : '') + (s.band === G.edu.band(k) ? ' now' : ''), onclick: () => skill(s.id) }, h('div', {}, h('b', {}, s.name), h('small', {}, s.objective)), stateChip(G, s.id)))),
+        h('button', { class: 'skillrow' + (s.band > G.edu.band(k) + 1 ? ' later' : '') + (s.band === G.edu.band(k) ? ' now' : ''), onclick: () => skill(s.id) }, h('div', {}, h('b', {}, skT(s, 'name')), h('small', {}, skT(s, 'objective'))), stateChip(G, s.id)))),
       h('button', { class: 'ghost', onclick: menu }, '‹ Subjects')));
     const skill = (id) => {
       const sk = SKILLS[id];
@@ -628,17 +629,17 @@ export function learn(G) {
         skill(id);
       };
       const watch = () => showMeHow(G, id, () => ({ skill: id, ...gen() }), { title: 'Watch one done' });
-      const hearIt = () => speak(`${sk.name}. ${sk.objective} ${sk.explain} Another way to think about it: ${sk.alt}`);
+      const hearIt = () => speak(`${skT(sk, 'name')}. ${skT(sk, 'objective')} ${skT(sk, 'explain')} ${skT(sk, 'alt')}`);
       const ways = [
         gen ? ['see', h('button', { class: 'way', onclick: watch }, h('span', {}, '👀'), h('b', {}, 'Watch one done'), h('small', {}, 'An example, step by step'))] : null,
         ['hear', h('button', { class: 'way', onclick: hearIt }, h('span', {}, '👂'), h('b', {}, 'Hear the lesson'), h('small', {}, 'Read it to me'))],
         ['other', h('button', { class: 'way', onclick: (e) => { alt.hidden = false; e.currentTarget.disabled = true; } }, h('span', {}, '🔄'), h('b', {}, 'Another way'), h('small', {}, 'Explain it differently'))],
         ['try', h('button', { class: 'way', onclick: practice }, h('span', {}, '✋'), h('b', {}, 'Try it'), h('small', {}, 'Practise with help'))],
       ].filter(Boolean).sort((a, b) => (likes(G, b[0]) ? 1 : 0) - (likes(G, a[0]) ? 1 : 0)).map((x) => x[1]);
-      const alt = h('div', { class: 'lc-explain lc-alt', hidden: !likes(G, 'other') }, h('b', {}, '🔄 Another way: '), sk.alt);
+      const alt = h('div', { class: 'lc-explain lc-alt', hidden: !likes(G, 'other') }, h('b', {}, '🔄 Another way: '), skT(sk, 'alt'));
       if (likes(G, 'hear')) setTimeout(hearIt, 300);
-      body.replaceChildren(h('div', { class: 'act lesson' }, h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj].icon} ${SUBJECTS[sk.subj].name} · Lesson`), h('h3', {}, sk.name), stateChip(G, id),
-        h('p', { class: 'lead' }, '🎯 ', sk.objective), h('div', { class: 'lc-explain' }, h('b', {}, '🧠 The idea: '), sk.explain), alt,
+      body.replaceChildren(h('div', { class: 'act lesson' }, h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj].icon} ${SUBJECTS[sk.subj].name} · Lesson`), h('h3', {}, skT(sk, 'name')), stateChip(G, id),
+        h('p', { class: 'lead' }, '🎯 ', skT(sk, 'objective')), h('div', { class: 'lc-explain' }, h('b', {}, '🧠 The idea: '), skT(sk, 'explain')), alt,
         h('div', { class: 'ways' }, ...ways),
         h('p', { class: 'tip' }, 'Where you’ll use it: ' + (sk.where && sk.where.length ? sk.where.join(' · ') : ({ math: 'the register, paychecks, recipes and inventory.', reading: 'signs, aisle labels, leases and instructions.', writing: 'applications and messages.', cursive: 'signatures and handwritten notes.', finance: 'bills, budgets and groceries.', thinking: 'every choice — especially when Jax is talking.' })[sk.subj])),
         sk.prereq && sk.prereq.length ? h('p', { class: 'tip' }, 'Builds on: ' + sk.prereq.map((p) => SKILLS[p] ? SKILLS[p].name : p).join(', ')) : null,

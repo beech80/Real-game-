@@ -4,7 +4,7 @@
 // are pointed back to a prerequisite. Read-aloud uses the device's own speech voice.
 import { h, UI } from './ui.js';
 import { SKILLS, SUBJECTS } from './edu.js';
-import { Voice, matchOption, parseSpokenNumber } from './voice.js';
+import { Voice, matchOption, parseSpokenNumber, sampler } from './voice.js';
 import { GEN } from './curriculum.js';
 import { splitWords } from './glossary.js';
 import { difficulty } from './readlevel.js';
@@ -12,6 +12,7 @@ import { say } from './readalong.js';
 import { WW } from './ww/index.js';
 import { likes } from './learnstyle.js';
 import { manipulatives } from './manip.js';
+import { skT, lang, translateQuestion } from './i18n.js';
 
 /** Who answers a wrong pick: the person you were just talking to (Rosa at work, Mr. Okafor at the center…), else the coach. */
 function coachName(G) {
@@ -83,10 +84,10 @@ function visual(v) {
 function helpFor(G, id) {
   const sup = G.edu.support(id);
   const band = (SKILLS[id] || {}).band || 1, card = h('div', { class: 'wordcard', hidden: true });
-  const box = h('div', { class: 'helpbox', hidden: sup !== 'guided' }, h('b', {}, '💡 '), h('span', {}, ...wordful(G, G.edu.explain(id), band, card)));
+  const box = h('div', { class: 'helpbox', hidden: sup !== 'guided' }, h('b', {}, '💡 '), h('span', {}, ...wordful(G, lang() === 'es' ? skT(SKILLS[id], G.edu.get(id).needsAlt ? 'alt' : 'explain') : G.edu.explain(id), band, card)));
   let used = false;
   const btn = h('button', { class: 'ghost sm', hidden: sup === 'guided', onclick: () => { box.hidden = false; btn.hidden = true; used = true; } }, 'Show a hint');
-  return { box, btn, card, hinted: () => sup === 'guided' || used, show: () => { box.hidden = false; box.lastChild.replaceChildren(...wordful(G, G.edu.explain(id), band, card)); } };
+  return { box, btn, card, hinted: () => sup === 'guided' || used, show: () => { box.hidden = false; box.lastChild.replaceChildren(...wordful(G, lang() === 'es' ? skT(SKILLS[id], G.edu.get(id).needsAlt ? 'alt' : 'explain') : G.edu.explain(id), band, card)); } };
 }
 
 const RECENT = {};   // skill → keys of the last few questions shown
@@ -114,7 +115,7 @@ export function showMeHow(G, id, make, { title = 'Show me how' } = {}) {
   steps.push(['📖', 'Read it', [h('p', { class: 'lead readable' }, W.q), visual(W.v)], `First, read the question. ${W.q}`]);
   if (W.type === 'choice') steps.push(['🔎', 'Look at the choices', [h('div', { class: 'smh-opts' }, ...W.o.map((o) => h('span', { class: 'smh-chip' }, String(o))))], 'Next, look at every choice before you pick one.']);
   else if (nums.length) steps.push(['🔎', 'Find the numbers', [h('div', { class: 'smh-opts' }, ...nums.map((n) => h('span', { class: 'smh-chip' }, n)))], `Next, find the numbers: ${nums.join(', ')}.`]);
-  if (sk.explain) steps.push(['🧠', 'Use the rule', [h('p', { class: 'readable' }, sk.explain)], sk.explain]);
+  if (sk.explain) steps.push(['🧠', 'Use the rule', [h('p', { class: 'readable' }, skT(sk, 'explain'))], skT(sk, 'explain')]);
   const work = W.type === 'order' ? W.items.slice() : W.type === 'sort' ? W.items.map(([t, b]) => `${t} → ${b}`) : W.type === 'budget' ? W.cats.filter((c) => c.min).map((c) => `${c.name} needs $${c.min} first.`) : W.type === 'write' ? [W.model].filter(Boolean) : [];
   if (work.length) steps.push(['✍️', W.type === 'write' ? 'Here is one way to write it' : 'Work it out', [h('ol', { class: 'smh-steps readable' }, ...work.map((t) => h('li', {}, t)))], work.join('. ')]);
   const why = sentences(W.why);
@@ -299,7 +300,16 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     const toolBox = h('div', { class: 'toolbox', hidden: true });
     const toolBtn = mathy ? h('button', { class: 'ghost sm tool', onclick: () => { if (!toolBox.firstChild) toolBox.append(manipulatives(Q, { ...sk, id })); toolBox.hidden = !toolBox.hidden; toolBtn.textContent = toolBox.hidden ? '🧮 Use a tool' : '🧮 Hide the tool'; } }, '🧮 Use a tool') : null;
     if (mathy && likes(G, 'see') && (sk.band || 1) <= 3) setTimeout(() => toolBtn.click(), 0);   // picture learners start with the tool open
+    // 🌎 the question in Spanish (Spanish players and English learners); English stays on screen to learn from
+    const esBox = h('div', { class: 'esbox', hidden: true });
+    const esBtn = lang() === 'es' && !Q.decode ? h('button', { class: 'ghost sm', onclick: async () => {
+      if (!esBox.hidden) { esBox.hidden = true; return; }
+      esBox.hidden = false; esBox.replaceChildren(h('small', {}, '🌎 …'));
+      const T = await translateQuestion(Q, sampler);
+      esBox.replaceChildren(...(T ? [h('p', { class: 'readable es-q' }, '🌎 ', T.q), T.o && T.o.length ? h('ul', { class: 'es-o' }, ...T.o.map((o) => h('li', {}, o))) : null, h('button', { class: 'say-btn', onclick: () => speak(T.q + ' ' + (T.o || []).join('. ')) }, '🔊')]
+        : [h('p', { class: 'readable' }, '🌎 ', skT(sk, 'objective')), h('p', { class: 'readable' }, skT(sk, 'explain'))]));
+    } }, '🌎 En español') : null;
     if (CHECK) { hp.box.hidden = true; hp.btn.hidden = true; howBtn.hidden = true; }
-    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') + (CHECK ? ' check' : '') }, CHECK ? h('p', { class: 'tip' }, '📋 Check: one try, no hints. Just do your best.') : null, ...head.filter(Boolean), hp.card, hp.box, body, wwBox, hint2, why, h('div', { class: 'row' }, speakRow, toolBtn, hp.btn, howBtn), toolBox, done);
+    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') + (CHECK ? ' check' : '') }, CHECK ? h('p', { class: 'tip' }, '📋 Check: one try, no hints. Just do your best.') : null, ...head.filter(Boolean), hp.card, hp.box, body, wwBox, hint2, why, h('div', { class: 'row' }, speakRow, toolBtn, esBtn, hp.btn, howBtn), esBox, toolBox, done);
   }, { icon, noClose: true });
 }

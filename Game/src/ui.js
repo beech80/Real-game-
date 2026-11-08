@@ -1,5 +1,6 @@
 import { speakerBtn, autoRead, readEls, stopReading, readToMe, markWords } from './readalong.js';
 // REAL — UI: tiny DOM helper, HUD, dialogue, modal sheets, toasts, minimap, captions.
+import { tr } from './i18n.js';
 export function h(tag, attrs = {}, ...kids) {
   const el = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs || {})) {
@@ -8,9 +9,9 @@ export function h(tag, attrs = {}, ...kids) {
     else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
     else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
     else if (k === 'html') el.innerHTML = v;
-    else el.setAttribute(k, v === true ? '' : v);
+    else el.setAttribute(k, v === true ? '' : (k === 'placeholder' || k === 'aria-label' || k === 'title') ? tr(v) : v);
   }
-  for (const c of kids.flat()) if (c !== null && c !== undefined && c !== false) el.append(c.nodeType ? c : document.createTextNode(String(c)));
+  for (const c of kids.flat()) if (c !== null && c !== undefined && c !== false) el.append(c.nodeType ? c : document.createTextNode(typeof c === 'string' ? tr(c) : String(c)));
   return el;
 }
 export const $ = (s) => document.querySelector(s);
@@ -69,6 +70,7 @@ export const UI = {
     if (label) E.interactLabel.textContent = label;
   },
   toast(text, kind = 'info', ms = 2600) {
+    text = tr(text);
     const t = h('div', { class: 'toast ' + kind }, text);
     this.els.toasts.append(t);
     setTimeout(() => t.classList.add('out'), ms);
@@ -76,6 +78,7 @@ export const UI = {
   },
   /** Dialogue with optional choices. Resolves with the choice index (or undefined). */
   say(speaker, text, choices, opts = {}) {
+    speaker = tr(speaker); text = tr(text); if (choices) choices = choices.map((c) => tr(c));
     return new Promise((res) => {
       const D = this.els.dialog;
       D.hidden = false;
@@ -104,6 +107,7 @@ export const UI = {
   },
   /** Modal sheet. build(close) returns content element. Resolves with close(value). */
   sheet(title, build, opts = {}) {
+    title = tr(title);
     // each sheet is its own stacked layer, so a "New skill" card can open on top of an activity without destroying it
     return new Promise((res) => {
       const host = this.els.modal;
