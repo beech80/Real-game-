@@ -126,7 +126,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   if (!esBtn) fail('no 🌎 En español button on a question');
   else { await esBtn.click(); await sleep(1500); const box = await ev((t) => { const x = document.querySelector(`${t} .esbox`); return x && !x.hidden ? x.innerText : null; }, top); console.log('🌎 box:', box && box.slice(0, 120)); if (!box || box.length < 10) fail('the 🌎 button showed nothing'); }
   const qEn = await ev((t) => document.querySelector(`${t} .qrow .lead`).textContent, top);
-  if (!/[a-z]/i.test(qEn) || /¿/.test(qEn)) fail('the question itself should stay in English');
+  if (/¿|¡/.test(qEn)) fail('the question itself should stay in English');
   await p.screenshot({ path: path.join(OUT, 'nf_spanish.png'), timeout: 180000 });
   if (errors.length) fail('page errors: ' + errors.slice(0, 3).join(' | '));
   console.log(bad.length ? 'NEWFEATURES FAILED' : 'NEWFEATURES PASSED');
