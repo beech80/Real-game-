@@ -296,7 +296,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       if (howBtn.hidden) return; howBtn.className = 'ghost sm how pulse'; if (likes(G, 'steps') && tries === 1) howBtn.click();
     };
     // math you can move: number line, blocks, fraction bars, coins (thinking tools, not hints; allowed in checks too)
-    const mathy = ['math', 'finance'].includes(sk.subj) && ['choice', 'number'].includes(Q.type) && /\d/.test(Q.q) && !Q.decode;
+    const mathy = ['math', 'finance'].includes(sk.subj) && ['choice', 'number'].includes(Q.type) && /\d/.test(Q.q + ' ' + (Q.o || []).join(' ') + ' ' + JSON.stringify(Q.v || '')) && !Q.decode;
     const toolBox = h('div', { class: 'toolbox', hidden: true });
     const toolBtn = mathy ? h('button', { class: 'ghost sm tool', onclick: () => { if (!toolBox.firstChild) toolBox.append(manipulatives(Q, { ...sk, id })); toolBox.hidden = !toolBox.hidden; toolBtn.textContent = toolBox.hidden ? '🧮 Use a tool' : '🧮 Hide the tool'; } }, '🧮 Use a tool') : null;
     if (mathy && likes(G, 'see') && (sk.band || 1) <= 3) setTimeout(() => toolBtn.click(), 0);   // picture learners start with the tool open

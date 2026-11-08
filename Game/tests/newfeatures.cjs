@@ -18,6 +18,13 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const ev = (f, a) => p.evaluate(f, a);
   const top = '#modal .modal:last-child';
   const closeAll = async () => { for (let i = 0; i < 6 && await p.isVisible('#modal .modal'); i++) { await p.$eval(`${top} .sh-x`, (e) => e.click()).catch(() => {}); await sleep(500); } };
+  // answer whatever question is open (any type) until Continue shows, then continue
+  const finishActivity = async () => { for (let i = 0; i < 8 && await p.$(`${top} .activity`); i++) {
+    const cont = await p.$(`${top} button.primary:text-is("Continue"):not([hidden])`); if (cont) { await cont.click(); await sleep(700); continue; }
+    await ev((t) => { const Q = window.__lastQ, m = document.querySelector(t); const opts = [...m.querySelectorAll('.opt:not([disabled])')];
+      const right = opts.find((x) => x.textContent === String(Q.a)); if (right) return right.click(); if (opts.length) return opts[0].click();
+      if (Q.type === 'number') { for (const d of String(Q.decimals ? Math.round(Q.a * 100) : Q.a)) { const k = [...m.querySelectorAll('.key')].find((x) => x.textContent === d); if (k) k.click(); } const ok = m.querySelector('.key.ok'); if (ok) ok.click(); } }, top);
+    await sleep(700); } };
   const phone = async (app) => { await closeAll(); await ev(() => document.getElementById('btn-phone').click()); await sleep(1200); await p.$$eval('#modal .app', (els, a) => { const x = els.find((e) => e.textContent.replace(/\d+|🔁/g, '').trim().endsWith(a)); if (x) x.click(); }, app); await sleep(1000); };
   await p.goto(`http://localhost:${srv.address().port}/index.html`, { timeout: 240000, waitUntil: 'domcontentloaded' });
   await ev(() => { try { localStorage.clear(); } catch (e) {} });
@@ -58,8 +65,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       await p.screenshot({ path: path.join(OUT, `nf_tool_${skill}.png`), timeout: 180000 });
     }
     if (!(await p.$(`${top} button.mic`))) fail(`no Say it button on ${skill}`);
-    await ev((t) => { const o = [...document.querySelectorAll(`${t} .opt`)].find((x) => x.textContent === String(window.__lastQ.a)); if (o) o.click(); }, top); await sleep(600);
-    await p.$eval(`${top} button.primary:text-is("Continue")`, (e) => e.click()).catch(() => {}); await sleep(700);
+    await finishActivity();
     await closeAll();
   }
   // --- spaced review: a proficient skill last used 2 days ago (first gap is 1 day) is due
