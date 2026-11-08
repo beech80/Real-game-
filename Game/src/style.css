@@ -543,3 +543,31 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .fam-help { display: block; margin-top: 4px; color: #9ec2ff; }
 .review-card { border: 1px solid rgba(143,123,255,.5); }
 .mic { white-space: nowrap; }
+/* math you can move */
+.toolbox { margin: 8px 0; padding: 10px; border-radius: 14px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); }
+.manip-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.manip-read { font-size: 17px; font-weight: 600; margin: 6px 0; }
+.manip-btns { flex-wrap: wrap; gap: 6px; }
+.nl-svg { width: 100%; max-width: 520px; height: auto; display: block; }
+.bt-mat { display: grid; grid-template-columns: 2fr 1.4fr 1fr; gap: 8px; min-height: 90px; }
+.bt-col { background: rgba(0,0,0,.18); border-radius: 10px; padding: 6px; }
+.bt-col small { display: block; color: var(--muted); margin-bottom: 4px; }
+.bt-pile { display: flex; flex-wrap: wrap; gap: 3px; align-items: flex-end; }
+.bt-flat { width: 34px; height: 34px; background: repeating-linear-gradient(0deg, #4c7df0 0 3px, #6f97ff 3px 3.4px), repeating-linear-gradient(90deg, transparent 0 3px, rgba(0,0,0,.25) 3px 3.4px); background-blend-mode: multiply; border-radius: 3px; }
+.bt-rod { width: 6px; height: 40px; background: repeating-linear-gradient(0deg, #3fbf7a 0 3.6px, #2a8f5a 3.6px 4px); border-radius: 2px; }
+.bt-cube { width: 8px; height: 8px; background: #e9a93a; border-radius: 2px; }
+.fb-wrap { display: flex; flex-direction: column; gap: 8px; }
+.fb-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.fb-bar { flex: 1 1 200px; display: grid; height: 34px; border: 2px solid #cfd6ff; border-radius: 6px; overflow: hidden; min-width: 160px; }
+.fb-part { border: 0; border-right: 1px solid #cfd6ff; background: transparent; padding: 0; cursor: pointer; min-height: 30px; }
+.fb-part:last-child { border-right: 0; }
+.fb-part.on { background: #8b5a3c; }
+.fb-lab { min-width: 44px; font-size: 18px; }
+.cm-mat { display: flex; flex-wrap: wrap; gap: 6px; min-height: 52px; padding: 8px; border-radius: 10px; background: rgba(47,143,90,.18); align-items: center; }
+.cm-tray { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.cm-piece { border: 0; cursor: pointer; font-weight: 700; color: #1c2148; min-height: 40px; }
+.cm-piece.bill { background: #9fd8a6; border-radius: 6px; padding: 8px 12px; }
+.cm-piece.coin { border-radius: 50%; width: 44px; height: 44px; padding: 0; font-size: 12px; }
+.cm-piece.coin.q, .cm-piece.coin.d, .cm-piece.coin.n { background: #d7dbe3; }
+.cm-piece.coin.p { background: #d08a5a; }
+.cm-piece.coin.d { width: 36px; height: 36px; }

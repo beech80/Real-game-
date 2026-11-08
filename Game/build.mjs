@@ -49,5 +49,21 @@ const walkGz = (d) => { for (const f of fs.readdirSync(d)) { const p = path.join
 walkGz(path.join(dist, 'assets'));
 fs.copyFileSync(path.join(dist, 'artifact.html'), path.join(hostedDir, 'index.html'));
 fs.copyFileSync(path.join(dist, 'assets', 'world.json'), path.join(hostedDir, 'assets', 'world.json'));
+// one-file offline copy: the whole game and every asset in a single page you can save and open with no internet
+{
+  const pack = {};
+  const walkPack = (d) => { for (const f of fs.readdirSync(d)) { const p = path.join(d, f); if (fs.statSync(p).isDirectory()) walkPack(p); else if (f.endsWith('.gz')) pack[path.relative(dist, p).split(path.sep).join('/')] = fs.readFileSync(p).toString('base64'); } };
+  walkPack(path.join(dist, 'assets'));
+  pack['assets/world.json'] = fs.readFileSync(path.join(dist, 'assets', 'world.json'), 'utf8');
+  const packJs = `window.__REAL_PACK=${JSON.stringify(pack)};window.__REAL_OFFLINE=true;`.replace(/<\/script/gi, '<\\/script');
+  const one = `<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>REAL (offline copy)</title>
+${frag.replace('<script type="module" src="game.js"></script>', () => `<script>${packJs}</script><script type="module">${bundle}</script>`)}
+</body></html>`;
+  fs.writeFileSync(path.join(dist, 'REAL-offline.html'), one);
+  fs.copyFileSync(path.join(dist, 'REAL-offline.html'), path.join(hostedDir, 'REAL-offline.html'));
+}
 const size = (f) => (fs.statSync(path.join(dist, f)).size / 1024).toFixed(0) + ' KB';
 console.log('built', { game: size('game.js'), page: size('index.html'), files: files.length });

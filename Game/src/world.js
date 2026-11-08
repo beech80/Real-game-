@@ -12,6 +12,15 @@ export const loader = new GLTFLoader();
  *  magic bytes are absent and the buffer is parsed directly. */
 export async function loadGLB(url, onProgress) {
   // Hosted builds (claude.ai artifacts) only serve text/media types: assets ship as base64 text there.
+  // the one-file offline copy carries every asset inside the page (base64 of the .gz): no network at all
+  const pack = typeof window !== 'undefined' && window.__REAL_PACK && window.__REAL_PACK[url];
+  if (pack) {
+    const bin = atob(pack); let b = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) b[i] = bin.charCodeAt(i);
+    if (onProgress) onProgress(1);
+    if (b[0] === 0x1f && b[1] === 0x8b) b = await gunzip(b);
+    const ab0 = b.byteOffset === 0 && b.byteLength === b.buffer.byteLength ? b.buffer : b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength);
+    return new Promise((res, rej) => loader.parse(ab0, '', res, rej));
+  }
   const b64 = typeof window !== 'undefined' && window.__REAL_B64 && url.endsWith('.gz');
   if (b64) url = url.replace(/\.gz$/, '.b64.txt');
   const resp = await fetch(url);

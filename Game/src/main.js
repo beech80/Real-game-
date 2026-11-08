@@ -55,6 +55,7 @@ const saveNow = () => { try { if (game && mode === 'play' && player && !game.sta
 document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); });
 window.addEventListener('pagehide', saveNow);
 initReadAlong(() => game && game.state);
+addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); window.__installPrompt = e; });   // offer Install from Settings › Play offline
 UI.onLine = (who, text) => logLine(who, text);   // the Talk log in the phone
 installKeyboard();
 // 🔊 on the goal bar, and the "Read to me" switch on the title screen
@@ -105,7 +106,7 @@ function roomierFreshMart(root, D) {
 
 async function boot() {
   progress(0.02, 'Loading the city…');
-  const data = W.data = await (await fetch('assets/world.json')).json();
+  const data = W.data = window.__REAL_PACK && window.__REAL_PACK['assets/world.json'] ? JSON.parse(window.__REAL_PACK['assets/world.json']) : await (await fetch('assets/world.json')).json();
   const g = await loadGLB('assets/district.glb.gz', (p) => progress(0.05 + p * 0.62, 'Loading the Starting District…'));
   progress(0.7, 'Building streets…');
   await wait(30);

@@ -518,6 +518,28 @@ export class Game {
   }
 }
 
+// ---------------------------------------------------------------------------------------- play offline
+/** Settings › Play offline: install the app (where the browser allows), check it's ready with no internet,
+ *  or download the one-file copy that opens from a computer or tablet with no internet at all. */
+function offlineBox() {
+  const status = h('small', {}, '');
+  const box = h('div', { class: 'bill offline' }, h('div', {}, h('b', {}, '📶 Play offline'), status));
+  const btns = h('div', { class: 'row' });
+  if (window.__REAL_OFFLINE) status.textContent = '✓ You’re playing the offline copy. No internet needed. Progress saves in this browser; use Settings › Save file to move it.';
+  else if (window.__REAL_B64) status.textContent = 'Download the whole game as one file (about 10 MB). Open it in any web browser, even with no internet. Good for school tablets and bus rides.';
+  else status.textContent = 'Checking…';
+  if (!window.__REAL_OFFLINE) btns.append(h('a', { class: 'ghost sm btn', href: 'REAL-offline.html', download: 'REAL-offline.html' }, '⬇️ Download to play offline'));
+  if (window.__installPrompt) btns.append(h('button', { class: 'primary sm', onclick: async () => { const p = window.__installPrompt; window.__installPrompt = null; p.prompt(); try { await p.userChoice; } catch (e) {} } }, '📲 Install the app'));
+  if (!window.__REAL_B64 && !window.__REAL_OFFLINE && 'serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistration().then(async (r) => {
+      const keys = window.caches ? await caches.keys() : [];
+      status.textContent = r && r.active && keys.some((k) => k.startsWith('real-')) ? '✓ Ready to play with no internet on this device. Add it to your home screen to open it like an app.' : 'Getting ready for offline play… keep the game open for a minute.';
+    }).catch(() => { status.textContent = 'Download the one-file copy below to play with no internet.'; });
+  }
+  box.append(btns);
+  return box;
+}
+
 // ---------------------------------------------------------------------------------------- phone
 export function openPhone(G) {
   const s = G.state;
@@ -632,6 +654,7 @@ export function openPhone(G) {
           ...[['large', 'Bigger text'], ['contrast', 'High contrast'], ['readAloud', 'Read to me (all text)'], ['calm', 'Reduce motion']].map(([k, n]) => { s.settings = s.settings || {}; return h('div', { class: 'row' }, h('span', {}, n), h('button', { class: s.settings[k] ? 'primary sm' : 'ghost sm', onclick: () => { s.settings[k] = !s.settings[k]; G.hooks.applyA11y(s.settings); G.save(); open('Settings'); } }, s.settings[k] ? 'On' : 'Off')); }),
           h('div', { class: 'row' }, h('span', {}, 'Live neighbors'), isSchool(s) ? h('button', { class: 'ghost sm', disabled: true }, 'Off (school)') : h('button', { class: (s.settings || {}).noNeighbors ? 'ghost sm' : 'primary sm', onclick: () => { s.settings = s.settings || {}; s.settings.noNeighbors = !s.settings.noNeighbors; G.save(); open('Settings'); } }, (s.settings || {}).noNeighbors ? 'Off' : 'On')),
           h('button', { class: 'ghost', onclick: () => open('Grown-ups') }, '👪 For grown-ups: privacy & progress'),
+          offlineBox(),
           h('div', { class: 'row' }, h('span', {}, 'Sound'), h('button', { class: 'ghost sm', onclick: (e) => { e.currentTarget.textContent = G.hooks.toggleSound() ? 'On' : 'Off'; } }, G.hooks.soundOn() ? 'On' : 'Off')),
           h('div', { class: 'tier-h' }, 'Save'),
           h('p', { class: 'tip' }, `Your game saves by itself on this device${s.savedAt ? ' (last saved ' + new Date(s.savedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + ')' : ''}. To play on another device, take a save file with you.`),
