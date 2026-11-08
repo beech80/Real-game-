@@ -62,7 +62,7 @@ const MOCK = () => {
   await p.click('.speakact button.primary:text-is("Continue")');
   // learning questions are tapped, not spoken
   await ev(() => { window.__pr = window.REAL.practice('fin.prices'); });
-  await p.waitForSelector('.activity .opt'); results.noMicInTasks = !(await p.$('.activity .mic'));
+  await p.waitForSelector('.activity .opt'); results.sayItOnTasks = !!(await p.$('.activity .mic'));   // spoken answers: an optional Say it button on questions
   await p.click('.activity .opt'); await sleep(400);
   await p.evaluate(() => { const b = document.querySelector('.activity button.primary'); if (b) b.click(); }); await sleep(500);
   // the phone/app blocks the browser mic: the 🎤 opens an answer box for the keyboard's own dictation instead
@@ -81,7 +81,7 @@ const MOCK = () => {
   results.claudeCalls = await ev(() => window.__samples.join(','));
   console.log(JSON.stringify(results, null, 1));
   console.log('page errors', errors.length, errors.slice(0, 5));
-  const ok = results.loaderShown && results.savedOnCreate && results.reachedPrologue && results.noMicInDialog && results.noMicInAsk && results.noMicInTasks && results.npcAnsweredQuestion && results.speakingStars && results.dictationBoxWhenBlocked && results.gradedFromDictation && results.dictateFocused && results.speakByDictation && !errors.length;
+  const ok = results.loaderShown && results.savedOnCreate && results.reachedPrologue && results.noMicInDialog && results.noMicInAsk && results.sayItOnTasks && results.npcAnsweredQuestion && results.speakingStars && results.dictationBoxWhenBlocked && results.gradedFromDictation && results.dictateFocused && results.speakByDictation && !errors.length;
   console.log(ok ? 'VOICE TEST PASSED' : 'VOICE TEST FAILED');
   await b.close(); srv.close(); process.exit(ok ? 0 : 1);
 })().catch(async (e) => { console.error('FAIL', e); process.exit(2); });
