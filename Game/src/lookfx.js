@@ -139,10 +139,10 @@ function CONTACT() {
   return contactMat;
 }
 let outlineMat = null, lkQuality = 'medium';
-export function setLookQuality(q) { lkQuality = q; if (outlineMat) outlineMat.visible = true; if (inkMat) inkMat.visible = q !== 'low'; }
+export function setLookQuality(q) { lkQuality = q; if (outlineMat) outlineMat.visible = q !== 'low'; if (inkMat) inkMat.visible = q !== 'low'; }   // low = weak phones: speed first
 function OUTLINE() {
   if (outlineMat) return outlineMat;
-  outlineMat = new THREE.MeshBasicMaterial({ color: 0x1a1420, side: THREE.BackSide }); outlineMat.visible = true;   // bold outline at every quality: characters are few
+  outlineMat = new THREE.MeshBasicMaterial({ color: 0x1a1420, side: THREE.BackSide }); outlineMat.visible = lkQuality !== 'low';
   outlineMat.onBeforeCompile = (sh) => {
     sh.vertexShader = sh.vertexShader.replace('#include <skinning_vertex>', '#include <skinning_vertex>\n  #ifdef USE_SKINNING\n  transformed += normalize(objectNormal) * 0.017;\n  #endif');
   };
