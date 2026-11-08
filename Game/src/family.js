@@ -52,6 +52,7 @@ export function familyView(G) {
       return h('div', { class: 'bill' }, h('div', {}, h('b', {}, sk.name), h('small', {}, `${sk.objective}${top && ERR[top[0]] ? ` Most misses: ${ERR[top[0]]}.` : ''}`),
         h('small', { class: 'fam-help' }, `How to help: open 📚 Learn › ${SUBJECTS[sk.subj].name} › ${sk.name} together and tap “Watch one done”. Then ask: “${sk.explain.split(/(?<=[.!?])\s/)[0]} Can you show me?”`))); }))
       : h('p', { class: 'tip' }, 'Nothing stuck right now. 🎉'),
+    ...(() => { const P = (G.state.portfolio || []).filter((f) => Date.now() - (f.t || 0) < 7 * DAY); return P.length ? [h('div', { class: 'tier-h' }, '✍️ Writing this week'), h('ul', { class: 'list' }, ...P.map((f) => h('li', {}, h('b', {}, f.title), ` · ${f.words} words, revised ${f.rounds} time${f.rounds === 1 ? '' : 's'} (${f.met}/${f.of} checks). Ask them to read it to you!`)))] : []; })(),
     h('div', { class: 'tier-h' }, '🔁 Coming back for review'),
     h('p', { class: 'tip' }, W.due.length ? `${W.due.length} skill${W.due.length > 1 ? 's are' : ' is'} ready for a quick review: ${W.due.slice(0, 4).map((id) => SKILLS[id].name).join(', ')}. Reviews space out over days and weeks so learning sticks.` : 'No reviews due. Known skills come back on their own, spaced further apart each time.'),
     h('div', { class: 'tier-h' }, `📖 Words (${(s.words || []).length})`),

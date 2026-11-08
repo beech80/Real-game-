@@ -16,6 +16,7 @@ const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[
 const cents = (v) => Math.round(v * 100);
 
 import { STYLES, likes, toggleStyle } from './learnstyle.js';
+import { writingWorkshop } from './writing.js';
 // ------------------------------------------------------------------------------------ teaching helpers
 /** Discover → Understand: first time a skill appears, an NPC/visual explanation card. */
 export async function teach(G, id, who = 'Tip') {
@@ -609,6 +610,7 @@ export function learn(G) {
     const subject = (k) => body.replaceChildren(h('div', { class: 'act' },
       h('p', { class: 'tip' }, 'Every skill is open to you. Start anywhere: the game adapts to what you show it.'),
       k === 'reading' ? h('button', { class: 'primary', onclick: () => { close(); readPassage(G); } }, '📖 Read a passage (with questions)') : null,
+      k === 'writing' ? h('button', { class: 'primary', onclick: () => { close(); writingWorkshop(G); } }, '✍️ Writing workshop: plan, draft, revise') : null,
       h('div', { class: 'skilllist' }, Object.values(SKILLS).filter((s) => s.subj === k).sort((a, b) => a.band - b.band).map((s) =>
         h('button', { class: 'skillrow' + (s.band > G.edu.band(k) + 1 ? ' later' : '') + (s.band === G.edu.band(k) ? ' now' : ''), onclick: () => skill(s.id) }, h('div', {}, h('b', {}, s.name), h('small', {}, s.objective)), stateChip(G, s.id)))),
       h('button', { class: 'ghost', onclick: menu }, '‹ Subjects')));

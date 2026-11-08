@@ -571,3 +571,15 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .cm-piece.coin.q, .cm-piece.coin.d, .cm-piece.coin.n { background: #d7dbe3; }
 .cm-piece.coin.p { background: #d08a5a; }
 .cm-piece.coin.d { width: 36px; height: 36px; }
+/* writing workshop */
+.plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin: 8px 0; }
+.plan-cell { display: flex; flex-direction: column; gap: 4px; }
+.plan-box { min-height: 56px; }
+.draft-box { width: 100%; font-size: 18px; line-height: 1.5; }
+.rubric { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.rub-row { padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,.05); font-size: 16px; line-height: 1.4; }
+.rub-row.ok b { color: #7fe0a5; } .rub-row.todo b { color: var(--gold); }
+.rub-at { display: block; margin-top: 4px; padding: 4px 8px; border-left: 3px solid var(--gold); color: #ffe2a8; font-style: italic; }
+.rub-at::before, .rub-at::after { content: ''; }
+.published p { font-size: 18px; line-height: 1.6; margin: 0 0 10px; }
+.tip.good { color: #7fe0a5; }
