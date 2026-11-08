@@ -294,6 +294,8 @@ async function startGameInner(state, isNew) {
   else { player.pos = { ...WILD.start }; player.heading = 0; }
   player.apply();
   mode = 'play'; UI.showHUD(true);
+  // welcome back: skills you know that are due for a spaced review
+  setTimeout(() => { try { const n = game.edu.dueReviews().length; if (n >= 1 && !isNew) UI.toast(`🔁 Welcome back! ${n} skill${n > 1 ? 's are' : ' is'} ready for a quick review in 📚 Learn.`, 'info', 5200); } catch (e) {} }, 2500);
 }
 
 const sock = (key, where = 'district') => W.data[where].sockets.find((s) => s.n === 'SOCKET_' + key);

@@ -136,7 +136,11 @@ const S = [
 
 const ALL = [...S, ...NEW_SKILLS.filter((n) => !S.some((o) => o[0] === n[0]))];
 export const SKILLS = Object.fromEntries(ALL.map(([id, subj, band, name, objective, prereq, explain, alt, where]) => [id, { id, subj, band, name, objective, prereq: prereq || [], explain, alt, where: where || [] }]));
-const REVIEW_GAPS = [3, 7, 14, 30];   // spaced review: each passed review pushes the next one further out
+const REVIEW_GAPS = [3, 7, 14, 30];
+// real-calendar spacing (days) for skills you've shown you know: each on-time review pushes the next one out;
+// a miss at review brings the next one closer. This is what makes learning stick across weeks, not minutes.
+export const REAL_GAPS = [1, 3, 7, 14, 30, 60];
+const DAY_MS = 864e5;   // spaced review: each passed review pushes the next one further out
 
 export function newEdu() {
   return { skills: {}, journal: [] };
@@ -163,7 +167,8 @@ export class Edu {
     const day = this.hooks.day ? this.hooks.day() : 1;
     const k = this.get(id);
     if (k.st === 0) k.st = 1;
-    k.n++; k.lastSeenDay = day; k.last5 = [...(k.last5 || []), correct && !hinted ? 1 : 0].slice(-5);
+    const now = Date.now(), wasDue = k.st >= 3 && k.lastSeenAt && now - k.lastSeenAt >= REAL_GAPS[Math.min(REAL_GAPS.length - 1, k.reviews || 0)] * DAY_MS;
+    k.n++; k.lastSeenDay = day; k.lastSeenAt = now; k.last5 = [...(k.last5 || []), correct && !hinted ? 1 : 0].slice(-5);
     const before = k.st;
     if (correct) {
       k.ok++;
@@ -186,6 +191,7 @@ export class Edu {
       else if (k.st === 5) { k.reviewMiss = (k.reviewMiss || 0) + 1; if (k.reviewMiss >= 2) k.st = 2; }
       else if (k.st === 3) k.st = 2; // gentle: back to practice, never below
     }
+    if (wasDue) { if (correct && !hinted) { k.reviews = (k.reviews || 0) + 1; k.reviewedAt = now; } else if (!correct) k.reviews = Math.max(0, (k.reviews || 0) - 1); }
     this.s.skills[id] = k;
     if (k.st !== before) { this._log(id, STATES[k.st]); this.hooks.onState && this.hooks.onState(SKILLS[id], k.st); }
     return k.st;
@@ -230,6 +236,14 @@ export class Edu {
     for (const [id, k] of Object.entries(this.s.skills)) if (k.st === 4 && day - (k.lastSeenDay || day) >= REVIEW_GAPS[Math.min(REVIEW_GAPS.length - 1, k.reviews || 0)]) { k.st = 5; }
   }
 
+  /** Skills ready for a spaced review now (real days since you last used them ≥ the next gap). Most overdue first. */
+  dueReviews(now = Date.now()) {
+    return Object.entries(this.s.skills).filter(([id, k]) => SKILLS[id] && k.st >= 3 && k.lastSeenAt)
+      .map(([id, k]) => [id, (now - k.lastSeenAt) / (REAL_GAPS[Math.min(REAL_GAPS.length - 1, k.reviews || 0)] * DAY_MS)])
+      .filter(([, r]) => r >= 1).sort((a, b) => b[1] - a[1]).map(([id]) => id);
+  }
+  /** when each known skill comes back next (for the family view) */
+  nextReview(id) { const k = this.get(id); return k.lastSeenAt ? k.lastSeenAt + REAL_GAPS[Math.min(REAL_GAPS.length - 1, k.reviews || 0)] * DAY_MS : null; }
   progress(subj) {
     const list = Object.values(SKILLS).filter((s) => s.subj === subj);
     const pts = list.reduce((a, s) => a + Math.min(4, this.state(s.id) === 5 ? 4 : this.state(s.id)), 0);

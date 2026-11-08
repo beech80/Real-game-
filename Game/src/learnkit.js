@@ -4,7 +4,7 @@
 // are pointed back to a prerequisite. Read-aloud uses the device's own speech voice.
 import { h, UI } from './ui.js';
 import { SKILLS, SUBJECTS } from './edu.js';
-import { Voice } from './voice.js';
+import { Voice, matchOption, parseSpokenNumber } from './voice.js';
 import { GEN } from './curriculum.js';
 import { splitWords } from './glossary.js';
 import { difficulty } from './readlevel.js';
@@ -204,9 +204,16 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     const head = [h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj] ? SUBJECTS[sk.subj].icon + ' ' + SUBJECTS[sk.subj].name : ''} · ${sk.name || ''}`),
       visual(Q.v), Q.cursive ? h('div', { class: 'cursive-note' }, ...Q.cursive.map((l) => h('div', {}, l))) : null,
       h('div', { class: 'qrow' }, h('p', { class: 'lead' }, ...wordful(G, Q.q, sk.band || 1, hp.card)), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
-    let body;
+    let body, speakRow = null;
     if (Q.type === 'choice') {
       const optsShown = shuffle([...new Set(Q.o)]);
+      const sayBtn = h('button', { class: 'ghost sm mic', 'aria-label': 'Say your answer', onclick: async () => {
+        const said = await Voice.ask({ prompt: Q.decode ? 'Read the word out loud' : 'Say your answer' }); if (!said || !done.hidden) return;
+        const btns = [...body.querySelectorAll('.opt')], i = matchOption(btns.map((b) => b.textContent), said);
+        if (i == null || btns[i].disabled) { UI.toast(`I heard “${said}”. Which one did you mean? Say it again or tap it.`, 'info', 3600); return; }
+        btns[i].click();
+      } }, '🎤 Say it');
+      speakRow = sayBtn;
       body = h('div', { class: 'opts' + (Q.decode ? ' decode' : '') }, optsShown.map((o) => h('button', { class: 'opt', 'data-noread': Q.decode ? '1' : null, onclick: (e) => { if (!done.hidden) return; const ok = o === Q.a; if (!attempt(ok, ok ? null : 'chose:' + String(o).slice(0, 24))) { e.currentTarget.classList.add('wrong'); e.currentTarget.disabled = true; if (!CHECK) explainWrong(reasonFor(Q, o, sk)); } else e.currentTarget.classList.add('right'); } }, o)));
     } else if (Q.type === 'number') {
       let val = '';
@@ -214,6 +221,11 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       const show = () => { disp.textContent = Q.prefix === '$' && Q.decimals ? '$' + (val ? (parseInt(val, 10) / 100).toFixed(2) : '0.00') : `${Q.prefix || ''}${val || '0'}${Q.suffix ? ' ' + Q.suffix : ''}`; };
       const value = () => (Q.decimals ? parseInt(val || '0', 10) / 100 : parseFloat(val || '0'));
       const key = (k) => h('button', { class: 'key', onclick: () => { if (k === '⌫') val = val.slice(0, -1); else if (k === '.' ) { if (!val.includes('.') && !Q.decimals) val += val ? '.' : '0.'; } else if (val.length < 9) val += k; show(); } }, k);
+      speakRow = h('button', { class: 'ghost sm mic', 'aria-label': 'Say your answer', onclick: async () => {
+        const said = await Voice.ask({ prompt: 'Say the number' }); if (!said || !done.hidden) return;
+        const n = parseSpokenNumber(said); if (n == null) { UI.toast(`I heard “${said}”, but no number. Try “twenty five”.`, 'info', 3600); return; }
+        val = Q.decimals ? String(Math.round(n * 100)) : String(n); show(); body.querySelector('.key.ok').click();
+      } }, '🎤 Say it');
       body = h('div', {}, disp, h('div', { class: 'keypad' }, ['1', '2', '3', '4', '5', '6', '7', '8', '9', Q.decimals ? '⌫' : '.', '0', Q.decimals ? '' : '⌫'].filter(Boolean).map(key),
         h('button', { class: 'key ok', onclick: () => { if (!done.hidden) return; const v = value(); const ok = Math.abs(v - Q.a) < 0.005; if (!attempt(ok, ok ? null : (v === 0 ? 'blank' : Math.abs(v - Q.a) / Math.max(1, Math.abs(Q.a)) < 0.15 ? 'close' : 'far'))) { if (!CHECK && val) explainWrong(reasonFor({ ...Q, a: Q.a }, fmt(Q, v), sk)); val = ''; show(); } } }, '✓')));
     } else if (Q.type === 'order') {
@@ -282,6 +294,6 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       if (howBtn.hidden) return; howBtn.className = 'ghost sm how pulse'; if (likes(G, 'steps') && tries === 1) howBtn.click();
     };
     if (CHECK) { hp.box.hidden = true; hp.btn.hidden = true; howBtn.hidden = true; }
-    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') + (CHECK ? ' check' : '') }, CHECK ? h('p', { class: 'tip' }, '📋 Check: one try, no hints. Just do your best.') : null, ...head.filter(Boolean), hp.card, hp.box, body, wwBox, hint2, why, h('div', { class: 'row' }, hp.btn, howBtn), done);
+    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') + (CHECK ? ' check' : '') }, CHECK ? h('p', { class: 'tip' }, '📋 Check: one try, no hints. Just do your best.') : null, ...head.filter(Boolean), hp.card, hp.box, body, wwBox, hint2, why, h('div', { class: 'row' }, speakRow, hp.btn, howBtn), done);
   }, { icon, noClose: true });
 }

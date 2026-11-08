@@ -540,6 +540,25 @@ export const PRACTICE = {
   'think.opportunity': () => ({ q: 'If you spend $40 on a hoodie, what is the opportunity cost?', a: 'Whatever else that $40 could have paid for', o: ['Whatever else that $40 could have paid for', 'Nothing, since you wanted the hoodie', 'The hoodie itself and its $40 price', 'The $40 plus the tax you paid'] }),
 };
 /** “Words I know”: every lesson word the learner has tapped and learned. Tap to see them with their meanings. */
+/** Quick review: a few skills you already know, mixed together, one question each. Spacing + mixing = remembering. */
+export async function quickReview(G, max = 5) {
+  const due = G.edu.dueReviews().filter((id) => PRACTICE[id]).slice(0, max);
+  if (!due.length) { UI.toast('Nothing to review right now. Great memory!', 'good'); return; }
+  let right = 0;
+  for (const [i, id] of shuffle(due).entries()) {
+    const r = await runActivity(G, () => ({ skill: id, ...PRACTICE[id]() }), 'review', `🔁 Quick review · ${i + 1} of ${due.length}`, '🔁');
+    if (r === undefined) break; if (r && r.ok) right++;
+  }
+  G.state.stats.reviews = (G.state.stats.reviews || 0) + 1; G.save();
+  UI.toast(right === due.length ? `🔁 ${right} of ${due.length}! Those skills are sticking. They’ll come back later, further apart.` : `🔁 ${right} of ${due.length}. The ones you missed will come back sooner, so you can practise them.`, 'good', 4200);
+}
+function reviewCard(G, after) {
+  const due = G.edu.dueReviews().filter((id) => PRACTICE[id]);
+  if (!due.length) return null;
+  return h('div', { class: 'bill review-card' }, h('div', {}, h('b', {}, `🔁 Quick review: ${due.length} skill${due.length > 1 ? 's' : ''} ready`),
+    h('small', {}, `Skills you know, back for a quick check so you don’t forget them: ${due.slice(0, 3).map((id) => SKILLS[id].name).join(', ')}${due.length > 3 ? '…' : ''}`)),
+    h('button', { class: 'primary sm', onclick: async () => { await quickReview(G); after && after(); } }, 'Review'));
+}
 function wordsLine(G) {
   const words = G.state.words || [];
   if (!words.length) return h('p', { class: 'tip' }, '📖 Tip: tap any word to hear it and sound it out. Underlined words also show what they mean.');
@@ -581,7 +600,7 @@ export function learn(G) {
   return UI.sheet('Learn', (close, body) => {
     const menu = () => body.replaceChildren(h('div', { class: 'act' },
       h('p', { class: 'lead' }, 'Your private skill path. It adapts to you. No grades, no timers, only progress.'),
-      wordsLine(G), learnStyles(G),
+      wordsLine(G), reviewCard(G, () => menu()), learnStyles(G),
       h('div', { class: 'cards cats' }, Object.entries(SUBJECTS).map(([k, s]) => {
         const p = G.edu.progress(k);
         return h('button', { class: 'card', onclick: () => subject(k) }, h('span', { class: 'big-emoji' }, s.icon), h('b', {}, s.name),

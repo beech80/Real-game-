@@ -120,6 +120,38 @@ const SAFE = 'You are a character in REAL, a friendly educational life-simulatio
 const words = (s) => String(s).toLowerCase().replace(/[^a-z0-9$.% ]/g, ' ').split(/\s+/).filter((w) => w.length > 1 && !STOP.has(w));
 const STOP = new Set(['the', 'a', 'an', 'and', 'or', 'to', 'of', 'it', 'is', 'i', 'my', 'me', 'you', 'your', 'be', 'in', 'on', 'for', 'at', 'that', 'this', 'with', 'so', 'do', 'just', 'think', 'would', 'will', 'its', 'im']);
 const NUMS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, fifteen: 15, twenty: 20, thirty: 30, forty: 40, fifty: 50, hundred: 100 };
+const ONES = { zero: 0, oh: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19,
+  cero: 0, uno: 1, una: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10, once: 11, doce: 12, trece: 13, catorce: 14, quince: 15, dieciséis: 16, diecisiete: 17, dieciocho: 18, diecinueve: 19 };
+const TENS = { twenty: 20, thirty: 30, forty: 40, fourty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90, veinte: 20, treinta: 30, cuarenta: 40, cincuenta: 50, sesenta: 60, setenta: 70, ochenta: 80, noventa: 90 };
+/** A spoken or typed number: "42", "$12.50", "twenty five", "three hundred and six", "four point five", "minus three",
+ *  "twelve dollars and fifty cents", "veinticinco". Null if there's no number in it. */
+export function parseSpokenNumber(said) {
+  if (said == null) return null;
+  let t = String(said).toLowerCase().replace(/,(?=\d{3})/g, '').replace(/−/g, '-').trim();
+  const dig = t.match(/-?\$?\s*-?\d+(\.\d+)?/);
+  if (dig && !/[a-z]{3,}.*\d|\d.*(dollars?|cents?)/.test(t)) return parseFloat(dig[0].replace(/[$\s]/g, ''));
+  t = t.replace(/veinti(\w+)/g, (m, w) => 'veinte ' + w).replace(/-/g, ' ');
+  const words = t.split(/[\s]+/).filter(Boolean);
+  let neg = false, total = 0, cur = 0, seen = false, dec = null, cents = null, mode = 'int';
+  for (const w0 of words) {
+    const w = w0.replace(/[^a-záéíóúñ0-9.]/g, ''); if (!w) continue;
+    if (/^(minus|negative|menos)$/.test(w)) { neg = true; continue; }
+    if (/^(point|dot|punto)$/.test(w)) { mode = 'dec'; dec = ''; continue; }
+    if (/^(dollars?|bucks|dólares?)$/.test(w)) { total += cur; cur = 0; mode = 'cents'; continue; }
+    if (/^(cents?|centavos?)$/.test(w)) { cents = cur; cur = 0; continue; }
+    if (/^(and|y|a|of)$/.test(w)) continue;
+    if (/^\d+(\.\d+)?$/.test(w)) { if (mode === 'dec') dec += w; else cur += parseFloat(w); seen = true; continue; }
+    if (w in ONES) { if (mode === 'dec') dec += String(ONES[w]); else cur += ONES[w]; seen = true; continue; }
+    if (w in TENS) { cur += TENS[w]; seen = true; continue; }
+    if (/^(hundred|cien|ciento|cientos)$/.test(w)) { cur = (cur || 1) * 100; seen = true; continue; }
+    if (/^(thousand|mil)$/.test(w)) { total += (cur || 1) * 1000; cur = 0; seen = true; continue; }
+    if (/^(half|quarter)$/.test(w)) { dec = w === 'half' ? '5' : '25'; seen = true; continue; }
+  }
+  if (!seen) return null;
+  let v = cents != null ? total + cents / 100 : mode === 'cents' ? total + cur / 100 : total + cur;
+  if (dec) v = parseFloat(`${Math.floor(v)}.${dec}`);
+  return neg ? -v : v;
+}
 /** best option for a spoken/typed answer, by word overlap and numbers; null if unsure */
 export function matchOption(options, said) {
   if (!said) return null;

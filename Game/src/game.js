@@ -530,7 +530,7 @@ export function openPhone(G) {
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
       h('div', { class: 'ph-grid' }, apps.map(([n, ic, c]) => h('button', { class: 'app', onclick: () => { G.sfx('click'); open(n); } },
-        h('span', { class: 'app-ic', style: { background: c } }, ic, n === 'Messages' && unread ? h('i', { class: 'badge' }, unread) : null), h('small', {}, n))))));
+        h('span', { class: 'app-ic', style: { background: c } }, ic, n === 'Messages' && unread ? h('i', { class: 'badge' }, unread) : null, n === 'Learn' && G.edu.dueReviews().length ? h('i', { class: 'badge' }, '🔁') : null), h('small', {}, n))))));
     const back = h('button', { class: 'ghost', onclick: () => home() }, '‹ Home');
     const open = (n) => {
       if (n === 'Learn') { close(); A.learn(G); return; }
