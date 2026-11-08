@@ -9,8 +9,8 @@ const fracs = (q) => [...String(q).matchAll(/(\d+)\s*\/\s*(\d+)/g)].map((m) => [
 
 /** which tool fits this question best */
 export function pickTool(Q, sk = {}) {
-  const q = String(Q.q) + ' ' + (Q.o || []).join(' ');
-  if (fracs(q).length) return 'fractions';
+  const q = String(Q.q) + ' ' + (Q.o || []).join(' ') + ' ' + (Q.v && Q.v.lines ? Q.v.lines.join(' ') : '');
+  if (fracs(q).length || /fraction/.test(sk.id || '')) return 'fractions';
   if (/\$|¢|cents?\b|dollars?|coins?|quarters?|dimes?|nickels?|pennies|change\b/i.test(q) || /^fin\./.test(sk.id || '')) return 'coins';
   const n = nums(Q.q);
   if (/negative|below zero|°|temperature|\bowe\b/i.test(q) || n.some((x) => x < 0)) return 'line';
