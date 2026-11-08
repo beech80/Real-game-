@@ -3,7 +3,7 @@ import { UI, h, money, clock, wait } from './ui.js';
 import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
-import { markWords, talkLog, voiceChoices, currentVoice, setVoice, SPEEDS, speedName, setSpeed, say as sayIt, naturalOn, naturalReady, loadNatural } from './readalong.js';
+import { markWords, talkLog, SPEEDS, speedName, setSpeed, say as sayIt, loadNatural } from './readalong.js';
 import { familyView } from './family.js';
 import { LANGS, lang, setLang } from './i18n.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
@@ -522,22 +522,13 @@ export class Game {
 // ---------------------------------------------------------------------------------------- reading voice
 /** Settings › Reading voice: the device's best voices (natural/enhanced first), each with a Try button, and a speed. */
 function voiceBox() {
+  // one voice for the whole game: Heart, a natural voice recorded for REAL. (Lines that can't be recorded ahead,
+  // like random-number questions, a player's own writing, or Spanish, are read by this device's best voice.)
   const box = h('div', { class: 'bill voicebox' });
-  const render = () => {
-    const sample = { en: 'Hi! I will read with you. You have $12.50, and you spend one fourth of it.', es: '¡Hola! Voy a leer contigo. Tienes $12.50 y gastas 1/4.' };
-    const rows = [['en', '🗣️ Reading voice']].concat(lang() === 'es' ? [['es', '🗣️ Voz en español']] : []);
-    box.replaceChildren(...rows.map(([w, label]) => {
-      const list = voiceChoices(w), cur = naturalOn() && w === 'en' ? null : currentVoice(w);
-      return h('div', {}, h('b', {}, label),
-        w === 'en' ? h('button', { class: 'chip style natural' + (naturalOn() ? ' on' : ''), onclick: async () => { setVoice('__natural', 'en'); await loadNatural(); render(); sayIt(sample.en, { en: true }); } }, `${naturalOn() ? '✓ ' : '▶ '}✨ REAL narrator (natural)${naturalReady() ? '' : ''}`) : null,
-        list.length ? h('div', { class: 'chips voice-list' }, ...list.slice(0, 6).map((v) => h('button', { class: 'chip style' + (cur && cur.name === v.name ? ' on' : ''), onclick: () => { setVoice(v.name, w); render(); sayIt(sample[w], { en: w === 'en' }); } },
-          `${cur && cur.name === v.name ? '✓ ' : '▶ '}${v.name.replace(/^(Microsoft|Google|Apple)\s+/, '').replace(/\s*\(.*?\)\s*/g, ' ').replace(/ Online| - English.*$/i, '').trim().slice(0, 28)}${/Natural|Neural|Enhanced|Premium/i.test(v.name) ? ' ✨' : ''}`)))
-          : h('small', {}, 'This device has no reading voice for this language. Try another browser, or add a voice in the device settings.'));
-    }), h('div', { class: 'row' }, h('span', {}, 'Speed'), ...SPEEDS.map(([k, n]) => h('button', { class: speedName() === k ? 'primary sm' : 'ghost sm', onclick: () => { setSpeed(k); render(); sayIt(lang() === 'es' ? '¿Así está bien?' : 'Is this a good speed?'); } }, n))),
-      h('small', { class: 'tip' }, '✨ REAL narrator is a natural voice recorded for the game’s lessons and story; anything else is read by this device’s voice. Tap a voice to hear it.'));
-  };
+  const render = () => box.replaceChildren(
+    h('div', { class: 'row' }, h('b', {}, '🗣️ Reading voice: ✨ Heart'), h('button', { class: 'ghost sm', onclick: async () => { await loadNatural(); sayIt(lang() === 'es' ? '¡Hola! Voy a leer contigo.' : 'Welcome to the Starting District. You look like you walked a long way.', { en: lang() !== 'es' }); } }, '▶ Hear it')),
+    h('div', { class: 'row' }, h('span', {}, 'Speed'), ...SPEEDS.map(([k, n]) => h('button', { class: speedName() === k ? 'primary sm' : 'ghost sm', onclick: () => { setSpeed(k); render(); sayIt(lang() === 'es' ? '¿Así está bien?' : 'Is this a good speed?'); } }, n))));
   render();
-  try { speechSynthesis.addEventListener('voiceschanged', render, { once: true }); } catch (e) {}
   return box;
 }
 

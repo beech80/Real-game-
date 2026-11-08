@@ -29,7 +29,7 @@ const pickVoice = () => {
   try {
     allVoices = speechSynthesis.getVoices();
     const best = (want) => allVoices.filter((v) => new RegExp('^' + want, 'i').test(v.lang) && !BAD.test(v.name)).sort((a, b) => score(b, want) - score(a, want));
-    const en = best('en'), es = best('es'), mine = pref('real.voice', ''), mineEs = pref('real.voiceEs', '');
+    const en = best('en'), es = best('es'), mine = '', mineEs = '';   // backup voices: always the device's best
     voice = en.find((v) => v.name === mine) || en[0] || null;
     esVoice = es.find((v) => v.name === mineEs) || es[0] || null;
   } catch (e) {}
@@ -86,7 +86,7 @@ export function voiceId(str) {
 // download only when needed. If any sentence of a text has no recording (random numbers, a player's own writing),
 // the whole text uses the device voice instead, so one passage never switches voices halfway.
 let NAT = null, natLoading = null; const PACKS = new Map();
-export const naturalOn = () => pref('real.voice', '__natural') === '__natural';
+export const naturalOn = () => true;   // Heart is the game's one voice
 export function loadNatural() {
   if (NAT || natLoading || window.__REAL_OFFLINE) return natLoading;
   natLoading = fetch('voice/manifest.json').then((r) => (r.ok ? r.json() : null)).then((m) => { NAT = m && m.c ? m : null; return NAT; }).catch(() => null);
