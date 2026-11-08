@@ -69,6 +69,59 @@ export function speakable(t, es = false) {
   s = s.replace(/___+/g, ' blank ').replace(/…/g, '... ').replace(/\s*\n+\s*/g, '. ').replace(/["“”]/g, '').replace(/\s+/g, ' ').trim();
   return s;
 }
+/** one sentence per recorded clip, and the key it's stored under (shared by the recorder and the game) */
+export const speechSentences = (s) => String(s).split(/(?<=[.!?])\s+/).map((x) => x.trim()).filter((x) => /[a-z0-9]/i.test(x));
+export const voiceKey = (s) => String(s).toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+/** short id for a sentence key (cyrb53): the recorder names clips with it, the game looks them up with it */
+export function voiceId(str) {
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (let i = 0; i < str.length; i++) { const ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+
+// ------------------------------------------------------------------------------------------- the recorded narrator
+// A natural voice (Kokoro, open source) recorded for every fixed English sentence in the game, in small packs that
+// download only when needed. If any sentence of a text has no recording (random numbers, a player's own writing),
+// the whole text uses the device voice instead, so one passage never switches voices halfway.
+let NAT = null, natLoading = null; const PACKS = new Map();
+export const naturalOn = () => pref('real.voice', '__natural') === '__natural';
+export function loadNatural() {
+  if (NAT || natLoading || window.__REAL_OFFLINE) return natLoading;
+  natLoading = fetch('voice/manifest.json').then((r) => (r.ok ? r.json() : null)).then((m) => { NAT = m && m.c ? m : null; return NAT; }).catch(() => null);
+  return natLoading;
+}
+export const naturalReady = () => !!NAT;
+const pack = (n) => { if (!PACKS.has(n)) PACKS.set(n, fetch(`voice/p${n}.mp3`).then((r) => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }).catch((e) => { PACKS.delete(n); throw e; })); return PACKS.get(n); };
+let natAudio = null, natTimers = [];
+function stopNatural() { natTimers.forEach(clearTimeout); natTimers = []; if (natAudio) { try { natAudio.pause(); } catch (e) {} natAudio = null; } }
+/** play recorded clips for every sentence; resolves false if any is missing (caller falls back to the device voice) */
+function playNatural(spoken, { onWord, onEnd, rate, fallback }) {
+  if (!NAT) return false;
+  const sents = speechSentences(spoken), clips = sents.map((s) => NAT.c[voiceId(voiceKey(s))]);
+  if (!sents.length || clips.some((c) => !c)) return false;
+  let fin = false; const done = () => { if (fin) return; fin = true; stopNatural(); if (onEnd) onEnd(); };
+  current = { done };
+  const speed = Math.max(0.75, Math.min(1.35, (rate || 0.92) / 0.92 * speedMul()));
+  let cursor = 0; const offs = sents.map((s) => { const i = spoken.indexOf(s, cursor); const o = i < 0 ? cursor : i; cursor = o + s.length; return o; });
+  const playAt = async (i) => {
+    if (fin) return; if (i >= clips.length) return done();
+    const [p, off, len, ms] = clips[i];
+    let buf; try { buf = await pack(p); } catch (e) { return done(); }
+    if (fin) return;
+    const url = URL.createObjectURL(new Blob([buf.slice(off, off + len)], { type: 'audio/mpeg' }));
+    const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true;
+    a.onended = () => { URL.revokeObjectURL(url); playAt(i + 1); }; a.onerror = () => { URL.revokeObjectURL(url); playAt(i + 1); };
+    if (onWord) {   // light each word in turn, spread over the clip by length
+      const words = [...sents[i].matchAll(/\S+/g)], total = sents[i].length || 1, dur = (ms || 1500) / speed;
+      words.forEach((w) => natTimers.push(setTimeout(() => { if (!fin) onWord(offs[i] + w.index); }, dur * w.index / total)));
+    }
+    a.play().catch(() => { if (i === 0 && fallback && !fin) { fin = true; stopNatural(); fallback(); } else done(); });   // audio blocked (no tap yet): use the device voice
+  };
+  playAt(0);
+  return true;
+}
 // sentence-sized pieces: natural pauses, and no long-utterance cut-off on some browsers
 function speechPieces(s) {
   const out = []; const parts = s.split(/(?<=[.!?:;])\s+/);
@@ -81,9 +134,9 @@ function speechPieces(s) {
   return out;
 }
 const clean = (t) => speakable(t);
-export const canSpeak = () => 'speechSynthesis' in window && !window.__voiceOff;
+export const canSpeak = () => ('speechSynthesis' in window || naturalReady()) && !window.__voiceOff;
 let current = null, keep = null;
-export function stopReading() { try { speechSynthesis.cancel(); } catch (e) {} clearInterval(keep); if (current) { current.done(); current = null; } }
+export function stopReading() { try { speechSynthesis.cancel(); } catch (e) {} stopNatural(); clearInterval(keep); if (current) { current.done(); current = null; } }
 /** Say text, sentence by sentence, in the best voice. onWord(charIndex) is called as each word starts (charIndex in
  *  the text as given when raw, else in its spoken form). en: always English (sounding out English words). */
 export function say(text, { rate = 0.92, onWord, onEnd, en = false, raw = false } = {}) {
@@ -92,6 +145,7 @@ export function say(text, { rate = 0.92, onWord, onEnd, en = false, raw = false 
   const spanish = !en && lang() === 'es' && isSpanish(text);
   const spoken = raw ? String(text) : speakable(text, spanish);
   if (!spoken || !/[\p{L}\p{N}]/u.test(spoken)) { if (onEnd) onEnd(); return false; }
+  if (!spanish && naturalOn() && !window.__deviceOnly) { loadNatural(); if (playNatural(spoken, { onWord, onEnd, rate, fallback: () => { window.__deviceOnly = true; say(text, { rate, onWord, onEnd, en, raw }); window.__deviceOnly = false; } })) return true; }
   let fin = false; const done = () => { if (fin) return; fin = true; clearInterval(keep); if (onEnd) onEnd(); };
   current = { done };
   const pieces = speechPieces(spoken); let base = 0;

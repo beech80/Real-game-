@@ -33,13 +33,13 @@ const cp = (src, dst) => { fs.mkdirSync(path.dirname(dst), { recursive: true });
 cp(path.join(root, 'public'), dist);
 // service worker with a precache list (offline play after first load)
 const files = [];
-const walk = (d, rel = '') => { for (const f of fs.readdirSync(d)) { const p = path.join(d, f), r = rel + f; if (fs.statSync(p).isDirectory()) walk(p, r + '/'); else if (!/^(sw\.js|artifact\.html)$/.test(r)) files.push(r); } };
+const walk = (d, rel = '') => { for (const f of fs.readdirSync(d)) { const p = path.join(d, f), r = rel + f; if (fs.statSync(p).isDirectory()) walk(p, r + '/'); else if (!/^(sw\.js|artifact\.html|REAL-offline\.html)$/.test(r) && !r.startsWith('voice/')) files.push(r); } };
 walk(dist);
 const version = Date.now().toString(36);
 fs.writeFileSync(path.join(dist, 'sw.js'), `const C='real-${version}';const F=${JSON.stringify(['./', ...files])};
 self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(F)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});`);
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{if(res.ok&&/\\/voice\\//.test(e.request.url)){const cp=res.clone();caches.open(C).then(c=>c.put(e.request,cp));}return res;})));});`);   // narrator packs: cached as they're used
 // base64 text copies of the binary assets for the hosted (artifact) build
 const hostedDir = path.join(root, 'dist-hosted');
 fs.rmSync(hostedDir, { recursive: true, force: true });
@@ -49,6 +49,7 @@ const walkGz = (d) => { for (const f of fs.readdirSync(d)) { const p = path.join
 walkGz(path.join(dist, 'assets'));
 fs.copyFileSync(path.join(dist, 'artifact.html'), path.join(hostedDir, 'index.html'));
 fs.copyFileSync(path.join(dist, 'assets', 'world.json'), path.join(hostedDir, 'assets', 'world.json'));
+if (fs.existsSync(path.join(dist, 'voice'))) fs.cpSync(path.join(dist, 'voice'), path.join(hostedDir, 'voice'), { recursive: true });   // recorded narrator packs
 // one-file offline copy: the whole game and every asset in a single page you can save and open with no internet
 {
   const pack = {};

@@ -23,7 +23,7 @@ import { scatterFlora, updateLook, inkEdges } from './lookfx.js';
 import { schoolFromLink, enableSchool, teacherDashboard, assignFromLink, setAssignment } from './school.js';
 import { installKeyboard } from './keyboard.js';
 import { initLang, lang, setLang } from './i18n.js';
-import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine } from './readalong.js';
+import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine, voiceId, loadNatural } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
 import { PetCourse, RobotArena } from './arenas.js';
@@ -57,6 +57,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) saveN
 window.addEventListener('pagehide', saveNow);
 initReadAlong(() => game && game.state);
 initLang();
+setTimeout(() => { try { loadNatural(); } catch (e) {} }, 4000);   // the recorded narrator's list (small), so the first line read is already natural
 { const tb = document.getElementById('btn-lang'); if (tb) { const lab = () => { tb.textContent = lang() === 'es' ? '🌎 English' : '🌎 Español'; }; lab(); tb.onclick = () => { setLang(lang() === 'es' ? 'en' : 'es'); lab(); }; } }
 addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); window.__installPrompt = e; });   // offer Install from Settings › Play offline
 UI.onLine = (who, text) => logLine(who, text);   // the Talk log in the phone
@@ -77,7 +78,7 @@ document.getElementById('obj-say').onclick = (e) => { e.stopPropagation(); readE
 UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.ask({ prompt: q }); if (!said) return null; UI.toast(`Heard “${said}” — checking…`, 'info', 1600); const i = await Brain.pick(q, choices, said); if (i == null) UI.toast(`I heard “${said}”. Which answer did you mean? Tap it, or say it again.`, 'info', 4200); return i; } };
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
-try { if (navigator.webdriver) window.__scene = scene; } catch (e) {}   // automated tests only
+try { if (navigator.webdriver) { window.__scene = scene; window.__narrate = (t) => sayText(t); window.__voiceId = (k) => voiceId(k); } } catch (e) {}   // automated tests only
 
 const W = { district: null, apartment: null, wild: null, club: null, data: null, lamps: [], d: {}, rooms: {} };
 let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60, mini = null, race = null, petCourse = null, arena = null, markT = 0;
