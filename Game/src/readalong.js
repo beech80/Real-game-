@@ -17,26 +17,94 @@ export function setReadToMe(on) { try { localStorage.setItem('real.readToMe', on
 
 // ------------------------------------------------------------------------------------------- narrator voice
 import { lang, isSpanish } from './i18n.js';
-let voice = null, esVoice = null;
-const pickVoice = () => { try { const all = speechSynthesis.getVoices(), es = all.filter((x) => /^es/i.test(x.lang)); esVoice = es.find((x) => /es-(US|MX|419)/i.test(x.lang)) || es[0] || null; const v = all.filter((x) => /^en/i.test(x.lang)); voice = v.find((x) => /Samantha|Google US English|Aria|Jenny|Karen/i.test(x.name)) || v.find((x) => /en-US/i.test(x.lang)) || v[0] || null; } catch (e) {} };
+// The best voice the device has: natural/neural/enhanced voices first, novelty and robotic voices never.
+// A player (or grown-up) can pick another in Settings › Reading voice, and choose slower / normal / faster.
+const GOOD = /Natural|Neural|Online|Enhanced|Premium|Siri|Google US English|Google español|Samantha|Ava|Allison|Susan|Zoe|Nicky|Aria|Jenny|Guy|Libby|Sonia|Michelle|Paulina|Mónica|Monica|Dalia|Jorge|Elvira|Sabina|Juan/i;
+const BAD = /eSpeak|Compact|Fred|Albert|Bad News|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Trinoids|Whisper|Zarvox|Superstar|Wobble|Junior|Ralph|Kathy|Grandpa|Grandma|Rocko|Shelley|Reed|Sandy|Flo|Eddy|Hysterical|Deranged/i;
+const score = (v, want) => (new RegExp('^' + want, 'i').test(v.lang) ? 100 : 0) + (GOOD.test(v.name) ? 40 : 0) + (/Natural|Neural|Enhanced|Premium|Online/i.test(v.name) ? 25 : 0)
+  + (want === 'en' && /en[-_]US/i.test(v.lang) ? 8 : 0) + (want === 'es' && /es[-_](US|MX|419)/i.test(v.lang) ? 8 : 0) + (v.localService ? 3 : 0) - (BAD.test(v.name) ? 200 : 0);
+let voice = null, esVoice = null, allVoices = [];
+const pref = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e) { return d; } };
+const pickVoice = () => {
+  try {
+    allVoices = speechSynthesis.getVoices();
+    const best = (want) => allVoices.filter((v) => new RegExp('^' + want, 'i').test(v.lang) && !BAD.test(v.name)).sort((a, b) => score(b, want) - score(a, want));
+    const en = best('en'), es = best('es'), mine = pref('real.voice', ''), mineEs = pref('real.voiceEs', '');
+    voice = en.find((v) => v.name === mine) || en[0] || null;
+    esVoice = es.find((v) => v.name === mineEs) || es[0] || null;
+  } catch (e) {}
+};
 try { pickVoice(); speechSynthesis.addEventListener('voiceschanged', pickVoice); } catch (e) {}
-const clean = (t) => String(t || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}★☆♛✓✕›‹•·]/gu, ' ').replace(/\$(\d+)\.(\d\d)\b/g, '$$$1 and $2 cents').replace(/\s+/g, ' ').trim();
+/** the device's English (or Spanish) voices, best first, for the Settings picker */
+export function voiceChoices(want = 'en') { pickVoice(); return allVoices.filter((v) => new RegExp('^' + want, 'i').test(v.lang) && !BAD.test(v.name)).sort((a, b) => score(b, want) - score(a, want)).slice(0, 8); }
+export function currentVoice(want = 'en') { pickVoice(); return want === 'es' ? esVoice : voice; }
+export function setVoice(name, want = 'en') { try { localStorage.setItem(want === 'es' ? 'real.voiceEs' : 'real.voice', name); } catch (e) {} pickVoice(); }
+export const SPEEDS = [['slow', 'Slower', 0.78], ['normal', 'Normal', 0.92], ['fast', 'Faster', 1.08]];
+export const speedName = () => pref('real.voiceSpeed', 'normal');
+export function setSpeed(k) { try { localStorage.setItem('real.voiceSpeed', k); } catch (e) {} }
+const speedMul = () => (SPEEDS.find((s) => s[0] === speedName()) || SPEEDS[1])[2] / 0.92;
+
+// ------------------------------------------------------------------------------------------- say it like a person
+const ONES = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+const DEN = { 2: ['half', 'halves'], 3: ['third', 'thirds'], 4: ['fourth', 'fourths'], 5: ['fifth', 'fifths'], 6: ['sixth', 'sixths'], 8: ['eighth', 'eighths'], 10: ['tenth', 'tenths'], 12: ['twelfth', 'twelfths'], 16: ['sixteenth', 'sixteenths'] };
+const frac = (n, d) => { n = +n; d = +d; const w = DEN[d]; if (!w || n > 12) return `${n} over ${d}`; return `${ONES[n]} ${n === 1 ? w[0] : w[1]}`; };
+const DEN_ES = { 2: ['medio', 'medios'], 3: ['tercio', 'tercios'], 4: ['cuarto', 'cuartos'], 5: ['quinto', 'quintos'], 6: ['sexto', 'sextos'], 8: ['octavo', 'octavos'], 10: ['décimo', 'décimos'] };
+/** Turn screen text into words a voice reads naturally: money, math signs, fractions, degrees, syllable dots, emoji. */
+export function speakable(t, es = false) {
+  let s = String(t || '');
+  s = s.replace(/(\p{L})·(?=\p{L})/gu, '$1');                                   // ap·ple → apple
+  s = s.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}★☆♛✓✕›‹•○◦▸▶]/gu, ' ');
+  s = s.replace(/−/g, '-').replace(/–|—/g, ', ');
+  if (es) {
+    s = s.replace(/-?\$(\d[\d,]*)\.(\d\d)\b/g, (m, d, c) => `${m.startsWith('-') ? 'menos ' : ''}${d} dólares con ${+c} centavos`).replace(/-?\$(\d[\d,]*)\b/g, (m, d) => `${m.startsWith('-') ? 'menos ' : ''}${d} ${d === '1' ? 'dólar' : 'dólares'}`).replace(/(\d+)¢/g, '$1 centavos');
+    s = s.replace(/\b(\d+)\s+(\d+)\/(\d+)\b/g, (m, w, n, d) => `${w} y ${n} ${(DEN_ES[d] || [`sobre ${d}`, `sobre ${d}`])[+n === 1 ? 0 : 1]}`).replace(/\b(\d+)\/(\d+)\b/g, (m, n, d) => DEN_ES[d] ? `${n} ${DEN_ES[d][+n === 1 ? 0 : 1]}` : m);
+    s = s.replace(/\s×\s|\s[x*]\s(?=\d)/g, ' por ').replace(/÷/g, ' entre ').replace(/\s\+\s/g, ' más ').replace(/\s=\s/g, ' es igual a ').replace(/(\d)\s?%/g, '$1 por ciento').replace(/°\s?F\b/g, ' grados').replace(/°/g, ' grados').replace(/\s-\s?(?=\d)/g, ' menos ').replace(/(^|\s)-(?=\d)/g, '$1menos ').replace(/→/g, ', luego ').replace(/&/g, ' y ');
+  } else {
+    s = s.replace(/-?\$(\d[\d,]*)\.(\d\d)\b/g, (m, d, c) => `${m.startsWith('-') ? 'minus ' : ''}${d} dollar${d === '1' ? '' : 's'}${+c ? ` and ${+c} cent${+c === 1 ? '' : 's'}` : ''}`).replace(/-?\$(\d[\d,]*)\b/g, (m, d) => `${m.startsWith('-') ? 'minus ' : ''}${d} dollar${d === '1' ? '' : 's'}`).replace(/(\d+)¢/g, '$1 cents');
+    s = s.replace(/\b(\d+)\s+(\d+)\/(\d+)\b/g, (m, w, n, d) => `${w} and ${frac(n, d)}`).replace(/(^|[^\d/:])(\d{1,2})\/(\d{1,2})(?![\d/])/g, (m, pre, n, d) => DEN[d] ? pre + frac(n, d) : m);   // 3/15 is a date: leave it
+    s = s.replace(/\s×\s|\s[x*]\s(?=\d)/g, ' times ').replace(/÷/g, ' divided by ').replace(/\s\+\s/g, ' plus ').replace(/\s=\s\?/g, ' equals what').replace(/\s=\s/g, ' equals ').replace(/(\d)\s?%/g, '$1 percent').replace(/°\s?F\b/g, ' degrees').replace(/°\s?C\b/g, ' degrees Celsius').replace(/°/g, ' degrees')
+      .replace(/\s-\s?(?=\d)/g, ' minus ').replace(/(^|\s)-(?=\d)/g, '$1minus ').replace(/→/g, ', then ').replace(/&/g, ' and ').replace(/\be\.g\./gi, 'for example').replace(/\bi\.e\./gi, 'that is').replace(/\bvs\.?\b/gi, 'versus').replace(/#(\d)/g, 'number $1')
+      .replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(ft)\b/g, '$1 feet').replace(/\b1 feet\b/g, '1 foot').replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(lb|lbs)\b/g, '$1 pounds').replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(oz)\b/g, '$1 ounces').replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(mL|ml)\b/g, '$1 milliliters').replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(km)\b/g, '$1 kilometers').replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(mph)\b/g, '$1 miles per hour');
+  }
+  s = s.replace(/___+/g, ' blank ').replace(/…/g, '... ').replace(/\s*\n+\s*/g, '. ').replace(/["“”]/g, '').replace(/\s+/g, ' ').trim();
+  return s;
+}
+// sentence-sized pieces: natural pauses, and no long-utterance cut-off on some browsers
+function speechPieces(s) {
+  const out = []; const parts = s.split(/(?<=[.!?:;])\s+/);
+  let cur = '';
+  for (const p of parts) {
+    if ((cur + ' ' + p).length > 220 && cur) { out.push(cur); cur = p; } else cur = cur ? cur + ' ' + p : p;
+    while (cur.length > 260) { const cut = cur.lastIndexOf(', ', 240) > 60 ? cur.lastIndexOf(', ', 240) + 1 : cur.lastIndexOf(' ', 240); out.push(cur.slice(0, cut)); cur = cur.slice(cut).trim(); }
+  }
+  if (cur) out.push(cur);
+  return out;
+}
+const clean = (t) => speakable(t);
 export const canSpeak = () => 'speechSynthesis' in window && !window.__voiceOff;
-let current = null;
-export function stopReading() { try { speechSynthesis.cancel(); } catch (e) {} if (current) { current.done(); current = null; } }
-/** Say text. onWord(charIndex) is called as each word starts (when the device reports it). */
-export function say(text, { rate = 0.88, onWord, onEnd, en = false } = {}) {
+let current = null, keep = null;
+export function stopReading() { try { speechSynthesis.cancel(); } catch (e) {} clearInterval(keep); if (current) { current.done(); current = null; } }
+/** Say text, sentence by sentence, in the best voice. onWord(charIndex) is called as each word starts (charIndex in
+ *  the text as given when raw, else in its spoken form). en: always English (sounding out English words). */
+export function say(text, { rate = 0.92, onWord, onEnd, en = false, raw = false } = {}) {
   if (!canSpeak()) { if (onEnd) onEnd(); return false; }
   stopReading();
-  const u = new SpeechSynthesisUtterance(clean(text));
   const spanish = !en && lang() === 'es' && isSpanish(text);
-  if (spanish) { u.lang = 'es-US'; if (esVoice) u.voice = esVoice; } else { if (voice) u.voice = voice; u.lang = 'en-US'; }
-  u.rate = rate; u.pitch = 1.05;
-  let fin = false; const done = () => { if (fin) return; fin = true; if (onEnd) onEnd(); };
+  const spoken = raw ? String(text) : speakable(text, spanish);
+  if (!spoken || !/[\p{L}\p{N}]/u.test(spoken)) { if (onEnd) onEnd(); return false; }
+  let fin = false; const done = () => { if (fin) return; fin = true; clearInterval(keep); if (onEnd) onEnd(); };
   current = { done };
-  if (onWord) u.onboundary = (e) => { if (e.name === 'word' || e.name === undefined) onWord(e.charIndex); };
-  u.onend = done; u.onerror = done;
-  try { speechSynthesis.speak(u); } catch (e) { done(); return false; }
+  const pieces = speechPieces(spoken); let base = 0;
+  pieces.forEach((piece, i) => {
+    const u = new SpeechSynthesisUtterance(piece), off = base; base += piece.length + 1;
+    if (spanish) { u.lang = (esVoice && esVoice.lang) || 'es-US'; if (esVoice) u.voice = esVoice; } else { u.lang = (voice && voice.lang) || 'en-US'; if (voice) u.voice = voice; }
+    u.rate = Math.max(0.5, Math.min(1.6, rate * speedMul())); u.pitch = 1;
+    if (onWord) u.onboundary = (e) => { if (e.name === 'word' || e.name === undefined) onWord(off + e.charIndex); };
+    if (i === pieces.length - 1) { u.onend = done; u.onerror = done; } else u.onerror = done;
+    try { speechSynthesis.speak(u); } catch (e) { done(); }
+  });
+  // some browsers pause speech that runs long in the background; a gentle nudge keeps it going
+  keep = setInterval(() => { try { if (!speechSynthesis.speaking) clearInterval(keep); else if (speechSynthesis.paused) speechSynthesis.resume(); } catch (e) {} }, 5000);
   return true;
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -65,11 +133,13 @@ export async function readEls(els, { rate } = {}) {
   els = els.filter((e) => e && e.isConnected && clean(e.textContent));
   for (const el of els) {
     const spans = wordSpans(el);
-    const text = spans.map((s) => s.textContent).join(' ');
-    // map char offsets of the joined text to spans
-    const starts = []; let k = 0; for (const s of spans) { starts.push(k); k += s.textContent.length + 1; }
+    const es = lang() === 'es' && isSpanish(el.textContent);
+    const said = spans.map((s) => speakable(s.textContent, es) || ' ');
+    const text = said.join(' ');
+    // map char offsets of the spoken text to spans
+    const starts = []; let k = 0; for (const w of said) { starts.push(k); k += w.length + 1; }
     let lit = null; const light = (s) => { if (lit) lit.classList.remove('lit'); lit = s; if (s) s.classList.add('lit'); };
-    await sayAsync(text, { rate, onWord: (ci) => { let i = starts.length - 1; while (i > 0 && starts[i] > ci) i--; light(spans[i]); } });
+    await sayAsync(text, { rate, raw: true, en: !es, onWord: (ci) => { let i = starts.length - 1; while (i > 0 && starts[i] > ci) i--; light(spans[i]); } });
     light(null);
     if (!current && !el.isConnected) break;
   }

@@ -3,7 +3,7 @@ import { UI, h, money, clock, wait } from './ui.js';
 import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
-import { markWords, talkLog } from './readalong.js';
+import { markWords, talkLog, voiceChoices, currentVoice, setVoice, SPEEDS, speedName, setSpeed, say as sayIt } from './readalong.js';
 import { familyView } from './family.js';
 import { LANGS, lang, setLang } from './i18n.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
@@ -519,6 +519,27 @@ export class Game {
   }
 }
 
+// ---------------------------------------------------------------------------------------- reading voice
+/** Settings › Reading voice: the device's best voices (natural/enhanced first), each with a Try button, and a speed. */
+function voiceBox() {
+  const box = h('div', { class: 'bill voicebox' });
+  const render = () => {
+    const sample = { en: 'Hi! I will read with you. You have $12.50, and you spend one fourth of it.', es: '¡Hola! Voy a leer contigo. Tienes $12.50 y gastas 1/4.' };
+    const rows = [['en', '🗣️ Reading voice']].concat(lang() === 'es' ? [['es', '🗣️ Voz en español']] : []);
+    box.replaceChildren(...rows.map(([w, label]) => {
+      const list = voiceChoices(w), cur = currentVoice(w);
+      return h('div', {}, h('b', {}, label),
+        list.length ? h('div', { class: 'chips voice-list' }, ...list.slice(0, 6).map((v) => h('button', { class: 'chip style' + (cur && cur.name === v.name ? ' on' : ''), onclick: () => { setVoice(v.name, w); render(); sayIt(sample[w], { en: w === 'en' }); } },
+          `${cur && cur.name === v.name ? '✓ ' : '▶ '}${v.name.replace(/^(Microsoft|Google|Apple)\s+/, '').replace(/\s*\(.*?\)\s*/g, ' ').replace(/ Online| - English.*$/i, '').trim().slice(0, 28)}${/Natural|Neural|Enhanced|Premium/i.test(v.name) ? ' ✨' : ''}`)))
+          : h('small', {}, 'This device has no reading voice for this language. Try another browser, or add a voice in the device settings.'));
+    }), h('div', { class: 'row' }, h('span', {}, 'Speed'), ...SPEEDS.map(([k, n]) => h('button', { class: speedName() === k ? 'primary sm' : 'ghost sm', onclick: () => { setSpeed(k); render(); sayIt(lang() === 'es' ? '¿Así está bien?' : 'Is this a good speed?'); } }, n))),
+      h('small', { class: 'tip' }, '✨ = a natural-sounding voice. Tap a voice to hear it.'));
+  };
+  render();
+  try { speechSynthesis.addEventListener('voiceschanged', render, { once: true }); } catch (e) {}
+  return box;
+}
+
 // ---------------------------------------------------------------------------------------- play offline
 /** Settings › Play offline: install the app (where the browser allows), check it's ready with no internet,
  *  or download the one-file copy that opens from a computer or tablet with no internet at all. */
@@ -651,6 +672,7 @@ export function openPhone(G) {
           h('div', { class: 'row' }, h('span', {}, 'Graphics'), ...['low', 'medium', 'high'].map((q) => h('button', { class: G.hooks.quality() === q ? 'primary sm' : 'ghost sm', onclick: () => { G.hooks.setQuality(q); open('Settings'); } }, q))),
           h('div', { class: 'row' }, h('span', {}, 'Time'), ...[[1, 'Normal'], [3, 'Fast']].map(([v, n]) => h('button', { class: (s.timeScale || 1) === v ? 'primary sm' : 'ghost sm', onclick: () => { s.timeScale = v; open('Settings'); } }, n))),
           h('div', { class: 'row' }, h('span', {}, '🌎 Language / Idioma'), ...LANGS.map(([k, n]) => h('button', { class: lang() === k ? 'primary sm' : 'ghost sm', onclick: () => { setLang(k); s.settings = s.settings || {}; s.settings.lang = k; G.save(); open('Settings'); } }, n))),
+          voiceBox(),
           h('div', { class: 'tier-h' }, 'Accessibility'),
           ...[['smart', 'Smart character replies', true]].map(([k, n]) => { s.settings = s.settings || {}; const on = s.settings[k] !== false; return h('div', { class: 'row' }, h('span', {}, n), isSchool(s) ? h('button', { class: 'ghost sm', disabled: true }, 'Off (school)') : h('button', { class: on ? 'primary sm' : 'ghost sm', onclick: () => { s.settings[k] = !on; G.hooks.applyA11y(s.settings); G.save(); open('Settings'); } }, on ? 'On' : 'Off')); }),
           ...[['large', 'Bigger text'], ['contrast', 'High contrast'], ['readAloud', 'Read to me (all text)'], ['calm', 'Reduce motion']].map(([k, n]) => { s.settings = s.settings || {}; return h('div', { class: 'row' }, h('span', {}, n), h('button', { class: s.settings[k] ? 'primary sm' : 'ghost sm', onclick: () => { s.settings[k] = !s.settings[k]; G.hooks.applyA11y(s.settings); G.save(); open('Settings'); } }, s.settings[k] ? 'On' : 'Off')); }),

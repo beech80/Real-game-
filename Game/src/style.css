@@ -587,3 +587,4 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .esbox { margin: 8px 0; padding: 10px 12px; border-radius: 12px; background: rgba(42,159,214,.14); border-left: 4px solid #2a9fd6; }
 .es-q { font-size: 17px; margin: 0 0 6px; } .es-o { margin: 0; padding-left: 18px; }
 .lang-btn { margin-top: 6px; }
+.voicebox b { display: block; margin-bottom: 6px; } .voice-list { gap: 6px; margin-bottom: 8px; }
