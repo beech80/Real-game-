@@ -4,6 +4,7 @@ import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
 import { markWords, talkLog } from './readalong.js';
+import { familyView } from './family.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
 import { lifeLevel, LIFE_CATS, CAREERS, TIER_NAMES, careerStatus, setSkillNames, ACHIEVEMENTS, INVITE_LEVEL, INVITE_MIN_DAY } from './life.js';
 setSkillNames(SKILLS);
@@ -639,7 +640,9 @@ export function openPhone(G) {
           h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => { G.save(); UI.toast('Game saved.', 'good'); } }, 'Save now'), h('button', { class: 'danger sm', onclick: (e) => {
             if (e.currentTarget.dataset.arm) { clearSave(); location.reload(); } else { e.currentTarget.dataset.arm = 1; e.currentTarget.textContent = 'Tap again to erase'; }
           } }, 'New game'))),
+        Family: () => familyView(G),
         'Grown-ups': () => h('div', { class: 'act' },
+          h('button', { class: 'primary', onclick: () => open('Family') }, '📅 Family view: this week'),
           h('p', { class: 'lead' }, 'REAL teaches reading, writing, cursive, math, money, science, critical thinking, social studies, health & life skills and technology (209 skills in six levels) through everyday life in the game.'),
           h('div', { class: 'tier-h' }, 'Privacy'),
           h('ul', { class: 'list' }, h('li', {}, 'Progress is saved only on this device. No account, no email, no ads, no purchases.'), h('li', {}, 'Learning records are private and never compared with other players.'), h('li', {}, 'Live neighbors (shared link only) see an anonymous character and 4 preset gestures. No names, chat or trading. You can turn it off above.'), h('li', {}, 'Characters never speak out loud; their lines are text. Players only speak in speaking-practice tasks (job interviews, work updates), where the 🎤 turns their words into text. They can always type instead.'), h('li', {}, 'Smart character replies (shared claude.ai link only): a player’s typed or spoken question or answer is sent to Claude with strict instructions to stay age-appropriate, stay in the game world and never ask for personal information. No name, account or save data is sent. Turn it off above to use only built-in answers.')),

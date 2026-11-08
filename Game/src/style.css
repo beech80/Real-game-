@@ -535,3 +535,11 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .styles { margin: 8px 0 12px; } .styles .chips { gap: 6px; margin-top: 6px; }
 .chip.style { font-size: 14px; padding: 6px 10px; border: 1px solid rgba(255,255,255,.15); color: inherit; cursor: pointer; min-height: 34px; }
 .chip.style.on { background: rgba(63,191,122,.25); border-color: #3fbf7a; }
+/* family view */
+.fam-bars { display: flex; gap: 6px; align-items: flex-end; height: 90px; margin: 10px 0 4px; }
+.fam-bar { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; gap: 4px; }
+.fam-bar i { display: block; width: 100%; min-height: 3px; background: #3fbf7a; border-radius: 6px 6px 2px 2px; }
+.fam-bar small { color: var(--muted); }
+.fam-help { display: block; margin-top: 4px; color: #9ec2ff; }
+.review-card { border: 1px solid rgba(143,123,255,.5); }
+.mic { white-space: nowrap; }

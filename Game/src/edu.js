@@ -191,6 +191,10 @@ export class Edu {
       else if (k.st === 5) { k.reviewMiss = (k.reviewMiss || 0) + 1; if (k.reviewMiss >= 2) k.st = 2; }
       else if (k.st === 3) k.st = 2; // gentle: back to practice, never below
     }
+    // daily log for the family view: [answered, right first try without help, {skill: n}] per calendar day (60 days kept)
+    { const dk = new Date(now).toISOString().slice(0, 10), D = this.s.days || (this.s.days = {}), r = D[dk] || (D[dk] = [0, 0, {}]);
+      r[0]++; if (correct && !hinted) r[1]++; r[2][id] = (r[2][id] || 0) + 1;
+      const ks = Object.keys(D); if (ks.length > 60) ks.sort().slice(0, ks.length - 60).forEach((x) => { delete D[x]; }); }
     if (wasDue) { if (correct && !hinted) { k.reviews = (k.reviews || 0) + 1; k.reviewedAt = now; } else if (!correct) k.reviews = Math.max(0, (k.reviews || 0) - 1); }
     this.s.skills[id] = k;
     if (k.st !== before) { this._log(id, STATES[k.st]); this.hooks.onState && this.hooks.onState(SKILLS[id], k.st); }
