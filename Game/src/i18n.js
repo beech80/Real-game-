@@ -42,7 +42,7 @@ export function translateStatic(root = document.body) {
     else if (ORIG.has(n)) { n.textContent = ORIG.get(n); ORIG.delete(n); }
   }
   root.querySelectorAll('[placeholder],[aria-label],[title]').forEach((el) => {
-    for (const a of ['placeholder', 'aria-label', 'title']) { if (!el.hasAttribute(a)) continue; const key = 'en' + a; const en = el.dataset[key] || el.getAttribute(a); if (LANG === 'es') { const v = tr(en); if (v !== en) { el.dataset[key] = en; el.setAttribute(a, v); } } else if (el.dataset[key]) { el.setAttribute(a, el.dataset[key]); delete el.dataset[key]; } }
+    for (const a of ['placeholder', 'aria-label', 'title']) { if (!el.hasAttribute(a)) continue; const key = 'en' + a.replace(/-(\w)/g, (m, c) => c.toUpperCase()); const en = el.dataset[key] || el.getAttribute(a); if (LANG === 'es') { const v = tr(en); if (v !== en) { el.dataset[key] = en; el.setAttribute(a, v); } } else if (el.dataset[key]) { el.setAttribute(a, el.dataset[key]); delete el.dataset[key]; } }
   });
 }
 export function setLang(l) {
