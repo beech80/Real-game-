@@ -595,3 +595,12 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .heart-ans { margin-top: 10px; }
 .heart-bubble { background: rgba(233,111,160,.14); border-left: 4px solid #e96fa0; border-radius: 12px; padding: 10px 12px; font-size: 17px; line-height: 1.5; }
 .heart-bubble b { color: #ff9cc4; }
+/* toolbox */
+.flashcard { display: flex; align-items: center; justify-content: center; min-height: 150px; width: 100%; border-radius: 18px; border: 2px solid var(--gold); background: #1c2148; color: #fff; font-size: 34px; cursor: pointer; padding: 16px; margin: 8px 0; }
+.flashcard.back { font-size: 19px; background: #243066; line-height: 1.4; }
+.calc-in { font-size: 22px; margin: 6px 0; }
+.calc-out { margin-top: 8px; }
+.timer-disp { font-size: 64px; font-weight: 800; text-align: center; margin: 10px 0; font-variant-numeric: tabular-nums; }
+.breath { width: 120px; height: 120px; margin: 16px auto; border-radius: 50%; background: radial-gradient(circle, #8fd3ff, #2a9fd6); transform: scale(.6); transition: transform 4s ease-in-out; }
+.breath.in, .breath.hold { transform: scale(1); } .breath.out, .breath.hold2 { transform: scale(.6); }
+@media (prefers-reduced-motion: reduce) { .breath { transition: none; } }

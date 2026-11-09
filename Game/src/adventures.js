@@ -231,7 +231,7 @@ const EPISODES = {
       await UI.say(who, `${['🥇 Champions!', '🥈 Second place!', '🥉 Third place!', 'Fourth, and a happy pet!'][res.place - 1]} Prize: ${money(prize)}.`);
       await G.petDebrief(res, who);
       if (res.place === 1) G.achieve('petchamp');
-      if (A.stage < 3) await G.advFinishEpisode('pets', A, who, {});
+      if (A.stage < lastEp('pets')) await G.advFinishEpisode('pets', A, who, {});
     } },
   ],
   // ============================================================== 3. EMERGENCY RESCUE
@@ -260,7 +260,7 @@ const EPISODES = {
     } },
     { title: 'Solve a quick case', offer: 'I’ve got a quick puzzle for you. Facts only, no guessing!', repeat: 'Another case', run: async (G, A, who) => {
       await act(G, 'read.inference#0', 'mystery', 'The note', '🔍'); await act(G, 'think.evidence#0', 'mystery', 'The evidence', '🔍'); await act(G, 'read.evidence#0', 'mystery', 'The witness', '🔍');
-      G.earn(20, 'Case fee'); if (A.stage < 3) await G.advFinishEpisode('mystery', A, who, { msg: 'Sharp work. You think like a detective.' });
+      G.earn(20, 'Case fee'); if (A.stage < lastEp('mystery')) await G.advFinishEpisode('mystery', A, who, { msg: 'Sharp work. You think like a detective.' });
     } },
   ],
   // ============================================================== 5. CULINARY
@@ -282,7 +282,7 @@ const EPISODES = {
       await G.judges(pts, who, 'grand');
       if (pts >= 4) G.achieve('cookchamp');
       G.earn(30 + pts * 15, 'Cook-off prize');
-      if (A.stage < 3) await G.advFinishEpisode('culinary', A, who, {});
+      if (A.stage < lastEp('culinary')) await G.advFinishEpisode('culinary', A, who, {});
     } },
   ],
   // ============================================================== 6. MEDICAL MISSIONS
@@ -298,7 +298,7 @@ const EPISODES = {
     } },
     { title: 'The sniffles puzzle', offer: 'Three patients, three different problems. Help me figure out who needs what. (Real diagnosis needs real training. This is a puzzle!)', repeat: 'Help again', run: async (G, A, who) => {
       await act(G, 'sci.health#0', 'medical', 'Patient 1', '🌡️'); await act(G, 'vitals', 'medical', 'Patient 2', '📈'); await act(G, 'nextQ', 'medical', 'Patient 3', '💬');
-      G.earn(25, 'Clinic volunteer thanks'); if (A.stage < 3) await G.advFinishEpisode('medical', A, who, { msg: 'You listened, checked the facts and asked good questions. That’s what care is.' });
+      G.earn(25, 'Clinic volunteer thanks'); if (A.stage < lastEp('medical')) await G.advFinishEpisode('medical', A, who, { msg: 'You listened, checked the facts and asked good questions. That’s what care is.' });
     } },
   ],
   // ============================================================== 7. ROBOT BUILDERS
@@ -306,22 +306,22 @@ const EPISODES = {
     { title: 'Build your first robot', offer: 'Choose a frame, wheels or legs, a tool and a battery. Then we test it.', run: async (G, A, who) => { await G.robotBuilder(who); await G.robotChallenge(0, who); await G.advFinishEpisode('robots', A, who, { reward: 40, msg: 'Your robot did that because YOU programmed it. Ready for rubble?' }); } },
     { title: 'Rubble run', offer: 'This course has rubble. Will your parts handle it?', run: async (G, A, who) => { if (await UI.say(who, 'Change your robot first?', ['Open the workbench', 'Use my robot']) === 0) await G.robotBuilder(who); await G.robotChallenge(1, who); await G.advFinishEpisode('robots', A, who, { reward: 50, msg: 'One more: the Stairway. Think about which robots can climb.' }); } },
     { title: 'The Stairway challenge', offer: 'The goal is across a staircase. Engineer your way there.', repeat: 'Pick a challenge', run: async (G, A, who) => {
-      let lv = 2; if (A.stage >= 3) lv = await UI.say(who, 'Which course?', ROBOT_LEVELS.map((l) => l.name));
+      let lv = 2; if (A.stage >= lastEp('robots')) lv = await UI.say(who, 'Which course?', ROBOT_LEVELS.map((l) => l.name));
       if (await UI.say(who, 'Change your robot first?', ['Open the workbench', 'Use my robot']) === 0) await G.robotBuilder(who);
-      const ok = await G.robotChallenge(lv, who); if (ok && A.stage < 3) await G.advFinishEpisode('robots', A, who, { reward: 60, msg: 'You’re thinking like an engineer: define, build, test, improve.' });
+      const ok = await G.robotChallenge(lv, who); if (ok && A.stage < lastEp('robots')) await G.advFinishEpisode('robots', A, who, { reward: 60, msg: 'You’re thinking like an engineer: define, build, test, improve.' });
     } },
   ],
   // ============================================================== 8. CONSTRUCTION
   construction: [
     { title: 'Build a park bench', offer: 'Brighter Park needs a new bench. Plan it, measure it, and we’ll build it.', run: async (G, A, who) => G.buildProject('bench', A, who) },
     { title: 'Build a playground', offer: 'Next project: a small playground. Bigger plan, bigger budget.', run: async (G, A, who) => G.buildProject('playground', A, who) },
-    { title: 'Build a garden shed', offer: 'The community garden needs a shed that can stand up to wind.', repeat: 'Help on a site', run: async (G, A, who) => { if (A.stage >= 3) { await act(G, 'math.geometry#0', 'construction', 'Site work', '📐'); await act(G, 'sci.forces#0', 'construction', 'Site work', '🏗️'); G.earn(30, 'Site work'); return; } return G.buildProject('shed', A, who); } },
+    { title: 'Build a garden shed', offer: 'The community garden needs a shed that can stand up to wind.', repeat: 'Help on a site', run: async (G, A, who) => { if (A.stage >= lastEp('construction')) { await act(G, 'math.geometry#0', 'construction', 'Site work', '📐'); await act(G, 'sci.forces#0', 'construction', 'Site work', '🏗️'); G.earn(30, 'Site work'); return; } return G.buildProject('shed', A, who); } },
   ],
   // ============================================================== 9. INVENTOR
   inventor: [
     { title: 'Invent a self-watering planter', offer: 'The community garden plants keep drying out. Let’s invent a fix.', run: async (G, A, who) => G.invent('planter', A, who) },
     { title: 'Invent a path night-light', offer: 'The park path is dark at night. Invent a light that turns on by itself?', run: async (G, A, who) => G.invent('light', A, who) },
-    { title: 'Invent a bike-lock alarm', offer: 'Bikes keep getting stolen at the bus stop. Invent an alarm?', repeat: 'Invent something new', run: async (G, A, who) => G.invent(A.stage >= 3 ? pick(['planter', 'light', 'alarm']) : 'alarm', A, who) },
+    { title: 'Invent a bike-lock alarm', offer: 'Bikes keep getting stolen at the bus stop. Invent an alarm?', repeat: 'Invent something new', run: async (G, A, who) => G.invent(A.stage >= lastEp('inventor') ? pick(['planter', 'light', 'alarm']) : 'alarm', A, who) },
   ],
   // ============================================================== 10. BUILD YOUR BUSINESS
   business: [
@@ -338,10 +338,124 @@ const EPISODES = {
       const place = score > 7 ? 1 : score > 5 ? 2 : 3;
       await UI.say(who, `${['🥇 Best Business in the city!', '🥈 Runner-up!', '🥉 Honorable mention!'][place - 1]} Reputation ${b.rep.toFixed(1)}/10, margin ${Math.round(margin * 100)}%.`);
       if (place === 1) { G.achieve('bestbiz'); b.rep = Math.min(10, b.rep + 1); }
-      if (A.stage < 2) await G.advFinishEpisode('business', A, who, {});
+      if (A.stage < lastEp('business')) await G.advFinishEpisode('business', A, who, {});
     } },
   ],
 };
+// ---- inserted before each finale: two more episodes, so every adventure is a full five-part story
+const NEW = {
+  pets: [
+    { title: 'Vet check-up day', offer: 'Pets need check-ups too. Help Dr. Amara’s clinic get every pet ready.', run: async (G, A, who) => quest(G, A, 'pets', who,
+      'Pets can’t tell us when something hurts, so we watch for clues and keep them clean, fed and moving.',
+      [['sci.animals', 'Pet needs', '🐾'], ['hl.hygiene', 'Clean paws, clean hands', '🧼'], ['math.measure', 'Weigh-in', '⚖️']],
+      { reward: 35, msg: 'Every pet left healthy and happy. Great care!' }) },
+    { title: 'The adoption fair', offer: 'Families are adopting pets at the park fair. Help them choose wisely and plan the costs.', run: async (G, A, who) => quest(G, A, 'pets', who,
+      'A pet is a promise for years. Food, vet visits and time all add up.',
+      [['fin.budget', 'Pet budget', '💵'], ['think.consequence', 'Is this pet a good fit?', '🏡'], ['read.paragraph', 'The care sheet', '📄']],
+      { reward: 40, msg: 'Six pets found homes, and every family has a plan. Next: the Championship!' }) },
+  ],
+  rescue: [
+    { title: 'First-aid class', offer: 'Captain Rhodes is teaching first aid. Learn it once, and you can help anyone.', run: async (G, A, who) => quest(G, A, 'rescue', who,
+      'In an emergency: stay calm, check it’s safe, call for help, then help if you know how.',
+      [['hl.firstaid', 'First steps', '🩹'], ['hl.safety', 'Stay safe', '🦺'], ['read.technical', 'Read the steps', '📋']],
+      { reward: 35, msg: 'You know what to do now. That knowledge can save a life.' }) },
+    { title: 'Storm-ready kits', offer: 'A big storm is coming. Help families pack emergency kits and plan where to go.', run: async (G, A, who) => quest(G, A, 'rescue', who,
+      'Water, food, a flashlight, medicine and a plan. Ready beats rushed.',
+      [['sci.weather', 'Read the forecast', '⛈️'], ['think.planning', 'Make the plan', '🗺️'], ['math.ratio', 'Water for everyone', '💧']],
+      { reward: 40, msg: 'Every family on the block is ready. One more mission: a lost hiker.' }) },
+  ],
+  mystery: [
+    { title: 'The Case of the Vanishing Cookies', offer: 'The bakery’s cookie tray keeps coming up short. Build a timeline and find out why.', run: async (G, A, who) => quest(G, A, 'mystery', who,
+      'Detectives write down what happened and when. The timeline tells the story.',
+      [['math.time', 'The timeline', '⏰'], ['read.inference', 'The note', '🔍'], ['think.evidence', 'Which clue proves it?', '🧾']],
+      { reward: 35, msg: 'A sneaky seagull through the open window! The timeline cracked it.' }) },
+    { title: 'The Counterfeit Coupon', offer: 'Someone is handing out fake coupons at Fresh Mart. Spot the scam before more people fall for it.', run: async (G, A, who) => quest(G, A, 'mystery', who,
+      'Scams look real on purpose. Check the source, the details and the deal.',
+      [['fin.fraud', 'Real or fake?', '🎟️'], ['read.sources', 'Who sent it?', '📨'], ['read.evidence', 'Prove it', '🔎']],
+      { reward: 40, msg: 'You stopped the scam and warned the whole street. Ready for a quick case?' }) },
+  ],
+  culinary: [
+    { title: 'Kitchen safety inspection', offer: 'The health inspector visits today! Get the kitchen ready: clean, cold and cooked right.', run: async (G, A, who) => quest(G, A, 'culinary', who,
+      'Clean hands, cold fridge, cook food all the way. Those three keep people safe.',
+      [['hl.foodsafety', 'Safe food', '🧊'], ['sci.heat', 'Cooked right', '🌡️'], ['read.technical', 'The kitchen rules', '🪧']],
+      { reward: 35, msg: 'Inspection passed with top marks!' }) },
+    { title: 'The bake sale', offer: 'Run a bake sale for the community garden. Price it, bake it, count the money.', run: async (G, A, who) => {
+      const pts = await G.cookRound(['fin.prices', 'math.ratio', 'fin.money', 'orders'], who);
+      await G.judges(pts, who, 'bake sale');
+      await G.advFinishEpisode('culinary', A, who, { reward: 40 + pts * 8, msg: 'Sold out! The garden gets new tools. Now: the Grand Cook-off.' });
+    } },
+  ],
+  medical: [
+    { title: 'Healthy habits workshop', offer: 'Teach a workshop for kids at the clinic: sleep, food and moving your body.', run: async (G, A, who) => quest(G, A, 'medical', who,
+      'Small habits every day add up to a healthy life.',
+      [['hl.sleep', 'Sleep', '😴'], ['sci.nutrition', 'Fuel', '🥦'], ['hl.exercise', 'Move', '🏃']],
+      { reward: 35, msg: 'The kids loved it, and so did their parents!' }) },
+    { title: 'Ambulance dispatch', offer: 'Three calls at once! Read each one carefully and decide who needs help first.', run: async (G, A, who) => quest(G, A, 'medical', who,
+      'Dispatchers read fast but carefully, and send help to the most urgent call first.',
+      [['read.multistep', 'Call 1', '📞'], ['think.risk', 'Who goes first?', '🚑'], ['soc.maps', 'The fastest route', '🗺️']],
+      { reward: 40, msg: 'Everyone got help in time. Calm, careful thinking saves lives.' }) },
+  ],
+  robots: [
+    { title: 'Program a delivery route', offer: 'Teach a delivery robot its route with steps, loops and if-then rules.', run: async (G, A, who) => quest(G, A, 'robots', who,
+      'Robots only do what the program says. Clear steps, loops for repeats, if-then for choices.',
+      [['tech.sequence', 'Steps in order', '🧭'], ['tech.loops', 'Repeat it', '🔁'], ['tech.conditionals', 'If there’s a puddle…', '🤖']],
+      { reward: 45, msg: 'Every package arrived. You’re a real programmer!' }) },
+    { title: 'Debug the broken bot', offer: 'A cleaning robot keeps bumping into walls. Find the bug and fix it.', run: async (G, A, who) => quest(G, A, 'robots', who,
+      'Debugging means testing one thing at a time until you find what’s wrong.',
+      [['tech.debug', 'Find the bug', '🐞'], ['sci.method', 'Test it', '🧪'], ['tech.variables', 'Fix the setting', '⚙️']],
+      { reward: 50, msg: 'Bug fixed! The bot cleans the whole floor now. Ready for the Stairway?' }) },
+  ],
+  construction: [
+    { title: 'Fix the leaky roof', offer: 'The Starter Apartments roof leaks. Measure it, order materials, and patch it.', run: async (G, A, who) => quest(G, A, 'construction', who,
+      'Measure twice, cut once. Area tells you how much material to buy.',
+      [['math.measure', 'Measure the roof', '📏'], ['math.geometry', 'Find the area', '📐'], ['fin.budget', 'Order materials', '🧾']],
+      { reward: 40, msg: 'No more drips! Everyone in the building thanks you.' }) },
+    { title: 'Plan a footbridge', offer: 'The creek path needs a footbridge. Make it strong, safe and on budget.', run: async (G, A, who) => quest(G, A, 'construction', who,
+      'Bridges carry loads by spreading forces. Triangles are strong!',
+      [['sci.forces', 'Forces on a bridge', '🌉'], ['sci.materials', 'Pick materials', '🪵'], ['math.divide', 'How many planks?', '🔢']],
+      { reward: 45, msg: 'The bridge holds strong. Next: the garden shed.' }) },
+  ],
+  inventor: [
+    { title: 'Invent a recycling sorter', offer: 'The recycling bins are always mixed up. Invent a sorter that helps.', run: async (G, A, who) => quest(G, A, 'inventor', who,
+      'Inventors start with a problem, then think about what makes things different: metal sticks to magnets!',
+      [['sci.magnets', 'Magnets sort metal', '🧲'], ['sci.matter', 'What is it made of?', '♻️'], ['sci.design', 'Improve the design', '🛠️']],
+      { reward: 45, msg: 'Your sorter works! The park bins are clean now.' }) },
+    { title: 'Pitch your invention', offer: 'Present your best invention at the city fair. Explain it so people want it.', run: async (G, A, who) => quest(G, A, 'inventor', who,
+      'A great pitch says the problem, the fix, and why it matters, with proof.',
+      [['write.persuasive', 'Your pitch', '🎤'], ['sci.data', 'Show the test results', '📊'], ['think.persuasion', 'Answer questions', '💬']],
+      { reward: 50, msg: 'The crowd loved it! A shop wants to sell your invention.' }) },
+  ],
+  business: [
+    { title: 'Hire your first helper', offer: 'Business is growing. Write a job post, interview, and work out payroll.', run: async (G, A, who) => {
+      if (!G.state.biz) { await UI.say(who, 'You’ll need a business first! Plan one in your phone’s Business app.'); A.runs--; return; }
+      return quest(G, A, 'business', who, 'Good bosses are clear, fair and pay people right and on time.',
+        [['write.professional', 'The job post', '📝'], ['fin.payroll', 'Payroll', '💵'], ['think.leadership', 'Being a good boss', '🤝']],
+        { reward: 40, msg: 'Your first helper started today. You’re a boss now!' });
+    } },
+    { title: 'Run a marketing campaign', offer: 'Get the word out! Make honest ads that bring in customers.', run: async (G, A, who) => {
+      if (!G.state.biz) { await UI.say(who, 'You’ll need a business first!'); A.runs--; return; }
+      return quest(G, A, 'business', who, 'Good ads tell the truth, show the value, and reach the right people.',
+        [['think.persuasion', 'What makes an ad work?', '📣'], ['read.bias', 'Honest or misleading?', '⚖️'], ['math.percent', 'Did sales grow?', '📈']],
+        { reward: 45, msg: 'Customers are lining up, and they trust you. Honest marketing works.' });
+    } },
+    { title: 'Open a second location', offer: 'Ready to grow? Decide if a second location makes sense, with real numbers.', run: async (G, A, who) => {
+      if (!G.state.biz) { await UI.say(who, 'You’ll need a business first!'); A.runs--; return; }
+      return quest(G, A, 'business', who, 'Growing costs money first. Forecast carefully, plan for a bad month, then decide.',
+        [['fin.forecast', 'Forecast sales', '🔮'], ['fin.expansion', 'Is it worth it?', '🏪'], ['fin.cashflow', 'Cash for the slow months', '💰']],
+        { reward: 50, msg: 'You made a smart, careful decision. That’s what real owners do.' });
+    } },
+  ],
+};
+/** a story episode built from lessons: intro, three activities, reward and wrap-up */
+async function quest(G, A, id, who, intro, steps, { reward = 30, msg = '' } = {}) {
+  await UI.say(who, intro);
+  let right = 0;
+  for (const [skill, title, icon] of steps) { const r = await act(G, skill, id, title, icon); if (r === undefined) return; if (r && r.ok) right++; }
+  if (right === steps.length) G.state.stats.wiseChoices = (G.state.stats.wiseChoices || 0) + 1;
+  await G.advFinishEpisode(id, A, who, { reward: reward + right * 5, msg: right === steps.length ? `${msg} (Perfect: ${right} of ${steps.length} first try!)` : msg });
+}
+for (const [id, eps] of Object.entries(NEW)) { const list = EPISODES[id], at = list.findIndex((e) => e.repeat); list.splice(at < 0 ? list.length : at, 0, ...eps); }
+const lastEp = (id) => EPISODES[id].length;
 
 // ------------------------------------------------------------------------------------------------ mission steps (in-world)
 Object.assign(MISSION_STEPS, {

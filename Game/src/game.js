@@ -5,6 +5,7 @@ import { schoolSettings, isSchool, reportView, assignmentView } from './school.j
 import { runActivity } from './learnkit.js';
 import { markWords, talkLog, SPEEDS, speedName, setSpeed, say as sayIt, loadNatural, readToMe, setReadToMe } from './readalong.js';
 import { familyView } from './family.js';
+import { toolbox } from './toolbox.js';
 import { heartOn, setHeart, askHeart } from './heart.js';
 import { LANGS, lang, setLang } from './i18n.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
@@ -574,7 +575,7 @@ export function openPhone(G) {
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Talks', '🗨️', '#7a4fd2'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
+      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Talks', '🗨️', '#7a4fd2'], ['Toolbox', '🧰', '#d2552f'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -663,6 +664,7 @@ export function openPhone(G) {
         },
         Words: () => A.myWords(G),
         Talks: () => talkLog(),
+        Toolbox: () => toolbox(G, A.PRACTICE, close),
         Assignment: () => assignmentView(G, async (what, id) => {
           const As = s.assign; close();
           if (what === 'skill') { const r = await runActivity(G, () => ({ skill: id, ...A.PRACTICE[id]() }), 'assignment', As.n, '📋'); if (r && r.ok && As.pre) { As.practice = As.practice || {}; As.practice[id] = (As.practice[id] || 0) + 1; G.save(); } return; }
