@@ -31,6 +31,9 @@ fs.writeFileSync(path.join(dist, 'index.html'), full);
 
 const cp = (src, dst) => { fs.mkdirSync(path.dirname(dst), { recursive: true }); fs.cpSync(src, dst, { recursive: true }); };
 cp(path.join(root, 'public'), dist);
+// the big learning data, loaded at start instead of living in the game file (see src/learndata.js)
+{ const ww = {}; for (const f of 'abcdefg') Object.assign(ww, JSON.parse(fs.readFileSync(path.join(root, 'src/ww', f + '.json'), 'utf8')));
+  fs.writeFileSync(path.join(dist, 'assets', 'learn.json'), JSON.stringify({ ww, kb: JSON.parse(fs.readFileSync(path.join(root, 'src/heartkb.json'), 'utf8')) })); }
 // service worker with a precache list (offline play after first load)
 const files = [];
 const walk = (d, rel = '') => { for (const f of fs.readdirSync(d)) { const p = path.join(d, f), r = rel + f; if (fs.statSync(p).isDirectory()) walk(p, r + '/'); else if (!/^(sw\.js|artifact\.html|REAL-offline\.html)$/.test(r) && !r.startsWith('voice/')) files.push(r); } };
@@ -38,8 +41,8 @@ walk(dist);
 const version = Date.now().toString(36);
 fs.writeFileSync(path.join(dist, 'sw.js'), `const C='real-${version}';const F=${JSON.stringify(['./', ...files])};
 self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(F)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{if(res.ok&&/\\/voice\\//.test(e.request.url)){const cp=res.clone();caches.open(C).then(c=>c.put(e.request,cp));}return res;})));});`);   // narrator packs: cached as they're used
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C&&x!=='real-voice').map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||/\\/voice\\//.test(e.request.url))return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});`);   // Heart's voice: the game reads it from its own saved cache (Settings › Save Heart's voice)
 // base64 text copies of the binary assets for the hosted (artifact) build
 const hostedDir = path.join(root, 'dist-hosted');
 fs.rmSync(hostedDir, { recursive: true, force: true });
@@ -48,7 +51,7 @@ const walkGz = (d) => { for (const f of fs.readdirSync(d)) { const p = path.join
   fs.mkdirSync(path.dirname(out), { recursive: true }); fs.writeFileSync(out, fs.readFileSync(p).toString('base64')); } } };
 walkGz(path.join(dist, 'assets'));
 fs.copyFileSync(path.join(dist, 'artifact.html'), path.join(hostedDir, 'index.html'));
-fs.copyFileSync(path.join(dist, 'assets', 'world.json'), path.join(hostedDir, 'assets', 'world.json'));
+for (const f of ['world.json', 'learn.json']) fs.copyFileSync(path.join(dist, 'assets', f), path.join(hostedDir, 'assets', f));
 if (fs.existsSync(path.join(dist, 'voice'))) fs.cpSync(path.join(dist, 'voice'), path.join(hostedDir, 'voice'), { recursive: true });   // recorded narrator packs
 for (const f of ['about.html', 'privacy.html', 'terms.html', 'about', 'icons', 'manifest.webmanifest']) if (fs.existsSync(path.join(dist, f))) fs.cpSync(path.join(dist, f), path.join(hostedDir, f), { recursive: true });   // product pages, icons
 // one-file offline copy: the whole game and every asset in a single page you can save and open with no internet
@@ -56,7 +59,7 @@ for (const f of ['about.html', 'privacy.html', 'terms.html', 'about', 'icons', '
   const pack = {};
   const walkPack = (d) => { for (const f of fs.readdirSync(d)) { const p = path.join(d, f); if (fs.statSync(p).isDirectory()) walkPack(p); else if (f.endsWith('.gz')) pack[path.relative(dist, p).split(path.sep).join('/')] = fs.readFileSync(p).toString('base64'); } };
   walkPack(path.join(dist, 'assets'));
-  pack['assets/world.json'] = fs.readFileSync(path.join(dist, 'assets', 'world.json'), 'utf8');
+  for (const f of ['world.json', 'learn.json']) pack['assets/' + f] = fs.readFileSync(path.join(dist, 'assets', f), 'utf8');
   const packJs = `window.__REAL_PACK=${JSON.stringify(pack)};window.__REAL_OFFLINE=true;`.replace(/<\/script/gi, '<\\/script');
   const one = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8">

@@ -1,0 +1,9 @@
+node_modules/
+models/
+piper/
+clips/
+trim/
+*.wav
+sentences*.json
+words*.json
+es_src.json

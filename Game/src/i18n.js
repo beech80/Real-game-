@@ -7,6 +7,7 @@ import es2 from './i18n/es_2.json' with { type: 'json' };
 import es3 from './i18n/es_3.json' with { type: 'json' };
 import es4 from './i18n/es_4.json' with { type: 'json' };
 import esSkills from './i18n/es_skills.json' with { type: 'json' };
+import esTpl from './i18n/es_tpl.json' with { type: 'json' };
 
 const ES = Object.assign({}, es1, es2, es3, es4);
 const VALUES = new Set(Object.values(ES));
@@ -15,10 +16,31 @@ export const lang = () => LANG;
 export const LANGS = [['en', 'English'], ['es', 'Español']];
 
 /** the Spanish for an English string the game shows (exact match, keeping surrounding spaces) */
+// lines built from a pattern ("Help shoppers at the register ({0}/{1})"): matched by shape, slots filled in (and
+// translated themselves when they are words, like a job title). Indexed by their first two letters to stay fast.
+const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const TPL = { lead: [], by: new Map() };
+for (const [en, sp] of Object.entries(esTpl)) {
+  const parts = en.split(/\{\d+\}/), slots = [...en.matchAll(/\{(\d+)\}/g)].map((m) => +m[1]);
+  const re = new RegExp('^' + parts.map(esc).join('(.+?)') + '$', 's'), item = { re, slots, sp };
+  if (!parts[0]) TPL.lead.push(item); else { const key = parts[0].slice(0, 2); (TPL.by.get(key) || TPL.by.set(key, []).get(key)).push(item); }
+}
+function trPattern(k, depth) {
+  for (const item of [...(TPL.by.get(k.slice(0, 2)) || []), ...TPL.lead]) {
+    const m = item.re.exec(k); if (!m) continue;
+    let out = item.sp; item.slots.forEach((n, i) => { const v = m[i + 1]; out = out.split(`{${n}}`).join(depth < 2 ? trCore(v, depth + 1) : v); });
+    return out;
+  }
+  return null;
+}
+function trCore(t, depth = 0) {
+  const k = t.trim(); if (!k) return t;
+  const v = ES[k] || (k.length < 400 && /[A-Za-z]{3}/.test(k) ? trPattern(k, depth) : null);
+  return v ? t.replace(k, v) : t;
+}
 export function tr(t) {
   if (LANG !== 'es' || typeof t !== 'string') return t;
-  const k = t.trim(); if (!k) return t;
-  const v = ES[k]; return v ? t.replace(k, v) : t;
+  return trCore(t);
 }
 /** a skill's lesson field in the current language */
 export function skT(sk, field) { return LANG === 'es' && sk && esSkills[sk.id] && esSkills[sk.id][field] ? esSkills[sk.id][field] : sk && sk[field]; }

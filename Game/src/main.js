@@ -25,12 +25,14 @@ import { installKeyboard } from './keyboard.js';
 import { initLang, lang, setLang } from './i18n.js';
 import { voicePanel, bindVoicePanel } from './game.js';
 import { tutorialTick } from './tutorial.js';
+import { VERSION, whatsNew } from './version.js';
 import { checkDaily, unlockOutfits, celebrate, addUnlockJackets } from './rewards.js';
 import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine, voiceId, loadNatural } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
 import { PetCourse, RobotArena } from './arenas.js';
 import { runActivity, forgetRecent } from './learnkit.js';
+import { loadLearnData, learnCount } from './learndata.js';
 import { PRACTICE } from './activities.js';
 import { carMesh, Pedestrian } from './city.js';
 installExpansion(Game); installEvents(Game); installAdventures(Game); installAdventureHelpers(Game);
@@ -60,6 +62,8 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) saveN
 window.addEventListener('pagehide', saveNow);
 initReadAlong(() => game && game.state);
 initLang();
+window.__REAL_VERSION = VERSION;
+{ const v = document.getElementById('version-tag'); if (v) v.textContent = 'v' + VERSION; }
 // problem log: the last 30 errors (message, where, when, version), kept only on this device for grown-ups to copy into a report
 { const log = (msg, src) => { try { const L = JSON.parse(localStorage.getItem('real.errors') || '[]'); L.push({ t: new Date().toISOString(), m: String(msg).slice(0, 300), s: String(src || '').slice(0, 160), v: 'REAL ' + (window.__REAL_VERSION || '') }); localStorage.setItem('real.errors', JSON.stringify(L.slice(-30))); } catch (e) {} };
   addEventListener('error', (e) => log(e.message, e.filename ? `${e.filename.split('/').pop()}:${e.lineno}` : ''));
@@ -88,7 +92,7 @@ document.getElementById('obj-say').onclick = (e) => { e.stopPropagation(); readE
 UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.ask({ prompt: q }); if (!said) return null; UI.toast(`Heard “${said}” — checking…`, 'info', 1600); const i = await Brain.pick(q, choices, said); if (i == null) UI.toast(`I heard “${said}”. Which answer did you mean? Tap it, or say it again.`, 'info', 4200); return i; } };
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
-try { if (navigator.webdriver) { window.__scene = scene; window.__audio = audio; window.__player = () => player; window.__narrate = (t) => sayText(t); window.__voiceId = (k) => voiceId(k); } } catch (e) {}   // automated tests only
+try { if (navigator.webdriver) { window.__scene = scene; window.__audio = audio; window.__player = () => player; window.__narrate = (t) => sayText(t); window.__voiceId = (k) => voiceId(k); window.__learnCount = learnCount; } } catch (e) {}   // automated tests only
 
 const W = { district: null, apartment: null, wild: null, club: null, data: null, lamps: [], d: {}, rooms: {} };
 let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60, mini = null, race = null, petCourse = null, arena = null, markT = 0;
@@ -121,9 +125,11 @@ function roomierFreshMart(root, D) {
 
 async function boot() {
   progress(0.02, 'Loading the city…');
+  const learnP = loadLearnData();
   const data = W.data = window.__REAL_PACK && window.__REAL_PACK['assets/world.json'] ? JSON.parse(window.__REAL_PACK['assets/world.json']) : await (await fetch('assets/world.json')).json();
   const g = await loadGLB('assets/district.glb.gz', (p) => progress(0.05 + p * 0.62, 'Loading the Starting District…'));
   progress(0.7, 'Building streets…');
+  await learnP;
   await wait(30);
   roomierFreshMart(g.scene, data.district);
   W.district = mergeStatic(g.scene, textures, 40);
@@ -337,6 +343,7 @@ async function startGameInner(state, isNew) {
   else { player.pos = { ...WILD.start }; player.heading = 0; }
   player.apply();
   mode = 'play'; UI.showHUD(true);
+  if (!isNew && !navigator.webdriver) setTimeout(() => { if (!busy()) whatsNew(); }, 1500);   // returning players: what's new in this update
   // welcome back: skills you know that are due for a spaced review
   setTimeout(() => { try { const n = game.edu.dueReviews().length; if (n >= 1 && !isNew) UI.toast(`🔁 Welcome back! ${n} skill${n > 1 ? 's are' : ' is'} ready for a quick review in 📚 Learn.`, 'info', 5200); } catch (e) {} }, 2500);
 }

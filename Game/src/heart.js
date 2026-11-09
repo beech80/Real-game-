@@ -8,7 +8,7 @@ import { lookup, GLOSSARY } from './glossary.js';
 import { say, stopReading } from './readalong.js';
 import { lang, skT } from './i18n.js';
 import { Voice, sampler } from './voice.js';
-import KB from './heartkb.json' with { type: 'json' };
+export const KB = [];   // Heart's knowledge (heartkb.json), filled at start by learndata.js
 
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 export const LINES = {

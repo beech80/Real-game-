@@ -699,3 +699,6 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 
 .legal-links { font-size: 14px; color: var(--muted); margin-top: 6px; } .legal-links a { color: var(--gold-2); }
 .problems summary { cursor: pointer; padding: 6px 0; } .problems pre { white-space: pre-wrap; font-size: 12px; max-height: 180px; overflow: auto; }
+
+.whatsnew .wn-row { display: grid; grid-template-columns: 40px 1fr; gap: 10px; align-items: start; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+.wn-ic { font-size: 28px; } .whatsnew b { font-size: 17px; } .whatsnew p { margin: 2px 0 0; font-size: 15.5px; line-height: 1.45; }

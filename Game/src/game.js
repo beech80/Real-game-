@@ -3,11 +3,12 @@ import { UI, h, money, clock, wait } from './ui.js';
 import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
-import { markWords, talkLog, SPEEDS, speedName, setSpeed, say as sayIt, loadNatural, readToMe, setReadToMe } from './readalong.js';
+import { markWords, talkLog, SPEEDS, speedName, setSpeed, say as sayIt, loadNatural, readToMe, setReadToMe, voiceSaved, saveVoice, forgetVoice } from './readalong.js';
 import { familyView } from './family.js';
 import { toolbox } from './toolbox.js';
 import { celebrate, trophiesApp } from './rewards.js';
 import { tipsOff, setTips } from './tutorial.js';
+import { VERSION, whatsNew } from './version.js';
 import { heartOn, setHeart, askHeart } from './heart.js';
 import { LANGS, lang, setLang } from './i18n.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
@@ -542,8 +543,22 @@ function voiceBox() {
   const box = h('div', { class: 'bill voicebox' });
   const render = () => box.replaceChildren(
     h('div', { class: 'row' }, h('b', {}, '🗣️ Reading voice: ✨ Heart'), h('button', { class: 'ghost sm', onclick: async () => { await loadNatural(); sayIt(lang() === 'es' ? '¡Hola! Voy a leer contigo.' : 'Welcome to the Starting District. You look like you walked a long way.', { en: lang() !== 'es' }); } }, '▶ Hear it')),
-    h('div', { class: 'row' }, h('span', {}, 'Speed'), ...SPEEDS.map(([k, n]) => h('button', { class: speedName() === k ? 'primary sm' : 'ghost sm', onclick: () => { setSpeed(k); render(); sayIt(lang() === 'es' ? '¿Así está bien?' : 'Is this a good speed?'); } }, n))));
-  render();
+    h('div', { class: 'row' }, h('span', {}, 'Speed'), ...SPEEDS.map(([k, n]) => h('button', { class: speedName() === k ? 'primary sm' : 'ghost sm', onclick: () => { setSpeed(k); render(); sayIt(lang() === 'es' ? '¿Así está bien?' : 'Is this a good speed?'); } }, n))),
+      saveRow);
+  // save Heart's voice on this device, so she keeps reading with no internet
+  const saveRow = h('div', { class: 'row voicesave' });
+  const showSave = async () => {
+    if (window.__REAL_OFFLINE || !window.caches) return saveRow.remove();
+    let st; try { st = await voiceSaved(); } catch (e) { return saveRow.remove(); }
+    if (!st.total) return saveRow.remove();
+    if (st.have >= st.total) saveRow.replaceChildren(h('span', {}, '✓ Heart’s voice is saved on this device'), h('button', { class: 'ghost sm', onclick: async () => { await forgetVoice(); showSave(); } }, 'Remove'));
+    else saveRow.replaceChildren(h('span', {}, '💾 Save Heart’s voice on this device (about 170 MB, for no internet)'), h('button', { class: 'primary sm', onclick: async (e) => {
+      const b = e.currentTarget; b.disabled = true;
+      try { await saveVoice((d, t) => { b.textContent = `${Math.round((d / t) * 100)}%`; }); } catch (err) { b.disabled = false; b.textContent = 'Try again'; return; }
+      showSave();
+    } }, 'Save'));
+  };
+  render(); showSave();
   return box;
 }
 
@@ -682,6 +697,7 @@ export function openPhone(G) {
           h('div', { class: 'row' }, h('span', {}, 'Time'), ...[[1, 'Normal'], [3, 'Fast']].map(([v, n]) => h('button', { class: (s.timeScale || 1) === v ? 'primary sm' : 'ghost sm', onclick: () => { s.timeScale = v; open('Settings'); } }, n))),
           h('div', { class: 'row' }, h('span', {}, '🌎 Language / Idioma'), ...LANGS.map(([k, n]) => h('button', { class: lang() === k ? 'primary sm' : 'ghost sm', onclick: () => { setLang(k); s.settings = s.settings || {}; s.settings.lang = k; G.save(); open('Settings'); } }, n))),
           voiceBox(),
+          h('div', { class: 'row' }, h('span', {}, `REAL v${VERSION}`), h('button', { class: 'ghost sm', onclick: () => { close(); whatsNew(true); } }, '🆕 What’s new')),
           h('div', { class: 'row' }, h('span', {}, '💡 Tips for new players'), h('button', { class: tipsOff() ? 'ghost sm' : 'primary sm', onclick: () => { setTips(true); UI.toast('Tips are on. They will show up as you play.', 'good'); open('Settings'); } }, tipsOff() ? 'Show tips again' : 'On')),
           h('div', { class: 'tier-h' }, 'Accessibility'),
           ...[['smart', 'Smart character replies', true]].map(([k, n]) => { s.settings = s.settings || {}; const on = s.settings[k] !== false; return h('div', { class: 'row' }, h('span', {}, n), isSchool(s) ? h('button', { class: 'ghost sm', disabled: true }, 'Off (school)') : h('button', { class: on ? 'primary sm' : 'ghost sm', onclick: () => { s.settings[k] = !on; G.hooks.applyA11y(s.settings); G.save(); open('Settings'); } }, on ? 'On' : 'Off')); }),

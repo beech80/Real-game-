@@ -6,6 +6,7 @@ globalThis.window = globalThis; globalThis.localStorage = { getItem: () => null,
 const { GEN } = await import('../src/curriculum.js');
 const { SKILLS } = await import('../src/edu.js');
 const { reasonFor } = await import('../src/learnkit.js');
+{ const fs = await import('fs'); const ww = {}; for (const f of 'abcdefg') Object.assign(ww, JSON.parse(fs.readFileSync(new URL('../src/ww/' + f + '.json', import.meta.url)))); (await import('../src/learndata.js')).fillLearnData({ ww, kb: JSON.parse(fs.readFileSync(new URL('../src/heartkb.json', import.meta.url))) }); }
 const { syl } = await import('../src/readlevel.js');
 const { explained } = await import('../src/glossary.js');
 const EVERYDAY = /^(everything|everybody|everyone|carefully|vegetables?|remembering|information|especially|regularly|celebrations?|exercising|activit(y|ies)|elevators?|firefighters?|watermelons?|televisions?|caterpillars?)$/i;

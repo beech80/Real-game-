@@ -90,25 +90,49 @@ let NAT = null, natLoading = null; const PACKS = new Map();
 export const naturalOn = () => true;   // Heart is the game's one voice
 export function loadNatural() {
   if (NAT || natLoading || window.__REAL_OFFLINE) return natLoading;
-  natLoading = fetch('voice/manifest.json').then((r) => (r.ok ? r.json() : null)).then((m) => { NAT = m && m.c ? m : null; return NAT; }).catch(() => null);
+  natLoading = fetch('voice/manifest.json').then((r) => (r.ok ? r : savedFile('voice/manifest.json'))).catch(() => savedFile('voice/manifest.json')).then((r) => (r && r.ok ? r.json() : null)).then((m) => { NAT = m && m.c ? m : null; return NAT; }).catch(() => null);
   return natLoading;
 }
 export const naturalReady = () => !!NAT;
+// Heart's voice saved on this device (Settings › Reading voice › Save): the packs live in Cache Storage and are
+// read from there first, so she keeps reading with no internet.
+const VC = 'real-voice'; let SAVED = null;
+const savedPacks = () => SAVED || (SAVED = (async () => { try { const ks = await (await caches.open(VC)).keys(); return new Set(ks.map((r) => +((/p(\d+)\.mp3/.exec(r.url) || [])[1])).filter((n) => n >= 0)); } catch (e) { return new Set(); } })());
+async function savedFile(url) { try { return (await (await caches.open(VC)).match(url)) || null; } catch (e) { return null; } }
+/** how much of Heart's voice is on this device: { have, total } packs */
+export async function voiceSaved() {
+  const m = await loadNatural(); const total = m ? 1 + Math.max(...Object.values(m.c).map((v) => v[0])) : 0;
+  return { have: Math.min(total, (await savedPacks()).size), total };
+}
+/** download every voice pack into this device's storage; onProgress(done, total) */
+export async function saveVoice(onProgress) {
+  const m = await loadNatural(); if (!m) throw new Error('no voice list');
+  const total = 1 + Math.max(...Object.values(m.c).map((v) => v[0])), c = await caches.open(VC);
+  try { if (navigator.storage && navigator.storage.persist) await navigator.storage.persist(); } catch (e) {}
+  const mr = await fetch('voice/manifest.json'); if (mr.ok) await c.put('voice/manifest.json', mr);
+  for (let i = 0; i < total; i++) {
+    const url = `voice/p${i}.mp3`;
+    if (!(await c.match(url))) { const r = await fetch(url); if (!r.ok) throw new Error('pack ' + i); await c.put(url, r); }
+    if (onProgress) onProgress(i + 1, total);
+  }
+  SAVED = null; return total;
+}
+export async function forgetVoice() { try { await caches.delete(VC); } catch (e) {} SAVED = null; }
 const CLIPS = new Map(); let noRanges = false;
 function clip([p, off, len]) {
   const key = `${p}:${off}`;
   if (CLIPS.has(key)) return CLIPS.get(key);
   const whole = () => pack(p).then((buf) => buf.slice(off, off + len));
-  const pr = (noRanges || PACKS.has(p) ? whole() : fetch(`voice/p${p}.mp3`, { headers: { Range: `bytes=${off}-${off + len - 1}` } }).then((r) => {
+  const pr = savedPacks().then((saved) => (noRanges || PACKS.has(p) || saved.has(p) ? whole() : fetch(`voice/p${p}.mp3`, { headers: { Range: `bytes=${off}-${off + len - 1}` } }).then((r) => {
     if (r.status === 206) return r.arrayBuffer();
     noRanges = true;                                   // this server sends whole files: keep the pack we just got
     if (r.ok) { const ab = r.arrayBuffer(); PACKS.set(p, ab); return ab.then((buf) => buf.slice(off, off + len)); }
     return whole();
-  })).catch((e) => { CLIPS.delete(key); throw e; });
+  }))).catch((e) => { CLIPS.delete(key); throw e; });
   CLIPS.set(key, pr); if (CLIPS.size > 600) CLIPS.delete(CLIPS.keys().next().value);
   return pr;
 }
-const pack = (n) => { if (!PACKS.has(n)) PACKS.set(n, fetch(`voice/p${n}.mp3`).then((r) => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }).catch((e) => { PACKS.delete(n); throw e; })); return PACKS.get(n); };
+const pack = (n) => { if (!PACKS.has(n)) PACKS.set(n, savedFile(`voice/p${n}.mp3`).then((s) => s || fetch(`voice/p${n}.mp3`)).then((r) => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }).catch((e) => { PACKS.delete(n); throw e; })); return PACKS.get(n); };
 let natAudio = null, natTimers = [];
 function stopNatural() { natTimers.forEach(clearTimeout); natTimers = []; if (natAudio) { try { natAudio.pause(); } catch (e) {} natAudio = null; } }
 // ---- Heart, word by word: for English lines with no whole-sentence recording (random numbers, a player's writing)
