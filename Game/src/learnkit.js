@@ -12,6 +12,7 @@ import { say } from './readalong.js';
 import { WW } from './ww/index.js';
 import { likes } from './learnstyle.js';
 import { manipulatives } from './manip.js';
+import { heartOn, heartAnswer, heartSays, askHeart } from './heart.js';
 import { skT, lang, translateQuestion } from './i18n.js';
 
 /** Who answers a wrong pick: the person you were just talking to (Rosa at work, Mr. Okafor at the center…), else the coach. */
@@ -127,13 +128,13 @@ export function showMeHow(G, id, make, { title = 'Show me how' } = {}) {
   if (ans) steps.push(['✅', 'The answer', [h('p', { class: 'smh-ans' }, ans)], `The answer is ${ans}.`]);
   return UI.sheet(title, (close) => {
     let i = 0; const list = h('div', { class: 'smh' }), nav = h('div', { class: 'row' });
-    const hear = likes(G, 'hear') || (G.state.settings || {}).readAloud;
+    const hear = likes(G, 'hear') || (G.state.settings || {}).readAloud || heartOn(G);
     const show = () => {
       list.replaceChildren(...steps.slice(0, i + 1).map(([ic, name, els, said], k) => h('div', { class: 'smh-step' + (k === i ? ' now' : '') },
         h('div', { class: 'smh-h' }, h('span', { class: 'smh-ic' }, ic), h('b', {}, name), h('button', { class: 'say-btn', 'aria-label': 'Read this step', onclick: () => speak(said) }, '🔊')), ...els.filter(Boolean))));
       nav.replaceChildren(i < steps.length - 1 ? h('button', { class: 'primary', onclick: () => { i++; show(); } }, 'Next step ›') : h('button', { class: 'primary', onclick: () => close(true) }, 'Now you try one!'),
         i < steps.length - 1 ? h('button', { class: 'ghost sm', onclick: () => { i = steps.length - 1; show(); } }, 'Show all steps') : null);
-      if (hear) speak(steps[i][3]);
+      if (hear) speak((i === 0 ? 'Let us do one together. ' : i === steps.length - 1 ? '' : '') + steps[i][3] + (i === steps.length - 1 && heartOn(G) ? ' Now you try one!' : ''));
       const last = list.lastChild; if (last && last.scrollIntoView) setTimeout(() => last.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 30);
     };
     show();
@@ -184,7 +185,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     const hp = helpFor(G, id);
     const why = h('div', { class: 'whybox', hidden: true });
     const done = h('button', { class: 'primary', hidden: true }, 'Continue');
-    const finish = (ok) => { if (body) body.querySelectorAll('button').forEach((b) => { if (!b.classList.contains('right')) b.disabled = true; }); why.hidden = false; why.replaceChildren(h('b', {}, ok ? '✓ ' : '💡 '), ...wordful(G, Q.why || (ok ? 'Nice work.' : ''), sk.band || 1, hp.card)); done.hidden = false; done.onclick = () => close({ ok: tries === 1 && ok }); if (settings.readAloud && Q.why) speak(Q.why); };
+    const finish = (ok) => { if (body) body.querySelectorAll('button').forEach((b) => { if (!b.classList.contains('right')) b.disabled = true; }); why.hidden = false; why.replaceChildren(h('b', {}, ok ? '✓ ' : '💡 '), ...wordful(G, Q.why || (ok ? 'Nice work.' : ''), sk.band || 1, hp.card)); done.hidden = false; done.onclick = () => close({ ok: tries === 1 && ok }); if (heartOn(G) && !CHECK) heartAnswer(G, ok, { tries, why: Q.why && (settings.readAloud || (sk.band || 1) <= 2 || !ok) ? Q.why : '' }); else if (settings.readAloud && Q.why) speak(Q.why); };
     const attempt = (ok, err) => {
       tries++;
       if (CHECK) { G.sfx(ok ? 'good' : 'bad'); finish(ok); return ok; }   // pre/post check: one try, no help, not counted as practice
@@ -202,7 +203,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     };
     const hint2 = h('p', { class: 'tip', hidden: true }), wwBox = h('p', { class: 'tip readable wwbox', hidden: true });
     const coach = coachName(G);
-    const explainWrong = (text) => { wwBox.hidden = false; wwBox.replaceChildren(h('b', { class: 'ww-who' }, coach ? `🗨️ ${coach}: ` : '💡 '), h('span', { class: 'ww-say' }, text)); if (settings.readAloud) speak(text); };
+    const explainWrong = (text) => { wwBox.hidden = false; wwBox.replaceChildren(h('b', { class: 'ww-who' }, coach ? `🗨️ ${coach}: ` : '💡 '), h('span', { class: 'ww-say' }, text)); if (heartOn(G)) heartAnswer(G, false, { reason: text }); else if (settings.readAloud) speak(text); };
     const head = [h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj] ? SUBJECTS[sk.subj].icon + ' ' + SUBJECTS[sk.subj].name : ''} · ${sk.name || ''}`),
       visual(Q.v), Q.cursive ? h('div', { class: 'cursive-note' }, ...Q.cursive.map((l) => h('div', {}, l))) : null,
       h('div', { class: 'qrow' }, h('p', { class: 'lead', 'data-en': '1' }, ...wordful(G, Q.q, sk.band || 1, hp.card)), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
@@ -309,7 +310,9 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       esBox.replaceChildren(...(T ? [h('p', { class: 'readable es-q' }, '🌎 ', T.q), T.o && T.o.length ? h('ul', { class: 'es-o' }, ...T.o.map((o) => h('li', {}, o))) : null, h('button', { class: 'say-btn', onclick: () => speak(T.q + ' ' + (T.o || []).join('. ')) }, '🔊')]
         : [h('p', { class: 'readable' }, '🌎 ', skT(sk, 'objective')), h('p', { class: 'readable' }, skT(sk, 'explain'))]));
     } }, '🌎 En español') : null;
-    if (CHECK) { hp.box.hidden = true; hp.btn.hidden = true; howBtn.hidden = true; }
-    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') + (CHECK ? ' check' : '') }, CHECK ? h('p', { class: 'tip' }, '📋 Check: one try, no hints. Just do your best.') : null, ...head.filter(Boolean), hp.card, hp.box, body, wwBox, hint2, why, h('div', { class: 'row' }, speakRow, toolBtn, esBtn, hp.btn, howBtn), esBox, toolBox, done);
+    hp.btn.addEventListener('click', () => { if (heartOn(G)) heartSays(G, 'hint', hp.box.textContent.replace(/^💡\s*/, '')); });
+    const askBtn = h('button', { class: 'ghost sm ask', onclick: () => askHeart(G, { q: Q.q, skill: id }) }, '✨ Ask Heart');
+    if (CHECK) { hp.box.hidden = true; hp.btn.hidden = true; howBtn.hidden = true; askBtn.hidden = true; }
+    return h('div', { class: 'act activity' + (sk.band === 1 ? ' lv1' : '') + (CHECK ? ' check' : '') }, CHECK ? h('p', { class: 'tip' }, '📋 Check: one try, no hints. Just do your best.') : null, ...head.filter(Boolean), hp.card, hp.box, body, wwBox, hint2, why, h('div', { class: 'row' }, speakRow, toolBtn, esBtn, hp.btn, howBtn, askBtn), esBox, toolBox, done);
   }, { icon, noClose: true });
 }

@@ -5,6 +5,7 @@ import { schoolSettings, isSchool, reportView, assignmentView } from './school.j
 import { runActivity } from './learnkit.js';
 import { markWords, talkLog, SPEEDS, speedName, setSpeed, say as sayIt, loadNatural, readToMe, setReadToMe } from './readalong.js';
 import { familyView } from './family.js';
+import { heartOn, setHeart, askHeart } from './heart.js';
 import { LANGS, lang, setLang } from './i18n.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
 import { lifeLevel, LIFE_CATS, CAREERS, TIER_NAMES, careerStatus, setSkillNames, ACHIEVEMENTS, INVITE_LEVEL, INVITE_MIN_DAY } from './life.js';
@@ -522,10 +523,13 @@ export class Game {
 // ---------------------------------------------------------------------------------------- reading voice
 /** Settings › Reading voice: the device's best voices (natural/enhanced first), each with a Try button, and a speed. */
 /** The 🗣️ button on the game screen: Heart's settings in one tap. */
+let G0 = () => null; export function bindVoicePanel(get) { G0 = get; }
 export function voicePanel() {
   return UI.sheet('Reading voice', () => h('div', { class: 'act' },
     h('p', { class: 'lead' }, '✨ Heart reads the game to you: the story, lessons, questions and answers.'),
     voiceBox(),
+    h('div', { class: 'row' }, h('span', {}, '🧑‍🏫 Heart coaches me (cheers, hints, why)'), ...[[true, 'On'], [false, 'Off']].map(([v, n]) => h('button', { class: heartOn(G0()) === v ? 'primary sm' : 'ghost sm', onclick: (e) => { setHeart(G0(), v); e.currentTarget.parentElement.querySelectorAll('button').forEach((b, i) => { b.className = (i === 0) === v ? 'primary sm' : 'ghost sm'; }); } }, n))),
+    h('button', { class: 'primary', onclick: () => askHeart(G0()) }, '✨ Ask Heart a question'),
     h('div', { class: 'row' }, h('span', {}, '🔊 Read everything to me'), ...[[true, 'On'], [false, 'Off']].map(([v, n]) => h('button', { class: readToMe() === v ? 'primary sm' : 'ghost sm', onclick: (e) => { setReadToMe(v); e.currentTarget.parentElement.querySelectorAll('button').forEach((b, i) => { b.className = (i === 0) === v ? 'primary sm' : 'ghost sm'; }); } }, n))),
     h('p', { class: 'tip' }, 'Tap 🔊 next to any text, or tap a word, to hear it any time.')), { icon: '🗣️' });
 }

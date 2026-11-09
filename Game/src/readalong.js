@@ -106,21 +106,34 @@ function numWords(n) {
   if (n < 1e6) return [...numWords(Math.floor(n / 1000)), 'thousand', ...(n % 1000 ? numWords(n % 1000) : [])];
   return [...numWords(Math.floor(n / 1e6)), 'million', ...(n % 1e6 ? numWords(n % 1e6) : [])];
 }
+const fold = (s) => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ñ/g, 'n');
+const sentKey = (s, es) => (es ? 'es:' + voiceKey(fold(s)) : voiceKey(s));
+const UNO = ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve'];
+const DEC = ['', '', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+const CEN = ['', 'ciento', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 'seiscientos', 'setecientos', 'ochocientos', 'novecientos'];
+function numWordsEs(n) {
+  if (n < 20) return [UNO[n]];
+  if (n < 100) return [DEC[Math.floor(n / 10)], ...(n % 10 ? ['y', UNO[n % 10]] : [])];
+  if (n === 100) return ['cien'];
+  if (n < 1000) return [CEN[Math.floor(n / 100)], ...(n % 100 ? numWordsEs(n % 100) : [])];
+  if (n < 1e6) return [...(n < 2000 ? [] : numWordsEs(Math.floor(n / 1000))), 'mil', ...(n % 1000 ? numWordsEs(n % 1000) : [])];
+  return [...numWordsEs(Math.floor(n / 1e6)), n < 2e6 ? 'millón' : 'millones', ...(n % 1e6 ? numWordsEs(n % 1e6) : [])];
+}
 /** the words Heart says for a line, each with where it sits in the text (for highlighting) and the pause after it */
-function heartWords(spoken) {
+function heartWords(spoken, es = false) {
   const out = [];
-  for (const m of String(spoken).matchAll(/[A-Za-z]+(?:['’][A-Za-z]+)?|\d[\d,]*(?:\.\d+)?|[.!?;:]|,/g)) {
+  for (const m of String(spoken).matchAll(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:['’][A-Za-z]+)?|\d[\d,]*(?:\.\d+)?|[.!?;:]|,/g)) {
     const t = m[0];
     if (/^[.!?;:]$/.test(t)) { if (out.length) out[out.length - 1].pause = 380; continue; }
     if (t === ',') { if (out.length) out[out.length - 1].pause = 190; continue; }
-    if (/^\d/.test(t)) { const [int, dec] = t.replace(/,/g, '').split('.'); const ws = [...numWords(Math.min(+int, 999999999)), ...(dec ? ['point', ...dec.split('').map((d) => ONEW[+d])] : [])]; ws.forEach((w) => out.push({ w, at: m.index, pause: 40 })); continue; }
+    if (/^\d/.test(t)) { const [int, dec] = t.replace(/,/g, '').split('.'); const ws = es ? [...numWordsEs(Math.min(+int, 999999999)), ...(dec ? ['punto', ...dec.split('').map((d) => UNO[+d])] : [])] : [...numWords(Math.min(+int, 999999999)), ...(dec ? ['point', ...dec.split('').map((d) => ONEW[+d])] : [])]; ws.forEach((w) => out.push({ w, at: m.index, pause: 40 })); continue; }
     out.push({ w: t.toLowerCase().replace(/’/g, "'"), at: m.index, pause: 40 });
   }
   return out;
 }
-function playWords(spoken, { onWord, onEnd, rate }) {
+function playWords(spoken, { onWord, onEnd, rate, es = false }) {
   if (!NAT) return false;
-  const items = heartWords(spoken).map((x) => ({ ...x, clip: NAT.c[voiceId('w:' + x.w)] })).filter((x) => x.clip);
+  const items = heartWords(spoken, es).map((x) => ({ ...x, clip: NAT.c[voiceId(es ? 'esw:' + fold(x.w) : 'w:' + x.w)] })).filter((x) => x.clip);
   if (!items.length) return false;
   let fin = false; const done = () => { if (fin) return; fin = true; stopNatural(); if (onEnd) onEnd(); };
   current = { done };
@@ -141,9 +154,9 @@ function playWords(spoken, { onWord, onEnd, rate }) {
   return true;
 }
 /** play recorded clips for every sentence; resolves false if any is missing (caller falls back to Heart word by word) */
-function playNatural(spoken, { onWord, onEnd, rate, fallback }) {
+function playNatural(spoken, { onWord, onEnd, rate, fallback, es = false }) {
   if (!NAT) return false;
-  const sents = speechSentences(spoken), clips = sents.map((s) => NAT.c[voiceId(voiceKey(s))]);
+  const sents = speechSentences(spoken), clips = sents.map((s) => NAT.c[voiceId(sentKey(s, es))]);
   if (!sents.length || clips.some((c) => !c)) return false;
   let fin = false; const done = () => { if (fin) return; fin = true; stopNatural(); if (onEnd) onEnd(); };
   current = { done };
@@ -191,8 +204,9 @@ export function say(text, { rate = 0.92, onWord, onEnd, en = false, raw = false 
   if (!spoken || !/[\p{L}\p{N}]/u.test(spoken)) { if (onEnd) onEnd(); return false; }
   // English is always Heart: whole recorded sentences when they exist, otherwise Heart word by word. (Spanish uses the
   // device's Spanish voice: Heart speaks English only. The one-file offline copy has no recordings.)
-  if (!spanish && !window.__deviceOnly && !window.__REAL_OFFLINE) {
-    const go = () => playNatural(spoken, { onWord, onEnd, rate, fallback: () => { window.__deviceOnly = true; say(text, { rate, onWord, onEnd, en, raw }); window.__deviceOnly = false; } }) || playWords(spoken, { onWord, onEnd, rate });
+  if (!window.__deviceOnly && !window.__REAL_OFFLINE) {
+    const es = spanish;
+    const go = () => playNatural(spoken, { onWord, onEnd, rate, es, fallback: () => { window.__deviceOnly = true; say(text, { rate, onWord, onEnd, en, raw }); window.__deviceOnly = false; } }) || playWords(spoken, { onWord, onEnd, rate, es });
     if (NAT) { if (go()) return true; }
     else { let fin2 = false; current = { done: () => { fin2 = true; } }; loadNatural().then(() => { if (fin2) return; current = null; if (!NAT || !go()) { window.__deviceOnly = true; say(text, { rate, onWord, onEnd, en, raw }); window.__deviceOnly = false; } }); return true; }
   }

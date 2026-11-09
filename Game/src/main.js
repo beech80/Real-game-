@@ -23,7 +23,7 @@ import { scatterFlora, updateLook, inkEdges } from './lookfx.js';
 import { schoolFromLink, enableSchool, teacherDashboard, assignFromLink, setAssignment } from './school.js';
 import { installKeyboard } from './keyboard.js';
 import { initLang, lang, setLang } from './i18n.js';
-import { voicePanel } from './game.js';
+import { voicePanel, bindVoicePanel } from './game.js';
 import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine, voiceId, loadNatural } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
@@ -289,6 +289,7 @@ async function startGameInner(state, isNew) {
   neighbors = new Neighbors(scene); if (!(state.settings && state.settings.noNeighbors)) neighbors.connect();
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
+  bindVoicePanel(() => game);
   $('#btn-voice').onclick = () => { if (mode === 'play' && !busy()) voicePanel(); };
   $('#btn-sprint').onclick = (e) => { input.sprintLatch = !input.sprintLatch; e.currentTarget.classList.toggle('on', input.sprintLatch); };
   startLoader(true, 0.35, 'Meeting the residents…');

@@ -590,3 +590,8 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .voicebox b { display: block; margin-bottom: 6px; } .voice-list { gap: 6px; margin-bottom: 8px; }
 
 .voice-btn { margin-top: 8px; display: block; }
+
+/* Heart */
+.heart-ans { margin-top: 10px; }
+.heart-bubble { background: rgba(233,111,160,.14); border-left: 4px solid #e96fa0; border-radius: 12px; padding: 10px 12px; font-size: 17px; line-height: 1.5; }
+.heart-bubble b { color: #ff9cc4; }
