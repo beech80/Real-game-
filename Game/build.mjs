@@ -23,7 +23,7 @@ const full = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32"><link rel="icon" href="icons/icon-192.png" sizes="192x192"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 ${frag}
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body></html>`;
@@ -50,6 +50,7 @@ walkGz(path.join(dist, 'assets'));
 fs.copyFileSync(path.join(dist, 'artifact.html'), path.join(hostedDir, 'index.html'));
 fs.copyFileSync(path.join(dist, 'assets', 'world.json'), path.join(hostedDir, 'assets', 'world.json'));
 if (fs.existsSync(path.join(dist, 'voice'))) fs.cpSync(path.join(dist, 'voice'), path.join(hostedDir, 'voice'), { recursive: true });   // recorded narrator packs
+for (const f of ['about.html', 'privacy.html', 'terms.html', 'about', 'icons', 'manifest.webmanifest']) if (fs.existsSync(path.join(dist, f))) fs.cpSync(path.join(dist, f), path.join(hostedDir, f), { recursive: true });   // product pages, icons
 // one-file offline copy: the whole game and every asset in a single page you can save and open with no internet
 {
   const pack = {};

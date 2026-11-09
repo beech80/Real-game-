@@ -60,6 +60,12 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) saveN
 window.addEventListener('pagehide', saveNow);
 initReadAlong(() => game && game.state);
 initLang();
+// problem log: the last 30 errors (message, where, when, version), kept only on this device for grown-ups to copy into a report
+{ const log = (msg, src) => { try { const L = JSON.parse(localStorage.getItem('real.errors') || '[]'); L.push({ t: new Date().toISOString(), m: String(msg).slice(0, 300), s: String(src || '').slice(0, 160), v: 'REAL ' + (window.__REAL_VERSION || '') }); localStorage.setItem('real.errors', JSON.stringify(L.slice(-30))); } catch (e) {} };
+  addEventListener('error', (e) => log(e.message, e.filename ? `${e.filename.split('/').pop()}:${e.lineno}` : ''));
+  addEventListener('unhandledrejection', (e) => log(e.reason && (e.reason.message || e.reason), 'promise')); }
+// very weak devices (2 or fewer cores, or 2 GB or less memory) start at low graphics; they can change it in Settings
+try { if (!localStorage.getItem('real.quality') && ((navigator.hardwareConcurrency || 4) <= 2 || (navigator.deviceMemory || 4) <= 2)) engine.setQuality('low', true); } catch (e) {}
 try { if (navigator.webdriver) document.documentElement.classList.add('autotest'); } catch (e) {}   // automated tests: buttons don't slide in
 setTimeout(() => { try { loadNatural(); } catch (e) {} }, 4000);   // the recorded narrator's list (small), so the first line read is already natural
 { const tb = document.getElementById('btn-lang'); if (tb) { const lab = () => { tb.textContent = lang() === 'es' ? '🌎 English' : '🌎 Español'; }; lab(); tb.onclick = () => { setLang(lang() === 'es' ? 'en' : 'es'); lab(); }; } }
