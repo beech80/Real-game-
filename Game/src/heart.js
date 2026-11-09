@@ -8,6 +8,7 @@ import { lookup, GLOSSARY } from './glossary.js';
 import { say, stopReading } from './readalong.js';
 import { lang, skT } from './i18n.js';
 import { Voice, sampler } from './voice.js';
+import KB from './heartkb.json' with { type: 'json' };
 
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 export const LINES = {
@@ -51,8 +52,20 @@ export function heartAnswer(G, ok, { tries = 1, why = '', reason = '' } = {}) {
 const STOP = new Set('a an the is are was were be to of and or in on at for with what why how who when where which do does did can could should would you your i me my it this that these those there their about please tell explain mean means'.split(' '));
 const words = (s) => (String(s).toLowerCase().match(/[a-z]+/g) || []).filter((w) => w.length > 2 && !STOP.has(w));
 /** Heart's own answer from what the game teaches (always available, offline too) */
+/** Heart's knowledge base: the questions learners ask most, every subject (keywords match at the start of a word) */
+export function kbAnswer(question, band = 3) {
+  const q = ' ' + String(question).toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, ' ') + ' ';
+  let best = null, bs = 0;
+  for (const e of KB) {
+    const hit = e.k.filter((k) => q.includes(' ' + k)).length; if (!hit) continue;
+    const sc = hit + (hit === e.k.length ? 0.5 : 0) - Math.abs((e.band || 3) - band) * 0.05;
+    if (sc > bs) { bs = sc; best = e; }
+  }
+  return best && bs >= 0.75 ? best.a : null;
+}
 export function localAnswer(question, ctx = {}) {
   const qw = words(question); if (!qw.length) return null;
+  if (lang() !== 'es') { const kb = kbAnswer(question, ctx.band || (ctx.skill && SKILLS[ctx.skill] && SKILLS[ctx.skill].band) || 3); if (kb && !/^how do i start|hint/i.test(question)) return kb; }
   // a word they want explained
   for (const w of String(question).match(/[A-Za-z]+/g) || []) { const e = w.length > 3 && lookup(w); if (e && /mean|what is|what's|define|word/i.test(question)) return `${w} means ${e.meaning}.`; }
   // the best-matching lesson (the current skill counts extra)
