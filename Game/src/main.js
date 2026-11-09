@@ -24,6 +24,7 @@ import { schoolFromLink, enableSchool, teacherDashboard, assignFromLink, setAssi
 import { installKeyboard } from './keyboard.js';
 import { initLang, lang, setLang } from './i18n.js';
 import { voicePanel, bindVoicePanel } from './game.js';
+import { tutorialTick } from './tutorial.js';
 import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine, voiceId, loadNatural } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
@@ -290,6 +291,14 @@ async function startGameInner(state, isNew) {
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
   bindVoicePanel(() => game);
+  // the guided first minutes: one tip at a time, when it matters
+  { let last = null, moved = 0; setInterval(() => { try {
+      if (!game || mode !== 'play') return;
+      const p = player && player.pos; if (p) { if (last) moved += Math.min(2, Math.hypot(p.x - last.x, p.y - last.y)); last = { ...p }; }
+      const dialog = !document.getElementById('dialog').hidden, sheet = !!document.querySelector('#modal .modal'), activity = !!document.querySelector('#modal .modal:last-child .activity');
+      if (navigator.webdriver && !window.__tips) return;   // automated tests turn tips on themselves
+      tutorialTick({ playing: !busy(), moved, dialog, activity, phone: !!game.state.flags.phone, busyOther: sheet && !activity });
+    } catch (e) {} }, 600); }
   $('#btn-voice').onclick = () => { if (mode === 'play' && !busy()) voicePanel(); };
   $('#btn-sprint').onclick = (e) => { input.sprintLatch = !input.sprintLatch; e.currentTarget.classList.toggle('on', input.sprintLatch); };
   startLoader(true, 0.35, 'Meeting the residents…');
