@@ -5,7 +5,12 @@ const http = require('http'), fs = require('fs'), path = require('path');
 const DIST = path.join(__dirname, '..', 'dist-hosted');
 const types = { '.html': 'text/html; charset=utf-8', '.json': 'application/json', '.mp3': 'audio/mpeg' };
 const wrap = (f, b) => (f.endsWith('index.html') ? Buffer.concat([Buffer.from('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>'), b, Buffer.from('</body></html>')]) : b);
-const srv = http.createServer((q, r) => { const f = path.join(DIST, decodeURIComponent(q.url.split('?')[0])); fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(wrap(f, b)); }); }).listen(0);
+let bytesSent = 0;
+const srv = http.createServer((q, r) => { const f = path.join(DIST, decodeURIComponent(q.url.split('?')[0])); fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); }
+  const m = /bytes=(\d+)-(\d+)/.exec(q.headers.range || '');   // like real web hosts: send just the requested bytes
+  if (m) { const part = b.subarray(+m[1], +m[2] + 1); bytesSent += part.length; r.writeHead(206, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream', 'Content-Range': `bytes ${m[1]}-${m[2]}/${b.length}` }); return r.end(part); }
+  if (f.endsWith('.mp3')) bytesSent += b.length;
+  r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(wrap(f, b)); }); }).listen(0);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 (async () => {
   const man = JSON.parse(fs.readFileSync(path.join(DIST, 'voice', 'manifest.json')));
@@ -34,7 +39,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     if (!st.played) fail('a recorded sentence did not play the recording');
   }
   await ev(() => { window.__played = []; window.__synth = []; });
-  await ev(() => window.__narrate('You have 7319 apples and 4271 pears.')); await sleep(1500);
+  const before = bytesSent; await ev(() => window.__narrate('You have 7319 apples and 4271 pears.')); await sleep(4000);
+  console.log('word-by-word downloaded', Math.round((bytesSent - before) / 1024), 'KB'); if (bytesSent - before > 400 * 1024) fail('word-by-word reading downloaded too much');
   const st2 = await ev(() => ({ played: window.__played.length, synth: window.__synth.length }));
   console.log('unrecorded sentence →', JSON.stringify(st2));
   if (!st2.played || st2.synth) fail('a sentence without a whole recording should still be Heart, word by word (never the device voice)');

@@ -94,6 +94,20 @@ export function loadNatural() {
   return natLoading;
 }
 export const naturalReady = () => !!NAT;
+const CLIPS = new Map(); let noRanges = false;
+function clip([p, off, len]) {
+  const key = `${p}:${off}`;
+  if (CLIPS.has(key)) return CLIPS.get(key);
+  const whole = () => pack(p).then((buf) => buf.slice(off, off + len));
+  const pr = (noRanges || PACKS.has(p) ? whole() : fetch(`voice/p${p}.mp3`, { headers: { Range: `bytes=${off}-${off + len - 1}` } }).then((r) => {
+    if (r.status === 206) return r.arrayBuffer();
+    noRanges = true;                                   // this server sends whole files: keep the pack we just got
+    if (r.ok) { const ab = r.arrayBuffer(); PACKS.set(p, ab); return ab.then((buf) => buf.slice(off, off + len)); }
+    return whole();
+  })).catch((e) => { CLIPS.delete(key); throw e; });
+  CLIPS.set(key, pr); if (CLIPS.size > 600) CLIPS.delete(CLIPS.keys().next().value);
+  return pr;
+}
 const pack = (n) => { if (!PACKS.has(n)) PACKS.set(n, fetch(`voice/p${n}.mp3`).then((r) => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }).catch((e) => { PACKS.delete(n); throw e; })); return PACKS.get(n); };
 let natAudio = null, natTimers = [];
 function stopNatural() { natTimers.forEach(clearTimeout); natTimers = []; if (natAudio) { try { natAudio.pause(); } catch (e) {} natAudio = null; } }
@@ -139,11 +153,11 @@ function playWords(spoken, { onWord, onEnd, rate, es = false }) {
   let fin = false; const done = () => { if (fin) return; fin = true; stopNatural(); if (onEnd) onEnd(); };
   current = { done };
   const speed = Math.max(0.55, Math.min(1.35, (rate || 0.92) / 0.92 * speedMul()));
-  Promise.all([...new Set(items.map((x) => x.clip[0]))].map(pack)).then(() => {
+  Promise.all(items.map((x) => clip(x.clip))).then(() => {
     const step = async (i) => {
       if (fin) return; if (i >= items.length) return done();
-      const { clip: [p, off, len], at, pause } = items[i]; const buf = await pack(p); if (fin) return;
-      const url = URL.createObjectURL(new Blob([buf.slice(off, off + len)], { type: 'audio/mpeg' }));
+      const { at, pause } = items[i]; const bytes = await clip(items[i].clip); if (fin) return;
+      const url = URL.createObjectURL(new Blob([bytes], { type: 'audio/mpeg' }));
       const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol();
       const next = () => { URL.revokeObjectURL(url); natTimers.push(setTimeout(() => step(i + 1), pause / speed)); };
       a.onended = next; a.onerror = next;
@@ -166,9 +180,10 @@ function playNatural(spoken, { onWord, onEnd, rate, fallback, es = false }) {
   const playAt = async (i) => {
     if (fin) return; if (i >= clips.length) return done();
     const [p, off, len, ms] = clips[i];
-    let buf; try { buf = await pack(p); } catch (e) { return done(); }
+    let bytes; try { bytes = await clip(clips[i]); } catch (e) { return done(); }
     if (fin) return;
-    const url = URL.createObjectURL(new Blob([buf.slice(off, off + len)], { type: 'audio/mpeg' }));
+    if (i + 1 < clips.length) clip(clips[i + 1]).catch(() => {});   // fetch the next sentence while this one plays
+    const url = URL.createObjectURL(new Blob([bytes], { type: 'audio/mpeg' }));
     const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol();
     a.onended = () => { URL.revokeObjectURL(url); playAt(i + 1); }; a.onerror = () => { URL.revokeObjectURL(url); playAt(i + 1); };
     if (onWord) {   // light each word in turn, spread over the clip by length
