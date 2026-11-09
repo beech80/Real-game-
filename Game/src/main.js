@@ -968,6 +968,12 @@ function loop(now) {
     if (fcam.zone && zone !== fcam.zone) fcam.snap = true; fcam.zone = zone; }   // look over the shelves; near-overhead in the small back rooms
   const mv = input && input.move; fcam.follow = playing && mv && mv.y > 0.2 && Math.hypot(mv.x, mv.y) > 0.3 ? player.heading : null;
   fcam.update(dt, focus, playing ? input : null, IR ? 5.6 : apt || club || (inFreshMart(player.pos) ? 4.6 : false));
+  // nobody blocks your view: characters standing between the camera and you fade out of the way
+  { const cp = camera.position, tp = fcam.target, seg = tp.clone().sub(cp), L2 = seg.lengthSq() || 1;
+    const roots = [...Object.values(npcs).map((n) => n && n.ch && n.ch.root), ...peds.map((p) => p && p.ch && p.ch.root), ...members.map((m) => m && (m.root || (m.ch && m.ch.root)))];
+    for (const r of roots) { if (!r || r === player.ch.root) continue; const v = r.position.clone().add(new THREE.Vector3(0, 0.9, 0)), t = Math.max(0, Math.min(1, v.clone().sub(cp).dot(seg) / L2)), near = cp.clone().addScaledVector(seg, t).distanceTo(v);
+      const block = t < 0.92 && near < 0.75;
+      if (block && !r.userData.camHidden && r.visible) { r.userData.camHidden = true; r.visible = false; } else if (!block && r.userData.camHidden) { r.userData.camHidden = false; r.visible = true; } } }   // only un-hide what this hid
   engine.setTime(IR ? 12.5 : apt ? Math.min(Math.max(s.time, 6), 23.9) : s.time % 24, apt ? new THREE.Vector3(0, -500, 0) : focus);
   if (IR) { engine.sun.intensity *= 0.4; engine.renderer.toneMappingExposure *= 0.9; }
   if (IR && IR.npc) IR.npc.update(dt, player.pos, camera.position);
@@ -1018,7 +1024,7 @@ function loop(now) {
     UI.objective(fcam.mode === 'follow' ? obj.text : null, dist);
     if (target) { beacon.visible = dist > 2.2; beacon.position.copy(P2W(target.x, target.y, apt ? -500 : target.y < WILD.edge ? wildHeight(target.x, target.y) : 0.14)); beacon.userData.ring.scale.setScalar(1 + Math.sin(t * 3) * 0.12); }
     else beacon.visible = false;
-    UI.taskPanel(s.quest === 'shift' ? 'JOB PROGRESS' : null, s.quest === 'shift' ? game.taskRows() : null, s.quest === 'shift' ? (s.job ? s.job.rate * s.job.hours : 60) : undefined);
+    UI.taskPanel(s.quest === 'shift' ? 'Today’s jobs' : null, s.quest === 'shift' ? game.taskRows() : null, s.quest === 'shift' ? (s.job ? s.job.rate * s.job.hours : 60) : undefined);
     nearest = busy() ? null : findInteraction();
     UI.interact(nearest ? nearest.label : null);
     if (DD) minimap.drawPlan(DD, player.pos, player.heading, target, DD.peds.map((p) => p.pos));

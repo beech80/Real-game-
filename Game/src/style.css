@@ -604,3 +604,31 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .breath { width: 120px; height: 120px; margin: 16px auto; border-radius: 50%; background: radial-gradient(circle, #8fd3ff, #2a9fd6); transform: scale(.6); transition: transform 4s ease-in-out; }
 .breath.in, .breath.hold { transform: scale(1); } .breath.out, .breath.hold2 { transform: scale(.6); }
 @media (prefers-reduced-motion: reduce) { .breath { transition: none; } }
+
+/* ===== clean HUD: one left column (money · goal · jobs), small map and buttons on the right ===== */
+.hud-left { position: absolute; left: max(10px, env(safe-area-inset-left)); top: max(10px, env(safe-area-inset-top)); display: flex; flex-direction: column; align-items: flex-start; gap: 8px; max-width: min(440px, calc(100vw - 130px)); pointer-events: none; }
+.hud-left > * { position: static !important; transform: none !important; left: auto !important; top: auto !important; max-width: 100% !important; }
+.hud-left .hud-tl, .hud-left .taskpanel { pointer-events: auto; }
+.hud-tl { padding: 6px 12px 8px; min-width: 0; }
+.hud-money { font-size: 22px; line-height: 1.1; }
+.hud-when { font-size: 13px; letter-spacing: .04em; text-transform: none; }
+.hud-tl .bars { margin-top: 5px; gap: 3px; width: 120px; }
+.hud-tl .bar-row { font-size: 11px; gap: 5px; }
+.hud-tl .meter { height: 6px; }
+.objective { width: auto; font-size: 16px; line-height: 1.3; padding: 8px 12px; font-weight: 600; }
+.objective #obj-text { overflow-wrap: anywhere; }
+.taskpanel { width: auto; padding: 0; font-size: 15px; pointer-events: auto; overflow: hidden; }
+.tp-chip { display: flex; align-items: center; gap: 8px; padding: 7px 12px; min-height: 38px; background: none; border: 0; color: var(--cream); font: inherit; font-weight: 600; cursor: pointer; width: 100%; text-align: left; }
+.tp-chip b { color: var(--gold-2); font-variant-numeric: tabular-nums; }
+.tp-chip .tp-chip-earn { color: var(--green); font-variant-numeric: tabular-nums; margin-left: auto; }
+.tp-chip i { font-style: normal; color: var(--muted); }
+.tp-rows { padding: 2px 12px 10px; border-top: 1px solid rgba(255,255,255,.08); }
+.tp-row { font-size: 15px; padding: 3px 0; }
+.tp-earn small { letter-spacing: .02em; font-size: 12px; text-transform: none; }
+.tp-earn b { font-size: 20px; }
+#minimap { width: clamp(76px, 20vw, 120px); }
+.phone-btn { width: 46px; height: 46px; font-size: 23px; border-radius: 14px; }
+.voice-btn { margin-top: 0; }
+@media (max-width: 720px) and (orientation: portrait) { .objective { font-size: 15px; } .toasts { top: auto !important; bottom: calc(max(12px, env(safe-area-inset-bottom)) + 150px); } }
+@media (max-height: 500px) and (orientation: landscape) { .hud-left { max-width: calc(100vw - 2 * 150px); } .objective { font-size: 14px; } }
+#hud.prologue .hud-left .hud-tl, #hud.prologue .hud-left .taskpanel { display: none; }

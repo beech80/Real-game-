@@ -89,10 +89,14 @@ export class FollowCamera {
     // walking: ease back behind the player unless they've just turned the camera themselves
     if (this.follow != null && now - (this.lastLook || 0) > 1500) {
       const dy = Math.atan2(Math.sin(-this.follow - this.yaw), Math.cos(-this.follow - this.yaw));
-      if (Math.abs(dy) < 2.3) this.yaw += dy * Math.min(1, dt * 1.1);
+      if (Math.abs(dy) < 2.3) this.yaw += dy * Math.min(1, dt * 1.4);
     }
-    const d = indoor ? Math.min(this.dist, typeof indoor === 'number' ? indoor : 3.6) : this.dist;
-    this.target.copy(focus).add(new THREE.Vector3(0, 1.15, 0));
+    const portrait = this.cam.aspect < 1;   // tall phone screens: step back a little outdoors so you see around you
+    const d = indoor ? Math.min(this.dist, typeof indoor === 'number' ? indoor : 3.6) : this.dist * (portrait ? 1.12 : 1);
+    // glide the look-at point instead of snapping to every footstep: steady, smooth camera on slow phones too
+    const goal = focus.clone().add(new THREE.Vector3(0, 1.15, 0));
+    if (!this.tSm || this.snap || this.tSm.distanceTo(goal) > 6) this.tSm = goal.clone(); else this.tSm.lerp(goal, 1 - Math.exp(-dt * 14));
+    this.target.copy(this.tSm);
     // some spaces need a higher view (over shelves): ease toward it without overwriting the player's own tilt
     this.pitchNow = this.pitchNow == null ? this.pitch : this.pitchNow + (Math.max(this.pitch, this.minPitch || 0) - this.pitchNow) * Math.min(1, dt * 6);
     const pitch = this.pitchNow;

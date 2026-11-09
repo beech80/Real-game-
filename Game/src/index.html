@@ -62,6 +62,7 @@
 
   <!-- HUD -->
   <section id="hud" hidden>
+    <div class="hud-left">
     <div class="hud-tl glass">
       <div class="hud-money" id="hud-money">$100.00</div>
       <div class="hud-when"><span id="hud-day">Day 1</span> · <span id="hud-time">8:00 AM</span></div>
@@ -70,13 +71,14 @@
         <div class="bar-row"><span>🍎</span><div id="bar-hunger" class="meter food"></div></div>
       </div>
     </div>
+    <div id="objective" class="objective glass" hidden><span class="crown">♛</span><span id="obj-text"></span><b id="obj-dist"></b><button id="obj-say" class="say-btn" aria-label="Read my goal to me">🔊</button></div>
+    <div id="taskpanel" class="taskpanel glass" hidden></div>
+    </div>
     <div class="hud-tr">
       <canvas id="minimap" width="240" height="240"></canvas>
       <button id="btn-phone" class="phone-btn" aria-label="Open phone">📱</button>
       <button id="btn-voice" class="phone-btn voice-btn" aria-label="Reading voice">🗣️</button>
     </div>
-    <div id="objective" class="objective glass" hidden><span class="crown">♛</span><span id="obj-text"></span><b id="obj-dist"></b><button id="obj-say" class="say-btn" aria-label="Read my goal to me">🔊</button></div>
-    <div id="taskpanel" class="taskpanel glass" hidden></div>
     <div id="joy-base" class="joy-base"><div id="joy-knob" class="joy-knob"></div></div>
     <button id="btn-sprint" class="sprint-btn" aria-label="Toggle run">RUN</button>
     <button id="btn-interact" class="interact-btn" hidden><span class="i-key">E</span><span id="interact-label">Interact</span></button>

@@ -63,9 +63,15 @@ export const UI = {
     const E = this.els;
     if (!rows) { E.task.hidden = true; return; }
     E.task.hidden = false;
-    fill(E.task, h('div', { class: 'tp-title' }, title),
-      ...rows.map((r) => h('div', { class: 'tp-row' + (r.done >= r.need ? ' done' : '') }, h('span', { class: 'tp-check' }, r.done >= r.need ? '✓' : ''), h('span', { class: 'tp-label' }, r.label), h('span', { class: 'tp-n' }, `${Math.min(r.done, r.need)}/${r.need}`))),
-      earn !== undefined ? h('div', { class: 'tp-earn' }, h('small', {}, "TODAY'S EARNINGS"), h('b', {}, money(earn))) : null);
+    const done = rows.reduce((a, r) => a + Math.min(r.done, r.need), 0), need = rows.reduce((a, r) => a + r.need, 0);
+    if (this._taskDone !== undefined && done > this._taskDone) { this._taskOpen = true; clearTimeout(this._taskT); this._taskT = setTimeout(() => { this._taskOpen = false; this._taskKey = ''; this.taskPanel(title, rows, earn); }, 4500); }   // a task finished: show the list for a moment
+    this._taskDone = done;
+    const key = [title, done, need, earn, this._taskOpen].join('|'); if (key === this._taskKey) return; this._taskKey = key;
+    E.task.classList.toggle('open', !!this._taskOpen);
+    fill(E.task, h('button', { class: 'tp-chip', 'aria-expanded': this._taskOpen ? 'true' : 'false', onclick: () => { this._taskOpen = !this._taskOpen; this._taskKey = ''; clearTimeout(this._taskT); this.taskPanel(title, rows, earn); } },
+        h('span', {}, '📋 ' + title), h('b', {}, `${done}/${need}`), earn !== undefined ? h('span', { class: 'tp-chip-earn' }, money(earn)) : null, h('i', {}, this._taskOpen ? '▾' : '▸')),
+      this._taskOpen ? h('div', { class: 'tp-rows' }, ...rows.map((r) => h('div', { class: 'tp-row' + (r.done >= r.need ? ' done' : '') }, h('span', { class: 'tp-check' }, r.done >= r.need ? '✓' : ''), h('span', { class: 'tp-label' }, r.label), h('span', { class: 'tp-n' }, `${Math.min(r.done, r.need)}/${r.need}`))),
+        earn !== undefined ? h('div', { class: 'tp-earn' }, h('small', {}, 'Money made today'), h('b', {}, money(earn))) : null) : null);
   },
   interact(label) {
     const E = this.els;

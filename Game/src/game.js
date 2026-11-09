@@ -104,33 +104,33 @@ export class Game {
     const s = this.state, q = s.quest;
     const T = (text, target) => ({ text, target });
     switch (q) {
-      case 'prologue_walk': return T('You’ve been summoned. Walk to the Council Room.', 'CLUB_COUNCIL');
+      case 'prologue_walk': return T('The Council wants to see you. Walk to the Council Room.', 'CLUB_COUNCIL');
       case 'find_way': return T(s.flags.readFirstSign ? 'Follow the road toward the city' : 'FIND YOUR WAY', s.flags.readFirstSign ? null : 'WILD_SIGN');
-      case 'find_help': return T('Find help: the Community Center (housing & jobs) on Main St', 'NPC_Counselor');
-      case 'job': return T('Fresh Mart is hiring. Talk to the manager.', 'NPC_Manager_Idle');
-      case 'clockin': return T('Clock in at the time clock (back room)', 'Interact_TimeClock');
+      case 'find_help': return T('Go to the Community Center on Main St. They can help you.', 'NPC_Counselor');
+      case 'job': return T('Fresh Mart needs a worker. Talk to Rosa, the boss.', 'NPC_Manager_Idle');
+      case 'clockin': return T('Start your shift: tap the time clock in the back room', 'Interact_TimeClock');
       case 'shift': {
         const sh = s.shift; if (!sh) return T('Great work today!', null);
-        if (sh.register < sh.need.register) return T(`Serve customers at Register 1 (${sh.register}/${sh.need.register})`, 'Interact_Register_01');
+        if (sh.register < sh.need.register) return T(`Help shoppers at the register (${sh.register}/${sh.need.register})`, 'Interact_Register_01');
         if (sh.stock < sh.need.stock) return T(`Stock the shelf: ${sh.product[0]} ${sh.product[2]}. Find the right aisle.`, null);
-        if (sh.inv < sh.need.inv) return T('Count the inventory in the stockroom', 'Interact_InventoryCount');
-        return T('Shift done! See the manager for your pay', 'NPC_Manager_Idle');
+        if (sh.inv < sh.need.inv) return T('Count the boxes in the back room', 'Interact_InventoryCount');
+        return T('All done! Go see Rosa to get paid', 'NPC_Manager_Idle');
       }
-      case 'jax1': return T('Your first paycheck. Walk down Main St.', 'NPC_Jax');
+      case 'jax1': return T('You got paid! Take a walk down Main St.', 'NPC_Jax');
       case 'home': {
         const food = Object.values(s.pantry || {}).some((n) => n > 0);
-        if (!s.flags.ate && !food) return T('Your fridge is empty. Get a meal at the Main St Diner (or groceries at Fresh Mart)', s.location === 'apartment' ? 'Interact_ExitDoor' : 'Door_Diner');
+        if (!s.flags.ate && !food) return T('Your fridge is empty. Eat at the Diner, or buy food at Fresh Mart', s.location === 'apartment' ? 'Interact_ExitDoor' : 'Door_Diner');
         // sleeping only works in the evening: before then, the goal suggests what to do with free time instead
-        if (s.flags.ate && s.flags.billsSeen && s.time < 19 && s.energy > 40) return T('Free time until tonight: practise in 📚 Learn, jog in Brighter Park, or relax. Sleep after 7 PM', s.location === 'apartment' ? 'Interact_ExitDoor' : 'Interact_ParkJog');
+        if (s.flags.ate && s.flags.billsSeen && s.time < 19 && s.energy > 40) return T('Free time! Learn in 📚, jog in the park, or rest. Go to bed after 7 PM', s.location === 'apartment' ? 'Interact_ExitDoor' : 'Interact_ParkJog');
         return s.location === 'apartment' ? T(s.flags.ate ? (s.flags.billsSeen ? 'Get some sleep' : 'Check your bills at the desk') : 'Eat something (fridge)', s.flags.ate ? (s.flags.billsSeen ? 'Interact_Sleep' : 'Interact_Bills') : 'Interact_Fridge')
-        : T('Buy groceries (optional), then go home to The Starter Apartments', 'Door_ApartmentLobby');
+        : T('Buy food if you want, then go home to your apartment', 'Door_ApartmentLobby');
       }
       case 'invite': return s.location === 'apartment' ? T('The Club has invited you back. Head out to the bus stop.', 'Interact_ExitDoor') : T('The Club has invited you back. Take the bus to The Club.', 'Interact_BusStop');
       default: {
         if (s.hunger < 22 && s.chapter !== 'prologue') {   // starving: eating comes first, with an arrow to food
           const food = Object.values(s.pantry || {}).some((n) => n > 0);
           if (s.location === 'apartment') return T(food ? 'You’re very hungry. Eat something from the fridge' : 'You’re very hungry and the fridge is empty. Get a meal at the Main St Diner', food ? 'Interact_Fridge' : 'Interact_ExitDoor');
-          return T('You’re very hungry. Get a meal at the Main St Diner (or eat at home)', 'Door_Diner');
+          return T('You’re very hungry! Eat at the Diner or at home', 'Door_Diner');
         }
         if (s.location === 'apartment') return T(s.time > 20 ? 'Get some sleep' : 'Head out and live your day', s.time > 20 ? 'Interact_Sleep' : 'Interact_ExitDoor');
         if (s.mission) return T(`${s.mission.text}${s.mission.loc !== s.location ? ' (' + ({ district: 'Starting District', midtown: 'Midtown', opportunity: 'Opportunity District', heights: 'The Heights' })[s.mission.loc] + ')' : ''}`, 'MISSION');
@@ -296,7 +296,7 @@ export class Game {
   shiftComplete() { const sh = this.state.shift; return sh && sh.register >= sh.need.register && sh.stock >= sh.need.stock && sh.inv >= sh.need.inv; }
   taskRows() {
     const sh = this.state.shift; if (!sh) return null;
-    return [{ label: 'Help customers', done: sh.register, need: sh.need.register }, { label: 'Stock shelves', done: sh.stock, need: sh.need.stock }, { label: 'Count inventory', done: sh.inv, need: sh.need.inv }];
+    return [{ label: 'Help shoppers', done: sh.register, need: sh.need.register }, { label: 'Fill the shelves', done: sh.stock, need: sh.need.stock }, { label: 'Count the boxes', done: sh.inv, need: sh.need.inv }];
   }
   async registerTask() { const r = await A.register(this); if (r && r.ok) { this.state.shift.register++; this.advance(0.5); this.save(); } }
   async stockTask(aisle) {
