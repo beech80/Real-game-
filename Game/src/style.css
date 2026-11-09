@@ -661,3 +661,38 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .vol-row input[type=range] { width: 100%; accent-color: var(--gold); height: 28px; }
 .vol-row small { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
 .autotest #title .title-actions > * { animation: none !important; }
+
+/* ===== celebrations ===== */
+.celebrate { position: fixed; inset: 0; z-index: 70; pointer-events: none; display: grid; place-items: center; }
+.celebrate.out { opacity: 0; transition: opacity .5s; }
+.cel-card { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 22px; max-width: min(360px, 88vw); text-align: center; background: linear-gradient(160deg, #26306a, #1a1f45); border: 2px solid var(--gold); border-radius: 22px; box-shadow: 0 20px 60px rgba(0,0,0,.55), 0 0 40px rgba(233,169,58,.35); animation: celPop .55s cubic-bezier(.2,1.6,.4,1) both; }
+.cel-card b { font-family: var(--f-head); font-size: 24px; color: var(--gold-2); line-height: 1.15; }
+.cel-card small { font-size: 16px; color: #fff; line-height: 1.35; }
+.cel-burst { font-size: 48px; animation: celSpin 1.2s ease-out both; }
+.celebrate.big .cel-card b { font-size: 30px; }
+@keyframes celPop { from { transform: scale(.4); opacity: 0; } }
+@keyframes celSpin { from { transform: rotate(-180deg) scale(.2); } }
+.confetti { position: absolute; inset: 0; overflow: hidden; }
+.confetti i { position: absolute; top: -12px; width: 9px; height: 14px; border-radius: 2px; animation: fall linear both; }
+@keyframes fall { to { transform: translateY(105vh) rotate(720deg); } }
+@media (prefers-reduced-motion: reduce) { .confetti { display: none; } .cel-card, .cel-burst { animation: none; } }
+/* ===== trophies app ===== */
+.goals { display: flex; flex-direction: column; gap: 6px; }
+.goal { display: grid; grid-template-columns: 26px 1fr auto; gap: 6px; align-items: center; padding: 8px 10px; border-radius: 12px; background: rgba(255,255,255,.06); font-size: 16px; }
+.goal.done { background: rgba(63,191,122,.18); }
+.cal-h { font-family: var(--f-head); text-align: center; margin: 10px 0 4px; text-transform: capitalize; }
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.cal b { font-size: 11px; color: var(--muted); }
+.cal-c { font-style: normal; padding: 6px 0; border-radius: 8px; background: rgba(255,255,255,.05); font-size: 13px; }
+.cal-c.on { background: rgba(233,111,60,.3); } .cal-c.today { outline: 2px solid var(--gold); } .cal-c.empty { background: none; }
+.stickers { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; }
+.stk { display: grid; place-items: center; height: 44px; border-radius: 12px; background: rgba(255,255,255,.05); font-size: 24px; color: var(--muted); }
+.stk.got { background: rgba(233,169,58,.18); }
+.unlocks { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.unl { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px; border-radius: 12px; background: rgba(255,255,255,.05); opacity: .7; text-align: center; }
+.unl.got { opacity: 1; outline: 2px solid var(--gold); } .unl i { width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(255,255,255,.3); }
+.unl small { color: var(--muted); font-size: 12px; }
+.badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+.badge { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 6px; border-radius: 12px; background: rgba(255,255,255,.04); text-align: center; opacity: .55; }
+.badge.got { opacity: 1; background: rgba(233,169,58,.14); }
+.badge span { font-size: 26px; } .badge small { font-weight: 600; font-size: 12.5px; line-height: 1.2; } .badge i { font-style: normal; font-size: 11px; color: var(--muted); line-height: 1.2; }

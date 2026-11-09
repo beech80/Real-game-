@@ -6,6 +6,7 @@ import { runActivity } from './learnkit.js';
 import { markWords, talkLog, SPEEDS, speedName, setSpeed, say as sayIt, loadNatural, readToMe, setReadToMe } from './readalong.js';
 import { familyView } from './family.js';
 import { toolbox } from './toolbox.js';
+import { celebrate, trophiesApp } from './rewards.js';
 import { tipsOff, setTips } from './tutorial.js';
 import { heartOn, setHeart, askHeart } from './heart.js';
 import { LANGS, lang, setLang } from './i18n.js';
@@ -51,12 +52,12 @@ export class Game {
   life() { return lifeLevel(this.state, this.edu); }
   onSkill(sk, st) {
     if (st >= 3) UI.toast(`${SUBJECTS[sk.subj].icon} ${sk.name}: ${STATES[st]}`, st >= 4 ? 'gold' : 'good', 3000);
-    if (st === 4) { this.sfx('level'); if (this.edu.masteredCount() >= 5) this.achieve('mastered5'); }
+    if (st === 4) { celebrate(this, `${SUBJECTS[sk.subj].icon} ${sk.name}: mastered!`, 'You know this one for good.'); if (this.edu.masteredCount() >= 5) this.achieve('mastered5'); }
   }
   achieve(id) {
     const s = this.state; if (s.achievements[id]) return;
     s.achievements[id] = s.day; this.sfx('level');
-    UI.toast(`🏆 ${ACHIEVEMENTS[id][0]}`, 'gold', 3500);
+    celebrate(this, `🏆 ${ACHIEVEMENTS[id][0]}`, ACHIEVEMENTS[id][1]);
   }
   befriend(n, v = 1) { this.state.friends[n] = (this.state.friends[n] || 0) + v; }
   spend(amt, desc) { const s = this.state; s.money = Math.round((s.money - amt) * 100) / 100; s.stats.spent += amt; s.bank.unshift({ day: s.day, desc, amt: -amt }); }
@@ -576,7 +577,7 @@ export function openPhone(G) {
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Talks', '🗨️', '#7a4fd2'], ['Toolbox', '🧰', '#d2552f'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
+      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Talks', '🗨️', '#7a4fd2'], ['Toolbox', '🧰', '#d2552f'], ['Trophies', '🏆', '#c9a227'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -666,6 +667,7 @@ export function openPhone(G) {
         Words: () => A.myWords(G),
         Talks: () => talkLog(),
         Toolbox: () => toolbox(G, A.PRACTICE, close),
+        Trophies: () => trophiesApp(G),
         Assignment: () => assignmentView(G, async (what, id) => {
           const As = s.assign; close();
           if (what === 'skill') { const r = await runActivity(G, () => ({ skill: id, ...A.PRACTICE[id]() }), 'assignment', As.n, '📋'); if (r && r.ok && As.pre) { As.practice = As.practice || {}; As.practice[id] = (As.practice[id] || 0) + 1; G.save(); } return; }

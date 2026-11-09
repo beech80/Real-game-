@@ -25,6 +25,7 @@ import { installKeyboard } from './keyboard.js';
 import { initLang, lang, setLang } from './i18n.js';
 import { voicePanel, bindVoicePanel } from './game.js';
 import { tutorialTick } from './tutorial.js';
+import { checkDaily, unlockOutfits, celebrate, addUnlockJackets } from './rewards.js';
 import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine, voiceId, loadNatural } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
@@ -292,6 +293,13 @@ async function startGameInner(state, isNew) {
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
   bindVoicePanel(() => game);
+  addUnlockJackets(JACKETS);
+  // rewards: daily goals, unlocks, and a celebration when your Life Level goes up
+  { let lastLevel = null; setInterval(() => { try {
+      if (!game || mode !== 'play' || busy()) return;
+      checkDaily(game); unlockOutfits(game);
+      const lv = game.life().level; if (lastLevel != null && lv > lastLevel) celebrate(game, `Life Level ${lv}!`, 'You are growing. New places and jobs open up.', { big: true }); lastLevel = lv;
+    } catch (e) {} }, 3000); }
   // the soundtrack follows you: district, indoors, night, lessons; footsteps as you walk; a soft whoosh for screens
   { let lastP = null, walked = 0, sheets = 0; setInterval(() => { try {
       if (!game || mode !== 'play' || !audio.ctx) return;
