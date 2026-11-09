@@ -6,6 +6,7 @@ import { runActivity } from './learnkit.js';
 import { askHeart, heartOn } from './heart.js';
 import { say, stopReading } from './readalong.js';
 import { lookup } from './glossary.js';
+import { lang } from './i18n.js';
 
 const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
 
@@ -61,10 +62,16 @@ export function steps(a, op, b) {
     return { ans: +(A / B).toFixed(4), steps: [`Share ${A} into ${B} equal groups.`, `${B} × ${q} = ${B * q}, so each group gets ${q}${r ? ` with ${r} left over` : ''}.`, r ? `As a decimal: ${A} ÷ ${B} ≈ ${+(A / B).toFixed(4)}` : `${A} ÷ ${B} = ${q}`] }; }
   return { ans: null, steps: [] };
 }
+// the calculator's steps in Spanish
+const ES_STEPS = [[/ten-thousands/g, 'decenas de millar'], [/hundred-thousands/g, 'centenas de millar'], [/\bthousands\b/g, 'millares'], [/\bhundreds\b/g, 'centenas'], [/\btens\b/g, 'decenas'], [/\bones\b/g, 'unidades'], 
+  [/ \+ 1 carried/g, ' + 1 que llevas'], [/→ write (\d+), carry 1/g, '→ escribe $1, llevas 1'], [/Write the last carried 1 in front\./g, 'Escribe el 1 que llevas al frente.'], [/(\S+) is less than (\S+), so borrow 1 from the next place:/g, '$1 es menor que $2, así que pide 1 prestado al siguiente lugar:'],
+  [/(\d+) groups of (\d+)\./g, '$1 grupos de $2.'], [/Split it:/g, 'Sepáralo:'], [/Share (\S+) into (\S+) equal groups\./g, 'Reparte $1 en $2 grupos iguales.'], [/so each group gets (\S+) with (\S+) left over\./g, 'así que a cada grupo le tocan $1 y sobran $2.'], [/so each group gets (\S+)\./g, 'así que a cada grupo le tocan $1.'],
+  [/As a decimal:/g, 'En decimal:'], [/Line up the decimal points\./g, 'Alinea los puntos decimales.'], [/(\S+) is bigger than (\S+), so the answer is below zero:/g, '$1 es mayor que $2, así que la respuesta es menor que cero:'], [/You can’t divide by zero: there’s no way to share into zero groups\./g, 'No se puede dividir entre cero: no hay forma de repartir en cero grupos.'], [/Type two numbers\./g, 'Escribe dos números.'], [/next place/g, 'siguiente lugar']];
+export const stepText = (t) => (lang() === 'es' ? ES_STEPS.reduce((a, [re, r]) => a.replace(re, r), t) : t);
 function calculator() {
   const a = h('input', { class: 'writebox calc-in', inputmode: 'decimal', placeholder: 'First number' }), b = h('input', { class: 'writebox calc-in', inputmode: 'decimal', placeholder: 'Second number' });
   let op = '+'; const ops = h('div', { class: 'row' }), out = h('div', { class: 'calc-out' });
-  const go = () => { const r = steps(a.value.replace(/[$,]/g, ''), op, b.value.replace(/[$,]/g, '')); out.replaceChildren(...(r.ans != null ? [h('p', { class: 'smh-ans' }, `= ${r.ans}`)] : []), h('ol', { class: 'smh-steps readable' }, ...r.steps.map((t) => h('li', {}, t)))); };
+  const go = () => { const r = steps(a.value.replace(/[$,]/g, ''), op, b.value.replace(/[$,]/g, '')); out.replaceChildren(...(r.ans != null ? [h('p', { class: 'smh-ans' }, `= ${r.ans}`)] : []), h('ol', { class: 'smh-steps readable' }, ...r.steps.map((t) => h('li', {}, stepText(t))))); };
   const drawOps = () => ops.replaceChildren(...['+', '−', '×', '÷'].map((o) => h('button', { class: o === op ? 'primary sm' : 'ghost sm', onclick: () => { op = o; drawOps(); go(); } }, o)));
   drawOps(); a.oninput = go; b.oninput = go;
   return h('div', { class: 'act' }, h('p', { class: 'lead' }, 'A calculator that shows how. Check your work, or see the steps for a money problem.'), a, ops, b, out,
