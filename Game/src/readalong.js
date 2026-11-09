@@ -39,6 +39,7 @@ try { pickVoice(); speechSynthesis.addEventListener('voiceschanged', pickVoice);
 export function voiceChoices(want = 'en') { pickVoice(); return allVoices.filter((v) => new RegExp('^' + want, 'i').test(v.lang) && !BAD.test(v.name)).sort((a, b) => score(b, want) - score(a, want)).slice(0, 8); }
 export function currentVoice(want = 'en') { pickVoice(); return want === 'es' ? esVoice : voice; }
 export function setVoice(name, want = 'en') { try { localStorage.setItem(want === 'es' ? 'real.voiceEs' : 'real.voice', name); } catch (e) {} pickVoice(); }
+const voiceVol = () => { try { const v = JSON.parse(localStorage.getItem('real.vol') || '{}').voice; return v == null ? 1 : Math.max(0, Math.min(1, v)); } catch (e) { return 1; } };
 export const SPEEDS = [['slow', 'Slower', 0.78], ['normal', 'Normal', 0.92], ['fast', 'Faster', 1.08]];
 export const speedName = () => pref('real.voiceSpeed', 'normal');
 export function setSpeed(k) { try { localStorage.setItem('real.voiceSpeed', k); } catch (e) {} }
@@ -143,7 +144,7 @@ function playWords(spoken, { onWord, onEnd, rate, es = false }) {
       if (fin) return; if (i >= items.length) return done();
       const { clip: [p, off, len], at, pause } = items[i]; const buf = await pack(p); if (fin) return;
       const url = URL.createObjectURL(new Blob([buf.slice(off, off + len)], { type: 'audio/mpeg' }));
-      const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true;
+      const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol();
       const next = () => { URL.revokeObjectURL(url); natTimers.push(setTimeout(() => step(i + 1), pause / speed)); };
       a.onended = next; a.onerror = next;
       if (onWord && (i === 0 || items[i - 1].at !== at)) onWord(at);
@@ -168,7 +169,7 @@ function playNatural(spoken, { onWord, onEnd, rate, fallback, es = false }) {
     let buf; try { buf = await pack(p); } catch (e) { return done(); }
     if (fin) return;
     const url = URL.createObjectURL(new Blob([buf.slice(off, off + len)], { type: 'audio/mpeg' }));
-    const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true;
+    const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol();
     a.onended = () => { URL.revokeObjectURL(url); playAt(i + 1); }; a.onerror = () => { URL.revokeObjectURL(url); playAt(i + 1); };
     if (onWord) {   // light each word in turn, spread over the clip by length
       const words = [...sents[i].matchAll(/\S+/g)], total = sents[i].length || 1, dur = (ms || 1500) / speed;
@@ -217,7 +218,7 @@ export function say(text, { rate = 0.92, onWord, onEnd, en = false, raw = false 
   pieces.forEach((piece, i) => {
     const u = new SpeechSynthesisUtterance(piece), off = base; base += piece.length + 1;
     if (spanish) { u.lang = (esVoice && esVoice.lang) || 'es-US'; if (esVoice) u.voice = esVoice; } else { u.lang = (voice && voice.lang) || 'en-US'; if (voice) u.voice = voice; }
-    u.rate = Math.max(0.5, Math.min(1.6, rate * speedMul())); u.pitch = 1;
+    u.rate = Math.max(0.5, Math.min(1.6, rate * speedMul())); u.pitch = 1; u.volume = voiceVol();
     if (onWord) u.onboundary = (e) => { if (e.name === 'word' || e.name === undefined) onWord(off + e.charIndex); };
     if (i === pieces.length - 1) { u.onend = done; u.onerror = done; } else u.onerror = done;
     try { speechSynthesis.speak(u); } catch (e) { done(); }

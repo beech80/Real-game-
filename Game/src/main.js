@@ -59,6 +59,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) saveN
 window.addEventListener('pagehide', saveNow);
 initReadAlong(() => game && game.state);
 initLang();
+try { if (navigator.webdriver) document.documentElement.classList.add('autotest'); } catch (e) {}   // automated tests: buttons don't slide in
 setTimeout(() => { try { loadNatural(); } catch (e) {} }, 4000);   // the recorded narrator's list (small), so the first line read is already natural
 { const tb = document.getElementById('btn-lang'); if (tb) { const lab = () => { tb.textContent = lang() === 'es' ? '🌎 English' : '🌎 Español'; }; lab(); tb.onclick = () => { setLang(lang() === 'es' ? 'en' : 'es'); lab(); }; } }
 addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); window.__installPrompt = e; });   // offer Install from Settings › Play offline
@@ -80,7 +81,7 @@ document.getElementById('obj-say').onclick = (e) => { e.stopPropagation(); readE
 UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.ask({ prompt: q }); if (!said) return null; UI.toast(`Heard “${said}” — checking…`, 'info', 1600); const i = await Brain.pick(q, choices, said); if (i == null) UI.toast(`I heard “${said}”. Which answer did you mean? Tap it, or say it again.`, 'info', 4200); return i; } };
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
-try { if (navigator.webdriver) { window.__scene = scene; window.__narrate = (t) => sayText(t); window.__voiceId = (k) => voiceId(k); } } catch (e) {}   // automated tests only
+try { if (navigator.webdriver) { window.__scene = scene; window.__audio = audio; window.__player = () => player; window.__narrate = (t) => sayText(t); window.__voiceId = (k) => voiceId(k); } } catch (e) {}   // automated tests only
 
 const W = { district: null, apartment: null, wild: null, club: null, data: null, lamps: [], d: {}, rooms: {} };
 let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60, mini = null, race = null, petCourse = null, arena = null, markT = 0;
@@ -279,7 +280,7 @@ async function startGameInner(state, isNew) {
     jaxLeave: () => { if (npcs.Jax) npcs.Jax.hidden = true; },
     goToClub: () => invitation(),
     JACKETS, quality: () => engine.quality, setQuality: (q) => engine.setQuality(q),
-    toggleSound: () => audio.toggle(), soundOn: () => audio.on, applyA11y: (st) => applyA11y(st),
+    toggleSound: () => audio.toggle(), soundOn: () => audio.on, vol: () => audio.vol(), setVol: (k, v) => audio.setVol(k, v), applyA11y: (st) => applyA11y(st),
     race: (trk, build, opts) => runMini('race', trk, build, opts), petRace: (p, care, tier) => runMini('pet', p, care, tier), robotRun: (lv, build, prog) => runMini('robot', lv, build, prog),
     travel: (loc) => travelTo(loc), enterBuilding: (loc, pt) => enterBuilding(loc, pt), refreshWorld: () => refreshWorld(), petTrick: () => { if (pet) pet.trick = 1; },
     DISTRICTS, HOMES, VEHICLES, PET_TYPES, WORK, CAREERS, COURSES,
@@ -291,6 +292,15 @@ async function startGameInner(state, isNew) {
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
   bindVoicePanel(() => game);
+  // the soundtrack follows you: district, indoors, night, lessons; footsteps as you walk; a soft whoosh for screens
+  { let lastP = null, walked = 0, sheets = 0; setInterval(() => { try {
+      if (!game || mode !== 'play' || !audio.ctx) return;
+      const s = game.state, t = s.time % 24, lesson = !!document.querySelector('#modal .modal .activity');
+      const where = s.chapter === 'prologue' || s.location === 'club' ? 'club' : s.location === 'apartment' || s.location === 'interior' || (player && inFreshMart(player.pos)) ? 'indoor' : player && inWild(player.pos) ? 'wild' : s.location === 'midtown' ? 'midtown' : s.location === 'heights' ? 'heights' : 'city';
+      audio.setMood(lesson ? 'lesson' : (t >= 20 || t < 6) && where !== 'club' && where !== 'indoor' ? 'night' : where);
+      const n = document.querySelectorAll('#modal .modal').length; if (n > sheets) audio.play('whoosh'); sheets = n;
+      const p = player && player.pos; if (p && lastP) { walked += Math.min(1.5, Math.hypot(p.x - lastP.x, p.y - lastP.y)); if (walked > 0.8) { walked = 0; if (!busy()) audio.play('step'); } } lastP = p ? { ...p } : null;
+    } catch (e) {} }, 150); }
   // the guided first minutes: one tip at a time, when it matters
   { let last = null, moved = 0; setInterval(() => { try {
       if (!game || mode !== 'play') return;

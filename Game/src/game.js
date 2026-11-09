@@ -688,6 +688,8 @@ export function openPhone(G) {
           h('button', { class: 'ghost', onclick: () => open('Grown-ups') }, '👪 For grown-ups: privacy & progress'),
           offlineBox(),
           h('div', { class: 'row' }, h('span', {}, 'Sound'), h('button', { class: 'ghost sm', onclick: (e) => { e.currentTarget.textContent = G.hooks.toggleSound() ? 'On' : 'Off'; } }, G.hooks.soundOn() ? 'On' : 'Off')),
+          ...(G.hooks.vol ? [['music', '🎵 Music'], ['sfx', '🔔 Sounds'], ['voice', '🗣️ Heart’s voice']].map(([k, n]) => { const V = G.hooks.vol(), out = h('small', {}, Math.round(V[k] * 100) + '%');
+            return h('label', { class: 'vol-row' }, h('span', {}, n), h('input', { type: 'range', min: 0, max: 100, value: Math.round(V[k] * 100), 'aria-label': n, oninput: (e) => { G.hooks.setVol(k, e.target.value / 100); out.textContent = e.target.value + '%'; } }), out); }) : []),
           h('div', { class: 'tier-h' }, 'Save'),
           h('p', { class: 'tip' }, `Your game saves by itself on this device${s.savedAt ? ' (last saved ' + new Date(s.savedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + ')' : ''}. To play on another device, take a save file with you.`),
           h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => { G.save(); const t = saveToText(s); const a = h('a', { href: URL.createObjectURL(new Blob([t], { type: 'text/plain' })), download: `REAL-save-${s.name}-day${s.day}.txt` }); document.body.append(a); a.click(); setTimeout(() => a.remove(), 500); UI.toast('Save file downloaded. Open it on the title screen of any device: Load a save.', 'good', 4200); } }, '⬇️ Save file'),

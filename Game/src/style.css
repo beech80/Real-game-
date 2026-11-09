@@ -656,3 +656,8 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 @keyframes tagIn { from { letter-spacing: 1.4em; opacity: 0; } }
 @keyframes slideUp { from { transform: translateY(24px); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { #title:not([hidden]) * { animation: none !important; } #title .logo-word { -webkit-text-fill-color: #fff; } }
+
+.vol-row { display: grid; grid-template-columns: 120px 1fr 40px; align-items: center; gap: 8px; margin: 4px 0; }
+.vol-row input[type=range] { width: 100%; accent-color: var(--gold); height: 28px; }
+.vol-row small { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.autotest #title .title-actions > * { animation: none !important; }
