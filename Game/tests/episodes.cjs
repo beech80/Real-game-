@@ -42,7 +42,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       const x = m.querySelector('.sh-x'); if (x) { x.click(); return 'close'; } return 'none'; }, top);
     if (did === 'stuck') { await p.screenshot({ path: path.join(OUT, 'ep_stuck.png') }); }
   } };
-  const NEWEP = { pets: 1, rescue: 2, mystery: 2, culinary: 2, medical: 2, robots: 2, construction: 2, inventor: 2, business: 2 };   // index of a new episode
+  const NEWEP = { pets: 2, rescue: 2, mystery: 2, culinary: 2, medical: 2, robots: 2, construction: 2, inventor: 2, business: 2 };   // index of a new episode
   for (const [id, at] of Object.entries(NEWEP)) {
     const r = await ev(({ id, at }) => { const s = window.REAL.state; s.quest = 'free'; s.mission = null; s.money = 2000; if (id === 'business' && !s.biz) s.biz = { type: 'coffee', name: 'Test Cart', days: 3, profit: 50, rep: 6, log: [], loan: 0, staff: 0 };
       s.adv = s.adv || {}; s.adv[id] = { stage: at, runs: 0, met: true, best: null }; window.__epDone = false;
