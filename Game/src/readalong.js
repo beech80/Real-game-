@@ -202,6 +202,7 @@ export function say(text, { rate = 0.92, onWord, onEnd, en = false, raw = false 
   const spanish = !en && lang() === 'es' && isSpanish(text);
   const spoken = raw ? String(text) : speakable(text, spanish);
   if (!spoken || !/[\p{L}\p{N}]/u.test(spoken)) { if (onEnd) onEnd(); return false; }
+  try { if (navigator.webdriver && Array.isArray(window.__said) && !window.__deviceOnly) window.__said.push(spoken); } catch (e) {}   // automated tests: what the narrator said
   // English is always Heart: whole recorded sentences when they exist, otherwise Heart word by word. (Spanish uses the
   // device's Spanish voice: Heart speaks English only. The one-file offline copy has no recordings.)
   if (!window.__deviceOnly && !window.__REAL_OFFLINE) {

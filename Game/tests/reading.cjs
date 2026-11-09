@@ -59,7 +59,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       else {
         if (card.parts.join('') !== 'community' || card.parts.length < 3) fail(`bad sound-out parts ${card.parts}`);
         if (!(await said()).includes('community')) fail('word card did not say the word');
-        await clearSaid(); await p.click('.wcard button:has-text("Sound it out")'); await sleep(2500);
+        await clearSaid(); await p.click('.wcard button:has-text("Sound it out")'); await sleep(2500); for (let i = 0; i < 12 && (await said()).slice(-1)[0] !== "community"; i++) await sleep(1000);   // Heart plays each part for real
         const s3 = await said(); console.log('sound out:', JSON.stringify(s3));
         if (s3.length < card.parts.length + 1 || s3[s3.length - 1] !== 'community') fail('sound it out did not say each part then the word');
         await shot('2_wordcard');
