@@ -56,12 +56,14 @@ export const STICKER_KEYS = Object.keys(ART);
 
 // ------------------------------------------------------------------------------------------- Heart's face
 // Heart, the reading voice: a warm heart with a face and a little headset. Moods: happy, cheer, think, talk.
+let heartN = 0;
 export function heartSVG(mood = 'happy') {
   const eyes = mood === 'cheer' ? `<path d="M30 44q5 -7 10 0M60 44q5 -7 10 0" fill="none" ${S}/>` : mood === 'think' ? `${eye(36, 42, 3.4)}${eye(66, 40, 3.4)}<path d="M59 31 72 29" ${S} fill="none"/>` : `${eye(35, 43, 3.6)}${eye(65, 43, 3.6)}`;
   const mouth = mood === 'cheer' ? `<path d="M40 54Q50 68 60 54Z" fill="#7a1f3d" ${S} stroke-width="2.4"/>` : mood === 'talk' ? `<ellipse cx="50" cy="58" rx="5" ry="4.5" fill="#7a1f3d" ${S} stroke-width="2.4"/>` : mood === 'think' ? `<path d="M45 58H56" ${S} fill="none"/>` : smile(50, 55, 7);
   const extra = mood === 'cheer' ? `<path d="M10 14 12 20 18 22 12 24 10 30 8 24 2 22 8 20Z M88 6 90 11 95 13 90 15 88 20 86 15 81 13 86 11Z" fill="#ffd23f" ${S} stroke-width="2"/>` : mood === 'think' ? `<circle cx="88" cy="18" r="3" fill="#fff" ${S} stroke-width="2"/><circle cx="94" cy="8" r="4.5" fill="#fff" ${S} stroke-width="2"/>` : '';
-  return svg(`<defs><linearGradient id="real-heart-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8fa3"/><stop offset="1" stop-color="#ff4d6d"/></linearGradient></defs>
-<path d="M50 90C22 70 6 54 6 34 6 18 18 8 30 8 40 8 46 14 50 22 54 14 60 8 70 8 82 8 94 18 94 34 94 54 78 70 50 90Z" fill="url(#real-heart-g)" ${S}/>
+  const gid = 'real-heart-g' + (++heartN);   // each copy gets its own gradient (a copy on a hidden screen can't lend its gradient)
+  return svg(`<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8fa3"/><stop offset="1" stop-color="#ff4d6d"/></linearGradient></defs>
+<path d="M50 90C22 70 6 54 6 34 6 18 18 8 30 8 40 8 46 14 50 22 54 14 60 8 70 8 82 8 94 18 94 34 94 54 78 70 50 90Z" fill="url(#${gid})" ${S}/>
 ${shine('M17 30C18 22 24 17 30 17')}
 <path d="M8 40C4 24 16 2 50 2S96 24 92 40" fill="none" stroke="${O}" stroke-width="5" stroke-linecap="round"/><rect x="2" y="34" width="11" height="18" rx="5" fill="#6ec6ff" ${S}/><rect x="87" y="34" width="11" height="18" rx="5" fill="#6ec6ff" ${S}/>
 <path d="M8 52C8 66 20 70 30 68" fill="none" ${S} stroke-width="2.6"/><circle cx="32" cy="68" r="3.5" fill="#fff" ${S} stroke-width="2.4"/>
@@ -95,7 +97,7 @@ const SCENES = {
 export const PLACES = Object.keys(SCENES);
 /** a postcard of a place: start, midtown, opportunity, heights, wild, club */
 export function postcardSVG(place) {
-  const sc = SCENES[place] || SCENES.start; const id = 'real-sky-' + place;
+  const sc = SCENES[place] || SCENES.start; const id = 'real-sky-' + place + (++heartN);
   return `<svg class="art-postcard" viewBox="0 0 320 180" role="img" aria-label="${place}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sc[0]}"/><stop offset="1" stop-color="${sc[1]}"/></linearGradient><clipPath id="${id}-c"><rect width="320" height="180" rx="14"/></clipPath></defs><g clip-path="url(#${id}-c)"><rect width="320" height="180" fill="url(#${id})"/>${sc[2]}</g><rect x="1.5" y="1.5" width="317" height="177" rx="13" fill="none" stroke="${O}" stroke-width="3"/></svg>`;
 }
 export function postcardEl(place) { const el = document.createElement('div'); el.className = 'art postcard'; el.innerHTML = postcardSVG(place); return el; }
