@@ -15,7 +15,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const bad = []; const fail = (m) => { bad.push(m); console.log('FAIL', m); };
   const ev = (f, a) => p.evaluate(f, a);
   await p.goto(`http://localhost:${srv.address().port}/index.html`, { timeout: 240000, waitUntil: 'domcontentloaded' });
-  await ev(() => { try { localStorage.clear(); } catch (e) {} window.__voiceOff = true; });
+  await ev(() => { try { localStorage.clear(); } catch (e) {} window.__voiceOff = true; window.__rewards = true; });
   await p.waitForFunction(() => window.REAL && window.REAL.mode === 'title', null, { timeout: 240000 });
   await ev(() => window.REAL.quality('low'));
   await p.click('#btn-new'); await p.waitForSelector('#cr-loading', { state: 'hidden', timeout: 120000 });

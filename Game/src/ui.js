@@ -51,6 +51,7 @@ export const UI = {
     E.energy.classList.toggle('low', s.energy < 20); E.hunger.classList.toggle('low', s.hunger < 20);
   },
   objective(text, dist) {
+    text = tr(text);
     const E = this.els;
     E.obj.hidden = !text;
     if (text) {

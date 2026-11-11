@@ -309,6 +309,7 @@ async function startGameInner(state, isNew) {
   // rewards: daily goals, unlocks, and a celebration when your Life Level goes up
   { let lastLevel = null; setInterval(() => { try {
       if (!game || mode !== 'play' || busy()) return;
+      if (navigator.webdriver && !window.__rewards) return;   // tests opt in (money changing mid-test confuses them)
       checkDaily(game); unlockOutfits(game);
       const lv = game.life().level; if (lastLevel != null && lv > lastLevel) celebrate(game, `Life Level ${lv}!`, 'You are growing. New places and jobs open up.', { big: true }); lastLevel = lv;
     } catch (e) {} }, 3000); }

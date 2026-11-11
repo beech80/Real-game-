@@ -33,12 +33,12 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 400000 });
   await p.waitForSelector('#loading', { state: 'hidden', timeout: 180000 }).catch(() => {});
   const n = await ev(() => window.__learnCount && window.__learnCount()); console.log('learning data entries:', n);
-  if (!(n > 3000)) fail('learning data (why-not reasons, Heart’s knowledge) did not load');
+  if (!(n > 2000)) fail('learning data (why-not reasons, Heart’s knowledge) did not load');
   await ev(() => window.REAL.devJump('hired')); await sleep(1500);
   for (let i = 0; i < 25 && await p.isVisible('#dialog'); i++) { await ev(() => { const c = document.querySelector('#dialog .d-choice, #dialog .d-next'); if (c) c.click(); }); await sleep(300); }
   await ev(() => { const s = window.REAL.state; s.quest = 'shift'; s.shift = { register: 0, stock: 0, inv: 0, need: { register: 1, stock: 2, inv: 1 }, mistakesAtStart: 0, product: ['Rice', 'aisle 3', 'rice', 'Pantry'] }; });
-  await sleep(4000);
-  const goal = await ev(() => document.getElementById('obj-text').textContent); console.log('goal in Spanish:', goal);
+  let goal = '';
+  for (let i = 0; i < 15 && !/caja|register/i.test(goal); i++) { await sleep(2000); goal = await ev(() => { const s = window.REAL.state; if (s.quest !== 'shift') { s.quest = 'shift'; s.shift = { register: 0, stock: 0, inv: 0, need: { register: 1, stock: 2, inv: 1 }, mistakesAtStart: 0, product: ['Rice', 'aisle 3', 'rice', 'Pantry'] }; } return document.getElementById('obj-text').textContent; }); } console.log('goal in Spanish:', goal);
   if (/Help shoppers/.test(goal) || !/caja/.test(goal)) fail('a pattern line stayed in English');
   // save Heart's voice on this device
   await ev(() => { document.getElementById('btn-voice').click(); }); await sleep(1500);

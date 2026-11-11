@@ -97,8 +97,8 @@ export const naturalReady = () => !!NAT;
 // Heart's voice saved on this device (Settings › Reading voice › Save): the packs live in Cache Storage and are
 // read from there first, so she keeps reading with no internet.
 const VC = 'real-voice'; let SAVED = null;
-const savedPacks = () => SAVED || (SAVED = (async () => { try { const ks = await (await caches.open(VC)).keys(); return new Set(ks.map((r) => +((/p(\d+)\.mp3/.exec(r.url) || [])[1])).filter((n) => n >= 0)); } catch (e) { return new Set(); } })());
-async function savedFile(url) { try { return (await (await caches.open(VC)).match(url)) || null; } catch (e) { return null; } }
+const savedPacks = () => SAVED || (SAVED = (async () => { try { if (!(await caches.has(VC))) return new Set(); const ks = await (await caches.open(VC)).keys(); return new Set(ks.map((r) => +((/p(\d+)\.mp3/.exec(r.url) || [])[1])).filter((n) => n >= 0)); } catch (e) { return new Set(); } })());
+async function savedFile(url) { try { if (!(await caches.has(VC))) return null; return (await (await caches.open(VC)).match(url)) || null; } catch (e) { return null; } }
 /** how much of Heart's voice is on this device: { have, total } packs */
 export async function voiceSaved() {
   const m = await loadNatural(); const total = m ? 1 + Math.max(...Object.values(m.c).map((v) => v[0])) : 0;
