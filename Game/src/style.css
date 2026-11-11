@@ -731,3 +731,8 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .voicebox { display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
 .voicebox .row { flex-wrap: wrap; } .voicesave span { flex: 1 1 180px; font-size: 15px; }
 .voicebox > .row { flex: none; flex-direction: row; align-items: center; justify-content: space-between; gap: 8px; } .voicebox > .row b { margin: 0; }
+
+.medal-wrap { position: relative; display: inline-block; font-size: inherit !important; } .medal-wrap .medal { width: 48px; height: 48px; }
+.badge .medal-subj { position: absolute; right: -10px; bottom: -4px; font-size: 18px; font-style: normal; }
+.load-heart { width: 86px; height: 86px; margin: 4px auto 10px; animation: heartBob 2.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .load-heart { animation: none; } }

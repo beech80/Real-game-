@@ -105,7 +105,7 @@ export function unlockOutfits(G) {
 function badges(G) {
   // learning badges: one per subject at 3, 8 and 15 skills you can do on your own
   return Object.entries(SUBJECTS).flatMap(([k, sub]) => { const n = Object.values(SKILLS).filter((x) => x.subj === k && G.edu.state(x.id) >= 3).length;
-    return [[3, '🥉'], [8, '🥈'], [15, '🥇']].map(([need, medal]) => ({ icon: `${medal}${sub.icon}`, name: `${sub.name} ${need}`, desc: es() ? `${need} habilidades de ${sub.name} que haces solo` : `${need} ${sub.name} skills you can do on your own`, got: n >= need, prog: `${Math.min(n, need)}/${need}` })); });
+    return [[3, '🥉', 'bronze'], [8, '🥈', 'silver'], [15, '🥇', 'gold']].map(([need, medal, tier]) => ({ icon: `${medal}${sub.icon}`, tier, subj: sub.icon, name: `${sub.name} ${need}`, desc: es() ? `${need} habilidades de ${sub.name} que haces solo` : `${need} ${sub.name} skills you can do on your own`, got: n >= need, prog: `${Math.min(n, need)}/${need}` })); });
 }
 function calendar(G) {
   const days = new Set(((G.state.streak || {}).days) || []), now = new Date(), y = now.getFullYear(), m = now.getMonth();
@@ -147,7 +147,7 @@ export function trophiesApp(G) {
     h('div', { class: 'tier-h' }, es() ? '🧥 Chaquetas para ganar' : '🧥 Jackets to unlock'),
     h('div', { class: 'unlocks' }, ...UNLOCKS.map(([id, name, color, , en, sp]) => h('div', { class: 'unl' + (s.wardrobe.includes(id) ? ' got' : '') }, h('i', { style: { background: '#' + color.toString(16).padStart(6, '0') } }), h('b', {}, name), h('small', {}, s.wardrobe.includes(id) ? (es() ? '¡Tuya!' : 'Yours!') : (es() ? sp : en))))),
     h('div', { class: 'tier-h' }, es() ? '🏅 Medallas de aprendizaje' : '🏅 Learning badges'),
-    h('div', { class: 'badges' }, ...B.map((b) => h('div', { class: 'badge' + (b.got ? ' got' : ''), title: b.desc }, h('span', {}, b.got ? b.icon : '🔒'), h('small', {}, b.name), h('i', {}, b.prog)))),
+    h('div', { class: 'badges' }, ...B.map((b) => h('div', { class: 'badge' + (b.got ? ' got' : ''), title: b.desc }, h('span', { class: 'medal-wrap' }, medalEl(b.tier, !b.got), h('i', { class: 'medal-subj' }, b.subj)), h('small', {}, b.name), h('i', {}, b.prog)))),
     h('div', { class: 'tier-h' }, `${es() ? '🏆 Trofeos' : '🏆 Trophies'} (${got}/${ach.length})`),
     h('div', { class: 'badges' }, ...ach.map(([id, [name, desc]]) => h('div', { class: 'badge' + (s.achievements[id] ? ' got' : ''), title: desc }, medalEl(s.achievements[id] ? 'gold' : 'silver', !s.achievements[id]), h('small', {}, name), h('i', {}, s.achievements[id] ? `${es() ? 'Día' : 'Day'} ${s.achievements[id]}` : desc)))));
 }

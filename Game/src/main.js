@@ -33,6 +33,7 @@ import { Race } from './race.js';
 import { PetCourse, RobotArena } from './arenas.js';
 import { runActivity, forgetRecent } from './learnkit.js';
 import { loadLearnData, learnCount } from './learndata.js';
+import { heartSVG } from './art.js';
 import { PRACTICE } from './activities.js';
 import { carMesh, Pedestrian } from './city.js';
 installExpansion(Game); installEvents(Game); installAdventures(Game); installAdventureHelpers(Game);
@@ -63,6 +64,7 @@ window.addEventListener('pagehide', saveNow);
 initReadAlong(() => game && game.state);
 initLang();
 window.__REAL_VERSION = VERSION;
+try { const lh = document.getElementById('load-heart'); if (lh) lh.innerHTML = heartSVG('happy'); } catch (e) {}
 { const v = document.getElementById('version-tag'); if (v) v.textContent = 'v' + VERSION; }
 // problem log: the last 30 errors (message, where, when, version), kept only on this device for grown-ups to copy into a report
 { const log = (msg, src) => { try { const L = JSON.parse(localStorage.getItem('real.errors') || '[]'); L.push({ t: new Date().toISOString(), m: String(msg).slice(0, 300), s: String(src || '').slice(0, 160), v: 'REAL ' + (window.__REAL_VERSION || '') }); localStorage.setItem('real.errors', JSON.stringify(L.slice(-30))); } catch (e) {} };
