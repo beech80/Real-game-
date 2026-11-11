@@ -5,16 +5,17 @@ import { SKILLS, SUBJECTS } from './edu.js';
 import { ACHIEVEMENTS } from './life.js';
 import { say } from './readalong.js';
 import { lang } from './i18n.js';
+import { stickerEl, STICKER_NAMES, heartEl, medalSVG, postcardEl } from './art.js';
 
 const today = (t = Date.now()) => new Date(t).toISOString().slice(0, 10);
 const es = () => lang() === 'es';
 
 // ------------------------------------------------------------------------------------------- celebrations
 /** confetti, a banner, a sound, and Heart cheering */
-export function celebrate(G, title, sub = '', { big = false, heart = true } = {}) {
+export function celebrate(G, title, sub = '', { big = false, heart = true, art = null } = {}) {
   const old = document.querySelector('.celebrate'); if (old) old.remove();
   const conf = h('div', { class: 'confetti', 'aria-hidden': 'true' }, ...[...Array(big ? 60 : 34)].map((_, i) => h('i', { style: { left: Math.random() * 100 + '%', background: ['#e9a93a', '#3fbf7a', '#4f8cff', '#e96fa0', '#8f7bff', '#ffd27a'][i % 6], animationDelay: Math.random() * 0.6 + 's', animationDuration: 1.6 + Math.random() * 1.2 + 's', transform: `rotate(${Math.random() * 360}deg)` } })));
-  const card = h('div', { class: 'celebrate' + (big ? ' big' : ''), role: 'status', 'aria-live': 'polite' }, conf, h('div', { class: 'cel-card' }, h('div', { class: 'cel-burst' }, big ? '🌟' : '🎉'), h('b', {}, title), sub ? h('small', {}, sub) : null));
+  const card = h('div', { class: 'celebrate' + (big ? ' big' : ''), role: 'status', 'aria-live': 'polite' }, conf, h('div', { class: 'cel-card' }, h('div', { class: 'cel-burst' }, art || heartEl('cheer')), h('b', {}, title), sub ? h('small', {}, sub) : null));
   document.body.append(card);
   G.sfx && G.sfx('reward');
   if (heart && (G.state.settings || {}).heart !== false) say(`${title}! ${sub}`);
@@ -68,7 +69,7 @@ export function checkDaily(G) {
   const cur = streakNow(G); st.best = Math.max(st.best || 0, cur);
   G.earn(25, es() ? 'Metas del día' : 'Daily goals reward');
   const stk = giveSticker(G);
-  celebrate(G, es() ? '¡Metas del día listas!' : 'Daily goals done!', `${es() ? 'Racha' : 'Streak'}: ${cur} 🔥 · +$25${stk ? ' · ' + stk : ''}`, { big: cur % 7 === 0 });
+  celebrate(G, es() ? '¡Metas del día listas!' : 'Daily goals done!', `${es() ? 'Racha' : 'Streak'}: ${cur} 🔥 · +$25${stk ? ' · ' + (es() ? 'Estampa nueva: ' : 'New sticker: ') + STICKER_NAMES[stk][es() ? 1 : 0] : ''}`, { big: cur % 7 === 0, art: stk ? stickerEl(stk, es()) : null });
   unlockOutfits(G);
   G.save();
 }
@@ -114,6 +115,22 @@ function calendar(G) {
   return h('div', {}, h('div', { class: 'cal-h' }, now.toLocaleDateString(lang() === 'es' ? 'es' : 'en', { month: 'long', year: 'numeric' })),
     h('div', { class: 'cal' }, ...['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((w) => h('b', {}, w)), ...cells));
 }
+const medalEl = (tier, locked) => { const e = h('span', { class: 'art medal' }); e.innerHTML = medalSVG(tier, locked); return e; };
+// the places of the city, as postcards you collect by going there
+const PLACE_NAMES = { club: ['The Club', 'El Club'], wild: ['The Wild', 'El campo'], start: ['Starting District', 'Distrito Inicial'], midtown: ['Midtown', 'Midtown'], opportunity: ['Opportunity District', 'Distrito Oportunidad'], heights: ['The Heights', 'The Heights'] };
+export function placesSeen(G) {
+  const s = G.state, v = s.visited || {}, city = s.chapter === 'city' || s.hired || (s.day || 1) > 1;
+  const seen = { club: true, wild: city || s.quest === 'find_way' || !!s.flags.readFirstSign, start: city || s.location === 'district', midtown: !!v.midtown, opportunity: !!v.opportunity, heights: !!v.heights };
+  return Object.keys(PLACE_NAMES).map((k) => [k, PLACE_NAMES[k][es() ? 1 : 0], !!seen[k]]);
+}
+/** a postcard slides in when you arrive somewhere */
+export function arrivalCard(place) {
+  if (!PLACE_NAMES[place] || typeof document === 'undefined') return;
+  const old = document.querySelector('.arrive'); if (old) old.remove();
+  const card = h('div', { class: 'arrive', role: 'status' }, postcardEl(place), h('b', {}, PLACE_NAMES[place][es() ? 1 : 0]));
+  document.body.append(card);
+  setTimeout(() => { card.classList.add('out'); setTimeout(() => card.remove(), 600); }, 3200);
+}
 export function trophiesApp(G) {
   const s = G.state, gs = dailyGoals(G), cur = streakNow(G);
   const ach = Object.entries(ACHIEVEMENTS), got = ach.filter(([id]) => s.achievements[id]).length, B = badges(G);
@@ -124,11 +141,13 @@ export function trophiesApp(G) {
     h('p', { class: 'tip' }, s.daily && s.daily.done ? (es() ? '¡Listo por hoy! Vuelve mañana para seguir tu racha.' : 'All done for today! Come back tomorrow to keep your streak.') : (es() ? 'Termina las 3 para ganar $25, una estampa y un día de racha.' : 'Finish all 3 for $25, a sticker and a streak day.')),
     calendar(G),
     h('div', { class: 'tier-h' }, `${es() ? '🗂️ Estampas' : '🗂️ Sticker book'} (${(s.stickers || []).length}/${STICKERS.length})`),
-    h('div', { class: 'stickers' }, ...STICKERS.map((x) => h('span', { class: 'stk' + ((s.stickers || []).includes(x) ? ' got' : '') }, (s.stickers || []).includes(x) ? x : '?'))),
+    h('div', { class: 'stickers' }, ...STICKERS.map((x) => { const got = (s.stickers || []).includes(x), n = STICKER_NAMES[x][es() ? 1 : 0]; return h('div', { class: 'stk' + (got ? ' got' : ''), title: got ? n : (es() ? 'Todavía no' : 'Not yet') }, got ? stickerEl(x, es()) : h('span', { class: 'stk-q' }, '?'), h('small', {}, got ? n : '')); })),
+    h('div', { class: 'tier-h' }, es() ? '📮 Postales de la ciudad' : '📮 City postcards'),
+    h('div', { class: 'postcards' }, ...placesSeen(G).map(([k, name, seen]) => h('div', { class: 'pc' + (seen ? ' got' : '') }, postcardEl(k), h('small', {}, seen ? name : (es() ? 'Aún sin visitar' : 'Not visited yet'))))),
     h('div', { class: 'tier-h' }, es() ? '🧥 Chaquetas para ganar' : '🧥 Jackets to unlock'),
     h('div', { class: 'unlocks' }, ...UNLOCKS.map(([id, name, color, , en, sp]) => h('div', { class: 'unl' + (s.wardrobe.includes(id) ? ' got' : '') }, h('i', { style: { background: '#' + color.toString(16).padStart(6, '0') } }), h('b', {}, name), h('small', {}, s.wardrobe.includes(id) ? (es() ? '¡Tuya!' : 'Yours!') : (es() ? sp : en))))),
     h('div', { class: 'tier-h' }, es() ? '🏅 Medallas de aprendizaje' : '🏅 Learning badges'),
     h('div', { class: 'badges' }, ...B.map((b) => h('div', { class: 'badge' + (b.got ? ' got' : ''), title: b.desc }, h('span', {}, b.got ? b.icon : '🔒'), h('small', {}, b.name), h('i', {}, b.prog)))),
     h('div', { class: 'tier-h' }, `${es() ? '🏆 Trofeos' : '🏆 Trophies'} (${got}/${ach.length})`),
-    h('div', { class: 'badges' }, ...ach.map(([id, [name, desc]]) => h('div', { class: 'badge' + (s.achievements[id] ? ' got' : ''), title: desc }, h('span', {}, s.achievements[id] ? '🏆' : '🔒'), h('small', {}, name), h('i', {}, s.achievements[id] ? `${es() ? 'Día' : 'Day'} ${s.achievements[id]}` : desc)))));
+    h('div', { class: 'badges' }, ...ach.map(([id, [name, desc]]) => h('div', { class: 'badge' + (s.achievements[id] ? ' got' : ''), title: desc }, medalEl(s.achievements[id] ? 'gold' : 'silver', !s.achievements[id]), h('small', {}, name), h('i', {}, s.achievements[id] ? `${es() ? 'Día' : 'Day'} ${s.achievements[id]}` : desc)))));
 }

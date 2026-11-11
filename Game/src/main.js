@@ -26,7 +26,7 @@ import { initLang, lang, setLang } from './i18n.js';
 import { voicePanel, bindVoicePanel } from './game.js';
 import { tutorialTick } from './tutorial.js';
 import { VERSION, whatsNew } from './version.js';
-import { checkDaily, unlockOutfits, celebrate, addUnlockJackets } from './rewards.js';
+import { checkDaily, unlockOutfits, celebrate, addUnlockJackets, arrivalCard } from './rewards.js';
 import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine, voiceId, loadNatural } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
@@ -626,7 +626,7 @@ async function travelTo(loc, silent) {
   }
   player.h = 0.13; player.apply(); fcam.yaw = 0;
   placeCar(); if (pet) pet.place(player.pos);
-  if (!silent) await UI.fade(0, 400);
+  if (!silent) { await UI.fade(0, 400); arrivalCard(loc === 'district' ? 'start' : loc); }
   game.save();
 }
 function placeCar() {

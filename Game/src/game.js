@@ -7,6 +7,7 @@ import { markWords, talkLog, SPEEDS, speedName, setSpeed, say as sayIt, loadNatu
 import { familyView } from './family.js';
 import { toolbox } from './toolbox.js';
 import { celebrate, trophiesApp } from './rewards.js';
+import { heartEl } from './art.js';
 import { tipsOff, setTips } from './tutorial.js';
 import { VERSION, whatsNew } from './version.js';
 import { heartOn, setHeart, askHeart } from './heart.js';
@@ -530,6 +531,7 @@ export class Game {
 let G0 = () => null; export function bindVoicePanel(get) { G0 = get; }
 export function voicePanel() {
   return UI.sheet('Reading voice', () => h('div', { class: 'act' },
+    h('div', { class: 'heart-hello' }, heartEl('happy')),
     h('p', { class: 'lead' }, '✨ Heart reads the game to you: the story, lessons, questions and answers.'),
     voiceBox(),
     h('div', { class: 'row' }, h('span', {}, '🧑‍🏫 Heart coaches me (cheers, hints, why)'), ...[[true, 'On'], [false, 'Off']].map(([v, n]) => h('button', { class: heartOn(G0()) === v ? 'primary sm' : 'ghost sm', onclick: (e) => { setHeart(G0(), v); e.currentTarget.parentElement.querySelectorAll('button').forEach((b, i) => { b.className = (i === 0) === v ? 'primary sm' : 'ghost sm'; }); } }, n))),

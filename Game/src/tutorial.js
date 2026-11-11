@@ -1,6 +1,7 @@
 // REAL — the guided first minutes. One tip at a time, each when it matters: the screen dims, a spotlight shows the
 // thing to use, Heart reads the tip, and "Got it" (or simply doing it) moves on. Players can skip tips, and turn them
 // back on in Settings. Tips are remembered per device, so a new save on the same device doesn't repeat them.
+import { heartEl } from './art.js';
 import { h } from './ui.js';
 import { say, stopReading } from './readalong.js';
 import { lang } from './i18n.js';
@@ -37,7 +38,7 @@ function show(tip, el) {
   const text = (lang() === 'es' ? (typeof es === 'function' ? es() : es) : (typeof en === 'function' ? en() : en));
   const below = box.y + box.h + 150 < innerHeight;
   const bubble = h('div', { class: 'tip-bubble', role: 'dialog', 'aria-live': 'polite', style: { left: Math.max(12, Math.min(innerWidth - 312, box.x)) + 'px', top: (below ? box.y + box.h + 12 : Math.max(12, box.y - 150)) + 'px' } },
-    h('div', { class: 'tip-who' }, '✨ Heart'), h('p', {}, text),
+    h('div', { class: 'tip-who' }, heartEl('happy'), 'Heart'), h('p', {}, text),
     h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: () => { setTips(false); close(null, false); } }, lang() === 'es' ? 'Saltar consejos' : 'Skip tips'), h('button', { class: 'primary sm', onclick: () => close(id) }, lang() === 'es' ? '¡Entendido!' : 'Got it!')));
   layer = h('div', { class: 'tip-layer' }, h('div', { class: 'tip-spot', style: { left: box.x + 'px', top: box.y + 'px', width: box.w + 'px', height: box.h + 'px' } }), bubble);
   document.body.append(layer);

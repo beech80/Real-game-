@@ -2,6 +2,7 @@
 // reads hints, talks through "Show me how", and answers questions ("Ask Heart") from what the game teaches: every
 // skill's lesson, the word helper, and the question in front of you (with Claude for fuller answers where the game
 // runs on claude.ai). Tutor talk is on by default and has an off switch (🗣️ button or Settings).
+import { heartEl } from './art.js';
 import { h, UI } from './ui.js';
 import { SKILLS } from './edu.js';
 import { lookup, GLOSSARY } from './glossary.js';
@@ -98,15 +99,16 @@ export function askHeart(G, ctx = {}) {
     const out = h('div', { class: 'heart-ans' });
     const ask = async (qText) => {
       const q = (qText || inp.value).trim(); if (!q) return;
-      out.replaceChildren(h('p', { class: 'tip' }, '💭 …'));
+      out.replaceChildren(h('div', { class: 'heart-row' }, heartEl('think'), h('p', { class: 'tip' }, '💭 …')));
       const smart = await smartAnswer(q, c, band), local = localAnswer(q, c);
       const ans = smart || local || (lang() === 'es' ? 'Buena pregunta. Abre 📚 Aprender y busca esa habilidad: ahí tienes la lección, un ejemplo paso a paso y práctica.' : 'Good question! Open 📚 Learn and find that skill: it has the lesson, a worked example step by step, and practice.');
-      out.replaceChildren(h('div', { class: 'heart-bubble readable' }, h('b', {}, '✨ Heart: '), ans), h('button', { class: 'ghost sm', onclick: () => say(ans) }, '🔊 Again'));
+      out.replaceChildren(h('div', { class: 'heart-row' }, heartEl('talk'), h('div', { class: 'heart-bubble readable' }, h('b', {}, 'Heart: '), ans)), h('button', { class: 'ghost sm', onclick: () => say(ans) }, '🔊 Again'));
       say(ans);
       G.state.stats.askedHeart = (G.state.stats.askedHeart || 0) + 1;
     };
     const ideas = sk ? [lang() === 'es' ? `¿Cómo empiezo?` : 'How do I start?', lang() === 'es' ? `¿Qué es ${skT(sk, 'name').toLowerCase()}?` : `What is ${sk.name.toLowerCase()}?`, lang() === 'es' ? 'Dame una pista' : 'Can you give me a hint?'] : [lang() === 'es' ? '¿Qué es un presupuesto?' : 'What is a budget?', lang() === 'es' ? '¿Cómo sumo fracciones?' : 'How do I add fractions?', lang() === 'es' ? '¿Qué es una oración?' : 'What is a sentence?'];
     return h('div', { class: 'act' },
+      h('div', { class: 'heart-hello' }, heartEl('happy')),
       h('p', { class: 'lead' }, lang() === 'es' ? 'Pregúntale a Heart lo que quieras de tus lecciones.' : 'Ask Heart anything about your lessons. She will help you think it through.'),
       h('div', { class: 'chips' }, ...ideas.map((t) => h('button', { class: 'chip style', onclick: () => { inp.value = t; ask(t); } }, t))),
       inp,

@@ -26,7 +26,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   for (let i = 0; i < 25 && await p.isVisible('#dialog'); i++) { await ev(() => { const c = document.querySelector('#dialog .d-choice, #dialog .d-next'); if (c) c.click(); }); await sleep(300); }
   // start a shift at the register, like the screenshot
   await ev(() => { const s = window.REAL.state; s.quest = 'shift'; s.shift = { register: 0, stock: 0, inv: 0, need: { register: 1, stock: 2, inv: 1 }, mistakesAtStart: 0, product: ['Rice', 'aisle 3', 'rice', 'Pantry'] }; s.todayEarned = 60; });
-  await sleep(4000);
+  await p.waitForFunction(() => { const e = document.querySelector('#taskpanel'); return e && !e.hidden && e.offsetParent && /register/i.test(document.getElementById('obj-text').textContent); }, null, { timeout: 120000 }).catch(() => {});
+  await sleep(1500);
   const box = (sel) => ev((s) => { const e = document.querySelector(s); if (!e || e.hidden || !e.offsetParent) return null; const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height, r: r.right, b: r.bottom }; }, sel);
   const L = { status: await box('.hud-tl'), goal: await box('#objective'), jobs: await box('#taskpanel'), map: await box('#minimap'), phone: await box('#btn-voice') };
   console.log(JSON.stringify(L));
