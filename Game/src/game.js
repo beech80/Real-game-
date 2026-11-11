@@ -554,7 +554,7 @@ function voiceBox() {
     let st; try { st = await voiceSaved(); } catch (e) { return saveRow.remove(); }
     if (!st.total) return saveRow.remove();
     if (st.have >= st.total) saveRow.replaceChildren(h('span', {}, '✓ Heart’s voice is saved on this device'), h('button', { class: 'ghost sm', onclick: async () => { await forgetVoice(); showSave(); } }, 'Remove'));
-    else saveRow.replaceChildren(h('span', {}, '💾 Save Heart’s voice on this device (about 170 MB, for no internet)'), h('button', { class: 'primary sm', onclick: async (e) => {
+    else saveRow.replaceChildren(h('span', {}, '💾 Save Heart’s voice on this device (about 180 MB, for no internet)'), h('button', { class: 'primary sm', onclick: async (e) => {
       const b = e.currentTarget; b.disabled = true;
       try { await saveVoice((d, t) => { b.textContent = `${Math.round((d / t) * 100)}%`; }); } catch (err) { b.disabled = false; b.textContent = 'Try again'; return; }
       showSave();

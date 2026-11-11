@@ -725,3 +725,9 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .arrive.out { transition: opacity .5s, transform .5s; opacity: 0; transform: translate(-50%, -30px); }
 @keyframes arriveIn { from { opacity: 0; transform: translate(-50%, -40px) scale(.8); } to { opacity: 1; transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .heart-hello .heart-face, .stk.got .art, .arrive { animation: none; } }
+/* trophies: the cards share a class name with the little red count badge on HUD buttons — undo that here */
+.badges .badge { position: static; top: auto; right: auto; color: inherit; font-size: inherit; font-weight: inherit; border-radius: 12px; padding: 8px 6px; background: rgba(255,255,255,.04); }
+.badges .badge.got { background: rgba(233,169,58,.14); }
+.voicebox { display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
+.voicebox .row { flex-wrap: wrap; } .voicesave span { flex: 1 1 180px; font-size: 15px; }
+.voicebox > .row { flex: none; flex-direction: row; align-items: center; justify-content: space-between; gap: 8px; } .voicebox > .row b { margin: 0; }
