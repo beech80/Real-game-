@@ -72,8 +72,8 @@ export class Game {
     const s = this.state;
     s.time += dtHours;
     if (s.chapter === 'prologue') return;
-    s.energy = Math.max(0, s.energy - dtHours * 3.5);
-    s.hunger = Math.max(0, s.hunger - dtHours * 4.5);
+    s.energy = Math.max(0, s.energy - dtHours * 2.1);   // the clock runs fast, so these stay gentle per minute of play
+    s.hunger = Math.max(0, s.hunger - dtHours * 2.7);
     if (s.hunger < 15 && !this._hw) { this._hw = true; UI.toast('You’re hungry. Eat something soon.', 'warn', 3500); }
     if (s.hunger > 30) this._hw = false;
     if (s.energy < 12 && !this._ew) { this._ew = true; UI.toast('You’re exhausted. Head home and sleep.', 'warn', 3500); }
@@ -455,9 +455,15 @@ export class Game {
       h('div', { class: 'opts' }, ['Check the total', 'Greet the customer', 'Stock the shelves'].map((o) => h('button', { class: 'opt', onclick: (e) => { const ok = o === 'Check the total'; this.edu.record('read.instructions', ok, { ctx: 'training' }); if (ok) { this.sfx('good'); close(); } else { this.sfx('bad'); e.currentTarget.classList.add('wrong'); } } }, o)))), { icon: '📋' });
   }
 
-  async sleep() {
+  async sleep(force = false) {
     const s = this.state;
-    if (s.time < 19 && s.energy > 40) { UI.toast('It’s too early to sleep. Come back tonight.', 'info'); return; }
+    if (!force && s.time % 24 < 19 && s.time % 24 >= 7 && s.energy > 40) {
+      // it is still daytime: the player may skip ahead to tonight (but not walk out on a shift)
+      if (s.quest === 'shift' || s.quest === 'clockin') { UI.toast('Finish your shift first. Then you can rest.', 'info'); return; }
+      const c = await UI.say('', 'It is still daytime. Do you want to skip ahead to tonight and go to sleep?', ['Yes, skip to tonight', 'Not yet']);
+      if (c !== 0) return;
+      s.time = Math.floor(s.time / 24) * 24 + 20; s.hunger = Math.max(15, s.hunger - 15);
+    }
     this.busy = true;
     await UI.fade(1, 700);
     const earned = s.bank.filter((t) => t.day === s.day && t.amt > 0).reduce((a, t) => a + t.amt, 0);
@@ -512,7 +518,7 @@ export class Game {
     this.state.energy = 50; this.state.mood -= 10;
     this.hooks.enterApartment(true);
     this.busy = false;
-    await this.sleep();
+    await this.sleep(true);
   }
 
   // ------------------------------------------------------------------ Chapters 11–12: the Invitation and the REAL decision
@@ -696,7 +702,7 @@ export function openPhone(G) {
         }, () => open('Assignment')),
         Settings: () => h('div', { class: 'act' },
           h('div', { class: 'row' }, h('span', {}, 'Graphics'), ...['low', 'medium', 'high'].map((q) => h('button', { class: G.hooks.quality() === q ? 'primary sm' : 'ghost sm', onclick: () => { G.hooks.setQuality(q); open('Settings'); } }, q))),
-          h('div', { class: 'row' }, h('span', {}, 'Time'), ...[[1, 'Normal'], [3, 'Fast']].map(([v, n]) => h('button', { class: (s.timeScale || 1) === v ? 'primary sm' : 'ghost sm', onclick: () => { s.timeScale = v; open('Settings'); } }, n))),
+          h('div', { class: 'row' }, h('span', {}, 'Time'), ...[[0.5, 'Slow'], [1, 'Normal'], [2, 'Fast']].map(([v, n]) => h('button', { class: (s.timeScale || 1) === v ? 'primary sm' : 'ghost sm', onclick: () => { s.timeScale = v; open('Settings'); } }, n))),
           h('div', { class: 'row' }, h('span', {}, '🌎 Language / Idioma'), ...LANGS.map(([k, n]) => h('button', { class: lang() === k ? 'primary sm' : 'ghost sm', onclick: () => { setLang(k); s.settings = s.settings || {}; s.settings.lang = k; G.save(); open('Settings'); } }, n))),
           voiceBox(),
           h('div', { class: 'row' }, h('span', {}, `REAL v${VERSION}`), h('button', { class: 'ghost sm', onclick: () => { close(); whatsNew(true); } }, '🆕 What’s new')),
