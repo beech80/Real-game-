@@ -5,11 +5,12 @@ module.exports = async function traceSteps(p, scope = '') {
   for (let n = 0; n < 40; n++) {
     const c = await p.waitForSelector(`${scope} canvas.sig`, { timeout: 20000 }).catch(() => null); if (!c) return seen;
     const info = await c.evaluate((el) => { const r = el.getBoundingClientRect(); return { t: el.dataset.text, fit: +el.dataset.fit, final: el.dataset.final === '1', x: r.x, y: r.y, w: r.width, h: r.height }; });
-    const pts = await p.evaluate(({ t, fit }) => {
+    info.step = seen.filter((x) => x === info.t).length ? 3 : 10;   // a thin letter (j, i, l) that was not accepted: trace it again with closer strokes
+    const pts = await p.evaluate(({ t, fit, step }) => {
       const cv = document.createElement('canvas'); cv.width = 640; cv.height = 220; const g = cv.getContext('2d');
       g.font = `${fit}px "Dancing Script", "Segoe Script", cursive`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(t, 320, 115);
       const d = g.getImageData(0, 0, 640, 220).data, out = [];
-      for (let x = 0; x < 640; x += 10) { const col = []; for (let y = 0; y < 220; y += 4) if (d[(y * 640 + x) * 4 + 3] > 100) col.push(y); if (col.length) out.push([x, col[0], col[col.length - 1]]); }
+      for (let x = 0; x < 640; x += step) { const col = []; for (let y = 0; y < 220; y += 4) if (d[(y * 640 + x) * 4 + 3] > 100) col.push(y); if (col.length) out.push([x, col[0], col[col.length - 1]]); }
       return out;
     }, info);
     // drag along each column of the guide with real pointer events on the canvas (fast: one round trip)
