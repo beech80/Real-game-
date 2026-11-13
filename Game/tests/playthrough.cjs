@@ -161,7 +161,7 @@ let seed = 7; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483
     try { did = await handleUI(); how = did ? 'ui' : ''; if (!did) { did = await act(s); how = 'act'; } } catch (e) { console.log('step error', e.message.slice(0, 120)); await p.keyboard.press('Escape').catch(() => {}); }
     const label = await p.textContent('#btn-interact').catch(() => '');
     const topTitle = await p.$eval('#modal .modal:last-child .sh-title', (e) => e.textContent).catch(() => '');
-    trail.push(`${how}/${did} loc=${s.loc} key=${s.key} pos=${s.pos ? Math.round(s.pos.x) + ',' + Math.round(s.pos.y) : '-'} me=${Math.round(s.pos0.x)},${Math.round(s.pos0.y)} btn=“${(label || '').trim().slice(0, 30)}” sheet=“${topTitle}” $${s.money}`); if (trail.length > 15) trail.shift();
+    trail.push(`${how}/${did} loc=${s.loc} key=${s.key} pos=${s.pos ? Math.round(s.pos.x) + ',' + Math.round(s.pos.y) : '-'} me=${Math.round(s.pos0.x)},${Math.round(s.pos0.y)} btn=“${(label || '').trim().slice(0, 30)}” sheet=“${topTitle}” $${s.money}`); if (process.env.TRAIL) console.log(trail[trail.length - 1]); if (trail.length > 15) trail.shift();
     { const now = total(), dt = now - clockAt; clockAt = now; if (dt > 0 && !s.busy && s.chapter !== 'prologue') await ev((h) => { const g = window.REAL.game(); if (!g.busy && window.REAL.mode === 'play') g.tick(h); }, Math.min(dt, 600) / 360).catch(() => {}); }
     // stuck detection: nothing meaningful changes for many actions
     const sig = JSON.stringify([s.quest, s.ll, s.day, Math.round(s.money), s.obj, /Grow your Life Level|Free time/.test(s.obj) ? Math.floor(s.time) : 0]);   // ignore location: going back and forth between places is still a stall

@@ -94,9 +94,9 @@ let step = 0, p;
   await dialog();
   await p.waitForSelector('.posting', { timeout: 20000 }); await settle(); await shot('application_posting');
   await p.click('.sheet .opt:has-text("hiring a cashier")'); await sleep(400); await settle();
-  for (const t of ['Nova', 'Mornings and weekends', 'I am reliable']) { await p.click(`.sheet .opt:has-text("${t}")`); await sleep(350); await settle(); }
+  for (const t of ['Nova', 'Mornings and weekends', 'You can count on me']) { await p.click(`.sheet .opt:has-text("${t}")`); await sleep(350); await settle(); }
   console.log('signature traced:', (await traceSteps(p, '.sheet')).join(' → ')); await sleep(800);
-  await shot('interview'); await dialog('Listen, check'); await dialog('Message the manager'); await dialog('To earn my own money'); await dialog();
+  await shot('interview'); await dialog('Listen, check'); await dialog('Text the boss'); await dialog('To earn my own money'); await dialog();
   console.log('hired:', await ev(() => window.REAL.state.flags.hired));
 
   }
