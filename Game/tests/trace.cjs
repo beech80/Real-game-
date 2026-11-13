@@ -23,7 +23,7 @@ module.exports = async function traceSteps(p, scope = '') {
     }, pts);
     seen.push(info.t); if (process.env.TRACE_LOG) console.log('traced', info.t);
     const btn = await c.evaluateHandle((el) => el.parentElement.querySelector('button.primary'));
-    await btn.asElement().click({ force: true });
+    await btn.asElement().evaluate((b) => b.click());   // a direct click: the pad is busy drawing, so a pointer click can wait a long time on a slow machine
     if (info.final) return seen;
     await p.waitForFunction((el) => !el.isConnected, c, { timeout: 10000 }).catch(() => {});
   }
