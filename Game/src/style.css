@@ -744,3 +744,8 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .breakcard .heart-face { width: 56px; height: 56px; } .breakcard p { margin: 0; font-size: 16px; line-height: 1.4; } .breakcard button { grid-column: 2; justify-self: end; }
 body.a11y-spaced { letter-spacing: .05em; word-spacing: .16em; }
 body.a11y-spaced p, body.a11y-spaced .d-text, body.a11y-spaced .opt, body.a11y-spaced .lead, body.a11y-spaced .readable, body.a11y-spaced #obj-text { line-height: 1.8; }
+
+/* how the player's REAL gets around: walking, wheelchair or crutches */
+.aid-chips { gap: 6px; flex-wrap: nowrap; }
+.aid-btn { flex: 1 1 0; min-width: 0; padding: 7px 4px; border-radius: 12px; background: rgba(255, 255, 255, .08); border: 2px solid rgba(255, 255, 255, .2); color: inherit; font: inherit; font-size: 12px; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; text-align: center; }
+.aid-btn.on { border-color: var(--gold-2); box-shadow: 0 0 0 3px rgba(233, 169, 58, .35); }

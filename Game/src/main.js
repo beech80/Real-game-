@@ -22,7 +22,7 @@ import { installEvents } from './events.js';
 import { scatterFlora, updateLook, inkEdges } from './lookfx.js';
 import { schoolFromLink, enableSchool, teacherDashboard, assignFromLink, setAssignment } from './school.js';
 import { installKeyboard } from './keyboard.js';
-import { initLang, lang, setLang, setReadLevel } from './i18n.js';
+import { initLang, lang, setLang, setReadLevel, tr } from './i18n.js';
 import { voicePanel, bindVoicePanel } from './game.js';
 import { tutorialTick } from './tutorial.js';
 import { VERSION, whatsNew } from './version.js';
@@ -239,7 +239,8 @@ function title() {
   }, { icon: '👥' }); };
   $('#btn-continue').onclick = () => { audio.start(); audio.play('click'); T.hidden = true; startGame(save, false); };
 }
-const creatorState = { i: 0, fur: 0, jacket: 0, hoodie: 0 };
+const creatorState = { i: 0, fur: 0, jacket: 0, hoodie: 0, aid: '' };
+const AIDS = [['', '🚶 Walking'], ['chair', '♿ Wheelchair'], ['crutches', '🩼 Crutches']];
 let preview = null;
 async function creator() {
   mode = 'creator';
@@ -253,9 +254,11 @@ async function creator() {
     if (SPECIES[creatorState.i] !== sp) return;
     if (preview) scene.remove(preview.root);
     preview = new Character(g); preview.root.position.copy(P2W(26, -9.5, 0.13)); preview.root.rotation.y = 0.5; scene.add(preview.root);
-    applyLook(); preview.play('Idle', 0); setTimeout(() => preview && preview.oneShot('Wave'), 300); preview.expression('Happy', 2);
+    applyLook(); preview.setAid(creatorState.aid); preview.play('Idle', 0); setTimeout(() => preview && preview.oneShot('Wave'), 300); preview.expression('Happy', 2);
     $('#cr-loading').hidden = true;
   };
+  const aidChips = () => $('#cr-aid').replaceChildren(...AIDS.map(([id, label]) => h('button', { class: 'aid-btn' + (creatorState.aid === id ? ' on' : ''), 'aria-pressed': String(creatorState.aid === id), onclick: () => { creatorState.aid = id; audio.play('click'); aidChips(); if (preview) preview.setAid(id); } }, tr(label))));
+  aidChips();
   const applyLook = () => preview && preview.setOutfit({ jacket: JACKETS[creatorState.jacket].color, hoodie: HOODIES[creatorState.hoodie].color, fur: FUR_SHIFT[creatorState.fur].mul });
   const chips = (id, list, key) => {
     const el = $(id);
@@ -271,6 +274,7 @@ async function creator() {
     C.hidden = true; camera.clearViewOffset(); audio.play('good');
     const st = newState({ name, species: SPECIES[creatorState.i].id, outfit: { jacket: JACKETS[creatorState.jacket].color, hoodie: HOODIES[creatorState.hoodie].color, fur: FUR_SHIFT[creatorState.fur].mul } });
     st.wardrobe = [...new Set(['black', 'navy', JACKETS[creatorState.jacket].id])];
+    if (creatorState.aid) st.aid = creatorState.aid;
     if (preview) { scene.remove(preview.root); preview = null; }
     try { localStorage.setItem('real.save.v2', JSON.stringify(st)); } catch (e) {}
     startGame(st, true);
@@ -301,7 +305,7 @@ async function startGame(state, isNew) {
   finally { clearTimeout(startWatch); startLoader(false); }
 }
 async function startGameInner(state, isNew) {
-  const ch = new Character(await loadSpecies(state.species), { outfit: state.outfit });
+  const ch = new Character(await loadSpecies(state.species), { outfit: state.outfit, aid: state.aid });
   scene.add(ch.root);
   player = new Player(ch);
   input = new Input($('#view'));
@@ -311,7 +315,7 @@ async function startGameInner(state, isNew) {
   game = new Game(state, {
     sfx: (n) => audio.play(n),
     enterApartment: (silent) => enterApartment(silent), exitApartment: () => exitApartment(),
-    playerAnim: (n, secs) => playerAnim(n, secs), setOutfit: (o) => player.ch.setOutfit(o),
+    playerAnim: (n, secs) => playerAnim(n, secs), setAid: (a) => { player.ch.setAid(a); fpT = 0; }, setOutfit: (o) => player.ch.setOutfit(o),
     npcExpr: (n, e) => npcs[n] && npcs[n].ch.expression(e, 3),
     jaxLeave: () => { if (npcs.Jax) npcs.Jax.hidden = true; },
     goToClub: () => invitation(),

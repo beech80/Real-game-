@@ -69,7 +69,59 @@ export class Character {
     this.expr = { name: null, w: 0, target: 0 };
     this.blinkT = 2 + Math.random() * 3; this.blinkW = 0;
     if (opts.outfit) this.setOutfit(opts.outfit);
+    // the seated pose for a wheelchair comes from the Sit clip: hips and legs only, so the arms and head still wave, talk and look around
+    this.bones = {}; this.root.traverse((o) => { if (o.isBone) this.bones[o.name] = o; });
+    const sit = gltf.animations.find((c) => /_Sit$/.test(c.name)); this.seat = [];
+    if (sit) for (const t of sit.tracks) { const [bone, prop] = t.name.split('.'); if (/^(pelvis|thigh|calf|foot|ball)/.test(bone) && this.bones[bone] && (prop === 'quaternion' || prop === 'position')) this.seat.push([this.bones[bone], prop, Array.from(t.values.slice(0, prop === 'position' ? 3 : 4))]); }
+    if (opts.aid) this.setAid(opts.aid);
   }
+
+  /** A mobility aid the player can choose: 'chair' (wheelchair), 'crutches', or none. */
+  setAid(kind) {
+    if (this.aidObj) { this.root.remove(this.aidObj); this.aidObj.traverse((o) => { if (o.geometry) o.geometry.dispose(); }); }
+    this.aidObj = null; this.aid = kind === 'chair' || kind === 'crutches' ? kind : null;
+    if (!this.aid) { this.mixer.update(0); return; }
+    const mat = (c, r = 0.55, m = 0.1) => new THREE.MeshStandardMaterial({ color: c, roughness: r, metalness: m });
+    const steel = mat(0x9aa3ad, 0.35, 0.6), dark = mat(0x23262b, 0.8), grip = mat(0x2f6fd0, 0.6);
+    const add = (g, geo, m, x, y, z) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); o.castShadow = true; g.add(o); return o; };
+    const G = new THREE.Group(); G.name = 'mobility-aid';
+    if (this.aid === 'chair') {
+      this._applySeat(); this.root.updateWorldMatrix(true, true);
+      const pv = this.bones.pelvis ? this.root.worldToLocal(this.bones.pelvis.getWorldPosition(new THREE.Vector3())) : new THREE.Vector3(0, 0.4, 0);
+      const sy = Math.max(0.22, pv.y - 0.09), R = Math.min(0.3, sy + 0.04), zc = pv.z;
+      add(G, new THREE.BoxGeometry(0.4, 0.05, 0.38), grip, 0, sy, zc + 0.08);                       // seat
+      add(G, new THREE.BoxGeometry(0.4, 0.36, 0.04), grip, 0, sy + 0.22, zc - 0.13);                // back rest
+      for (const sx of [-1, 1]) {
+        add(G, new THREE.BoxGeometry(0.03, 0.03, 0.4), steel, sx * 0.2, sy - 0.04, zc + 0.08);       // seat rails
+        add(G, new THREE.BoxGeometry(0.03, 0.5, 0.03), steel, sx * 0.2, sy + 0.2, zc - 0.15);        // back posts
+        add(G, new THREE.BoxGeometry(0.03, 0.03, 0.1), dark, sx * 0.2, sy + 0.45, zc - 0.2);         // push handles
+        add(G, new THREE.BoxGeometry(0.03, sy - 0.06, 0.03), steel, sx * 0.17, (sy + 0.06) / 2, zc + 0.27);   // front legs
+        add(G, new THREE.BoxGeometry(0.13, 0.02, 0.1), dark, sx * 0.1, 0.07, zc + 0.36);              // foot plates
+        add(G, new THREE.BoxGeometry(0.03, 0.03, 0.12), steel, sx * 0.17, 0.08, zc + 0.31);
+        const w = new THREE.Group(); w.position.set(sx * 0.25, R, zc - 0.02); G.add(w);              // big wheel: tyre, push rim, spokes
+        const tyre = add(w, new THREE.TorusGeometry(R - 0.025, 0.025, 8, 28), dark, 0, 0, 0); tyre.rotation.y = Math.PI / 2;
+        const rim = add(w, new THREE.TorusGeometry(R - 0.07, 0.012, 6, 24), steel, sx * 0.035, 0, 0); rim.rotation.y = Math.PI / 2;
+        for (let k = 0; k < 4; k++) { const sp = add(w, new THREE.BoxGeometry(0.012, (R - 0.03) * 2, 0.012), steel, 0, 0, 0); sp.rotation.x = k * Math.PI / 4; }
+        add(w, new THREE.CylinderGeometry(0.03, 0.03, 0.05, 10), steel, 0, 0, 0).rotation.z = Math.PI / 2;
+        (this.wheels = sx < 0 ? [w] : [...this.wheels, w]);
+        const c = add(G, new THREE.CylinderGeometry(0.06, 0.06, 0.03, 14), dark, sx * 0.17, 0.06, zc + 0.27); c.rotation.z = Math.PI / 2;   // small front wheel
+      }
+      add(G, new THREE.BoxGeometry(0.5, 0.03, 0.03), steel, 0, R, zc - 0.02);                        // axle
+    } else {
+      this.crutch = [];
+      for (const side of ['l', 'r']) {
+        const c = new THREE.Group(); G.add(c);
+        const pole = add(c, new THREE.CylinderGeometry(0.014, 0.014, 1, 8), steel, 0, -0.5, 0);       // from the hand down to the ground (scaled each frame)
+        const tip = add(c, new THREE.CylinderGeometry(0.022, 0.026, 0.04, 8), dark, 0, -1, 0);
+        add(c, new THREE.CylinderGeometry(0.014, 0.014, 0.2, 8), steel, 0, 0.1, -0.02).rotation.x = -0.12;   // upper part along the forearm
+        add(c, new THREE.BoxGeometry(0.03, 0.03, 0.11), dark, 0, 0, 0.035);                            // hand grip
+        const cuff = add(c, new THREE.TorusGeometry(0.04, 0.012, 6, 14, Math.PI * 1.5), grip, 0, 0.2, 0); cuff.rotation.x = Math.PI / 2; cuff.rotation.z = Math.PI * 0.75;
+        this.crutch.push({ g: c, pole, tip, hand: this.bones['hand_' + side], sx: side === 'l' ? 1 : -1 });
+      }
+    }
+    this.aidObj = G; this.root.add(G);
+  }
+  _applySeat() { for (const [b, prop, v] of this.seat) b[prop].fromArray(v); }
 
   play(name, fade = 0.25, speed = 1) {
     const a = this.actions[name];
@@ -83,6 +135,7 @@ export class Character {
 
   /** Locomotion from ground speed (m/s). Picks clip and scales playback so feet don't slide. */
   locomote(speed, dt) {
+    this.speed = speed;
     if (this.lock) return;
     if (speed < 0.15) this.play('Idle', 0.3);
     else if (speed < 2.4) { this.play('Walk', 0.25); this.current.timeScale = Math.max(0.6, speed / CLIP_SPEED.Walk); }
@@ -118,6 +171,14 @@ export class Character {
 
   update(dt) {
     this.mixer.update(dt);
+    if (this.aid === 'chair') {   // seated: hips and legs stay in the chair; the wheels turn with the ground speed
+      this._applySeat();
+      if (this.wheels) for (const w of this.wheels) w.rotation.x += (this.speed || 0) * dt / 0.28;
+    } else if (this.aid === 'crutches' && this.crutch) {   // each crutch stands under its hand and reaches the ground
+      this.root.updateWorldMatrix(true, false); const v = this._v || (this._v = new THREE.Vector3());
+      for (const c of this.crutch) { if (!c.hand) continue; this.root.worldToLocal(c.hand.getWorldPosition(v)); const hgt = Math.max(0.15, v.y);
+        c.g.position.set(v.x + c.sx * 0.02, hgt, v.z); c.pole.scale.y = hgt; c.pole.position.y = -hgt / 2; c.tip.position.y = -hgt + 0.02; }
+    }
     // expression envelope
     const e = this.expr;
     if (e.name) {

@@ -1,0 +1,51 @@
+// Mobility aids: a player can choose a wheelchair or crutches in the creator and change it later in Settings.
+// Checks the aid is drawn, saved, the player still moves, and nothing errors.
+const { chromium, devices } = require('playwright');
+const http = require('http'), fs = require('fs'), path = require('path');
+const DIST = path.join(__dirname, '..', 'dist-hosted');
+const OUT = process.env.SHOTS || path.join(__dirname, 'shots');
+const types = { '.txt': 'text/plain', '.html': 'text/html; charset=utf-8', '.json': 'application/json' };
+const wrap = (f, b) => (f.endsWith('index.html') ? Buffer.concat([Buffer.from('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>'), b, Buffer.from('</body></html>')]) : b);
+const srv = http.createServer((q, r) => { const f = path.join(DIST, decodeURIComponent(q.url.split('?')[0])); fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(wrap(f, b)); }); }).listen(0);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+(async () => {
+  fs.mkdirSync(OUT, { recursive: true });
+  const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const ctx = await b.newContext({ ...devices['iPhone 13'] });
+  const p = await ctx.newPage(); const errors = []; p.on('pageerror', (e) => errors.push(e.message));
+  const ev = (f, a) => p.evaluate(f, a);
+  const bad = []; const fail = (m) => { bad.push(m); console.log('FAIL', m); };
+  const shot = (n) => p.screenshot({ path: path.join(OUT, `aid_${n}.png`), timeout: 240000 });
+  const aidDrawn = () => ev(() => { let n = 0; window.__scene.traverse((o) => { if (o.name === 'mobility-aid' && o.parent && o.parent.visible) n++; }); return n; });
+  await p.goto(`http://localhost:${srv.address().port}/index.html`, { timeout: 240000, waitUntil: 'domcontentloaded' });
+  await ev(() => { try { localStorage.clear(); } catch (e) {} });
+  await p.waitForFunction(() => window.REAL && window.REAL.mode === 'title', null, { timeout: 180000 });
+  await ev(() => window.REAL.quality('low'));
+  await p.click('#btn-new'); await p.waitForSelector('#cr-loading', { state: 'hidden', timeout: 120000 });
+  const btns = await p.$$('#cr-aid .aid-btn'); if (btns.length !== 3) fail('the creator should offer walking, wheelchair and crutches');
+  await p.click('#cr-aid .aid-btn:has-text("Crutches")'); await sleep(2500); await shot('1_creator_crutches');
+  if (await aidDrawn() !== 1) fail('crutches are not drawn in the creator');
+  await p.click('#cr-aid .aid-btn:has-text("Wheelchair")'); await sleep(2500); await shot('2_creator_chair');
+  if (await aidDrawn() !== 1) fail('the wheelchair is not drawn in the creator');
+  await p.fill('#cr-name', 'Kai'); await p.click('#cr-go');
+  await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 180000 });
+  await ev(() => window.REAL.devJump('hired')); await sleep(1500);
+  await ev(() => { const s = window.REAL.state; s.quest = 'free'; s.time = 11; window.REAL.teleportXY(22, -6); window.REAL.cam(2.4, 0.3, 3.2); }); await sleep(3000);
+  if (await ev(() => window.REAL.state.aid) !== 'chair') fail('the wheelchair choice was not saved');
+  if (await aidDrawn() !== 1) fail('the wheelchair is not drawn in the game');
+  await shot('3_play_chair');
+  const p0 = await ev(() => window.REAL.playerPos());
+  await p.keyboard.down('ArrowUp'); await sleep(9000); await p.keyboard.up('ArrowUp');
+  const p1 = await ev(() => window.REAL.playerPos());
+  if (Math.hypot(p1.x - p0.x, p1.y - p0.y) < 0.3) fail('the player in a wheelchair did not move');
+  await ev(() => window.REAL.cam(2.4, 0.3, 3.2)); await sleep(1500); await shot('4_play_chair_moved');
+  // change it later (what the Settings row does)
+  await ev(() => { const g = window.REAL.game(); g.state.aid = 'crutches'; g.hooks.setAid('crutches'); window.REAL.cam(2.4, 0.3, 3.2); }); await sleep(2500);
+  if (await aidDrawn() !== 1) fail('crutches are not drawn in the game');
+  await shot('5_play_crutches');
+  await ev(() => { const g = window.REAL.game(); delete g.state.aid; g.hooks.setAid(''); }); await sleep(1500);
+  if (await aidDrawn() !== 0) fail('choosing walking did not remove the aid');
+  console.log('page errors', errors.length, errors.slice(0, 3)); if (errors.length) fail('page errors');
+  console.log(bad.length ? 'AIDS FAILED' : 'AIDS PASSED');
+  await b.close(); srv.close(); process.exit(bad.length ? 1 : 0);
+})().catch((e) => { console.error('FAIL', e.message.split('\n')[0]); srv.close(); process.exit(2); });

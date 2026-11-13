@@ -3,9 +3,10 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.2.1';
+export const VERSION = '1.3.0';
 export const NOTES = [
-  ['1.2.1', [
+  ['1.3.0', [
+    ['♿', 'Wheelchair and crutches', 'Your REAL can use a wheelchair or crutches. Pick it when you make your REAL, or in Settings.'],
     ['👁️', 'See through your eyes', 'Tap 👁️ to see the world the way your REAL sees it. Tap it again to see your REAL from behind.'],
     ['🎵', 'Softer music', 'The drum beat is gone. The music is calm now.'],
   ]],
