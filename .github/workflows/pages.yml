@@ -1,10 +1,11 @@
-# Publish the game as a public website with GitHub Pages: every push builds Game/ and deploys Game/dist.
+# Publish the game as a public website with GitHub Pages. Work in progress can be pushed freely: the site is
+# rebuilt and deployed only when Game/RELEASE changes, which is done after the tests pass.
 name: Publish the game
 
 on:
   push:
     branches: [claude/real-game-production-xbixza, main]
-    paths: ['Game/**', '.github/workflows/pages.yml']
+    paths: ['Game/RELEASE', '.github/workflows/pages.yml']   # the site updates only when Game/RELEASE changes (a tested release)
   workflow_dispatch:
 
 permissions:
