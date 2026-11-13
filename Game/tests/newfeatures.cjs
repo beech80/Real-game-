@@ -55,7 +55,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const tb = await p.$(`${top} button.tool`);
     if (!tb) { fail(`no math tool button on ${skill}`); }
     else {
-      await tb.click(); await sleep(600);
+      await tb.evaluate((b) => b.click()); await sleep(600);
       const on = await ev((t) => { const x = document.querySelector(`${t} .manip-tabs .on`); return x && x.textContent; }, top);
       console.log(skill, 'tool opened:', on);
       if (!on || !want.test(on)) fail(`${skill}: the fitting tool did not open first (got ${on})`);
