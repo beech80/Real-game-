@@ -149,17 +149,18 @@ let seed = 7; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483
   };
 
   // ---------------------------------------------------------------- the loop
-  let actions = 0, last = '', same = 0, prevSig = '', clockAt = 0; const trail = [];
+  let badReads = 0; let actions = 0, last = '', same = 0, prevSig = '', clockAt = 0; const trail = [];
   const t0 = Date.now();
   while (actions < MAX_ACTIONS) {
-    let s; try { s = await S(); } catch (e) { await sleep(1000); continue; }
+    let s; try { s = await Promise.race([S(), sleep(120000).then(() => { throw new Error('the page did not answer for 2 minutes'); })]); badReads = 0; }
+    catch (e) { if (++badReads % 20 === 1) console.log('state read failed:', e.message.slice(0, 200)); if (badReads > 60) { issue('frozen', e.message.slice(0, 200)); await shot('frozen').catch(() => {}); break; } await sleep(1000); continue; }
     if (s.day > MAX_DAYS) { issue('too-long', `still not finished after ${MAX_DAYS} game days (Life Level ${s.ll})`); break; }
     const partName = s.ending ? 'epilogue' : s.chapter === 'prologue' ? 'prologue (The Club)' : s.chapter === 'nowhere' ? 'countryside walk' : s.quest === 'invite' ? 'invitation' : ({ find_help: 'arrival & home', job: 'first job: applying', clockin: 'first job: shifts', shift: 'first job: shifts', jax1: 'Jax', home: 'first evening at home' })[s.quest] || `free play (Life Level ${s.ll})`;
     mark(partName, s); part.actions++;
     if (s.ending && !s.busy && !(await vis('#caption'))) { console.log('reached the epilogue'); break; }
     actions++;
     let did = false, how = '';
-    try { did = await handleUI(); how = did ? 'ui' : ''; if (!did) { did = await act(s); how = 'act'; } } catch (e) { console.log('step error', e.message.slice(0, 120)); await p.keyboard.press('Escape').catch(() => {}); }
+    try { await Promise.race([(async () => { did = await handleUI(); how = did ? 'ui' : ''; if (!did) { did = await act(s); how = 'act'; } })(), sleep(420000).then(() => { throw new Error('one step took over 7 minutes'); })]); } catch (e) { console.log('step error', e.message.slice(0, 120)); await p.keyboard.press('Escape').catch(() => {}); }
     const label = await p.textContent('#btn-interact').catch(() => '');
     const topTitle = await p.$eval('#modal .modal:last-child .sh-title', (e) => e.textContent).catch(() => '');
     trail.push(`${how}/${did} loc=${s.loc} key=${s.key} pos=${s.pos ? Math.round(s.pos.x) + ',' + Math.round(s.pos.y) : '-'} me=${Math.round(s.pos0.x)},${Math.round(s.pos0.y)} btn=“${(label || '').trim().slice(0, 30)}” sheet=“${topTitle}” $${s.money}`); if (process.env.TRAIL) console.log(trail[trail.length - 1]); if (trail.length > 15) trail.shift();
