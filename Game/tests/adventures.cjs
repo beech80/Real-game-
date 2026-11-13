@@ -87,7 +87,13 @@ let step = 0, p;
       const x = await top.$('.sh-x'); if (x) { await x.click(); continue; }
     }
   };
-  const talk = async (id, want, label) => { await ev((k) => { window.__t = window.REAL.game().advTalk(k); }, id); await play(want, 160, label); await ev(() => window.__t); };
+  const talk = async (id, want, label) => { await ev((k) => { window.__t = window.REAL.game().advTalk(k); }, id); await play(want, 160, label);
+    const r = await Promise.race([ev(() => window.__t).then(() => 'ok'), sleep(600000).then(() => 'hung')]);
+    if (r === 'hung') {   // say what the game is waiting on, then stop
+      console.log('HUNG in', id, JSON.stringify(await ev(() => ({ mini: !!window.REAL.mini(), dialog: !document.querySelector('#dialog').hidden && document.querySelector('#dialog').textContent.slice(0, 200), modals: [...document.querySelectorAll('#modal .modal')].map((m) => m.textContent.slice(0, 200)), caption: !document.querySelector('#caption').hidden && document.querySelector('#caption').textContent, fade: [...document.querySelectorAll('.fade')].map((f) => getComputedStyle(f).opacity), other: [...document.body.children].filter((e) => e.id !== 'modal' && getComputedStyle(e).display !== 'none' && !e.hidden).map((e) => e.tagName + '#' + e.id + '.' + e.className).join(' ') }))));
+      await p.screenshot({ path: path.join(OUT, 'adv_HUNG.png'), timeout: 240000 }).catch(() => {});
+      throw new Error('adventure ' + id + ' never finished');
+    } };
   const S = (f) => ev(f);
   await p.goto(`http://localhost:${srv.address().port}/index.html`);
   await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
