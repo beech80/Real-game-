@@ -21,9 +21,9 @@ export const BUSINESSES = {
   bikes: { name: 'Bike repair', icon: '🚲', startup: 3000, unit: 4, price: 15, demand: 8, perish: false, desc: 'Workshop tools $2,200 + stand $800. Fixes bikes.' },
 };
 export const VEHICLES = {
-  bike: { name: 'City bike', icon: '🚲', price: 150, weekly: 0, desc: 'No fuel, no insurance. Free rides between districts. Good exercise.' },
+  bike: { name: 'City bike', icon: '🚲', price: 150, weekly: 0, desc: 'No gas. No insurance. Free rides from place to place. Good for your body.' },
   scooter: { name: 'Electric scooter', icon: '🛵', price: 900, weekly: 14, desc: 'Charging $4/week + insurance $10/week.' },
-  car: { name: 'Used car', icon: '🚗', price: 2500, weekly: 43, desc: 'Fuel $15/week + insurance $28/week + an oil change every 10 days.' },
+  car: { name: 'Used car', icon: '🚗', price: 2500, weekly: 43, desc: 'Gas $15/week + insurance $28/week + an oil change each 10 days.' },
 };
 export const HOMES = {
   starter: { name: 'The Starter Apartments', district: 'district', rent: 300, door: 'Door_ApartmentLobby' },
@@ -41,12 +41,12 @@ export const ZONES = {
   life: { name: 'Life Skills Gauntlet', icon: '🏆', gens: ['delivery', 'allergy', 'discount', 'recipe', 'lead'] },
 };
 export const FRIENDS = {
-  Marcus: { lines: ['Midtown never sleeps. Neither do my deliveries.', 'You’re the one who walked in from the old road? Respect.', 'Found a shortcut through the cross street today. Life’s good.'], favor: 'address', ask: 'Help me sort these packages?' },
-  'Ms. Lindqvist': { lines: ['The library is free. That’s the best deal in the city.', 'Every book here was written by someone who once knew nothing about it.', 'The Learning Lab upstairs has challenge zones. No timers, I promise.'], favor: 'memo', ask: 'Could you help me read this notice for the board?' },
-  Priya: { lines: ['I learned to code at the City Tech Institute at night.', 'Bugs are just puzzles that haven’t been solved yet.', 'Brightline hires people who can think, not people who already know everything.'], favor: 'loop', ask: 'Second pair of eyes on this code?' },
-  'Coach Bo': { lines: ['Challenge zones are for growing, not for winning.', 'Hints aren’t cheating. Pros use them every day.', 'Take your time. Speed was never the point.'], favor: 'tests', ask: 'Help me pick the best training plan?' },
-  'Dr. Amara': { lines: ['Medicine is years of study. Every one of them was worth it.', 'Rest is part of health. So is a good breakfast.', 'Heights College gives financial aid to people who keep learning.'], favor: 'vitals', ask: 'Can you double-check this chart?' },
-  Theo: { lines: ['The Heights looks fancy. It was built by people who measured carefully.', 'Every building starts as a sketch and a question.', 'The view from Overlook Park is worth the bus fare.'], favor: 'scale', ask: 'Help me check a measurement?' },
+  Marcus: { lines: ['Midtown never sleeps. I bring boxes all day and all night.', 'You’re the one who walked in from the old road? Respect.', 'Found a shortcut through the cross street today. Life’s good.'], favor: 'address', ask: 'Help me sort these packages?' },
+  'Ms. Lindqvist': { lines: ['The library is free. That’s the best deal in the city.', 'Each book here was made by a person who once knew none of it.', 'The Learning Lab upstairs has challenge zones. No timers, I promise.'], favor: 'memo', ask: 'Could you help me read this notice for the board?' },
+  Priya: { lines: ['I learned to code at the City Tech Institute at night.', 'Bugs are just puzzles that haven’t been solved yet.', 'Brightline hires people who can think. You do not have to know it all.'], favor: 'loop', ask: 'Second pair of eyes on this code?' },
+  'Coach Bo': { lines: ['Challenge zones are to help you grow, not to win.', 'Hints are not cheating. Pros use them each day.', 'Take your time. Speed was never the point.'], favor: 'tests', ask: 'Help me pick the best training plan?' },
+  'Dr. Amara': { lines: ['It takes years to learn to be a doctor. Each year was worth it.', 'Rest is part of health. So is a good breakfast.', 'Heights College helps people pay if they keep learning.'], favor: 'vitals', ask: 'Can you double-check this chart?' },
+  Theo: { lines: ['The Heights looks fancy. People built it. They measured with care.', 'Each building starts as a sketch and a question.', 'The view from Overlook Park is worth the bus fare.'], favor: 'scale', ask: 'Help me check how long this is?' },
 };
 
 export function installExpansion(Game) {
@@ -68,10 +68,10 @@ export function installExpansion(Game) {
       shelter: [[s.pet ? `🐾 Visit the shelter with ${s.pet.name}` : '🐾 Adopt a pet', () => this.shelter()]],
       library: [['🧩 Learning Lab challenge zones', () => this.challengeZones('library')], ['📕 Read a book', () => this.readBook()], ['📚 Study (free practice)', () => A.learn(G)]],
       thinktank: [['🏆 Challenge zones', () => this.challengeZones('thinktank')]],
-      sbc: [['🚀 Small Business Center', () => this.sbc()], s.biz ? ['📈 Plan next week (forecast & marketing)', () => this.bizPlanWeek()] : null],
+      sbc: [['🚀 Small Business Center', () => this.sbc()], s.biz ? ['📈 Plan next week (guess sales, tell people)', () => this.bizPlanWeek()] : null],
       bootcamp: [['🎓 Classes', () => school(G, 'bootcamp')]],
       college: [['🎓 Classes', () => school(G, 'college')]],
-      bank: [['🏦 Banking, investing & credit', () => this.bank()]],
+      bank: [['🏦 Banks, saving & credit', () => this.bank()]],
       thread: [['🧥 Shop jackets', () => this.clothing()]],
       kitchen: [['🍳 Eat at Corner Kitchen', () => A.menuBuy(G, 'Corner Kitchen', '🍳', [
         { name: 'Veggie omelette', price: 9.5, icon: '🍳', note: '+50 food, +mood', apply: () => { this.feed(50); s.mood += 6; s.stats.mealsEaten = (s.stats.mealsEaten || 0) + 1; this.advance(0.5); } },
@@ -139,7 +139,7 @@ export function installExpansion(Game) {
     await this.hooks.travel(go);
     s.visited = s.visited || {}; s.visited[go] = true;
     if (['midtown', 'opportunity', 'heights'].every((k) => s.visited[k])) this.achieve('explorer');
-    if (go !== 'district' && !s.flags['intro_' + go]) { s.flags['intro_' + go] = true; const D = DISTRICTS[go]; UI.caption([`${D.name}.`, D.tag, 'Every career here is open to you. What unlocks it is what you learn.'], 2400); }
+    if (go !== 'district' && !s.flags['intro_' + go]) { s.flags['intro_' + go] = true; const D = DISTRICTS[go]; UI.caption([`${D.name}.`, D.tag, 'Each job here is open to you. What you learn is the key.'], 2400); }
     this.save();
   };
   P.overlook = async function () {
@@ -158,7 +158,7 @@ export function installExpansion(Game) {
   };
   P.checkup = async function () {
     const s = this.state;
-    await UI.say('Nurse Kim · City Clinic', `Energy ${Math.round(s.energy)}, food ${Math.round(s.hunger)}, mood ${Math.round(s.mood)}. ${s.hunger < 40 ? 'Eat regular meals. Cooking at home is cheaper and healthier.' : 'You’re eating well.'} ${s.energy < 40 ? 'Sleep is part of health. Get to bed before midnight.' : 'Rested and ready.'}`);
+    await UI.say('Nurse Kim · City Clinic', `Energy ${Math.round(s.energy)}, food ${Math.round(s.hunger)}, mood ${Math.round(s.mood)}. ${s.hunger < 40 ? 'Eat meals at the same times each day. It costs less to cook at home. It is good for you too.' : 'You’re eating well.'} ${s.energy < 40 ? 'Sleep is part of health. Get to bed before midnight.' : 'Rested and ready.'}`);
     s.stats.checkups = (s.stats.checkups || 0) + 1; s.stats.goodNights = (s.stats.goodNights || 0) + 0.5;
     await UI.say('Nurse Kim · City Clinic', 'Before you go, one quick health question. Knowing this keeps you and your friends well.');
     await this.lessonIn('health', 'clinic', 'Health check', '🩺');
@@ -173,7 +173,7 @@ export function installExpansion(Game) {
         h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'DAYS OPEN'), h('b', {}, b.days)), h('div', {}, h('small', {}, 'PROFIT'), h('b', { class: b.profit >= 0 ? 'pos' : 'neg' }, money(b.profit))), h('div', {}, h('small', {}, 'REPUTATION'), h('b', {}, '★'.repeat(Math.round(b.rep / 2)) || '—'))),
         h('div', { class: 'opts' },
           h('button', { class: 'opt', onclick: () => close('hire') }, b.staff.length < 3 ? '👥 Hire an employee' : '👥 Team (3/3)'),
-          !b.store ? h('button', { class: 'opt', onclick: () => close('store') }, '🏪 Open a storefront in Midtown') : null,
+          !b.store ? h('button', { class: 'opt', onclick: () => close('store') }, '🏪 Open a shop in Midtown') : null,
           b.loan > 0 ? h('button', { class: 'opt', onclick: () => close('repay') }, `💳 Repay loan early (${money(b.loan)} left)`) : null,
           h('button', { class: 'opt', onclick: () => close('run') }, `${B.icon} Run today`)),
         h('p', { class: 'tip' }, 'Owners decide: price, supplies, staff and growth. Every decision is a trade-off.')), { icon: '🚀' });
@@ -182,7 +182,7 @@ export function installExpansion(Game) {
       return;
     }
     if (!s.achievements.plan) {
-      await UI.say('Advisor · Small Business Center', 'Every business here starts with a plan. Write one in your phone’s Business app, then come back and we’ll register it.');
+      await UI.say('Advisor · Small Business Center', 'Each shop here starts with a plan. Write one in the Business app on your phone. Then come back and we will sign it up.');
       return;
     }
     const type = await UI.sheet('Start a business', (close) => h('div', { class: 'act' },
@@ -215,8 +215,8 @@ export function installExpansion(Game) {
   P.runBusiness = async function () {
     const s = this.state, b = s.biz, G = this; if (!b) return;
     const B = BUSINESSES[b.type];
-    if (b.last === s.day) { UI.toast('You already opened today. See the daily report in the Business app.', 'info'); return; }
-    if (s.time > 19 || s.time < 6) { UI.toast('Customers come between 6 AM and 7 PM.', 'info'); return; }
+    if (b.last === s.day) { UI.toast('You opened your shop today. See how it went in the Business app.', 'info'); return; }
+    if (s.time > 19 || s.time < 6) { UI.toast('Shoppers come from 6 AM to 7 PM.', 'info'); return; }
     const weather = pick([['☀️ Sunny', 1.15], ['⛅ Cloudy', 1], ['🌧️ Rainy', b.type === 'coffee' ? 1.1 : 0.75], ['🍂 Cool', b.type === 'coffee' ? 1.2 : 0.95]]);
     const expected = Math.round(B.demand * (1 + b.rep * 0.05) * (b.store ? 2.2 : 1) * (1 + b.staff.length * 0.15));
     // 1) supplies
@@ -251,7 +251,7 @@ export function installExpansion(Game) {
   P.hire = async function () {
     const s = this.state, b = s.biz, G = this;
     if (b.staff.length >= 3) { UI.toast('Your team is full.', 'info'); return; }
-    const cands = [['Sam', 'Reliable, 2 years of café work', 16], ['Ana', 'New to work, eager to learn', 15], ['Lee', 'Great with customers, wants weekends only', 17]].filter(([n]) => !b.staff.some((e) => e.name === n));
+    const cands = [['Sam', 'Reliable, 2 years of café work', 16], ['Ana', 'New to work, eager to learn', 15], ['Lee', 'Great with shoppers. Wants weekends only', 17]].filter(([n]) => !b.staff.some((e) => e.name === n));
     const c = await UI.sheet('Hire an employee', (close) => h('div', { class: 'act' },
       h('p', { class: 'lead' }, 'Employees add capacity and run the business on days you don’t. You pay wages every day they work (4 hours).'),
       h('div', { class: 'bill-list' }, cands.map(([n, d, w]) => h('div', { class: 'bill' }, h('div', {}, h('b', {}, n), h('small', {}, `${d} · ${money(w)}/h`)), h('button', { class: 'primary sm', onclick: () => close([n, w]) }, 'Hire'))))), { icon: '👥' });
@@ -263,9 +263,9 @@ export function installExpansion(Game) {
   P.storefront = async function () {
     const s = this.state, b = s.biz;
     if (b.days < 5 || b.rep < 5) { UI.toast(`Landlords want 5+ days of sales and ★★★ reputation first (${b.days} days, ${'★'.repeat(Math.round(b.rep / 2)) || 'no stars'}).`, 'info', 4200); return; }
-    if (s.money < 300) { UI.toast('A storefront needs a $300 deposit.', 'warn'); return; }
+    if (s.money < 300) { UI.toast('You pay $300 first to get a shop.', 'warn'); return; }
     this.spend(300, `${b.name}: storefront deposit`); b.store = true; s.stats.businessSteps = (s.stats.businessSteps || 0) + 2;
-    UI.toast('Storefront open in Midtown: more than twice the customers, plus $30/day rent.', 'good', 4000); this.save();
+    UI.toast('Shop open in Midtown: two times the shoppers and more. Rent is $30 a day.', 'good', 4000); this.save();
   };
   /** Overnight: staff run the business on days you didn't. */
   P.bizOvernight = function () {
@@ -307,7 +307,7 @@ export function installExpansion(Game) {
   P.serviceVehicle = async function () {
     const s = this.state, v = s.vehicle; if (!v) return;
     const cost = v.type === 'car' ? 40 : v.type === 'scooter' ? 20 : 8, due = s.day - v.service;
-    await UI.say('Ray · Midtown Motors', due >= 10 ? 'You’re overdue. Skipping maintenance is how a $40 job becomes a $250 repair.' : 'Regular service keeps small problems small.');
+    await UI.say('Ray · Midtown Motors', due >= 10 ? 'You are late. Skip a $40 check and it can turn into a $250 fix.' : 'Check your car often. Small problems stay small.');
     if (s.money < cost) { UI.toast(`Service costs ${money(cost)}.`, 'warn'); return; }
     this.spend(cost, 'Vehicle service'); v.service = s.day; v.broken = false; s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 0.5; UI.toast('Serviced. Good for 10 days.', 'good'); this.save();
   };
@@ -345,7 +345,7 @@ export function installExpansion(Game) {
   P.shelter = async function () {
     const s = this.state, G = this;
     if (s.pet) { await UI.say('Jo · Paws & Friends', `${s.pet.name} looks ${s.pet.bond >= 6 ? 'so happy' : 'healthy'}! Keep up the walks, food and play.`); return; }
-    await UI.say('Jo · Paws & Friends', 'A pet is a promise: food every day, walks, play and care. It costs $60 to adopt and about $12 a week after that.');
+    await UI.say('Jo · Paws & Friends', 'A pet is a promise: food each day, walks, play and care. It costs $60 to take one home and about $12 a week after that.');
     const t = await UI.sheet('Adopt', (close) => h('div', { class: 'act' }, h('div', { class: 'cards' }, Object.entries(PET_TYPES).map(([id, p]) => h('button', { class: 'card', onclick: () => close(id) }, h('span', { class: 'big-emoji' }, p.icon), h('b', {}, p.name)))),
       h('p', { class: 'tip' }, 'Every pet here needs a good home.')), { icon: '🐾' });
     if (!t) return;
@@ -407,7 +407,7 @@ export function installExpansion(Game) {
   // ---------------------------------------------------------------------------------- savings & interest (Heights Bank)
   P.savings = async function () {
     const s = this.state, G = this; s.savings = s.savings || 0;
-    if (!s.flags.savingsOpen) { await runTask(G, { skill: 'math.percent', q: 'A real savings account pays 4% interest a year. You save $500. How much interest after one year?', a: '$20', o: ['$20', '$200', '$4', '$2'], why: '4% of $500 = 0.04 × 500 = $20 in a year. Anyone promising much more, with no risk, is probably running a scam.' }, 'bank', 'How interest works', '🏦'); s.flags.savingsOpen = true; this.achieve('investor'); }
+    if (!s.flags.savingsOpen) { await runTask(G, { skill: 'math.percent', q: 'A real savings account pays 4% interest a year. You save $500. How much interest do you get in one year?', a: '$20', o: ['$20', '$200', '$4', '$2'], why: '4% of $500 = 0.04 × 500 = $20 in a year. If a person says you will get much more, with no risk, it may be a trick.' }, 'bank', 'How interest works', '🏦'); s.flags.savingsOpen = true; this.achieve('investor'); }
     const act = await UI.sheet('Heights Bank · Savings', (close) => h('div', { class: 'act' },
       h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'CHECKING'), h('b', {}, money(s.money))), h('div', {}, h('small', {}, 'SAVINGS'), h('b', { class: 'pos' }, money(s.savings))), h('div', {}, h('small', {}, 'RATE'), h('b', {}, '4% / year (APY)'))),
       h('div', { class: 'opts' }, [50, 100, 500].map((v) => h('button', { class: 'opt', disabled: s.money < v, onclick: () => close(v) }, `Deposit ${money(v)}`)), h('button', { class: 'opt', disabled: s.savings <= 0, onclick: () => close(-1) }, 'Withdraw everything')),
@@ -425,7 +425,7 @@ export function installExpansion(Game) {
       h('div', { class: 'big-emoji' }, s.companion ? '🧸' : '✨'),
       s.companion ? h('p', { class: 'lead' }, `${s.companion.name} is with you. Your companion floats beside you and shares tips when you need them.`) : h('p', { class: 'lead' }, 'A plush companion travels with you and gives friendly tips. Every REAL can choose a free starter companion, or link a REAL plush with the code on its tag.'),
       h('div', { class: 'opts' },
-        !s.companion ? h('button', { class: 'opt', onclick: () => close('starter') }, 'Choose a free starter companion') : null,
+        !s.companion ? h('button', { class: 'opt', onclick: () => close('starter') }, 'Pick a free first pet friend') : null,
         h('button', { class: 'opt', onclick: () => close('code') }, 'Link a plush with its tag code'),
         s.companion ? h('button', { class: 'opt', onclick: () => close('toggle') }, s.companion.hidden ? 'Show companion' : 'Hide companion') : null),
       h('p', { class: 'tip' }, 'Codes are checked on this device only. No account, no chat, nothing is shared.')), { icon: '🧸' });
@@ -464,7 +464,7 @@ export function installExpansion(Game) {
       if (before > 0) notes.push(`Investments: ${after >= before ? '+' : '−'}${money(Math.abs(after - before))} (one simulated week). Values go up and down.`);
     }
     if (s.savings > 0) { s.savInt = (s.savInt || 0) + s.savings * 0.04 / 52; if (s.savInt >= 0.01 && s.day % 7 === 0) { const i = r2(s.savInt); s.savInt = 0; s.savings = r2(s.savings + i); notes.push(`Savings interest (4% a year): +${money(i)}`); } }
-    if (s.vehicle && s.vehicle.type !== 'bike' && s.day - s.vehicle.service > 12 && !s.vehicle.broken) { s.vehicle.broken = true; s.bills.push({ id: 'repair' + s.day, name: 'Vehicle repair (skipped maintenance)', amount: 250, due: s.day + 5, paid: false }); notes.push('Your vehicle broke down. Skipped maintenance turned into a $250 repair. Service it at Midtown Motors every 10 days.'); }
+    if (s.vehicle && s.vehicle.type !== 'bike' && s.day - s.vehicle.service > 12 && !s.vehicle.broken) { s.vehicle.broken = true; s.bills.push({ id: 'repair' + s.day, name: 'Vehicle repair (skipped maintenance)', amount: 250, due: s.day + 5, paid: false }); notes.push('Your ride broke down. You did not get it checked, so now it costs $250 to fix. Get it checked at Midtown Motors each 10 days.'); }
     if (s.pet) { const p = s.pet; if (s.day - p.fed >= 2) { p.bond = Math.max(0, p.bond - 0.5); s.mood = Math.max(0, s.mood - 8); notes.push(`${p.name} is hungry. Feed your pet at home every day.`); } }
     return notes;
   };
@@ -482,7 +482,7 @@ export function installExpansion(Game) {
         h('button', { class: 'opt', onclick: () => close('ask') }, '💬 Ask Mr. Okafor a question'),
         h('button', { class: 'opt', onclick: () => close('civics') }, '🏛️ How our city works (rights, laws, voting)'),
         h('button', { class: 'opt', onclick: () => close('resume') }, s.flags.resume ? '📝 Update my résumé' : '📝 Help me write a résumé'),
-        struggling ? h('button', { class: 'opt', onclick: () => close('help') }, '🤝 I’m struggling with money') : h('button', { class: 'opt', onclick: () => close('help') }, '🤝 Money help & advice'),
+        struggling ? h('button', { class: 'opt', onclick: () => close('help') }, '🤝 I need help with money') : h('button', { class: 'opt', onclick: () => close('help') }, '🤝 Help with money'),
         ll >= 8 || s.ending ? h('button', { class: 'opt', onclick: () => close('mentor') }, '🌱 Mentor a newcomer') : null)), { icon: '🤝' });
     if (c === 'board') return this.careerBoard();
     if (c === 'ask') return askNPC(this, { name: 'Mr. Okafor' });
@@ -492,7 +492,7 @@ export function installExpansion(Game) {
       const r = await runActivity(G, gen('write.resume'), 'resume', 'Your résumé', '📝');
       await runActivity(G, GEN['write.resume'][1], 'resume', 'Your résumé', '📝');
       s.flags.resume = true; s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 0.5;
-      await UI.say(O, 'That’s a résumé an employer will read twice. It will help every application you send.'); this.save(); return;
+      await UI.say(O, 'A boss will read that résumé twice. It will help with each job you try for.'); this.save(); return;
     }
     if (c === 'help') return this.hardship(lateRent);
     if (c === 'mentor') {
@@ -506,13 +506,13 @@ export function installExpansion(Game) {
   P.hardship = async function (lateRent) {
     const s = this.state, O = 'Mr. Okafor · Community Center';
     const opts = [];
-    if (s.flags.foodBank !== s.day && (s.flags.foodBankLast || 0) <= s.day - 2) opts.push(['🥫 Food bank (free groceries)', 'food']);
+    if (s.flags.foodBank !== s.day && (s.flags.foodBankLast || 0) <= s.day - 2) opts.push(['🥫 Food bank (free food)', 'food']);
     if (lateRent.length) opts.push(['🏠 Rent payment plan (no late fees)', 'plan']);
     opts.push(['📊 Make a budget with me', 'budget']);
     const c = await UI.sheet('Help is available', (close) => h('div', { class: 'act' },
       h('p', { class: 'lead' }, 'Hard weeks happen to everyone. Using help is a smart move, not a failure.'),
       h('div', { class: 'opts' }, opts.map(([l, k]) => h('button', { class: 'opt', onclick: () => close(k) }, l)))), { icon: '🤝' });
-    if (c === 'food') { s.flags.foodBankLast = s.day; s.pantry = s.pantry || {}; s.pantry.rice = (s.pantry.rice || 0) + 3; s.pantry.beans = (s.pantry.beans || 0) + 3; this.feed(25); UI.toast('Free groceries are in your fridge: rice and beans for a few meals.', 'good', 3600); }
+    if (c === 'food') { s.flags.foodBankLast = s.day; s.pantry = s.pantry || {}; s.pantry.rice = (s.pantry.rice || 0) + 3; s.pantry.beans = (s.pantry.beans || 0) + 3; this.feed(25); UI.toast('Free food is in your fridge: rice and beans for a few meals.', 'good', 3600); }
     if (c === 'plan') {
       for (const b of lateRent) { const base = b.lateFee ? b.amount - 15 : b.amount; b.paid = true; b.renewed = true; s.bills.push({ id: 'plan' + s.day + 'a', name: `${b.name} (plan 1 of 2)`, amount: Math.round(base / 2 * 100) / 100, due: s.day + 7, paid: false }, { id: 'plan' + s.day + 'b', name: `${b.name} (plan 2 of 2)`, amount: Math.round(base / 2 * 100) / 100, due: s.day + 14, paid: false }); }
       s.stats.lateFees = Math.max(0, (s.stats.lateFees || 0) - lateRent.length);
@@ -531,7 +531,7 @@ export function installExpansion(Game) {
       h('div', { class: 'opts' }, A.PASSAGES.filter((P) => Math.abs(P.band - b) <= 1).slice(0, 4).map((P) => h('button', { class: 'opt', onclick: () => close('p:' + P.id) }, `${P.icon} ${P.title}`)),
         h('div', { class: 'tier-h' }, 'Practice books'), ...shelf.slice(0, 2).map((k) => h('button', { class: 'opt', onclick: () => close(k.id) }, `📕 ${titles[k.id] || k.name}`)),
         h('div', { class: 'tier-h' }, 'Nonfiction shelf'), ...Object.entries(NF).map(([k, [ic, nm]]) => h('button', { class: 'opt', onclick: () => close('nf:' + k) }, `${ic} ${nm}`)),
-        h('button', { class: 'opt', onclick: () => close('all') }, '📚 Browse every subject (Learn)'))), { icon: '📚' });
+        h('button', { class: 'opt', onclick: () => close('all') }, '📚 See all subjects (Learn)'))), { icon: '📚' });
     if (!pickId) return;
     if (pickId === 'all') return A.learn(this);
     if (pickId.startsWith('nf:')) { const k = pickId.slice(3); for (let i = 0; i < 2; i++) await this.lessonIn(k, 'library', NF[k][1], NF[k][0]); s.stats.booksRead = (s.stats.booksRead || 0) + 1; s.mood = Math.min(100, s.mood + 5); this.advance(0.75); this.save(); return; }
@@ -553,12 +553,12 @@ export function installExpansion(Game) {
     if (c === 'score') {
       // only credit accounts (loans) are reported; rent and phone bills usually aren't. No credit history → no score yet.
       const credit = s.bills.filter((b) => (/^(carloan|bizloan|studentloan)/.test(b.id) || (/^rent/.test(b.id) && s.home === 'owned')) && (b.amount > 0)), onTime = credit.filter((b) => b.paid && !b.lateFee).length + (s.stats.creditOnTime || 0), late = credit.filter((b) => b.lateFee).length + (s.stats.creditLate || 0);
-      if (!credit.length && !s.stats.creditOnTime) { await UI.say('Advisor · Heights Bank', 'You don’t have a credit score yet: you have no loans or credit cards, so there’s nothing for the credit bureaus to report. Rent and phone bills usually aren’t reported. Paying them on time still matters: late or unpaid bills can be sent to collections, and that hurts your credit.'); }
+      if (!credit.length && !s.stats.creditOnTime) { await UI.say('Advisor · Heights Bank', 'You do not have a credit score yet. You have no loans and no credit cards, so there is nothing to report. Rent and phone bills are not on the report most times. But pay them on time! Late bills can hurt your credit.'); }
       else {
         const months = Math.max(1, Math.round((s.day - (s.vehicle ? s.vehicle.bought : s.day)) / 30));
         const score = Math.max(300, Math.min(850, 640 + Math.min(onTime, 24) * 4 + Math.min(months, 12) * 3 - late * 40));
         s.creditScore = score;
-        await UI.say('Advisor · Heights Bank', `Your simulated credit score is ${score}. Scores come mostly from paying credit on time (the biggest part), how much of your credit limit you use, and how long you’ve had credit. ${late ? 'A late payment can stay on your report for up to 7 years.' : 'Keep every loan payment on time and it will keep climbing slowly.'}`);
+        await UI.say('Advisor · Heights Bank', `Your simulated credit score is ${score}. Scores come mostly from paying credit on time (the biggest part), how much of your credit limit you use, and how long you’ve had credit. ${late ? 'A late payment can stay on your report for up to 7 years.' : 'Pay each loan bill on time. Your score will climb bit by bit.'}`);
       }
       await runActivity(G, gen('fin.score'), 'bank', 'Credit scores', '⭐'); return;
     }
@@ -573,7 +573,7 @@ export function installExpansion(Game) {
     const c = await UI.sheet('Investing simulator', (close) => h('div', { class: 'act' },
       h('p', { class: 'tip' }, 'Simulated money only. Each night is one week of market time, the same clock as your rent and loans. Bond fund (safe): about 4% a year on average, small ups and downs. Mixed: about 6%. Stock fund (risky): about 8%, with big swings. Any of them can lose money. Real stock funds have averaged roughly 7–10% a year over long periods, but have dropped 20–50% in bad years.'),
       h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'SAFE'), h('b', {}, money(P2.safe))), h('div', {}, h('small', {}, 'MIXED'), h('b', {}, money(P2.mixed))), h('div', {}, h('small', {}, 'RISKY'), h('b', {}, money(P2.risky)))),
-      h('div', { class: 'opts' }, ['safe', 'mixed', 'risky'].map((k) => h('button', { class: 'opt', disabled: s.money < 50, onclick: () => close(k) }, `Put $50 in ${k}`)), h('button', { class: 'opt', onclick: () => close('sell') }, 'Sell everything back to checking'))), { icon: '📈' });
+      h('div', { class: 'opts' }, ['safe', 'mixed', 'risky'].map((k) => h('button', { class: 'opt', disabled: s.money < 50, onclick: () => close(k) }, `Put $50 in ${k}`)), h('button', { class: 'opt', onclick: () => close('sell') }, 'Sell it all. Move the money to checking'))), { icon: '📈' });
     if (!c) return;
     if (c === 'sell') { const tot = Math.round((P2.safe + P2.mixed + P2.risky) * 100) / 100; if (tot > 0) { this.earn(tot, 'Investments sold'); s.stats.earned -= tot; } P2.safe = P2.mixed = P2.risky = 0; }
     else { this.spend(50, `Invested ($50 ${c})`); s.stats.spent -= 50; P2[c] = Math.round((P2[c] + 50) * 100) / 100; if (P2.safe && P2.mixed && P2.risky) { s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1; await runActivity(G, gen('fin.diversify'), 'bank', 'Diversification', '🧺'); } }
@@ -582,12 +582,12 @@ export function installExpansion(Game) {
   /** Jax's advice: sometimes good, sometimes misleading. The skill is judging it, not ignoring him. */
   const JAX_TIPS = [
     { t: 'Buy the 20-lb bag of rice instead of the little ones. Way cheaper per meal.', good: true, why: 'Unit price: the big bag costs less per pound. If you’ll use it before it spoils, it’s a good tip.', skill: 'think.compare' },
-    { t: 'Get the weekly bus pass. You ride every day anyway.', good: true, why: '7 rides × $2 = $14. If the pass costs less than that, it saves money.', skill: 'think.compare' },
-    { t: 'Skip the phone bill this week. Nobody pays on time.', good: false, why: 'Late bills add fees and hurt your credit score. “Nobody does it” isn’t evidence.', skill: 'think.consequence' },
-    { t: 'My buddy’s new coin is going to the moon. Put your rent money in. Guaranteed!', good: false, why: '“Guaranteed” returns don’t exist, and rent money is money you can’t afford to lose.', skill: 'think.risk' },
+    { t: 'Get the bus pass for the week. You ride each day.', good: true, why: '7 rides × $2 = $14. If the pass costs less than that, it saves money.', skill: 'think.compare' },
+    { t: 'Skip the phone bill this week. Nobody pays on time.', good: false, why: 'Late bills cost more and hurt your credit score. “No one does it” is not proof.', skill: 'think.consequence' },
+    { t: 'My buddy’s new coin is going to the moon. Put your rent money in. Guaranteed!', good: false, why: 'No one can promise you will win money. And you need your rent money.', skill: 'think.risk' },
     { t: 'Take that night class at City Tech. Brightline hires people who finish it.', good: true, why: 'It costs now but leads to higher pay. That’s long-term thinking.', skill: 'think.longterm' },
-    { t: 'Everyone in Midtown has the new phone. You look broke without it.', good: false, why: 'That’s peer pressure (“everyone has it”), not a reason. Check whether it fits your budget.', skill: 'think.persuasion' },
-    { t: 'Ask Rosa for more shifts before the holidays. Stores need extra hands.', good: true, why: 'Busy seasons mean more hours are available. Asking politely is smart.', skill: 'think.planning' },
+    { t: 'Everyone in Midtown has the new phone. You look broke without it.', good: false, why: '“They all have it” is not a good reason. Check if it fits your budget.', skill: 'think.persuasion' },
+    { t: 'Ask Rosa for more shifts before the holidays. Stores need more hands.', good: true, why: 'Busy times mean more hours to work. It is smart to ask in a nice way.', skill: 'think.planning' },
     { t: 'Text your bank PIN to that number. They said it’s to unlock your account.', good: false, why: 'Banks never ask for your PIN. That’s a scam.', skill: 'fin.fraud' },
   ];
   P.jaxAdvice = async function () {
@@ -600,7 +600,7 @@ export function installExpansion(Game) {
     this.edu.record(tip.skill, ok, { ctx: 'jax' }); this.edu.record('think.evaluate', ok, { ctx: 'jax' });
     if (ok) s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1;
     if (ok) await UI.say('Jax', (tip.good ? 'See? Told you. ' : 'Ha. You caught that one. ') + tip.why, null, { tone: 'jax' });
-    else await UI.say('Thinking it through', (tip.good ? 'Look again: this tip was actually good advice. ' : 'Look again: this tip was bad advice. ') + tip.why);
+    else await UI.say('Thinking it through', (tip.good ? 'Look again: this tip was good to hear. ' : 'Look again: this tip was bad advice. ') + tip.why);
     this.befriend('Jax', 0.3); this.save();
   };
   /** Calendar → plan the week: scheduling + budget allocation. */
@@ -616,7 +616,7 @@ export function installExpansion(Game) {
     await runActivity(this, gen('fin.cashflow'), 'business', 'Cash flow', '💵');
     const m = await UI.sheet('Marketing', (close) => h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Pick one idea for next week:'),
       h('div', { class: 'opts' }, [['Loyalty card: 10th drink free', 'loyal'], ['Flyers at Fresh Mart ($15)', 'flyers'], ['Pay for fake reviews', 'fake']].map(([l, k]) => h('button', { class: 'opt', onclick: () => close(k) }, l)))), { icon: '📣' });
-    if (m === 'fake') { this.edu.record('think.ethics', false, { ctx: 'business' }); b.rep = Math.max(0, b.rep - 1); await UI.say('Advisor · Small Business Center', 'Fake reviews mislead customers, and when people find out, trust is gone. Your reputation dropped. Honest marketing lasts longer.'); }
+    if (m === 'fake') { this.edu.record('think.ethics', false, { ctx: 'business' }); b.rep = Math.max(0, b.rep - 1); await UI.say('Advisor · Small Business Center', 'Fake reviews trick people. When they find out, they stop trusting you. People trust you less now. The truth lasts.'); }
     else { this.edu.record('think.strategy', true, { ctx: 'business' }); if (m === 'flyers' && s.money >= 15) this.spend(15, `${b.name}: flyers`); b.rep = Math.min(10, b.rep + (m === 'loyal' ? 0.6 : 0.8)); UI.toast('Good plan. Reputation up.', 'good'); }
     s.stats.businessSteps = (s.stats.businessSteps || 0) + 0.5; this.save();
   };

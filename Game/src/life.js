@@ -41,36 +41,36 @@ export function lifeLevel(s, edu) {
 // ------------------------------------------------------------------------------------------- careers (Tier 0-4)
 // req: skills (skill id -> min state), life (Life Level), shifts, flag; where: 'here' playable now, else district
 export const CAREERS = [
-  { id: 'cashier', tier: 0, title: 'Cashier', employer: 'Fresh Mart', rate: 15, hours: 4, where: 'here', req: {}, desc: 'Scan items, make change, help customers.' },
-  { id: 'shiftlead', tier: 0, title: 'Shift Lead', employer: 'Fresh Mart', rate: 17, hours: 4, where: 'here', req: { shifts: 4, skills: { 'math.change': 3, 'read.instructions': 3 } }, desc: 'Open the store, train new cashiers, balance the register.', promotionOf: 'cashier' },
+  { id: 'cashier', tier: 0, title: 'Cashier', employer: 'Fresh Mart', rate: 15, hours: 4, where: 'here', req: {}, desc: 'Scan things, make change, help shoppers.' },
+  { id: 'shiftlead', tier: 0, title: 'Shift Lead', employer: 'Fresh Mart', rate: 17, hours: 4, where: 'here', req: { shifts: 4, skills: { 'math.change': 3, 'read.instructions': 3 } }, desc: 'Open the store. Teach new cashiers. Count the register.', promotionOf: 'cashier' },
   { id: 'barista', tier: 0, title: 'Barista (weekends)', employer: 'Daily Grind', rate: 15, hours: 4, where: 'here', req: { shifts: 1, flag: 'baristaTip' }, desc: 'Take orders, measure recipes, make change. Tips on top.' },
-  { id: 'courier', tier: 0, title: 'Delivery courier', employer: 'Midtown Express', rate: 16, where: 'Midtown', req: { skills: { 'read.signs': 3 } }, desc: 'Read addresses and maps, deliver on time.' },
-  { id: 'warehouse', tier: 0, title: 'Warehouse associate', employer: 'Opportunity Logistics', rate: 17, where: 'Opportunity District', req: { skills: { 'math.multiply': 3 } }, desc: 'Count, sort and load inventory.' },
-  { id: 'mechanic', tier: 1, title: 'Mechanic apprentice', employer: 'Midtown Motors', rate: 19, where: 'Midtown', req: { life: 5, skills: { 'read.instructions': 3, 'math.fractions': 2 } }, desc: 'Diagnose problems, follow service manuals, measure parts.' },
-  { id: 'cook', tier: 1, title: 'Line cook', employer: 'Corner Kitchen', rate: 18, where: 'Midtown', req: { life: 4, skills: { 'math.fractions': 3 } }, desc: 'Scale recipes, time orders, keep the kitchen safe.' },
-  { id: 'sales', tier: 1, title: 'Sales associate', employer: 'Thread & Co', rate: 18, where: 'Midtown', req: { life: 4, skills: { 'math.percent': 2, 'write.professional': 2 } }, desc: 'Help customers compare options and work out discounts.' },
-  { id: 'office', tier: 1, title: 'Office assistant', employer: 'Opportunity District', rate: 20, where: 'Opportunity District', req: { life: 5, skills: { 'write.professional': 3, 'read.documents': 3 } }, desc: 'Write emails, file documents, schedule meetings.' },
+  { id: 'courier', tier: 0, title: 'Delivery courier', employer: 'Midtown Express', rate: 16, where: 'Midtown', req: { skills: { 'read.signs': 3 } }, desc: 'Read street names and maps. Be on time.' },
+  { id: 'warehouse', tier: 0, title: 'Warehouse associate', employer: 'Opportunity Logistics', rate: 17, where: 'Opportunity District', req: { skills: { 'math.multiply': 3 } }, desc: 'Count, sort and load the stock.' },
+  { id: 'mechanic', tier: 1, title: 'Mechanic apprentice', employer: 'Midtown Motors', rate: 19, where: 'Midtown', req: { life: 5, skills: { 'read.instructions': 3, 'math.fractions': 2 } }, desc: 'Find what is wrong. Read the guide. Measure parts.' },
+  { id: 'cook', tier: 1, title: 'Line cook', employer: 'Corner Kitchen', rate: 18, where: 'Midtown', req: { life: 4, skills: { 'math.fractions': 3 } }, desc: 'Make recipes bigger or smaller. Time each order. Keep the kitchen safe.' },
+  { id: 'sales', tier: 1, title: 'Sales associate', employer: 'Thread & Co', rate: 18, where: 'Midtown', req: { life: 4, skills: { 'math.percent': 2, 'write.professional': 2 } }, desc: 'Help shoppers pick. Work out sale prices.' },
+  { id: 'office', tier: 1, title: 'Office assistant', employer: 'Opportunity District', rate: 20, where: 'Opportunity District', req: { life: 5, skills: { 'write.professional': 3, 'read.documents': 3 } }, desc: 'Write emails. Put files away. Plan meetings.' },
   { id: 'construction', tier: 1, title: 'Construction helper', employer: 'Build Right Co', rate: 21, where: 'Opportunity District', req: { life: 5, skills: { 'math.fractions': 3 } }, desc: 'Measure, cut and build to plan.' },
-  { id: 'photo', tier: 2, title: 'Photographer', employer: 'Studio Lumen', rate: 26, where: 'Opportunity District', req: { life: 7, skills: { 'math.percent': 3, 'write.professional': 3 } }, desc: 'Equipment, clients, pricing and creative work.' },
-  { id: 'programmer', tier: 2, title: 'Junior programmer', employer: 'Brightline Tech', rate: 32, where: 'Opportunity District', req: { course: 'code', life: 8, skills: { 'math.algebra': 2, 'think.evaluate': 3 } }, desc: 'Logic, problem solving and building apps.' },
+  { id: 'photo', tier: 2, title: 'Photographer', employer: 'Studio Lumen', rate: 26, where: 'Opportunity District', req: { life: 7, skills: { 'math.percent': 3, 'write.professional': 3 } }, desc: 'Tools, clients, prices and art work.' },
+  { id: 'programmer', tier: 2, title: 'Junior programmer', employer: 'Brightline Tech', rate: 32, where: 'Opportunity District', req: { course: 'code', life: 8, skills: { 'math.algebra': 2, 'think.evaluate': 3 } }, desc: 'Think, solve problems and build apps.' },
   { id: 'accountant', tier: 2, title: 'Accounting clerk', employer: 'Ledger & Co', rate: 28, where: 'Opportunity District', req: { course: 'acct', life: 8, skills: { 'fin.taxes': 3, 'math.percent': 3 } }, desc: 'Records, reports and accuracy.' },
-  { id: 'health', tier: 2, title: 'Healthcare aide', employer: 'City Clinic', rate: 25, where: 'Midtown', req: { life: 7, skills: { 'read.documents': 3 } }, desc: 'Care for patients, read charts, follow procedures.' },
-  { id: 'electrician', tier: 2, title: 'Electrician apprentice', employer: 'Volt Works', rate: 27, where: 'Opportunity District', req: { course: 'trades', life: 7, skills: { 'math.algebra': 2, 'read.instructions': 3 } }, desc: 'Wiring, safety codes and measurement.' },
-  { id: 'engineer', tier: 3, title: 'Engineer', employer: 'Heights Engineering', rate: 45, where: 'The Heights', req: { course: 'eng', life: 10, skills: { 'math.algebra': 3 } }, desc: 'Design and test real-world systems.' },
+  { id: 'health', tier: 2, title: 'Healthcare aide', employer: 'City Clinic', rate: 25, where: 'Midtown', req: { life: 7, skills: { 'read.documents': 3 } }, desc: 'Care for patients. Read charts. Do each step.' },
+  { id: 'electrician', tier: 2, title: 'Electrician apprentice', employer: 'Volt Works', rate: 27, where: 'Opportunity District', req: { course: 'trades', life: 7, skills: { 'math.algebra': 2, 'read.instructions': 3 } }, desc: 'Wires, safe rules and how to measure.' },
+  { id: 'engineer', tier: 3, title: 'Engineer', employer: 'Heights Engineering', rate: 45, where: 'The Heights', req: { course: 'eng', life: 10, skills: { 'math.algebra': 3 } }, desc: 'Plan and test things for the real world.' },
   { id: 'doctor', tier: 3, title: 'Resident doctor', employer: 'Heights Medical', rate: 32, where: 'The Heights', req: { course: 'medschool', life: 11, skills: { 'read.documents': 3 } }, desc: 'Years of study to care for others.' },
   { id: 'architect', tier: 3, title: 'Architect', employer: 'Form Studio', rate: 48, where: 'The Heights', req: { course: 'arch', life: 10, skills: { 'math.multiply': 3 } }, desc: 'Buildings, geometry and clients.' },
   { id: 'lawyer', tier: 3, title: 'Associate lawyer', employer: 'Heights Legal', rate: 62, where: 'The Heights', req: { course: 'lawschool', life: 11, skills: { 'read.documents': 3 } }, desc: 'Contracts, evidence and argument.' },
   // careers that grow out of adventures (the adventure character becomes your boss)
   { id: 'racemech', tier: 1, title: 'Race mechanic', employer: 'Rita’s Garage', rate: 19, where: 'Starting District', adv: 'race', req: { life: 3, flag: 'adv_race_1' }, desc: 'Tune cars, fix engines, prep racers.' },
-  { id: 'firefighter', tier: 1, title: 'Firefighter cadet', employer: 'Station 7', rate: 18, where: 'Starting District', adv: 'rescue', req: { life: 3, flag: 'adv_rescue_2' }, desc: 'Safety checks, drills and community rescues.' },
-  { id: 'vettech', tier: 1, title: 'Animal care assistant', employer: 'Brighter Park Pet Club', rate: 17, where: 'Starting District', adv: 'pets', req: { flag: 'adv_pets_1' }, desc: 'Feed, exercise and care for animals.' },
-  { id: 'medasst', tier: 1, title: 'Medical assistant', employer: 'City Clinic', rate: 19, where: 'Midtown', adv: 'medical', req: { life: 4, flag: 'adv_medical_2' }, desc: 'Check-in, supplies and patient care.' },
-  { id: 'detective', tier: 1, title: 'Junior investigator', employer: 'City Detective Agency', rate: 20, where: 'Starting District', adv: 'mystery', req: { life: 4, flag: 'adv_mystery_1' }, desc: 'Find facts, interview people, solve cases.' },
+  { id: 'firefighter', tier: 1, title: 'Firefighter cadet', employer: 'Station 7', rate: 18, where: 'Starting District', adv: 'rescue', req: { life: 3, flag: 'adv_rescue_2' }, desc: 'Safe checks, drills and help for the town.' },
+  { id: 'vettech', tier: 1, title: 'Animal care assistant', employer: 'Brighter Park Pet Club', rate: 17, where: 'Starting District', adv: 'pets', req: { flag: 'adv_pets_1' }, desc: 'Feed pets, walk them and care for them.' },
+  { id: 'medasst', tier: 1, title: 'Medical assistant', employer: 'City Clinic', rate: 19, where: 'Midtown', adv: 'medical', req: { life: 4, flag: 'adv_medical_2' }, desc: 'Check-in, things you need and care for patients.' },
+  { id: 'detective', tier: 1, title: 'Junior investigator', employer: 'City Detective Agency', rate: 20, where: 'Starting District', adv: 'mystery', req: { life: 4, flag: 'adv_mystery_1' }, desc: 'Find facts. Talk to people. Solve cases.' },
   { id: 'robotech', tier: 2, title: 'Robotics technician', employer: 'Opportunity Robo Lab', rate: 26, where: 'Opportunity District', adv: 'robots', req: { life: 6, flag: 'adv_robots_3' }, desc: 'Build, program and test robots.' },
   { id: 'chef', tier: 2, title: 'Chef', employer: 'Corner Kitchen', rate: 27, where: 'Midtown', adv: 'culinary', req: { life: 6, flag: 'adv_culinary_2' }, desc: 'Create menus, run the kitchen, train cooks.' },
-  { id: 'designer', tier: 2, title: 'Product designer', employer: 'Volt Works Lab', rate: 29, where: 'Opportunity District', adv: 'inventor', req: { life: 7, flag: 'adv_inventor_2' }, desc: 'Invent, prototype and test new products.' },
+  { id: 'designer', tier: 2, title: 'Product designer', employer: 'Volt Works Lab', rate: 29, where: 'Opportunity District', adv: 'inventor', req: { life: 7, flag: 'adv_inventor_2' }, desc: 'Think up new things, build them and test them.' },
   { id: 'contractor', tier: 2, title: 'Contractor', employer: 'Build Right Co', rate: 30, where: 'Opportunity District', adv: 'construction', req: { life: 7, flag: 'adv_construction_3' }, desc: 'Plan and lead building projects.' },
-  { id: 'owner', tier: 4, title: 'Business owner', employer: 'Your own company', rate: 0, where: 'Business app', req: { life: 6, skills: { 'fin.budget': 3 } }, desc: 'Build something that’s yours. Start with a business plan in the Business app.' },
+  { id: 'owner', tier: 4, title: 'Business owner', employer: 'Your own company', rate: 0, where: 'Business app', req: { life: 6, skills: { 'fin.budget': 3 } }, desc: 'Build a thing that is yours. Start with a plan in the Business app.' },
 ];
 export const COURSE_NAMES = { code: 'Intro to Programming (City Tech)', trades: 'Electrical Safety (City Tech)', acct: 'Accounting Basics (City Tech)', eng: 'Engineering degree (Heights College)', med: 'Bachelor’s degree, pre-med track (Heights College)', medschool: 'Medical school (Heights College of Medicine)', lawschool: 'Law school (Heights College of Law)', arch: 'Architecture degree (Heights College)', law: 'Bachelor’s degree, pre-law track (Heights College)' };
 export const TIER_NAMES = ['Starter work', 'Skilled work', 'Careers', 'Professional careers', 'Entrepreneurship'];
@@ -79,7 +79,7 @@ export function careerStatus(c, s, edu, ll) {
   const r = c.req, missing = [];
   if (r.shifts && s.stats.shifts < r.shifts) missing.push(`${r.shifts} shifts worked (${s.stats.shifts} so far)`);
   if (r.life && ll < r.life && !s.flags['ref_' + c.id]) missing.push(`Life Level ${r.life}`);
-  if (r.flag && !s.flags[r.flag]) missing.push(/^adv_/.test(r.flag) ? 'More experience in this adventure' : 'A tip about the opening');
+  if (r.flag && !s.flags[r.flag]) missing.push(/^adv_/.test(r.flag) ? 'More skill in this adventure' : 'A tip about the start');
   if (r.course && !(s.courses && s.courses[r.course] && s.courses[r.course].done)) missing.push(`Course: ${COURSE_NAMES[r.course]}`);
   for (const [id, need] of Object.entries(r.skills || {})) if (edu.state(id) < need) missing.push(`${skillName(id)} — ${['', 'learning', 'practicing', 'proficient', 'mastered'][need]}`);
   const held = (s.jobs || []).includes(c.id);
@@ -94,7 +94,7 @@ export const ACHIEVEMENTS = {
   found_way: ['Found your way', 'Walked from nowhere to the Starting District.'],
   first_home: ['A place to sleep', 'Got your first apartment key.'],
   hired: ['Hired', 'Got your first job.'],
-  regular: ['Part of the neighbourhood', 'Joined in 5 afternoon events around town.'],
+  regular: ['Part of the neighbourhood', 'Joined in 5 events around town.'],
   first_pay: ['The first dollar', 'Earned your first paycheck.'],
   said_no: ['Not today, Jax', 'Thought it through before spending.'],
   honest: ['Clean hands', 'Refused to take what you didn’t pay for.'],
@@ -113,7 +113,7 @@ export const ACHIEVEMENTS = {
   explorer: ['Explorer', 'Visited every district.'],
   owner: ['Open for business', 'Opened your own business.'],
   boss: ['Good boss', 'Hired your first employee.'],
-  profit: ['In the black', 'Made $500 in business profit.'],
+  profit: ['In the black', 'Made $500 from your shop.'],
   wheels: ['On the move', 'Bought a vehicle.'],
   moved_up: ['New address', 'Moved into a better home.'],
   homeowner: ['Homeowner', 'Bought a home.'],
@@ -122,14 +122,14 @@ export const ACHIEVEMENTS = {
   challenge: ['Challenger', 'Cleared a challenge zone.'],
   allzones: ['Think Tank champion', 'Cleared every challenge zone.'],
   companion: ['Plush pal', 'Linked a plush companion.'],
-  investor: ['Investor', 'Opened a savings account that earns interest.'],
-  mentor: ['Mentor', 'Helped a newcomer get started in the city.'],
+  investor: ['Investor', 'Opened a savings account. It pays you a little extra.'],
+  mentor: ['Mentor', 'Helped a new person get a start in the city.'],
   racewin: ['Checkered flag', 'Won a race.'],
   petchamp: ['Champion team', 'Won the Pet Championship.'],
   cookchamp: ['Top chef', 'Wowed the cook-off judges.'],
-  robot: ['It works!', 'Programmed a robot to complete a challenge.'],
-  inventor: ['Inventor', 'Invented something that passed its test.'],
-  bestbiz: ['Best in the city', 'Won the Best Business award.'],
+  robot: ['It works!', 'Coded a robot to win a challenge.'],
+  inventor: ['Inventor', 'Made a new thing that passed its test.'],
+  bestbiz: ['Best in the city', 'Won the Best Business prize.'],
   explorer2: ['Curious mind', 'Tried five different adventures.'],
   reader: ['Bookworm', 'Read five books at the library.'],
 };

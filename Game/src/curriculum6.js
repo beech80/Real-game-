@@ -154,7 +154,7 @@ const FAMILIES = [
 const printing = [
   () => { const [ls, tip] = pick(FAMILIES); const l = pick(ls.split(' ')); return { type: 'trace', skill: 'write.print', style: 'print', word: l, q: `Trace the letter “${l}” in print. ${tip}`, why: tip, diff: 1 }; },
   () => { const U = pick('BDEFHILMNPRTCGOQ'.split('')); return { type: 'trace', skill: 'write.print', style: 'print', word: U, q: `Trace the capital “${U}”. Start at the top line. Touch the bottom line.`, why: 'Capital letters are tall. They go from the top line to the bottom line.', diff: 2 }; },
-  () => { const w = pick(['cat', 'dog', 'sun', 'map', 'pig', 'hat', 'bed', 'fox']); return { type: 'trace', skill: 'write.print', style: 'print', word: w, q: `Trace the word “${w}” in print. Keep the letters close together.`, why: 'Keep the letters in a word close together. Most letters sit on the bottom line.', diff: 2 }; },
+  () => { const w = pick(['cat', 'dog', 'sun', 'map', 'pig', 'hat', 'bed', 'fox']); return { type: 'trace', skill: 'write.print', style: 'print', word: w, q: `Trace the word “${w}” in print. Keep the letters close.`, why: 'Keep the letters in a word close together. Most letters sit on the bottom line.', diff: 2 }; },
   () => { const w = pick(['I can run.', 'The cat sat.', 'We go up.']); return { type: 'trace', skill: 'write.print', style: 'print', word: w, q: `Trace the sentence in print: “${w}”`, why: 'Start with a capital. Leave finger spaces. End with a period.', diff: 3 }; },
 ];
 export const K2_SKILLS = [

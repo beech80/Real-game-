@@ -78,7 +78,7 @@ export function localAnswer(question, ctx = {}) {
     let sc = stems.filter((w) => text.includes(w)).reduce((a, w) => a + wt(w), 0) + (ctx.skill === s.id ? 1.5 : 0) + 2 * stems.filter((w) => nm.includes(w)).reduce((a, w) => a + wt(w), 0);
     if (sc > bs) { bs = sc; best = s; }
   }
-  if (best && bs >= 1.5) return `${skT(best, 'explain')} ${lang() === 'es' ? 'Otra forma de verlo:' : 'Another way to think about it:'} ${skT(best, 'alt')}`;
+  if (best && bs >= 1.5) return `${skT(best, 'explain')} ${lang() === 'es' ? 'Otra forma de verlo:' : 'A new way to think about it:'} ${skT(best, 'alt')}`;
   for (const w of qw) { const e = lookup(w); if (e) return `${w} means ${e.meaning}.`; }
   return null;
 }
@@ -101,7 +101,7 @@ export function askHeart(G, ctx = {}) {
       const q = (qText || inp.value).trim(); if (!q) return;
       out.replaceChildren(h('div', { class: 'heart-row' }, heartEl('think'), h('p', { class: 'tip' }, '💭 …')));
       const smart = await smartAnswer(q, c, band), local = localAnswer(q, c);
-      const ans = smart || local || (lang() === 'es' ? 'Buena pregunta. Abre 📚 Aprender y busca esa habilidad: ahí tienes la lección, un ejemplo paso a paso y práctica.' : 'Good question! Open 📚 Learn and find that skill: it has the lesson, a worked example step by step, and practice.');
+      const ans = smart || local || (lang() === 'es' ? 'Buena pregunta. Abre 📚 Aprender y busca esa habilidad: ahí tienes la lección, un ejemplo paso a paso y práctica.' : 'Good question! Open 📚 Learn and find that skill. It has the lesson, each step shown, and practice.');
       out.replaceChildren(h('div', { class: 'heart-row' }, heartEl('talk'), h('div', { class: 'heart-bubble readable' }, h('b', {}, 'Heart: '), ans)), h('button', { class: 'ghost sm', onclick: () => say(ans) }, '🔊 Again'));
       say(ans);
       G.state.stats.askedHeart = (G.state.stats.askedHeart || 0) + 1;

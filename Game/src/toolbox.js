@@ -85,7 +85,7 @@ function focusTimer() {
   const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
   const tick = () => { left--; disp.textContent = fmt(left); if (left <= 0) { clearInterval(t); t = null;
     if (mode === 'focus') { mode = 'break'; left = 120; note.textContent = '🎉 Brain break! Stand up, stretch, drink some water.'; say('Great focus! Time for a brain break. Stand up and stretch.'); start(); }
-    else { mode = 'focus'; left = 600; disp.textContent = fmt(left); note.textContent = 'Break’s over. Ready for another round?'; say('Break is over. Ready for another round?'); } } };
+    else { mode = 'focus'; left = 600; disp.textContent = fmt(left); note.textContent = 'Break is over. Want to go again?'; say('Break is over. Want to go again?'); } } };
   const start = () => { if (!t) t = setInterval(tick, 1000); };
   const box = h('div', { class: 'act' }, h('p', { class: 'lead' }, '⏱️ Focus timer'), disp, note,
     h('div', { class: 'row' }, h('button', { class: 'primary', onclick: start }, 'Start'), h('button', { class: 'ghost', onclick: () => { clearInterval(t); t = null; } }, 'Pause'), h('button', { class: 'ghost sm', onclick: () => { clearInterval(t); t = null; mode = 'focus'; left = 600; disp.textContent = fmt(left); } }, 'Reset')));
@@ -96,7 +96,7 @@ function focusTimer() {
 // ---- 📝 notes
 function notes(G) {
   const s = G.state, list = s.notes || (s.notes = []);
-  const ta = h('textarea', { class: 'writebox', rows: 3, placeholder: 'Write a note: something you learned, a goal, a question for later…' });
+  const ta = h('textarea', { class: 'writebox', rows: 3, placeholder: 'Write a note: a thing you learned, a goal, a question for later…' });
   const wrap = h('div', {});
   const render = () => wrap.replaceChildren(...list.slice().reverse().map((n, i) => h('div', { class: 'bill' }, h('div', { class: 'readable' }, h('small', {}, `Day ${n.d}`), h('p', {}, n.t)),
     h('div', {}, h('button', { class: 'say-btn', onclick: () => say(n.t) }, '🔊'), h('button', { class: 'ghost sm', onclick: () => { list.splice(list.length - 1 - i, 1); G.save(); render(); } }, '🗑️')))));

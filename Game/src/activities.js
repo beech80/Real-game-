@@ -118,13 +118,13 @@ export function jobApplication(G) {
         return h('div', { class: 'act' },
           h('div', { class: 'posting' }, h('b', {}, 'NOW HIRING: CASHIER'), h('p', {}, 'Fresh Mart is looking for a friendly, reliable cashier. You will scan groceries, make change, stock shelves and help customers find what they need. No experience required. We train you. $15/hour, 4-hour shifts.')),
           h('p', { class: 'lead' }, 'What is the main idea of this posting?'), hp.box,
-          h('div', { class: 'opts' }, shuffle([['Fresh Mart is hiring a cashier and will train you', true], ['Fresh Mart sells cheap groceries', false], ['You need experience to work here', false]]).map(([t, ok]) =>
+          h('div', { class: 'opts' }, shuffle([['Fresh Mart is hiring a cashier and will train you', true], ['Fresh Mart sells food for a low price', false], ['You need experience to work here', false]]).map(([t, ok]) =>
             h('button', { class: 'opt', onclick: (e) => { G.edu.record('read.main', ok, { ctx: 'application', hinted: hp.hinted() }); if (ok) { G.sfx('good'); step(1); } else { G.sfx('bad'); e.currentTarget.classList.add('wrong'); hp.box.hidden = false; } } }, t))), hp.btn);
       },
       () => {
         G.edu.discover('write.forms');
         const hp = helpBox(G, 'write.forms');
-        const fields = [['Name', [G.state.name, 'me', 'a REAL'], G.state.name], ['Available', ['Mornings and weekends', 'whenever lol', '???'], 'Mornings and weekends'], ['Why should we hire you?', ['I am reliable and I learn quickly.', 'i need money', 'Because.'], 'I am reliable and I learn quickly.']];
+        const fields = [['Name', [G.state.name, 'me', 'a REAL'], G.state.name], ['Available', ['Mornings and weekends', 'whenever lol', '???'], 'Mornings and weekends'], ['Why should we hire you?', ['You can count on me, and I learn fast.', 'i need money', 'Because.'], 'You can count on me, and I learn fast.']];
         let i = 0; const wrap = h('div', { class: 'act' });
         const render = () => {
           const [label, opts, good] = fields[i];
@@ -139,7 +139,7 @@ export function jobApplication(G) {
       () => {
         const holder = h('div', { class: 'act' }, h('p', { class: 'lead' }, 'Loading the signature card…'));
         const ready = document.fonts && document.fonts.load ? document.fonts.load('80px "Dancing Script"') : Promise.resolve();
-        Promise.race([ready, wait(2500)]).then(() => holder.replaceWith(cursivePad(G, G.state.name, 'curs.signature', 'Sign your application in cursive. Trace your name with your finger.', () => close(true))));
+        Promise.race([ready, wait(2500)]).then(() => holder.replaceWith(cursivePad(G, G.state.name, 'curs.signature', 'Sign your form in cursive. Trace your name with your finger.', () => close(true))));
         return holder;
       },
     ];
@@ -152,13 +152,13 @@ export async function interview(G) {
   const R = 'Rosa · Manager';
   const qs = [
     ['A customer says they were charged twice. What do you do?', ['Listen, check the receipt, and fix it or get help', 'Tell them it’s not my problem', 'Ignore them and keep scanning'], 0, 'think.consequence',
-      ['When you work the register, the customer’s problem is your problem. Brushing them off loses a customer, and they tell their friends.', 'Ignoring someone makes them angrier, and the double charge is still there. Problems don’t fix themselves.'],
-      'A good worker listens, checks the facts, and fixes it or asks for help.'],
-    ['Your shift starts at 9:00. The bus is late and you’ll arrive at 9:10. What’s best?', ['Message the manager before 9:00 to let them know', 'Show up and say nothing', 'Skip the shift'], 0, 'think.consequence',
-      ['If you say nothing, I don’t know if you’re coming. I can’t plan the shift. A quick message builds trust.', 'Skipping a whole shift because you’re 10 minutes late leaves the team short. Late and honest beats missing.'],
-      'Telling your manager early lets them plan. That’s what reliable people do.'],
+      ['At the register, the shopper’s problem is your problem. If you brush them off, you lose them. And they tell their friends.', 'If you do not answer, they get more upset. And the bill is still wrong. Problems do not fix themselves.'],
+      'A good worker listens and checks the facts. Then they fix it or ask for help.'],
+    ['Your shift starts at 9:00. The bus is late and you’ll arrive at 9:10. What’s best?', ['Text the boss before 9:00 to let them know', 'Show up and say nothing', 'Skip the shift'], 0, 'think.consequence',
+      ['If you say nothing, I don’t know if you’re coming. I can’t plan the shift. A quick message builds trust.', 'You are 10 minutes late. If you skip the whole shift, the team is short. Late and true beats not there.'],
+      'Tell your boss early so they can plan. That is what people you can count on do.'],
     ['Why do you want this job?', ['To earn my own money and learn real skills', 'My old life ended and I have to', 'Honestly, I don’t'], 0, 'think.compare',
-      ['That may be true, but it’s about your past. Tell me what you want to build. Bosses hire people who look ahead.', 'Honesty is good, but a manager wants to hear why you’d show up and try. Find one real reason.'],
+      ['That may be true, but it’s about your past. Tell me what you want to build. Bosses hire people who look ahead.', 'It is good to tell the truth. But a boss wants to hear why you would come and try. Find one real reason.'],
       'Connecting the job to your goals shows you’ll stick with it.'],
   ];
   await UI.say(R, `Thanks for applying, ${G.state.name}. I don’t care where you come from. I care whether you show up and do the work. A few questions.`);
@@ -199,7 +199,7 @@ export function cursivePad(G, text, skill, prompt, done, opts = {}) {
     strip.replaceChildren(...parts.map((t, i) => h('span', { class: st.final ? 'now' : i < st.i ? 'done' : i === st.i ? 'now' : '' }, t)));
     strip.classList.toggle('sentence', sentence);
     stepLbl.textContent = st.final
-      ? (PRINT ? `Now the whole ${sentence ? 'sentence' : 'word'}: trace “${text}”. ${sentence ? 'Leave a finger space between words.' : 'Keep the letters close together.'}` : `Now join them! Trace the whole ${sentence ? 'sentence' : 'word'} “${text}” in one smooth line.`)
+      ? (PRINT ? `Now the whole ${sentence ? 'sentence' : 'word'}: trace “${text}”. ${sentence ? 'Leave a finger space between words.' : 'Keep the letters close.'}` : `Now join them! Trace the whole ${sentence ? 'sentence' : 'word'} “${text}” in one smooth line.`)
       : `${sentence ? 'Word' : 'Letter'} ${st.i + 1} of ${parts.length}: trace “${st.t}”.`;
   };
   const show = () => {
@@ -249,7 +249,7 @@ export function cursivePad(G, text, skill, prompt, done, opts = {}) {
         // the skill is recorded once, on the whole word; single letters are warm-up steps
         if (final) G.edu.record(skill, good, { ctx: skill === 'curs.signature' ? 'application' : 'practice', hinted: hp.hinted() });
         if (good) ok();
-        else { G.sfx('bad'); hp.box.hidden = false; UI.toast(s.cover <= 0.42 ? (final ? (PRINT ? 'Follow the gold letters more closely. Start at the top.' : 'Follow the gold letters more closely. Cursive letters connect.') : 'Follow the gold letter more closely.') : 'Try to stay on the letters.', 'warn'); }
+        else { G.sfx('bad'); hp.box.hidden = false; UI.toast(s.cover <= 0.42 ? (final ? (PRINT ? 'Follow the gold letters more closely. Start at the top.' : 'Stay on the gold letters. Cursive letters join up.') : 'Stay on the gold letter.') : 'Try to stay on the letters.', 'warn'); }
       } }, final ? 'Done' : 'Next ›')));
   };
   show();
@@ -310,7 +310,7 @@ export async function register(G) {
         else { G.sfx('bad'); hp.box.hidden = false; hp.box.lastChild.textContent = G.edu.explain(skill); G.state.stats.mistakes++; UI.toast(coupon ? `Subtotal ${money(sub)}. Take 10% off: find 10% by moving the decimal one place, round it to the nearest cent, then subtract.` : 'Add the prices on the receipt one at a time.', 'warn', 3600); reset(); }
       }, { decimals: !whole });
       body.replaceChildren(h('div', { class: 'act' }, list.cloneNode(true),
-        coupon ? h('div', { class: 'coupon' }, '🏷️ Customer has a 10% OFF coupon') : null,
+        coupon ? h('div', { class: 'coupon' }, '🏷️ The shopper has a 10% OFF coupon') : null,
         h('p', { class: 'lead' }, coupon ? 'Training mode: work out the total after the 10% coupon (round the discount to the nearest cent).' : 'Training mode: the register shows the prices. What is the total?'), hp.box, disp, pad, hp.btn));
     };
     const changeStep = async () => {
@@ -449,7 +449,7 @@ export async function shop(G) {
         h('button', { class: 'primary', onclick: () => {
           const { t, meals } = recalc();
           if (t === 0) return close(false);
-          if (t > G.state.money) { G.sfx('bad'); UI.toast('Not enough money. Take something out of the cart.', 'warn'); return; }
+          if (t > G.state.money) { G.sfx('bad'); UI.toast('Not enough money. Take a thing out of the cart.', 'warn'); return; }
           for (const [id, q] of Object.entries(cart)) G.state.pantry[id] = (G.state.pantry[id] || 0) + q * FOODS.find((f) => f.id === id).meals;
           G.spend(t, 'Fresh Mart groceries');
           G.edu.record('fin.budget', t / meals < 1.2 && G.state.money > 0, { ctx: 'groceries' });
@@ -529,23 +529,23 @@ export const PRACTICE = {
   'math.percent': () => { const p = pick([40, 48, 60, 80, 120]); return { q: `A $${p} jacket is 25% off. Sale price?`, a: '$' + p * 0.75, o: [p * 0.75, p * 0.25, p - 25, p * 0.8].map((v) => '$' + v), why: `25% = one quarter. $${p} ÷ 4 = $${p / 4} off, so $${p} − $${p / 4} = $${p * 0.75}.` }; },
   'read.signs': () => ({ q: 'A sign says “AISLE 3 — PASTA & RICE ←”. Where is the brown rice?', a: 'Aisle 3, to the left', o: ['Aisle 3, to the left', 'Aisle 1', 'Behind the counter'] }),
   'read.instructions': () => ({ q: '“1) Wash hands. 2) Put on gloves. 3) Slice bread.” What do you do right after washing your hands?', a: 'Put on gloves', o: ['Put on gloves', 'Slice bread', 'Wash again'] }),
-  'read.main': () => ({ q: '“The park cleanup is Saturday at 9. Bring gloves. Snacks provided.” Main idea?', a: 'There is a park cleanup on Saturday', o: ['There is a park cleanup on Saturday', 'Snacks are free', 'You need gloves for everything'] }),
+  'read.main': () => ({ q: '“The park cleanup is Saturday at 9. Bring gloves. Snacks provided.” Main idea?', a: 'People will clean the park on Saturday', o: ['People will clean the park on Saturday', 'Snacks are free', 'You need gloves for all of it'] }),
   'read.documents': () => ({ q: 'Lease: “Rent is due on the 1st. A $25 fee applies after the 5th.” You pay on the 4th. Fee?', a: 'No fee', o: ['No fee', '$25 fee', '$5 fee'] }),
-  'write.sentences': () => ({ q: 'Which is a complete, correct sentence?', a: 'Their apartment is near the park.', o: ['Their apartment is near the park.', 'there apartment near park', 'Near the park, their.'] }),
-  'write.professional': () => ({ q: 'Best way to start a message to your manager?', a: 'Hello Rosa, I wanted to ask about Saturday’s shift.', o: ['Hello Rosa, I wanted to ask about Saturday’s shift.', 'yo rosa whats up with saturday', 'SATURDAY??? Need to talk!!!', 'Hey, so about that Saturday shift thing I have'] }),
+  'write.sentences': () => ({ q: 'Which one is a whole, right sentence?', a: 'Their apartment is near the park.', o: ['Their apartment is near the park.', 'there apartment near park', 'Near the park, their.'] }),
+  'write.professional': () => ({ q: 'What is the best way to start a note to your boss?', a: 'Hello Rosa, I want to ask about my shift on Saturday.', o: ['Hello Rosa, I want to ask about my shift on Saturday.', 'yo rosa whats up with saturday', 'SATURDAY??? Need to talk!!!', 'Hey, so about that Saturday shift thing I have'] }),
   'fin.needs': () => ({ q: 'Which is a need?', a: 'Groceries for the week', o: ['Groceries for the week', 'A second pair of sneakers', 'Concert tickets'] }),
   'fin.budget': () => ({ q: 'You earn $200 this week. Using 50/30/20, how much goes to savings?', a: '$40', o: ['$40', '$100', '$60', '$20'] }),
   'fin.bills': () => ({ q: 'Your phone bill is due Day 5. When is the safest day to pay?', a: 'On or before Day 5', o: ['On or before Day 5', 'On Day 7', 'Whenever you can', 'After Day 5'] }),
-  'fin.credit': () => ({ q: 'What is interest on a credit card?', a: 'Extra money you pay for borrowing', o: ['Extra money you pay for borrowing', 'A free bonus for using the card', 'The most you are allowed to spend', 'A fee for opening a new card'] }),
+  'fin.credit': () => ({ q: 'What is interest on a credit card?', a: 'Extra money you pay when you borrow', o: ['Extra money you pay when you borrow', 'A free bonus for using the card', 'The most you are allowed to spend', 'A fee for opening a new card'] }),
   'think.compare': () => ({ q: 'Diner burger $11.50 (1 meal) vs. rice & beans $2.89 (4 meals). Which costs less per meal?', a: 'Rice & beans', o: ['Rice & beans', 'The burger', 'They’re the same'] }),
   'think.evaluate': () => ({ q: 'An ad says “9 out of 10 people love Star Bites!” What should you ask first?', a: 'Who asked them, and how many people?', o: ['Who asked them, and how many people?', 'What color is the box?', 'Nothing, it must be true'] }),
-  'think.opportunity': () => ({ q: 'If you spend $40 on a hoodie, what is the opportunity cost?', a: 'Whatever else that $40 could have paid for', o: ['Whatever else that $40 could have paid for', 'Nothing, since you wanted the hoodie', 'The hoodie itself and its $40 price', 'The $40 plus the tax you paid'] }),
+  'think.opportunity': () => ({ q: 'You spend $40 on a hoodie. What do you give up?', a: 'Whatever else that $40 could have paid for', o: ['Whatever else that $40 could have paid for', 'Nothing, since you wanted the hoodie', 'The hoodie itself and its $40 price', 'The $40 plus the tax you paid'] }),
 };
 /** “Words I know”: every lesson word the learner has tapped and learned. Tap to see them with their meanings. */
 /** Quick review: a few skills you already know, mixed together, one question each. Spacing + mixing = remembering. */
 export async function quickReview(G, max = 5) {
   const due = G.edu.dueReviews().filter((id) => PRACTICE[id]).slice(0, max);
-  if (!due.length) { UI.toast('Nothing to review right now. Great memory!', 'good'); return; }
+  if (!due.length) { UI.toast('No review right now. You have a great memory!', 'good'); return; }
   let right = 0;
   for (const [i, id] of shuffle(due).entries()) {
     const r = await runActivity(G, () => ({ skill: id, ...PRACTICE[id]() }), 'review', `🔁 Quick review · ${i + 1} of ${due.length}`, '🔁');
@@ -611,7 +611,7 @@ export function learn(G) {
     const subject = (k) => body.replaceChildren(h('div', { class: 'act' },
       h('p', { class: 'tip' }, 'Every skill is open to you. Start anywhere: the game adapts to what you show it.'),
       k === 'reading' ? h('button', { class: 'primary', onclick: () => { close(); readPassage(G); } }, '📖 Read a passage (with questions)') : null,
-      k === 'writing' ? h('button', { class: 'primary', onclick: () => { close(); writingWorkshop(G); } }, '✍️ Writing workshop: plan, draft, revise') : null,
+      k === 'writing' ? h('button', { class: 'primary', onclick: () => { close(); writingWorkshop(G); } }, '✍️ Writing shop: plan, write, fix') : null,
       h('div', { class: 'skilllist' }, Object.values(SKILLS).filter((s) => s.subj === k).sort((a, b) => a.band - b.band).map((s) =>
         h('button', { class: 'skillrow' + (s.band > G.edu.band(k) + 1 ? ' later' : '') + (s.band === G.edu.band(k) ? ' now' : ''), onclick: () => skill(s.id) }, h('div', {}, h('b', {}, skT(s, 'name')), h('small', {}, skT(s, 'objective'))), stateChip(G, s.id)))),
       h('button', { class: 'ghost', onclick: menu }, '‹ Subjects')));
@@ -621,7 +621,7 @@ export function learn(G) {
       const practice = async () => {
         if (['curs.strokes', 'curs.signature', 'curs.reading'].includes(id)) {
           const word = pick(['fresh', 'grow', 'real', 'learn', G.state.name]);
-          body.replaceChildren(cursivePad(G, word, id === 'curs.signature' ? 'curs.signature' : 'curs.strokes', `Trace “${word}” in cursive.`, () => { UI.toast('Beautiful. Keep the letters joined.', 'good'); skill(id); }));
+          body.replaceChildren(cursivePad(G, word, id === 'curs.signature' ? 'curs.signature' : 'curs.strokes', `Trace “${word}” in cursive.`, () => { UI.toast('So nice. Keep the letters joined.', 'good'); skill(id); }));
           return;
         }
         if (!gen) { UI.toast('You’ll practise this one out in the world.', 'info'); return; }
@@ -655,9 +655,9 @@ export async function businessPlan(G) {
   await teach(G, 'fin.business', 'Business app');
   const steps = [
     { q: 'Coffee cart idea. Who are your customers? Pick the best research step.', a: 'Count how many people pass the park each morning', o: ['Count how many people pass the park each morning', 'Guess', 'Ask Jax'], skill: 'think.evaluate' },
-    { q: 'Startup costs: cart $1,400 + espresso machine $600 + license $50. Total?', a: '$2,050', o: ['$2,050', '$2,000', '$1,450', '$2,500'], skill: 'math.add' },
+    { q: 'Costs to start: cart $1,400 + coffee machine $600 + permit $50. Total?', a: '$2,050', o: ['$2,050', '$2,000', '$1,450', '$2,500'], skill: 'math.add' },
     { q: 'Each cup sells for $3.50 and costs $1.20 to make. Profit per cup?', a: '$2.30', o: ['$2.30', '$4.70', '$1.20', '$3.50'], skill: 'math.decimals' },
-    { q: 'At $2.30 profit per cup, about how many cups to earn back $2,050?', a: 'About 900 cups', o: ['About 900 cups', 'About 90 cups', 'About 9,000 cups'], skill: 'math.multiply' },
+    { q: 'You make $2.30 on each cup. About how many cups to earn back $2,050?', a: 'About 900 cups', o: ['About 900 cups', 'About 90 cups', 'About 9,000 cups'], skill: 'math.multiply' },
   ];
   return UI.sheet('Business plan: coffee cart', (close, body) => {
     let i = 0;

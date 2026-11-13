@@ -27,15 +27,15 @@ const SKILL_WHY = {
   'write.caps': () => 'Check each name, day and place. Each one needs a capital letter, and so does the first word.',
   'write.commas': (Q) => /date/i.test(Q.q) ? 'Look at where each comma sits. A comma goes after the day of the week, and between the date and the year.' : 'Look at where each comma sits. Commas go between the things in a list, not between other words.',
   'write.sentences': (Q) => /NOT/.test(Q.q) ? 'That one is a full sentence: it tells who and what they do. Find the one that is missing a part.' : 'That one is missing a part. A sentence tells who, and what they do.',
-  'write.tense': () => 'Look for the time word in the sentence, like yesterday or tomorrow. It tells you when it happens.',
-  'write.grammar': (Q, o) => { const role = (Q.q.match(/\b(noun|verb|adjective|adverb)\b/) || [])[1]; const DEF = { noun: 'A noun names a person, place or thing.', verb: 'A verb is the action word.', adjective: 'An adjective tells what something is like.', adverb: 'An adverb tells how something is done.' }; return role ? `“${o}” is not the ${role}. ${DEF[role]}` : null; },
+  'write.tense': () => 'Look for the time word in the sentence, like yesterday or tomorrow. It tells you when.',
+  'write.grammar': (Q, o) => { const role = (Q.q.match(/\b(noun|verb|adjective|adverb)\b/) || [])[1]; const DEF = { noun: 'A noun names a person, place or thing.', verb: 'A verb is the action word.', adjective: 'An adjective tells what a thing is like.', adverb: 'An adverb tells how a thing is done.' }; return role ? `“${o}” is not the ${role}. ${DEF[role]}` : null; },
   'math.coords': (Q) => /first number/.test(Q.q) ? 'A point is written (across, up). Think about which way the first number moves you.' : 'Move across first: right adds to the first number. Then move up: that adds to the second number.',
   'tech.conditionals': () => 'Check the number against the IF test first. Only one branch runs: the first one whose test is true.',
   'soc.maps': () => 'Find the first place on the map. Then look which way you go to reach the other one. North is up, so east is to the right.',
   'fin.bills': () => 'Compare the day you paid with the due day. A fee only comes when you pay after the due day.',
   'read.contracts': () => 'Compare the day you paid with the due day in the lease. Then read what the lease says happens.',
   'math.time': () => 'Check both hands. The short hand shows the hour. The long hand shows the minutes.',
-  'math.stats': () => 'Look for one number far bigger than the rest. It pulls the average up, so a middle value describes most days better.',
+  'math.stats': () => 'Look for one number much bigger than the rest. It pulls the average up. So a middle number tells more about most days.',
   'math.statsadv': () => 'Look for the one day far from the rest. It pulls the mean, so the median describes a usual day better.',
   'math.probability': () => 'Chance = the number of ways you want ÷ all the things in the bag. Count both again.',
   'math.ratio': () => 'Find the price for one item in each deal, then compare those.',
@@ -114,7 +114,7 @@ export function showMeHow(G, id, make, { title = 'Show me how' } = {}) {
   const nums = (String(W.q).match(/\$?\d[\d,.]*%?/g) || []).slice(0, 6);
   const steps = [];
   steps.push(['📖', 'Read it', [h('p', { class: 'lead readable' }, W.q), visual(W.v)], `First, read the question. ${W.q}`]);
-  if (W.type === 'choice') steps.push(['🔎', 'Look at the choices', [h('div', { class: 'smh-opts' }, ...W.o.map((o) => h('span', { class: 'smh-chip' }, String(o))))], 'Next, look at every choice before you pick one.']);
+  if (W.type === 'choice') steps.push(['🔎', 'Look at the choices', [h('div', { class: 'smh-opts' }, ...W.o.map((o) => h('span', { class: 'smh-chip' }, String(o))))], 'Next, look at each choice before you pick one.']);
   else if (nums.length) steps.push(['🔎', 'Find the numbers', [h('div', { class: 'smh-opts' }, ...nums.map((n) => h('span', { class: 'smh-chip' }, n)))], `Next, find the numbers: ${nums.join(', ')}.`]);
   if (sk.explain) steps.push(['🧠', 'Use the rule', [h('p', { class: 'readable' }, skT(sk, 'explain'))], skT(sk, 'explain')]);
   const work = W.type === 'order' ? W.items.slice() : W.type === 'sort' ? W.items.map(([t, b]) => `${t} → ${b}`) : W.type === 'budget' ? W.cats.filter((c) => c.min).map((c) => `${c.name} needs $${c.min} first.`) : W.type === 'write' ? [W.model].filter(Boolean) : [];
@@ -258,7 +258,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
         h('button', { class: 'primary sm', onclick: () => {
           if (!done.hidden) return;
           const t = ta.value.trim(), words = t.split(/\s+/).filter(Boolean).length;
-          const checks = [['Long enough (' + Q.minWords + '+ words)', words >= Q.minWords], ['Starts with a capital letter', /^[A-Z“"]/.test(t)], ['Ends with punctuation', /[.!?]["”]?$/.test(t)],
+          const checks = [['Long enough (' + Q.minWords + '+ words)', words >= Q.minWords], ['Starts with a big letter', /^[A-Z“"]/.test(t)], ['Ends with punctuation', /[.!?]["”]?$/.test(t)],
             ...Q.rubric.map(([label, test]) => [label, typeof test === 'function' ? test(t) : test.test(t)])];
           const starters = Object.fromEntries((Q.rubric || []).filter((r) => r[2]).map((r) => [r[0], r[2]]));
           fb.replaceChildren(...checks.map(([l, ok]) => h('li', { class: ok ? 'ok' : 'todo' }, (ok ? '✓ ' : '○ ') + l, !ok && starters[l] ? h('small', { class: 'starter' }, ` Try: “${starters[l]}”`) : null)));
@@ -267,7 +267,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
           if (ok || passed >= checks.length - 1) { tries++; G.edu.record(id, ok, { ctx, hinted: hp.hinted() || ta.value === Q.model }); G.sfx('good'); finish(true); why.firstChild.textContent = ok ? '✓ ' : '✓ Almost there. '; why.lastChild && why.append(h('div', { class: 'tip' }, 'Example: ' + Q.model)); }
           else { tries++; G.edu.record(id, false, { ctx, err: 'rubric' }); G.sfx('bad'); hp.show(); }
         } }, 'Check my writing')));
-      Q.why = Q.why || 'Clear writing says what you mean, with complete sentences and the details the reader needs.';
+      Q.why = Q.why || 'Good writing says what you mean. Use whole sentences. Add the facts the reader needs.';
     } else if (Q.type === 'budget') {
       const vals = Q.cats.map((c) => c.min);
       const left = h('b', {}), rows = h('div', { class: 'budgetrows' });

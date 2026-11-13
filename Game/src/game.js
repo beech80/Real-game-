@@ -74,7 +74,7 @@ export class Game {
     if (s.chapter === 'prologue') return;
     s.energy = Math.max(0, s.energy - dtHours * 1.05);   // the clock runs fast, so these stay gentle per minute of play
     s.hunger = Math.max(0, s.hunger - dtHours * 1.35);
-    if (s.hunger < 15 && !this._hw) { this._hw = true; UI.toast('You’re hungry. Eat something soon.', 'warn', 3500); }
+    if (s.hunger < 15 && !this._hw) { this._hw = true; UI.toast('You are hungry. Eat some food soon.', 'warn', 3500); }
     if (s.hunger > 30) this._hw = false;
     if (s.energy < 12 && !this._ew) { this._ew = true; UI.toast('You’re exhausted. Head home and sleep.', 'warn', 3500); }
     if (s.energy > 25) this._ew = false;
@@ -109,7 +109,7 @@ export class Game {
     const T = (text, target) => ({ text, target });
     switch (q) {
       case 'prologue_walk': return T('The Council wants to see you. Walk to the Council Room.', 'CLUB_COUNCIL');
-      case 'find_way': return T(s.flags.readFirstSign ? 'Follow the road toward the city' : 'FIND YOUR WAY', s.flags.readFirstSign ? null : 'WILD_SIGN');
+      case 'find_way': return T(s.flags.readFirstSign ? 'Follow the road to the city' : 'FIND YOUR WAY', s.flags.readFirstSign ? null : 'WILD_SIGN');
       case 'find_help': return T('Go to the Community Center on Main St. They can help you.', 'NPC_Counselor');
       case 'job': return T('Fresh Mart needs a worker. Talk to Rosa, the boss.', 'NPC_Manager_Idle');
       case 'clockin': return T('Start your shift: tap the time clock in the back room', 'Interact_TimeClock');
@@ -133,17 +133,17 @@ export class Game {
       default: {
         if (s.hunger < 22 && s.chapter !== 'prologue') {   // starving: eating comes first, with an arrow to food
           const food = Object.values(s.pantry || {}).some((n) => n > 0);
-          if (s.location === 'apartment') return T(food ? 'You’re very hungry. Eat something from the fridge' : 'You’re very hungry and the fridge is empty. Get a meal at the Main St Diner', food ? 'Interact_Fridge' : 'Interact_ExitDoor');
-          return T('You’re very hungry! Eat at the Diner or at home', 'Door_Diner');
+          if (s.location === 'apartment') return T(food ? 'You are very hungry. Eat some food from the fridge' : 'You are very hungry and the fridge is empty. Get a meal at the Main St Diner', food ? 'Interact_Fridge' : 'Interact_ExitDoor');
+          return T('You are very hungry! Eat at the Diner or at home', 'Door_Diner');
         }
         if (s.location === 'apartment') return T(s.time > 20 ? 'Get some sleep' : 'Head out and live your day', s.time > 20 ? 'Interact_Sleep' : 'Interact_ExitDoor');
         if (s.mission) return T(`${s.mission.text}${s.mission.loc !== s.location ? ' (' + ({ district: 'Starting District', midtown: 'Midtown', opportunity: 'Opportunity District', heights: 'The Heights' })[s.mission.loc] + ')' : ''}`, 'MISSION');
-        if (s.flags.jaxStealDue && !s.flags.jaxSteal) return T('Someone’s waiting by Thread & Co…', 'NPC_Jax');
+        if (s.flags.jaxStealDue && !s.flags.jaxSteal) return T('A person waits by Thread & Co…', 'NPC_Jax');
         if (s.flags.jax3due && !s.flags.jax3) return T('Jax wants to talk at the corner of Main & Fresh', 'NPC_Jax');
         if (!s.flags[`worked${s.day}`] && s.time < 17) return T('Work today’s shift at Fresh Mart (clock in)', 'Interact_TimeClock');
         const unpaid = s.bills.find((b) => !b.paid && b.due <= s.day + 1);
         if (unpaid) return T(`Pay your bill: ${unpaid.name} (${money(unpaid.amount)}) — Bills app`, null);
-        if (s.flags.baristaTip && !(s.jobs || []).includes('barista')) return T('Ask Dee about the barista job at Daily Grind', 'Door_CoffeeShop');
+        if (s.flags.baristaTip && !(s.jobs || []).includes('barista')) return T('Ask Dee about the coffee job at Daily Grind', 'Door_CoffeeShop');
         if (s.event && s.location === 'district' && this.constructor.EVENTS && this.constructor.EVENTS[s.event.id]) { const E = this.constructor.EVENTS[s.event.id]; return T(`${E.icon} ${E.title} (optional)`, s.location === 'district' ? s.event.at : null); }
         const ll = this.life();
         const next = [['midtown', 3, 'Midtown'], ['opportunity', 5, 'the Opportunity District'], ['heights', 8, 'The Heights']].find(([k, lv]) => ll.level >= lv && !(s.visited || {})[k]);
@@ -194,7 +194,7 @@ export class Game {
       Interact_Bills: () => ({ label: 'Pay bills', run: () => { s.flags.billsSeen = true; return A.bills(G); } }),
       Interact_Sleep: () => ({ label: 'Sleep', run: () => this.sleep() }),
       Interact_Wardrobe: () => ({ label: 'Change outfit', run: () => this.wardrobe() }),
-      Interact_Storage: () => ({ label: 'Storage', run: () => UI.toast('Empty. Everything from The Club stayed at The Club.', 'info', 3200) }),
+      Interact_Storage: () => ({ label: 'Storage', run: () => UI.toast('Empty. All you had at The Club stayed at The Club.', 'info', 3200) }),
       Interact_Phone: () => ({ label: 'Relax on the couch', run: () => { this.hooks.playerAnim('Sit', 4); s.mood = Math.min(100, s.mood + 8); this.advance(0.5); } }),
       Interact_Shower: () => ({ label: 'Shower', run: () => { s.mood = Math.min(100, s.mood + 10); s.energy = Math.min(100, s.energy + 5); this.advance(0.25); UI.toast('Fresh. +Mood', 'good'); } }),
       Door_CoffeeShop: () => ({ label: 'Daily Grind Coffee', run: () => this.coffee() }),
@@ -204,7 +204,7 @@ export class Game {
         { name: 'Pancake stack', price: 8.75, icon: '🥞', note: '+45 food, +mood', apply: () => { this.feed(45); s.mood += 8; this.advance(0.5); } }]) }),
       Door_Clothing: () => ({ label: 'Thread & Co', run: () => this.clothing() }),
       Door_Gym: () => ({ label: 'Grow Gym', run: () => A.menuBuy(G, 'Grow Gym', '🏋️', [
-        { name: 'Day pass workout', price: 5, icon: '🏋️', note: '+15 mood, −10 energy. Fitness pays off later.', apply: () => { s.mood = Math.min(100, s.mood + 15); s.energy = Math.max(0, s.energy - 10); s.stats.workouts = (s.stats.workouts || 0) + 1; this.advance(1); } }]) }),
+        { name: 'Day pass workout', price: 5, icon: '🏋️', note: '+15 mood, −10 energy. A fit body pays off later.', apply: () => { s.mood = Math.min(100, s.mood + 15); s.energy = Math.max(0, s.energy - 10); s.stats.workouts = (s.stats.workouts || 0) + 1; this.advance(1); } }]) }),
       Interact_BusStop: () => ({ label: s.quest === 'invite' ? 'Take the bus to The Club' : 'Bus schedule', run: () => this.bus() }),
       Interact_ParkJog: () => ({ label: 'Go for a jog', run: () => { s.mood = Math.min(100, s.mood + 12); s.energy = Math.max(0, s.energy - 8); s.stats.workouts = (s.stats.workouts || 0) + 0.5; this.advance(0.5); UI.toast('A free workout. +Mood', 'good'); } }),
     };
@@ -234,16 +234,16 @@ export class Game {
     const s = this.state, O = 'Mr. Okafor · Community Center';
     await UI.say(O, 'Welcome to the Starting District. You look like you walked a long way. Let’s get you sorted out: somewhere to sleep, and a way to earn.');
     const c = await UI.say(O, 'Where are you staying tonight?', ['I don’t have a place yet. I just got here.', 'I lived at The Club until today. Now I have nothing.', 'Could you help me find somewhere to stay?']);
-    await UI.say(O, ['Thanks for being honest. That’s the first step. Let’s fix it together.', 'The Club, huh? That doesn’t matter here. Everybody starts somewhere, and most people start right where you are.', 'That’s exactly what I’m here for. Asking for help is smart, not weak.'][c] || 'Let’s get you sorted out.');
-    await UI.say(O, 'The Fresh Start program covers your first week in a starter unit at The Starter Apartments, Unit 3B. After that, rent is $300 a week, and Fresh Start pays half of it for your first four weeks, so you pay $150. It’s modest, but it’s yours to keep up.');
-    await UI.say(O, 'I also checked your basic bank account. Everything linked to The Club is gone, but there’s a remaining balance of $100. And here’s a basic phone. It’s not fancy, but it works.');
+    await UI.say(O, ['Thanks for being honest. That’s the first step. Let’s fix it together.', 'The Club, huh? That is not a big deal here. We all start some place. Most people start right where you are.', 'That’s exactly what I’m here for. Asking for help is smart, not weak.'][c] || 'Let’s get you sorted out.');
+    await UI.say(O, 'Fresh Start pays for your first week in Unit 3B at The Starter Apartments. After that, rent is $300 a week. Fresh Start pays half for your first four weeks, so you pay $150. It is small, but it is yours to care for.');
+    await UI.say(O, 'I checked your bank account too. All you had from The Club is gone, but you still have $100. And here is a plain phone. It is not fancy, but it works.');
     s.flags.housed = true; s.flags.phone = true; this.achieve('first_home'); this.befriend('Okafor', 2);
     this.earn(100, 'Remaining balance (basic account)');
     s.bills = [{ id: 'phone1', name: 'Phone plan', amount: 25, due: s.day + 4, paid: false }, { id: 'rent1', name: 'Rent — The Starter Apartments (week 2)', amount: 150, due: s.day + 6, paid: false }, { id: 'util1', name: 'Utilities', amount: 20, due: s.day + 6, paid: false }];
-    s.messages.unshift({ from: 'The Starter Apartments', text: 'Welcome to Unit 3B! Your first week is covered by Fresh Start. Rent ($300/week, $150 with your Fresh Start subsidy for 4 weeks) is due every 7 days starting Day ' + (s.day + 6) + '.', day: s.day, read: false });
+    s.messages.unshift({ from: 'The Starter Apartments', text: 'Welcome to Unit 3B! Fresh Start pays for your first week. Rent is $300 a week. Fresh Start pays half for 4 weeks, so you pay $150. Rent is due each 7 days, starting Day ' + (s.day + 6) + '.', day: s.day, read: false });
     const r = await UI.say(s.name, '…', ['Thank you, Mr. Okafor. I’ll use it wisely.', 'Only $100? That won’t last very long.', 'What should I spend it on first?'], { crown: false, player: true });
     if (r === 0) this.befriend('Okafor', 1);
-    await UI.say(O, ['You’re welcome. Using it wisely means paying for what you need before what you want. Let’s practice that right now.', 'You’re right, it won’t. That’s why every dollar needs a plan. Let’s make one together.', 'Great question. Needs come first: food, your phone, rent. Wants can wait. Let’s sort them out.'][r] || 'Before you spend any of it, let’s make sure you know what you need, and what can wait.');
+    await UI.say(O, ['You are welcome. To use it well, pay for what you need before what you want. Let’s practice that right now.', 'You’re right, it won’t. That’s why every dollar needs a plan. Let’s make one together.', 'Great question. Needs come first: food, your phone, rent. Wants can wait. Let’s sort them out.'][r] || 'Before you spend it, let’s find out what you need. And what can wait.');
     await A.needsWants(this);
     await A.firstBudget(this);
     await UI.say(O, 'Good. Last thing: you’ll need income. Fresh Mart, across Fresh Ave, is hiring. Talk to Rosa, the manager. Tell her I sent you.');
@@ -282,12 +282,12 @@ export class Game {
         if (c === 0) { s.jobs = s.jobs.filter((j) => j !== 'cashier').concat('shiftlead'); s.job = { id: 'shiftlead', title: 'Shift Lead', employer: 'Fresh Mart', rate: 17, hours: 4 }; s.stats.promotions = (s.stats.promotions || 0) + 1; this.achieve('promoted'); this.save(); }
         return;
       }
-      await UI.say(N, pick(['Great work lately. Customers notice when you’re friendly.', 'Count change back out loud. It avoids mistakes.', 'Read the aisle signs before you guess. Saves everyone time.', 'Shifts run 7 AM to 5 PM. Come by any day.']));
+      await UI.say(N, pick(['Great work these days. Shoppers see when you are kind.', 'Count change back out loud. It avoids mistakes.', 'Read the aisle signs before you guess. Saves everyone time.', 'Shifts run 7 AM to 5 PM. Come by any day.']));
     }
   }
   async clockIn() {
     const s = this.state;
-    if (s.flags[`worked${s.day}`]) return UI.toast('You already worked today. Come back tomorrow.', 'info');
+    if (s.flags[`worked${s.day}`]) return UI.toast('You worked today. Come back tomorrow.', 'info');
     if (s.quest !== 'clockin' && (s.time < 7 || s.time > 17)) return UI.toast('Shifts run from 7 AM to 5 PM.', 'info');
     const ok = await A.clockIn(this);
     if (!ok) return;
@@ -326,7 +326,7 @@ export class Game {
     this.befriend('Rosa', 1);
     if (s.stats.shifts === 1) {
       this.achieve('first_pay');
-      await UI.caption(['Your first paycheck.', 'It isn’t a fortune.', 'But it’s the first money you ever earned yourself.'], 2300);
+      await UI.caption(['Your first paycheck.', 'It isn’t a fortune.', 'But it is the first money you earned on your own.'], 2300);
       s.quest = 'jax1';
     } else {
       s.quest = 'free';
@@ -348,7 +348,7 @@ export class Game {
     this.edu.discover('think.opportunity');
     if (c === 2) {
       s.stats.thoughtThrough = (s.stats.thoughtThrough || 0) + 1; this.edu.record('think.evaluate', true, { ctx: 'jax', hinted: true });
-      await UI.say(J, 'First impressions. People hire people who look ready. Show up to your next interview in that sad jacket and see what happens.', null, { tone: 'jax' });
+      await UI.say(J, 'People judge fast. They hire people who look ready. Go to your next job talk in that sad jacket and see.', null, { tone: 'jax' });
       const after = s.money - price, due = this.upcomingBills(7);
       c = await UI.sheet('Think it through', (close) => h('div', { class: 'act' },
         h('div', { class: 'budget' }, h('div', {}, h('small', {}, 'YOU HAVE'), h('b', {}, money(s.money))), h('div', {}, h('small', {}, 'HOODIE'), h('b', { class: 'neg' }, '−' + money(price))), h('div', {}, h('small', {}, 'BILLS THIS WEEK'), h('b', { class: after < due ? 'neg' : '' }, money(due)))),
@@ -395,7 +395,7 @@ export class Game {
       this.hooks.npcExpr('Jax', 'Thinking');
       await UI.say(J, 'Relax. I was testing you. …Mostly.', null, { tone: 'jax' });
     } else if (c === 2) {
-      if (s.money >= 25) { this.spend(25, 'Thread & Co cap'); s.mood = Math.min(100, s.mood + 8); this.edu.record('think.consequence', true, { ctx: 'jax', hinted: true }); await UI.say(J, 'Paying full price. Look at you, a model citizen.', null, { tone: 'jax' }); }
+      if (s.money >= 25) { this.spend(25, 'Thread & Co cap'); s.mood = Math.min(100, s.mood + 8); this.edu.record('think.consequence', true, { ctx: 'jax', hinted: true }); await UI.say(J, 'You pay full price. Look at you, such a good neighbor.', null, { tone: 'jax' }); }
       else await UI.say(J, 'With what money? Ha. Fine, forget it.', null, { tone: 'jax' });
     } else {
       s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1; this.edu.record('think.consequence', true, { ctx: 'jax', hinted: true });
@@ -407,10 +407,10 @@ export class Game {
     const s = this.state, J = 'Jax';
     this.hooks.npcExpr('Jax', 'Thinking');
     await UI.say(J, `${s.name}. Not here to sell you anything. Promise.`, null, { tone: 'jax' });
-    await UI.say(J, 'Daily Grind needs a weekend barista. $15 an hour, plus tips. You’ve got register experience now. That counts.', null, { tone: 'jax' });
+    await UI.say(J, 'Daily Grind needs help at the coffee bar on weekends. $15 an hour, plus tips. You know the register now. That counts.', null, { tone: 'jax' });
     const c = await UI.say(J, 'Two incomes beat one. Just saying.', ['Thanks, Jax. I’ll check it out.', 'What’s the catch?', 'Why are you helping me?'], { tone: 'jax' });
-    if (c === 1) await UI.say(J, 'No catch. Even I give good advice sometimes. Don’t tell anyone.', null, { tone: 'jax' });
-    if (c === 2) await UI.say(J, 'Because watching you start from nothing is… weirdly interesting. Don’t make it weird.', null, { tone: 'jax' });
+    if (c === 1) await UI.say(J, 'No catch. I give good tips too some days. Do not tell.', null, { tone: 'jax' });
+    if (c === 2) await UI.say(J, 'I like to watch you start from nothing. It is… kind of cool. Do not make it weird.', null, { tone: 'jax' });
     s.flags.baristaTip = true; s.flags.jax3 = true; s.flags.jax3due = false; this.befriend('Jax', 1); this.edu.record('think.evaluate', true, { ctx: 'jax', hinted: true }); this.save();
     this.hooks.jaxLeave();
   }
@@ -430,7 +430,7 @@ export class Game {
     }
     return A.menuBuy(this, 'Daily Grind Coffee', '☕', [
       { name: 'Drip coffee', price: 2.25, icon: '☕', note: '+12 energy', apply: () => { s.energy = Math.min(100, s.energy + 12); } },
-      { name: 'Oat latte', price: 4.75, icon: '🥛', note: '+15 energy, +mood. Twice the price for 3 more energy?', apply: () => { s.energy = Math.min(100, s.energy + 15); s.mood += 5; } },
+      { name: 'Oat latte', price: 4.75, icon: '🥛', note: '+15 energy, +mood. Two times the price for 3 more energy?', apply: () => { s.energy = Math.min(100, s.energy + 15); s.mood += 5; } },
       { name: 'Bagel', price: 2.5, icon: '🥯', note: '+20 food', apply: () => this.feed(20) }]);
   }
   async clothing() {
@@ -450,7 +450,7 @@ export class Game {
     await A.teach(this, 'read.instructions', 'Training board');
     await UI.sheet('Training board', (close) => h('div', { class: 'act' },
       h('h3', {}, 'New cashier checklist'),
-      h('ol', { class: 'list' }, h('li', {}, 'Greet every customer.'), h('li', {}, 'Scan every item. Check the total.'), h('li', {}, 'Count change back starting from the total.'), h('li', {}, 'Stock items in the aisle that matches the sign.'), h('li', {}, 'Ask your manager when unsure.')),
+      h('ol', { class: 'list' }, h('li', {}, 'Greet every customer.'), h('li', {}, 'Scan each thing. Check the total.'), h('li', {}, 'Count change back starting from the total.'), h('li', {}, 'Stock items in the aisle that matches the sign.'), h('li', {}, 'Ask your boss when you are not sure.')),
       h('p', { class: 'lead' }, 'What do you do right after scanning every item?'),
       h('div', { class: 'opts' }, ['Check the total', 'Greet the customer', 'Stock the shelves'].map((o) => h('button', { class: 'opt', onclick: (e) => { const ok = o === 'Check the total'; this.edu.record('read.instructions', ok, { ctx: 'training' }); if (ok) { this.sfx('good'); close(); } else { this.sfx('bad'); e.currentTarget.classList.add('wrong'); } } }, o)))), { icon: '📋' });
   }
@@ -524,9 +524,9 @@ export class Game {
   // ------------------------------------------------------------------ Chapters 11–12: the Invitation and the REAL decision
   endingText(kind) {
     return {
-      return: ['You accept.', 'You walk back into The Club through your own accomplishments.', 'Membership is a resource now, not who you are.'],
-      reject: ['You decline.', 'The life you built is already meaningful.', 'Independence was the membership you were looking for.'],
-      rebuild: ['You ask for something bigger.', 'Opportunity shouldn’t wait behind a gate for people who already made it.', 'You start a mentorship network for the next REAL who arrives with nothing.'],
+      return: ['You accept.', 'You walk back into The Club. You earned it on your own.', 'The Club is a tool for you now. It is not who you are.'],
+      reject: ['You decline.', 'The life you built is good as it is.', 'You wanted to be a member. What you needed was to stand on your own.'],
+      rebuild: ['You ask for a bigger thing.', 'A chance should not wait behind a gate for people who made it.', 'You start a group to help the next REAL who comes with nothing.'],
     }[kind];
   }
 }
@@ -542,7 +542,7 @@ export function voicePanel() {
     voiceBox(),
     h('div', { class: 'row' }, h('span', {}, '🧑‍🏫 Heart coaches me (cheers, hints, why)'), ...[[true, 'On'], [false, 'Off']].map(([v, n]) => h('button', { class: heartOn(G0()) === v ? 'primary sm' : 'ghost sm', onclick: (e) => { setHeart(G0(), v); e.currentTarget.parentElement.querySelectorAll('button').forEach((b, i) => { b.className = (i === 0) === v ? 'primary sm' : 'ghost sm'; }); } }, n))),
     h('button', { class: 'primary', onclick: () => askHeart(G0()) }, '✨ Ask Heart a question'),
-    h('div', { class: 'row' }, h('span', {}, '🔊 Read everything to me'), ...[[true, 'On'], [false, 'Off']].map(([v, n]) => h('button', { class: readToMe() === v ? 'primary sm' : 'ghost sm', onclick: (e) => { setReadToMe(v); e.currentTarget.parentElement.querySelectorAll('button').forEach((b, i) => { b.className = (i === 0) === v ? 'primary sm' : 'ghost sm'; }); } }, n))),
+    h('div', { class: 'row' }, h('span', {}, '🔊 Read it all to me'), ...[[true, 'On'], [false, 'Off']].map(([v, n]) => h('button', { class: readToMe() === v ? 'primary sm' : 'ghost sm', onclick: (e) => { setReadToMe(v); e.currentTarget.parentElement.querySelectorAll('button').forEach((b, i) => { b.className = (i === 0) === v ? 'primary sm' : 'ghost sm'; }); } }, n))),
     h('p', { class: 'tip' }, 'Tap 🔊 next to any text, or tap a word, to hear it any time.')), { icon: '🗣️' });
 }
 function voiceBox() {
@@ -560,7 +560,7 @@ function voiceBox() {
     let st; try { st = await voiceSaved(); } catch (e) { return saveRow.remove(); }
     if (!st.total) return saveRow.remove();
     if (st.have >= st.total) saveRow.replaceChildren(h('span', {}, '✓ Heart’s voice is saved on this device'), h('button', { class: 'ghost sm', onclick: async () => { await forgetVoice(); showSave(); } }, 'Remove'));
-    else saveRow.replaceChildren(h('span', {}, '💾 Save Heart’s voice on this device (about 180 MB, for no internet)'), h('button', { class: 'primary sm', onclick: async (e) => {
+    else saveRow.replaceChildren(h('span', {}, '💾 Save Heart’s voice on this phone or tablet (about 180 MB, to play with no internet)'), h('button', { class: 'primary sm', onclick: async (e) => {
       const b = e.currentTarget; b.disabled = true;
       try { await saveVoice((d, t) => { b.textContent = `${Math.round((d / t) * 100)}%`; }); } catch (err) { b.disabled = false; b.textContent = 'Try again'; return; }
       showSave();
@@ -578,15 +578,15 @@ function offlineBox() {
   const box = h('div', { class: 'bill offline' }, h('div', {}, h('b', {}, '📶 Play offline'), status));
   const btns = h('div', { class: 'row' });
   if (window.__REAL_OFFLINE) status.textContent = '✓ You’re playing the offline copy. No internet needed. Progress saves in this browser; use Settings › Save file to move it.';
-  else if (window.__REAL_B64) status.textContent = 'Download the whole game as one file (about 10 MB). Open it in any web browser, even with no internet. Good for school tablets and bus rides.';
+  else if (window.__REAL_B64) status.textContent = 'Get the whole game as one file (about 10 MB). Open it in a web browser, with no internet. Good for school tablets and bus rides.';
   else status.textContent = 'Checking…';
   if (!window.__REAL_OFFLINE) btns.append(h('a', { class: 'ghost sm btn', href: 'REAL-offline.html', download: 'REAL-offline.html' }, '⬇️ Download to play offline'));
   if (window.__installPrompt) btns.append(h('button', { class: 'primary sm', onclick: async () => { const p = window.__installPrompt; window.__installPrompt = null; p.prompt(); try { await p.userChoice; } catch (e) {} } }, '📲 Install the app'));
   if (!window.__REAL_B64 && !window.__REAL_OFFLINE && 'serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistration().then(async (r) => {
       const keys = window.caches ? await caches.keys() : [];
-      status.textContent = r && r.active && keys.some((k) => k.startsWith('real-')) ? '✓ Ready to play with no internet on this device. Add it to your home screen to open it like an app.' : 'Getting ready for offline play… keep the game open for a minute.';
-    }).catch(() => { status.textContent = 'Download the one-file copy below to play with no internet.'; });
+      status.textContent = r && r.active && keys.some((k) => k.startsWith('real-')) ? '✓ Ready to play with no internet. Add it to your home screen. Then it opens like an app.' : 'Almost ready to play with no Wi-Fi… Keep the game open for a minute.';
+    }).catch(() => { status.textContent = 'Get the one-file copy below. Then you can play with no Wi-Fi.'; });
   }
   box.append(btns);
   return box;
@@ -596,7 +596,7 @@ function offlineBox() {
 export function openPhone(G) {
   const s = G.state;
   if (s.chapter === 'prologue') { UI.toast('Your Club phone buzzes: “Council Room. Now.”', 'gold', 3200); return Promise.resolve(); }
-  if (!s.flags.phone) { UI.toast('Your old Club phone has no service. Everything connected to The Club was cut off.', 'warn', 3600); return Promise.resolve(); }
+  if (!s.flags.phone) { UI.toast('Your old Club phone does not work. All you had from The Club was cut off.', 'warn', 3600); return Promise.resolve(); }
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
@@ -621,7 +621,7 @@ export function openPhone(G) {
           h('p', { class: 'tip' }, 'Ride the bus from any bus stop. Districts open as your Life Level grows, never by wealth.')),
         Messages: () => { s.messages.forEach((m) => (m.read = true)); return h('div', { class: 'msgs' }, s.messages.map((m) => h('div', { class: 'msg' }, h('b', {}, m.from), h('small', {}, `Day ${m.day}`), (() => { const p = h('p', {}, m.text); markWords(p); return p; })()))); },
         Calendar: () => h('div', {}, h('button', { class: 'primary', onclick: () => { close(); G.planWeek(); } }, '🗓️ Plan my week'), h('div', { class: 'bill-list' }, [...Array(7)].map((_, i) => { const d = s.day + i; const ev = [];
-          if (s.flags.hired) ev.push('Fresh Mart shift available (7 AM–5 PM)');
+          if (s.flags.hired) ev.push('You can work a shift at Fresh Mart (7 AM–5 PM)');
           if (s.jobs.includes('barista') && [6, 0].includes(d % 7)) ev.push('Daily Grind weekend shift');
           for (const j of s.jobs.filter((j) => G.hooks.WORK[j])) ev.push(`${G.hooks.CAREERS.find((c) => c.id === j).employer} shift`);
           for (const [cid, c] of Object.entries(s.courses || {})) if (!c.done) ev.push(`Class: ${G.hooks.COURSES[cid].name}`);
@@ -671,7 +671,7 @@ export function openPhone(G) {
           const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } };
           const list = h('div', { class: 'bill-list' });
           const draw = () => { const notes = load(); list.replaceChildren(...(notes.length ? notes.slice().reverse().map((n) => h('div', { class: 'bill' }, h('div', {}, h('b', {}, n.text), h('small', {}, `Day ${n.day} ${n.clock} · ${n.where} · goal: ${n.goal}`)))) : [h('p', { class: 'tip' }, 'No notes yet.')])); };
-          const ta = h('textarea', { class: 'writebox', rows: 3, maxlength: 600, placeholder: 'What felt wrong, confusing, too hard, too easy, or fun?' });
+          const ta = h('textarea', { class: 'writebox', rows: 3, maxlength: 600, placeholder: 'What felt wrong, mixed up, too hard, too easy, or fun?' });
           const save = () => {
             const t = ta.value.trim(); if (!t) return UI.toast('Type a note first.', 'info');
             const ob = G.objective();
@@ -730,9 +730,9 @@ export function openPhone(G) {
           (() => { let L = []; try { L = JSON.parse(localStorage.getItem('real.errors') || '[]'); } catch (e) {}
             return h('details', { class: 'problems' }, h('summary', {}, `🛠️ Problem log (${L.length})`),
               L.length ? h('pre', { class: 'codebox' }, L.slice(-10).reverse().map((x) => `${x.t.slice(0, 16)} ${x.m} ${x.s}`).join('\n')) : h('p', { class: 'tip' }, 'No problems recorded. 🎉'),
-              h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: async () => { try { await navigator.clipboard.writeText(JSON.stringify(L, null, 1)); UI.toast('Copied. Paste it into an email to report a problem.', 'good'); } catch (e) { UI.toast('Could not copy here.', 'warn'); } } }, '📋 Copy'), h('button', { class: 'ghost sm', onclick: () => { try { localStorage.removeItem('real.errors'); } catch (e) {} open('Grown-ups'); } }, 'Clear'))); })(),
+              h('div', { class: 'row' }, h('button', { class: 'ghost sm', onclick: async () => { try { await navigator.clipboard.writeText(JSON.stringify(L, null, 1)); UI.toast('Copied. Paste it in an email to tell us about a problem.', 'good'); } catch (e) { UI.toast('Could not copy here.', 'warn'); } } }, '📋 Copy'), h('button', { class: 'ghost sm', onclick: () => { try { localStorage.removeItem('real.errors'); } catch (e) {} open('Grown-ups'); } }, 'Clear'))); })(),
           h('div', { class: 'tier-h' }, 'Privacy'),
-          h('ul', { class: 'list' }, h('li', {}, 'Progress is saved only on this device. No account, no email, no ads, no purchases.'), h('li', {}, 'Learning records are private and never compared with other players.'), h('li', {}, 'Live neighbors (shared link only) see an anonymous character and 4 preset gestures. No names, chat or trading. You can turn it off above.'), h('li', {}, 'Characters never speak out loud; their lines are text. Players only speak in speaking-practice tasks (job interviews, work updates), where the 🎤 turns their words into text. They can always type instead.'), h('li', {}, 'Smart character replies (shared claude.ai link only): a player’s typed or spoken question or answer is sent to Claude with strict instructions to stay age-appropriate, stay in the game world and never ask for personal information. No name, account or save data is sent. Turn it off above to use only built-in answers.')),
+          h('ul', { class: 'list' }, h('li', {}, 'Your game is saved only on this phone or tablet. No account. No email. No ads. Nothing to buy.'), h('li', {}, 'Learning records are private and never compared with other players.'), h('li', {}, 'Live neighbors (shared link only) see an anonymous character and 4 preset gestures. No names, chat or trading. You can turn it off above.'), h('li', {}, 'Characters never speak out loud; their lines are text. Players only speak in speaking-practice tasks (job interviews, work updates), where the 🎤 turns their words into text. They can always type instead.'), h('li', {}, 'Smart character replies (shared claude.ai link only): a player’s typed or spoken question or answer is sent to Claude with strict instructions to stay age-appropriate, stay in the game world and never ask for personal information. No name, account or save data is sent. Turn it off above to use only built-in answers.')),
           schoolSettings(G, () => open('Grown-ups')),
           h('div', { class: 'tier-h' }, 'Learning progress'),
           h('div', { class: 'skills' }, Object.entries(SUBJECTS).map(([k, sb]) => { const p = G.edu.progress(k); const m = p.list.filter((x) => G.edu.state(x.id) >= 4).length, pr = p.list.filter((x) => G.edu.state(x.id) === 3).length; return h('div', { class: 'skill' }, h('span', {}, `${sb.icon} ${sb.name}`), h('div', { class: 'bar' }, h('i', { style: { width: p.pct + '%' } })), h('small', {}, `${m} mastered · ${pr} proficient · of ${p.list.length}`)); })),

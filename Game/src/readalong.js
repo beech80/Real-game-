@@ -501,7 +501,7 @@ export function talkLog() {
   const count = {};
   for (const l of log) for (const w of l.t.toLowerCase().match(/[a-z']{4,}/g) || []) if (!/^(that|this|with|have|your|you're|what|they|them|then|than|there|here|from|will|just|like|when|were|been|it's|i'm|don't|about|into|some|more|very|even)$/.test(w)) count[w] = (count[w] || 0) + 1;
   const top = Object.entries(count).sort((a, b) => b[1] - a[1]).slice(0, 18).map(([w]) => w).sort();
-  const find = h('input', { class: 'writebox', type: 'search', placeholder: 'Find a word…', 'aria-label': 'Find a word in your conversations' });
+  const find = h('input', { class: 'writebox', type: 'search', placeholder: 'Find a word…', 'aria-label': 'Find a word in your talks' });
   const list = h('div', { class: 'talk-list' });
   const render = () => {
     const q = find.value.trim().toLowerCase().replace(/[^a-z']/g, '');

@@ -47,15 +47,15 @@ function fatal(msg) {
   el.hidden = false;
   const b = document.getElementById('crash-reload'); if (b) b.onclick = () => location.reload();
 }
-addEventListener('error', (e) => { if (mode === 'loading' || mode === 'intro') fatal('REAL hit a problem while starting: ' + (e.message || 'unknown error') + '. Your character is saved. Tap Reload and choose Continue.'); });
-addEventListener('unhandledrejection', (e) => { const m = (e.reason && e.reason.message) || e.reason; if (mode === 'loading' || mode === 'intro') fatal('REAL hit a problem while starting: ' + m + '. Your character is saved. Tap Reload and choose Continue.'); else console.warn('async error', m); });
+addEventListener('error', (e) => { if (mode === 'loading' || mode === 'intro') fatal('REAL hit a problem at the start: ' + (e.message || 'unknown error') + '. Your character is saved. Tap Reload and choose Continue.'); });
+addEventListener('unhandledrejection', (e) => { const m = (e.reason && e.reason.message) || e.reason; if (mode === 'loading' || mode === 'intro') fatal('REAL hit a problem at the start: ' + m + '. Your character is saved. Tap Reload and choose Continue.'); else console.warn('async error', m); });
 document.addEventListener('gesturestart', (e) => e.preventDefault());
 document.addEventListener('dblclick', (e) => e.preventDefault());
 
 let engine;
 try { engine = new Engine($('#view')); }
 catch (e) { fatal(e.message); throw e; }
-engine.onContextLost = () => { try { game && game.save(); } catch (e) {} fatal('Your phone paused the 3D graphics (this can happen when memory runs low). Your progress is saved — tap Reload to continue.'); };
+engine.onContextLost = () => { try { game && game.save(); } catch (e) {} fatal('Your phone paused the 3D world. (This can happen when it runs low on memory.) Your game is saved. Tap Reload to keep playing.'); };
 const audio = new Audio();
 setSfx((n) => audio.play(n));
 UI.init();
@@ -291,7 +291,7 @@ async function startGame(state, isNew) {
   startWatch = setTimeout(() => {
     if (mode === 'intro') {
       const el = $('#load-label'); if (!el) return;
-      el.replaceChildren(document.createTextNode('Still loading. A slow connection can take a minute. '));
+      el.replaceChildren(document.createTextNode('Still loading. A slow internet can take a minute. '));
       const b = document.createElement('button'); b.className = 'primary sm'; b.textContent = 'Reload'; b.onclick = () => location.reload(); el.appendChild(b);
     }
   }, 30000);
@@ -446,7 +446,7 @@ async function prologue() {
   player.pos = { ...CLUB.hallStart }; player.heading = 0; player.apply();
   fcam.yaw = 0; fcam.pitch = 0.22; fcam.cur.set(0, 1e4, 0);
   mode = 'play'; UI.showHUD(true); $('#hud').classList.add('prologue');
-  await UI.caption(['THE CLUB.', 'Where money, power and big chances were part of every day.'], 2600);
+  await UI.caption(['THE CLUB.', 'A place with money, power and big chances each day.'], 2600);
   UI.toast('Drag the left side to move · drag the right side to look', 'info', 5000);
 }
 async function councilScene() {
@@ -461,8 +461,8 @@ async function councilScene() {
   const R = 'Council Representative';
   W.rep.play('Talk', 0.3);
   await UI.say(R, `${game.state.name}. Thank you for coming. Please, sit.`);
-  await UI.say(R, 'Being in The Club comes with a responsibility. Knowing successful people is not enough.');
-  await UI.say(R, 'A member must show four things: independence, responsibility, knowledge and achievement. You enjoyed The Club, but you never built those things yourself.');
+  await UI.say(R, 'Being in The Club means you must do your part. It is not enough to know people who did well.');
+  await UI.say(R, 'A member must show four things. Stand on your own. Do your part. Know things. Reach goals. You liked The Club, but you did not build those things yet.');
   shot([CLUB.ox + 3.4, CLUB.rep.y - 1.2, 1.75], [CLUB.ox, CLUB.rep.y, 1.3]);
   W.rep.expression('Focused', 6);
   await UI.say(R, 'You have seen what success looks like. But do you know what it takes?');
@@ -470,7 +470,7 @@ async function councilScene() {
   player.ch.expression('Surprised', 4);
   const c = await UI.say(game.state.name, '…', ['But I belong here.', 'What did I do wrong?', 'What happens now?']);
   shot([CLUB.ox + 3.4, CLUB.rep.y - 1.2, 1.75], [CLUB.ox, CLUB.rep.y, 1.3]);
-  await UI.say(R, ['Belonging isn’t something you are handed. It is something you build.', 'Nothing wrong. Nothing at all. That is the problem. You never had to do anything.', 'Your special pass ends tonight.'][c]);
+  await UI.say(R, ['No one hands you a place to belong. You build it.', 'Nothing wrong. Nothing at all. That is the problem. You never had to do anything.', 'Your special pass ends tonight.'][c]);
   await UI.say(R, 'You can come back one day. First, show that you can build a good life on your own.');
   // card revoked
   player.ch.expression('Sad', 6);
@@ -478,7 +478,7 @@ async function councilScene() {
   document.getElementById('root').append(card);
   audio.play('bad');
   await wait(2600); card.classList.add('out'); await wait(500); card.remove();
-  await UI.say(R, 'Your access card. Your accounts. Everything connected to The Club. Security will see you out.');
+  await UI.say(R, 'Your card. Your accounts. All you had at The Club. The guards will see you out.');
   // escorted out — the gates close
   await UI.fade(1, 700);
   W.rep.play('Idle', 0);
@@ -509,7 +509,7 @@ async function startWilderness() {
   fcam.mode = 'follow'; fcam.yaw = 0; fcam.pitch = 0.16; fcam.dist = 5.5; fcam.cur.set(0, 1e4, 0);
   game.save();
   await UI.fade(0, 2200);
-  await UI.caption(['Nowhere.', 'No house. No car. No job. No one to tell you where to go.', 'Just you, the clothes you’re wearing, and a city on the horizon.'], 2600);
+  await UI.caption(['Nowhere.', 'No house. No car. No job. No one to tell you where to go.', 'Just you, the clothes on your back, and a city far away.'], 2600);
   mode = 'play'; UI.showHUD(true);
 }
 
@@ -540,13 +540,13 @@ async function invitation() {
   const ll = game.life();
   await UI.say(R, `A job you earned. Bills you paid. Skills you mastered: ${game.edu.masteredCount()} of them. Life Level ${ll.level}. We are offering you membership.`);
   camera.position.copy(P2W(CLUB.ox + 1.4, CLUB.seat.y + 1.6, 1.4)); camera.lookAt(P2W(CLUB.ox, CLUB.seat.y, 1.15));
-  await UI.caption(['You remember the empty road.', 'The first apartment. The first grocery trip.', 'The first paycheck. The first mistake.'], 2200);
-  const c = await UI.say(s.name, 'What will you do?', ['Accept: return to The Club, through my own accomplishments', 'Decline: the life I built is already meaningful', 'Rebuild: open a pathway for people who are starting with nothing'], { crown: false });
+  await UI.caption(['You think of the empty road.', 'The first home. The first trip to buy food.', 'The first paycheck. The first mistake.'], 2200);
+  const c = await UI.say(s.name, 'What will you do?', ['Say yes: go back to The Club. I earned it on my own', 'Say no: the life I built is good as it is', 'Rebuild: open a way in for people who start with nothing'], { crown: false });
   const kind = ['return', 'reject', 'rebuild'][c];
   camera.position.copy(P2W(CLUB.ox + 3.4, CLUB.rep.y - 1.2, 1.75)); camera.lookAt(P2W(CLUB.ox, CLUB.rep.y, 1.3));
   await UI.say(R, {
     return: 'Welcome back. This time, the door opened because of you.',
-    reject: 'Few people have ever said no to us. Perhaps that is the clearest proof you no longer need us.',
+    reject: 'Few people have said no to us. That may be the best proof that you do not need us now.',
     rebuild: (game.state.friends.Rosa + game.state.friends.Okafor + game.state.friends.Jax) >= 4 ? 'Rosa, Mr. Okafor, even Jax spoke for you. The Council will fund your mentorship network. Let’s change who gets a chance.' : 'Bold. The Council will listen. Build your network of mentors, and we will help it grow.',
   }[kind]);
   s.ending = kind; game.achieve('ending');
@@ -558,11 +558,11 @@ async function invitation() {
   player.pos = { x: WILD.start.x, y: WILD.start.y + 4 }; player.heading = 0; player.h = wildHeight(player.pos.x, player.pos.y); player.apply();
   fcam.mode = 'follow'; fcam.yaw = 0; fcam.pitch = 0.12; fcam.dist = 6; fcam.cur.set(0, 1e4, 0);
   await UI.fade(0, 2000);
-  await UI.caption(['The same empty landscape. The same road. The same skyline.', 'But you see it differently now.'], 2800);
+  await UI.caption(['The same empty landscape. The same road. The same skyline.', 'But you see it in a new way now.'], 2800);
   await UI.caption(['You started with nothing.', 'But you were never nothing.', 'Look at what you’ve built.'], 2600);
   await UI.caption(['REAL', 'LEARN • LIVE • GROW', 'YOUR STORY. YOUR FUTURE. REAL.'], 2600);
   game.busy = false; input.enabled = true; game.save();
-  UI.toast('Your story continues. The city is yours to keep building.', 'gold', 5000);
+  UI.toast('Your story goes on. The city is yours to keep building.', 'gold', 5000);
 }
 
 // ------------------------------------------------------------------------------------------ apartment
@@ -967,7 +967,7 @@ function storyTriggers() {
     }
     if (P.y > WILD.edge + 2) {
       game.arrive();
-      UI.caption(['The city doesn’t know you.', 'No one recognises you. No one gives you special treatment.', 'Everything here costs something. Earning it takes effort.'], 2600);
+      UI.caption(['The city doesn’t know you.', 'No one recognises you. No one gives you special treatment.', 'Things here cost money. You have to work to earn it.'], 2600);
     }
   }
   const J = npcs.Jax; if (!J) return;
