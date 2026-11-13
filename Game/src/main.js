@@ -1036,7 +1036,7 @@ function loop(now) {
     const zone = fmNow ? (player.pos.y > fm.y + fm.boh - 0.5 ? (player.pos.x > fm.x + 7 ? 'office' : 'stock') : 'floor') : 'out';
     if (fcam.zone && zone !== fcam.zone) fcam.snap = true; fcam.zone = zone; }   // look over the shelves; near-overhead in the small back rooms
   const mv = input && input.move; fcam.follow = playing && mv && mv.y > 0.2 && Math.hypot(mv.x, mv.y) > 0.3 ? player.heading : null;
-  { const fp = ((s.settings || {}).view || (navigator.webdriver && !window.__fp ? 'third' : 'first')) !== 'third' && mode === 'play' && fcam.mode === 'follow';   // first person by default: you see the world through your REAL's eyes (👁 swaps the view)
+  { const fp = (s.settings || {}).view === 'first' && mode === 'play' && fcam.mode === 'follow';   // the view from behind is the normal one; 👁 swaps to first person (through your REAL's eyes) and back
     fcam.first = fp; if (fp) { camera.layers.disable(1); if ((fpT -= dt) < 0) { fpT = 1; player.ch.root.traverse((o) => o.layers.set(1)); } } else camera.layers.enable(1); }
   fcam.update(dt, focus, playing ? input : null, IR ? 5.6 : apt || club || (inFreshMart(player.pos) ? 4.6 : false));
   // nobody blocks your view: characters standing between the camera and you fade out of the way

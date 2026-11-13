@@ -27,8 +27,10 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await ev(() => { const s = window.REAL.state; s.quest = 'free'; s.time = 11; });
   const shot = (n) => p.screenshot({ path: path.join(OUT, `pov_${n}.png`), timeout: 240000 });
   const view = () => ev(() => ({ check: { first: window.REAL.firstPerson(), dist: window.REAL.eyeGap() } }));
-  await sleep(2500);
-  let r = await view(); console.log('first person:', JSON.stringify(r.check));
+  await sleep(1500);
+  let r = await view(); if (r.check.first) fail('the game should start in the view from behind');
+  await p.click('#btn-view'); await sleep(2500);
+  r = await view(); console.log('first person:', JSON.stringify(r.check));
   if (!(r.check.dist < 0.6)) fail('the camera is not at the player’s eyes: ' + JSON.stringify(r.check));
   await shot('1_street');
   // walk forward: the player must move

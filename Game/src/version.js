@@ -3,10 +3,10 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.2.0';
+export const VERSION = '1.2.1';
 export const NOTES = [
-  ['1.2.0', [
-    ['👁️', 'See through your eyes', 'Now you see the world the way your REAL sees it. Tap 👁️ to see your REAL from behind.'],
+  ['1.2.1', [
+    ['👁️', 'See through your eyes', 'Tap 👁️ to see the world the way your REAL sees it. Tap it again to see your REAL from behind.'],
     ['🎵', 'Softer music', 'The drum beat is gone. The music is calm now.'],
   ]],
   ['1.1.0', [
