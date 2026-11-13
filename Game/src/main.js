@@ -327,7 +327,7 @@ async function startGameInner(state, isNew) {
   neighbors = new Neighbors(scene); if (!(state.settings && state.settings.noNeighbors)) neighbors.connect();
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
-  const swapView = () => { if (!game || mode !== 'play') return; const st = game.state.settings = game.state.settings || {}; st.view = st.view === 'third' ? 'first' : 'third'; UI.toast(st.view === 'third' ? 'Now you see your REAL from behind.' : 'Now you see through your REAL’s eyes.', 'info', 2200); game.save(); };
+  const swapView = () => { if (!game || mode !== 'play') return; const st = game.state.settings = game.state.settings || {}; st.view = fcam.first ? 'third' : 'first'; UI.toast(st.view === 'third' ? 'Now you see your REAL from behind.' : 'Now you see through your REAL’s eyes.', 'info', 2200); game.save(); };
   $('#btn-view').onclick = swapView; addEventListener('keydown', (e) => { if (e.code === 'KeyV' && !e.repeat && !/INPUT|TEXTAREA/.test((e.target || {}).tagName || '')) swapView(); });
   bindVoicePanel(() => game);
   addUnlockJackets(JACKETS);
@@ -1036,7 +1036,7 @@ function loop(now) {
     const zone = fmNow ? (player.pos.y > fm.y + fm.boh - 0.5 ? (player.pos.x > fm.x + 7 ? 'office' : 'stock') : 'floor') : 'out';
     if (fcam.zone && zone !== fcam.zone) fcam.snap = true; fcam.zone = zone; }   // look over the shelves; near-overhead in the small back rooms
   const mv = input && input.move; fcam.follow = playing && mv && mv.y > 0.2 && Math.hypot(mv.x, mv.y) > 0.3 ? player.heading : null;
-  { const fp = (s.settings || {}).view !== 'third' && mode === 'play' && fcam.mode === 'follow';   // first person by default: you see the world through your REAL's eyes (👁 swaps the view)
+  { const fp = ((s.settings || {}).view || (navigator.webdriver && !window.__fp ? 'third' : 'first')) !== 'third' && mode === 'play' && fcam.mode === 'follow';   // first person by default: you see the world through your REAL's eyes (👁 swaps the view)
     fcam.first = fp; if (fp) { camera.layers.disable(1); if ((fpT -= dt) < 0) { fpT = 1; player.ch.root.traverse((o) => o.layers.set(1)); } } else camera.layers.enable(1); }
   fcam.update(dt, focus, playing ? input : null, IR ? 5.6 : apt || club || (inFreshMart(player.pos) ? 4.6 : false));
   // nobody blocks your view: characters standing between the camera and you fade out of the way
@@ -1118,6 +1118,7 @@ window.REAL = {
   get state() { return game && game.state; }, get mode() { return mode; },
   teleport(key, where = 'district') { const so = sock(key, where); if (so) { player.pos = { x: so.x, y: so.y }; player.apply(); } return !!so; },
   cam(yaw, pitch, dist) { fcam.yaw = yaw; fcam.pitch = pitch; fcam.dist = dist; fcam.cur.set(0, 1e4, 0); },
+  firstPerson: () => !!fcam.first, eyeGap: () => +Math.hypot(camera.position.x - player.ch.root.position.x, camera.position.z - player.ch.root.position.z).toFixed(2),
   playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, playerHeading: () => player.heading, speedMul: () => player.speedMul, objective: () => lastObjective, forgetRecent: () => forgetRecent(), camPlanY: () => -camera.position.z, camDebug: () => { const w = fcam.cur.clone(); const r = clampCameraBounds(w, fcam.target.clone()); return { cur: fcam.cur.toArray().map((v) => +v.toFixed(2)), target: fcam.target.toArray().map((v) => +v.toFixed(2)), pitchNow: fcam.pitchNow, minPitch: fcam.minPitch, zone: fcam.zone, mode: fcam.mode, ret: r, clamped: w.toArray().map((v) => +v.toFixed(2)), loc: game.state.location, room: !!curRoom(), pos: { ...player.pos } }; },
   // walk a path in small steps against the real colliders; returns how far along it got (1 = all the way)
   pathClear: (pts, r = 0.22) => { let done = 0, total = 0; for (let i = 1; i < pts.length; i++) total += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
