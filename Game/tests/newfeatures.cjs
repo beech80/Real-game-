@@ -78,7 +78,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   // --- writing workshop: plan → draft → check → publish
   await ev(() => { window.__ww = import('./writing.js').catch(() => null); });
   await phone('Learn'); await p.$$eval(`${top} .card`, (els) => { const w = els.find((e) => /Writing/.test(e.textContent)); if (w) w.click(); }); await sleep(800);
-  await p.$$eval(`${top} button`, (els) => { const w = els.find((e) => /Writing workshop/.test(e.textContent)); if (w) w.click(); }); await sleep(1200);
+  await p.$$eval(`${top} button`, (els) => { const w = els.find((e) => /Writing (work)?shop/.test(e.textContent)); if (w) w.click(); }); await sleep(1200);
   if (!(await p.$(`${top} .skillrow`))) fail('the writing workshop did not open');
   else {
     await p.$$eval(`${top} .skillrow`, (els) => { const x = els.find((e) => /favorite animal/.test(e.textContent)) || els[0]; x.click(); }); await sleep(800);
