@@ -108,7 +108,8 @@ let seed = 7; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483
     const opts = await m.$$('.opt:not([disabled]), .card.job, .card:not(.locked)');
     for (const o of opts) { const t = (await o.textContent()).trim(); if (tried.has(t) || /Browse every subject|Cancel|Leave|Not now|Close/i.test(t)) continue; tried.add(t); T.screens += 6; await o.click().catch(() => {}); await sleep(450); return true; }
     const prim = await m.$('button.primary:not([disabled])'); if (prim && await prim.isVisible()) { const t = (await prim.textContent()).trim(); if (!tried.has('P:' + t)) { tried.add('P:' + t); T.screens += 5; await prim.click().catch(() => {}); await sleep(450); return true; } }
-    const x = await m.$('.sh-x'); if (x) { await x.click().catch(() => {}); await sleep(300); return true; }
+    const x = await m.$('.sh-x'); if (x) { for (const k of [...triedOpts.keys()]) if (/application/i.test(title) && k.startsWith(title + '|')) triedOpts.delete(k);   // a form left half-done starts again from the top next time
+      await x.click().catch(() => {}); await sleep(300); return true; }
     const ghost = await m.$('button.ghost'); if (ghost) { await ghost.click().catch(() => {}); await sleep(300); return true; }
     return false;
   };
