@@ -22,7 +22,7 @@ import { installEvents } from './events.js';
 import { scatterFlora, updateLook, inkEdges } from './lookfx.js';
 import { schoolFromLink, enableSchool, teacherDashboard, assignFromLink, setAssignment } from './school.js';
 import { installKeyboard } from './keyboard.js';
-import { initLang, lang, setLang } from './i18n.js';
+import { initLang, lang, setLang, setReadLevel } from './i18n.js';
 import { voicePanel, bindVoicePanel } from './game.js';
 import { tutorialTick } from './tutorial.js';
 import { VERSION, whatsNew } from './version.js';
@@ -202,6 +202,7 @@ function makeBeacon() {
 let titleT = 0;
 function title() {
   mode = 'title';
+  setReadLevel(1);   // the first screen is always in the simplest words
   const save = loadSave();
   const T = $('#title');
   T.hidden = false;
@@ -329,7 +330,8 @@ async function startGameInner(state, isNew) {
   bindVoicePanel(() => game);
   addUnlockJackets(JACKETS);
   // rewards: daily goals, unlocks, and a celebration when your Life Level goes up
-  { let lastLevel = null, sess = 0; setInterval(() => { try {
+  { let lastLevel = null, sess = 0, lastWords = null; setInterval(() => { try {
+      if (game) { const wl = game.wordLevel(); setReadLevel(wl); if (lastWords != null && wl > lastWords && mode === 'play' && !busy() && (!navigator.webdriver || window.__rewards)) celebrate(game, 'Bigger words!', 'You read so well. The game will use some harder words now.'); if (mode !== 'play' || !busy()) lastWords = wl; }
       if (game && mode === 'play' && !document.hidden) sess += 3;                    // real seconds of play this sitting
       if (!game || mode !== 'play' || busy()) return;
       if (sess >= (window.__breakAfter || 1800)) { sess = 0; if (!navigator.webdriver || window.__rewards) breakCard(game); }   // a gentle break reminder every 30 minutes

@@ -52,6 +52,14 @@ export class Game {
       if (!this._bak || Date.now() - this._bak > 60000) { this._bak = Date.now(); localStorage.setItem(SAVE_KEY + '.bak', j); } } catch (e) {}
   }
   life() { return lifeLevel(this.state, this.edu); }
+  /** How hard the game's own words may be (1–6). It follows the player's reading: one level above the highest
+   *  reading level where they can do at least two skills on their own. It is saved and never goes back down. */
+  wordLevel() {
+    const s = this.state, bands = Object.values(SKILLS).filter((k) => k.subj === 'reading' && this.edu.state(k.id) >= 3).map((k) => k.band).sort((a, b) => b - a);
+    const lv = bands.length >= 2 ? Math.min(6, bands[1] + 1) : 1;
+    if (lv > (s.wordLevel || 1)) s.wordLevel = lv;
+    return s.wordLevel || 1;
+  }
   onSkill(sk, st) {
     if (st >= 3) UI.toast(`${SUBJECTS[sk.subj].icon} ${sk.name}: ${STATES[st]}`, st >= 4 ? 'gold' : 'good', 3000);
     if (st === 4) { celebrate(this, `${SUBJECTS[sk.subj].icon} ${sk.name}: mastered!`, 'You know this one for good.'); if (this.edu.masteredCount() >= 5) this.achieve('mastered5'); }

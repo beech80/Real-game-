@@ -9,6 +9,7 @@ import es4 from './i18n/es_4.json' with { type: 'json' };
 import es5 from './i18n/es_5.json' with { type: 'json' };
 import esSkills from './i18n/es_skills.json' with { type: 'json' };
 import esTpl from './i18n/es_tpl.json' with { type: 'json' };
+import GROW from './i18n/grow.json' with { type: 'json' };
 
 const ES = Object.assign({}, es5, es1, es2, es3, es4);
 const VALUES = new Set(Object.values(ES));
@@ -39,9 +40,18 @@ function trCore(t, depth = 0) {
   const v = ES[k] || (k.length < 400 && /[A-Za-z]{3}/.test(k) ? trPattern(k, depth) : null);
   return v ? t.replace(k, v) : t;
 }
+// Words that grow with the reader: every line starts in its simplest wording. grow.json holds a richer wording for
+// 346 of them, each with the reading level (3–6) at which it takes over. The level comes from the player's own
+// reading progress (Game.wordLevel) and never goes back down.
+let LEVEL = 1;
+export const setReadLevel = (n) => { LEVEL = Math.max(1, Math.min(6, Math.floor(n) || 1)); };
+export const readLevel = () => LEVEL;
 export function tr(t) {
-  if (LANG !== 'es' || typeof t !== 'string') return t;
-  return trCore(t);
+  if (typeof t !== 'string') return t;
+  if (LANG === 'es') return trCore(t);
+  if (LEVEL < 3) return t;
+  const k = t.trim(), g = k && GROW[k];
+  return g && LEVEL >= g[1] ? t.replace(k, g[0]) : t;
 }
 /** a skill's lesson field in the current language */
 export function skT(sk, field) { return LANG === 'es' && sk && esSkills[sk.id] && esSkills[sk.id][field] ? esSkills[sk.id][field] : sk && sk[field]; }
