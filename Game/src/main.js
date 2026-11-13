@@ -98,7 +98,7 @@ const scene = engine.scene, camera = engine.camera;
 try { if (navigator.webdriver) { window.__scene = scene; window.__audio = audio; window.__player = () => player; window.__narrate = (t) => sayText(t); window.__voiceId = (k) => voiceId(k); window.__learnCount = learnCount; } } catch (e) {}   // automated tests only
 
 const W = { district: null, apartment: null, wild: null, club: null, data: null, lamps: [], d: {}, rooms: {} };
-let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60, mini = null, race = null, petCourse = null, arena = null, markT = 0;
+let fpT = 0; let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60, mini = null, race = null, petCourse = null, arena = null, markT = 0;
 let player = null, game = null, input = null, fcam = null, traffic = null, peds = [], npcs = {}, coll = null, aptColl = null, clubColl = null, members = [];
 var mode = 'loading';
 let beacon = null, minimap = null, mapView = null, lastTarget = null;
@@ -327,6 +327,8 @@ async function startGameInner(state, isNew) {
   neighbors = new Neighbors(scene); if (!(state.settings && state.settings.noNeighbors)) neighbors.connect();
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
+  const swapView = () => { if (!game || mode !== 'play') return; const st = game.state.settings = game.state.settings || {}; st.view = st.view === 'third' ? 'first' : 'third'; UI.toast(st.view === 'third' ? 'Now you see your REAL from behind.' : 'Now you see through your REAL’s eyes.', 'info', 2200); game.save(); };
+  $('#btn-view').onclick = swapView; addEventListener('keydown', (e) => { if (e.code === 'KeyV' && !e.repeat && !/INPUT|TEXTAREA/.test((e.target || {}).tagName || '')) swapView(); });
   bindVoicePanel(() => game);
   addUnlockJackets(JACKETS);
   // rewards: daily goals, unlocks, and a celebration when your Life Level goes up
@@ -1034,12 +1036,14 @@ function loop(now) {
     const zone = fmNow ? (player.pos.y > fm.y + fm.boh - 0.5 ? (player.pos.x > fm.x + 7 ? 'office' : 'stock') : 'floor') : 'out';
     if (fcam.zone && zone !== fcam.zone) fcam.snap = true; fcam.zone = zone; }   // look over the shelves; near-overhead in the small back rooms
   const mv = input && input.move; fcam.follow = playing && mv && mv.y > 0.2 && Math.hypot(mv.x, mv.y) > 0.3 ? player.heading : null;
+  { const fp = (s.settings || {}).view !== 'third' && mode === 'play' && fcam.mode === 'follow';   // first person by default: you see the world through your REAL's eyes (👁 swaps the view)
+    fcam.first = fp; if (fp) { camera.layers.disable(1); if ((fpT -= dt) < 0) { fpT = 1; player.ch.root.traverse((o) => o.layers.set(1)); } } else camera.layers.enable(1); }
   fcam.update(dt, focus, playing ? input : null, IR ? 5.6 : apt || club || (inFreshMart(player.pos) ? 4.6 : false));
   // nobody blocks your view: characters standing between the camera and you fade out of the way
   { const cp = camera.position, tp = fcam.target, seg = tp.clone().sub(cp), L2 = seg.lengthSq() || 1;
     const roots = [...Object.values(npcs).map((n) => n && n.ch && n.ch.root), ...peds.map((p) => p && p.ch && p.ch.root), ...members.map((m) => m && (m.root || (m.ch && m.ch.root)))];
     for (const r of roots) { if (!r || r === player.ch.root) continue; const v = r.position.clone().add(new THREE.Vector3(0, 0.9, 0)), t = Math.max(0, Math.min(1, v.clone().sub(cp).dot(seg) / L2)), near = cp.clone().addScaledVector(seg, t).distanceTo(v);
-      const block = t < 0.92 && near < 0.75;
+      const block = !fcam.first && t < 0.92 && near < 0.75;
       if (block && !r.userData.camHidden && r.visible) { r.userData.camHidden = true; r.visible = false; } else if (!block && r.userData.camHidden) { r.userData.camHidden = false; r.visible = true; } } }   // only un-hide what this hid
   engine.setTime(IR ? 12.5 : apt ? Math.min(Math.max(s.time, 6), 23.9) : s.time % 24, apt ? new THREE.Vector3(0, -500, 0) : focus);
   if (IR) { engine.sun.intensity *= 0.4; engine.renderer.toneMappingExposure *= 0.9; }

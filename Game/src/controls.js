@@ -82,7 +82,7 @@ export class FollowCamera {
     const now = performance.now();
     if (input) {
       if (input.look.x || input.look.y || input.zoom) this.lastLook = now;
-      this.yaw -= input.look.x * 0.006; this.pitch = THREE.MathUtils.clamp(this.pitch + input.look.y * 0.004, 0.05, 1.1);
+      this.yaw -= input.look.x * 0.006; this.pitch = THREE.MathUtils.clamp(this.pitch + input.look.y * 0.004, this.first ? -0.9 : 0.05, 1.1);
       input.look.set(0, 0);
       if (input.zoom) { this.dist = THREE.MathUtils.clamp(this.dist + input.zoom * 0.5, this.minDist, this.maxDist); input.zoom = 0; }
     }
@@ -97,6 +97,16 @@ export class FollowCamera {
     const goal = focus.clone().add(new THREE.Vector3(0, 1.15, 0));
     if (!this.tSm || this.snap || this.tSm.distanceTo(goal) > 6) this.tSm = goal.clone(); else this.tSm.lerp(goal, 1 - Math.exp(-dt * 14));
     this.target.copy(this.tSm);
+    if (this.first) {   // first person: the camera is the player's eyes
+      if (!this.wasFirst) { this.wasFirst = true; this.pitch = Math.min(this.pitch, 0.08); }
+      const p = this.pitch, fx = -Math.sin(this.yaw), fz = -Math.cos(this.yaw);
+      this.cur.set(this.tSm.x + fx * 0.12, this.tSm.y + (this.eye || 0.3), this.tSm.z + fz * 0.12); this.snap = false;
+      this.cam.position.copy(this.cur);
+      this.target.set(this.cur.x + fx * Math.cos(p), this.cur.y - Math.sin(p), this.cur.z + fz * Math.cos(p));
+      this.cam.lookAt(this.target); this.pitchNow = p;
+      return;
+    }
+    if (this.wasFirst) { this.wasFirst = false; this.pitch = Math.max(this.pitch, 0.25); this.snap = true; }
     // some spaces need a higher view (over shelves): ease toward it without overwriting the player's own tilt
     this.pitchNow = this.pitchNow == null ? this.pitch : this.pitchNow + (Math.max(this.pitch, this.minPitch || 0) - this.pitchNow) * Math.min(1, dt * 6);
     const pitch = this.pitchNow;

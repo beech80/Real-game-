@@ -60,11 +60,11 @@ export class Audio {
   // Original generative music, made live (nothing to download). Each mood has its own chords, tempo and
   // instruments; moving between places crossfades at the next bar. Volumes: music / sounds / Heart's voice.
   static MOODS = {
-    city: { bpm: 76, chords: [[53, 57, 60, 64], [52, 55, 59, 62], [50, 53, 57, 60], [48, 52, 55, 59]], keys: 'triangle', hats: 1, kick: 0, lead: 0.5, vol: 1 },
-    midtown: { bpm: 96, chords: [[48, 52, 55, 59], [45, 48, 52, 55], [50, 53, 57, 60], [43, 47, 50, 53]], keys: 'square', hats: 1, kick: 1, lead: 0.7, vol: 0.85 },
+    city: { bpm: 76, chords: [[53, 57, 60, 64], [52, 55, 59, 62], [50, 53, 57, 60], [48, 52, 55, 59]], keys: 'triangle', hats: 0, kick: 0, lead: 0.5, vol: 1 },
+    midtown: { bpm: 96, chords: [[48, 52, 55, 59], [45, 48, 52, 55], [50, 53, 57, 60], [43, 47, 50, 53]], keys: 'square', hats: 0, kick: 0, lead: 0.7, vol: 0.85 },
     heights: { bpm: 68, chords: [[50, 54, 57, 61], [47, 50, 54, 57], [43, 47, 50, 54], [45, 49, 52, 55]], keys: 'sine', hats: 0, kick: 0, lead: 0.8, vol: 1 },
     wild: { bpm: 52, chords: [[48, 50, 55, 62], [43, 45, 50, 57], [45, 47, 52, 59], [41, 43, 48, 55]], keys: 'sine', hats: 0, kick: 0, lead: 0.25, vol: 0.9, pad: 1 },
-    club: { bpm: 88, chords: [[50, 53, 57, 60, 64], [43, 47, 53, 57, 64], [48, 52, 55, 59, 62], [45, 49, 55, 58, 64]], keys: 'triangle', hats: 1, kick: 0, lead: 0.6, vol: 0.9, swing: 1 },
+    club: { bpm: 88, chords: [[50, 53, 57, 60, 64], [43, 47, 53, 57, 64], [48, 52, 55, 59, 62], [45, 49, 55, 58, 64]], keys: 'triangle', hats: 0, kick: 0, lead: 0.6, vol: 0.9, swing: 1 },
     indoor: { bpm: 72, chords: [[53, 57, 60, 64], [50, 53, 57, 60], [46, 50, 53, 57], [48, 52, 55, 60]], keys: 'triangle', hats: 0, kick: 0, lead: 0.35, vol: 0.75 },
     night: { bpm: 62, chords: [[45, 48, 52, 55], [41, 45, 48, 52], [48, 52, 55, 59], [43, 47, 50, 52]], keys: 'sine', hats: 0, kick: 0, lead: 0.3, vol: 0.7, pad: 1 },
     lesson: { bpm: 64, chords: [[48, 52, 55, 59], [53, 57, 60, 64], [45, 48, 52, 55], [50, 53, 57, 62]], keys: 'sine', hats: 0, kick: 0, lead: 0.15, vol: 0.5, pad: 1 },
@@ -90,8 +90,8 @@ export class Audio {
         const M = Audio.MOODS[this.mood], beat = 60 / M.bpm, ch = M.chords[bar % M.chords.length];
         if (M.pad) ch.forEach((m) => this._pad(mtof(m), next, beat * 4.2, 0.018));
         else ch.forEach((m, i) => this.tone(mtof(m + 12), next + i * (M.swing ? 0.03 : 0.015), beat * 3.6, M.keys, M.keys === 'square' ? 0.018 : 0.045, this.musicBus));
-        this.tone(mtof(ch[0] - 12), next, beat * 1.8, 'sine', 0.13, this.musicBus);
-        this.tone(mtof(ch[2] - 12), next + beat * 2, beat * 1.6, 'sine', 0.1, this.musicBus);
+        this._pad(mtof(ch[0] - 12), next, beat * 4.2, 0.05);   // a soft, slow bass under the chords: no drum, no thump
+        
         if (M.kick) for (const k of [0, 2]) this._kick(next + k * beat);
         if (M.hats) for (let k = 0; k < 8; k++) this._hat(next + k * beat / 2 + (k % 2 ? (M.swing ? beat * 0.16 : 0.03) : 0), k % 2 ? 0.014 : 0.026);
         // a gentle melody that wanders over the chord (pentatonic, mostly steps)
