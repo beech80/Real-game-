@@ -5,6 +5,7 @@ import { SKILLS, SUBJECTS } from './edu.js';
 import { ACHIEVEMENTS } from './life.js';
 import { say } from './readalong.js';
 import { lang } from './i18n.js';
+import { showCertificate } from './certificate.js';
 import { stickerEl, STICKER_NAMES, heartEl, medalSVG, postcardEl } from './art.js';
 
 const today = (t = Date.now()) => new Date(t).toISOString().slice(0, 10);
@@ -131,10 +132,21 @@ export function arrivalCard(place) {
   document.body.append(card);
   setTimeout(() => { card.classList.add('out'); setTimeout(() => card.remove(), 600); }, 3200);
 }
+/** Heart suggests a short break (every 30 minutes of play). It never stops the game. */
+export function breakCard(G) {
+  if (typeof document === 'undefined') return;
+  const old = document.querySelector('.breakcard'); if (old) old.remove();
+  const text = es() ? '¡Hora de un descanso corto! Párate, estírate y toma agua. Tu juego está guardado.' : 'Time for a short break! Stand up, stretch, and drink some water. Your game is saved.';
+  const card = h('div', { class: 'breakcard', role: 'status', 'aria-live': 'polite' }, heartEl('happy'), h('p', {}, text), h('button', { class: 'primary sm', onclick: () => card.remove() }, 'OK'));
+  document.body.append(card); G.save();
+  if ((G.state.settings || {}).heart !== false) say(text);
+  setTimeout(() => card.remove(), 20000);
+}
 export function trophiesApp(G) {
   const s = G.state, gs = dailyGoals(G), cur = streakNow(G);
   const ach = Object.entries(ACHIEVEMENTS), got = ach.filter(([id]) => s.achievements[id]).length, B = badges(G);
   return h('div', { class: 'act trophies' },
+    h('button', { class: 'ghost cert-btn', onclick: () => showCertificate(G) }, es() ? '📜 Mi certificado' : '📜 My certificate'),
     h('div', { class: 'budget' }, h('div', {}, h('small', {}, es() ? 'RACHA' : 'STREAK'), h('b', {}, `${cur} 🔥`)), h('div', {}, h('small', {}, es() ? 'MEJOR' : 'BEST'), h('b', {}, (s.streak || {}).best || 0)), h('div', {}, h('small', {}, es() ? 'TROFEOS' : 'TROPHIES'), h('b', {}, `${got}/${ach.length}`))),
     h('div', { class: 'tier-h' }, es() ? '🎯 Metas de hoy' : '🎯 Today’s goals'),
     h('div', { class: 'goals' }, ...gs.map((g) => h('div', { class: 'goal' + (g.have >= g.n ? ' done' : '') }, h('span', {}, g.have >= g.n ? '✅' : '⬜'), h('span', {}, g.label), h('small', {}, `${Math.min(g.have, g.n)}/${g.n}`)))),

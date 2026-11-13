@@ -26,7 +26,7 @@ import { initLang, lang, setLang } from './i18n.js';
 import { voicePanel, bindVoicePanel } from './game.js';
 import { tutorialTick } from './tutorial.js';
 import { VERSION, whatsNew } from './version.js';
-import { checkDaily, unlockOutfits, celebrate, addUnlockJackets, arrivalCard } from './rewards.js';
+import { checkDaily, unlockOutfits, celebrate, addUnlockJackets, arrivalCard, breakCard } from './rewards.js';
 import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine, voiceId, loadNatural } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
@@ -34,6 +34,7 @@ import { PetCourse, RobotArena } from './arenas.js';
 import { runActivity, forgetRecent } from './learnkit.js';
 import { loadLearnData, learnCount } from './learndata.js';
 import { heartSVG } from './art.js';
+import { parked, parkCurrent, switchTo, removePlayer, MAX_PLAYERS } from './players.js';
 import { PRACTICE } from './activities.js';
 import { carMesh, Pedestrian } from './city.js';
 installExpansion(Game); installEvents(Game); installAdventures(Game); installAdventureHelpers(Game);
@@ -215,7 +216,26 @@ function title() {
         const cur = loadSave(); if (cur && cur.name && !confirm(`Replace ${cur.name}'s game (Day ${cur.day}) with ${st.name}'s game (Day ${st.day})?`)) return;
         try { localStorage.setItem('real.save.v2', JSON.stringify(st)); } catch (e) {} close(); UI.toast(`Loaded ${st.name}, Day ${st.day}.`, 'good'); title(); } }, 'Load this game'));
   }, { icon: '📂' }); };
-  $('#btn-new').onclick = () => { audio.start(); audio.play('click'); T.hidden = true; creator(); };
+  // a new game never replaces the one in progress: that game is kept under 👥 Players
+  const newGame = () => {
+    const cur = loadSave();
+    if (cur && !parkCurrent() && !confirm(`There is no room to keep ${cur.name}'s game. Replace it with a new game?`)) return;
+    if (cur && !loadSave()) UI.toast(`${cur.name}'s game is kept under 👥 Players.`, 'good', 4000);
+    audio.start(); T.hidden = true; creator();
+  };
+  $('#btn-new').onclick = () => { audio.play('click'); newGame(); };
+  $('#btn-players').onclick = () => { audio.play('click'); UI.sheet('Players', (close) => {
+    const cur = loadSave(), list = parked();
+    const row = (name, day, cash, ...btns) => h('div', { class: 'bill player-row' }, h('div', {}, h('b', {}, name), h('small', {}, `Day ${day} · ${money(cash)}`)), ...btns);
+    return h('div', { class: 'act' },
+      h('p', { class: 'lead' }, 'Each player keeps their own game on this device.'),
+      cur ? row(cur.name, cur.day, cur.money, h('button', { class: 'primary sm', onclick: () => { close(); $('#btn-continue').click(); } }, 'Play')) : null,
+      ...list.map((pl) => row(pl.name, pl.day, pl.money,
+        h('button', { class: 'primary sm', onclick: () => { if (switchTo(pl.id)) { close(); title(); $('#btn-continue').click(); } else UI.toast('Could not switch players. Free up some space on this device.', 'warn'); } }, 'Play'),
+        h('button', { class: 'ghost sm', 'aria-label': 'Delete this player', onclick: () => { if (confirm(`Delete ${pl.name}'s game (Day ${pl.day}) for good?`)) { removePlayer(pl.id); close(); $('#btn-players').click(); } } }, '🗑️'))),
+      !cur && !list.length ? h('p', { class: 'tip' }, 'No players yet. Start a new game to add one.') : null,
+      (cur ? 1 : 0) + list.length < MAX_PLAYERS + 1 ? h('button', { class: 'ghost', onclick: () => { close(); newGame(); } }, '➕ New player') : h('p', { class: 'tip' }, 'This device is full. Delete a player to add a new one.'));
+  }, { icon: '👥' }); };
   $('#btn-continue').onclick = () => { audio.start(); audio.play('click'); T.hidden = true; startGame(save, false); };
 }
 const creatorState = { i: 0, fur: 0, jacket: 0, hoodie: 0 };
@@ -258,7 +278,7 @@ async function creator() {
 }
 
 // ------------------------------------------------------------------------------------------ game start
-function applyA11y(st) { if (game) window.__playerName = game.state.name; window.__voiceOff = st.voices === false; window.__smartOff = st.smart === false; window.__micOff = st.mic === false; if (window.__voiceOff) Voice.stop(); document.body.classList.toggle('a11y-large', !!st.large); document.body.classList.toggle('a11y-contrast', !!st.contrast); document.body.classList.toggle('a11y-calm', !!st.calm); }
+function applyA11y(st) { if (game) window.__playerName = game.state.name; window.__voiceOff = st.voices === false; window.__smartOff = st.smart === false; window.__micOff = st.mic === false; if (window.__voiceOff) Voice.stop(); document.body.classList.toggle('a11y-large', !!st.large); document.body.classList.toggle('a11y-contrast', !!st.contrast); document.body.classList.toggle('a11y-calm', !!st.calm); document.body.classList.toggle('a11y-spaced', !!st.spaced); }
 function startLoader(on, p, label) {
   const L = $('#loading'); if (!L) return;
   L.hidden = !on; if (on) progress(p, label);
@@ -309,8 +329,10 @@ async function startGameInner(state, isNew) {
   bindVoicePanel(() => game);
   addUnlockJackets(JACKETS);
   // rewards: daily goals, unlocks, and a celebration when your Life Level goes up
-  { let lastLevel = null; setInterval(() => { try {
+  { let lastLevel = null, sess = 0; setInterval(() => { try {
+      if (game && mode === 'play' && !document.hidden) sess += 3;                    // real seconds of play this sitting
       if (!game || mode !== 'play' || busy()) return;
+      if (sess >= (window.__breakAfter || 1800)) { sess = 0; if (!navigator.webdriver || window.__rewards) breakCard(game); }   // a gentle break reminder every 30 minutes
       if (navigator.webdriver && !window.__rewards) return;   // tests opt in (money changing mid-test confuses them)
       checkDaily(game); unlockOutfits(game);
       const lv = game.life().level; if (lastLevel != null && lv > lastLevel) celebrate(game, `Life Level ${lv}!`, 'You are growing. New places and jobs open up.', { big: true }); lastLevel = lv;

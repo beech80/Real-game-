@@ -736,3 +736,11 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .badge .medal-subj { position: absolute; right: -10px; bottom: -4px; font-size: 18px; font-style: normal; }
 .load-heart { width: 86px; height: 86px; margin: 4px auto 10px; animation: heartBob 2.4s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .load-heart { animation: none; } }
+
+/* players, certificate, break reminder, easier-to-read letters */
+.player-row { gap: 8px; } .player-row b { font-size: 18px; }
+.cert-btn { width: 100%; margin-bottom: 8px; } .cert-wrap { background: #fff; border-radius: 14px; padding: 8px; overflow: auto; }
+.breakcard { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 70; width: min(360px, 92vw); display: grid; grid-template-columns: 56px 1fr; gap: 6px 10px; align-items: center; padding: 12px; border-radius: 16px; background: #fffaf0; color: #2a2140; box-shadow: 0 10px 28px rgba(0,0,0,.45); animation: arriveIn .5s ease-out both; }
+.breakcard .heart-face { width: 56px; height: 56px; } .breakcard p { margin: 0; font-size: 16px; line-height: 1.4; } .breakcard button { grid-column: 2; justify-self: end; }
+body.a11y-spaced { letter-spacing: .05em; word-spacing: .16em; }
+body.a11y-spaced p, body.a11y-spaced .d-text, body.a11y-spaced .opt, body.a11y-spaced .lead, body.a11y-spaced .readable, body.a11y-spaced #obj-text { line-height: 1.8; }

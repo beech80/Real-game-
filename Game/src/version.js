@@ -3,8 +3,16 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.0.0';
+export const VERSION = '1.1.0';
 export const NOTES = [
+  ['1.1.0', [
+    ['🎨', 'New artwork', 'Hand-drawn stickers, medals, city postcards, and a face for Heart.'],
+    ['👥', 'Players', 'More than one person can keep a game on this device. Find it on the first screen.'],
+    ['⏩', 'Faster days', 'Days go by faster, and you can skip ahead to tonight from your bed.'],
+    ['📜', 'My certificate', 'Print a certificate of what you have learned. Find it in Trophies.'],
+    ['💗', 'Break reminders', 'Heart reminds you to stretch and drink water after 30 minutes.'],
+    ['🔤', 'Easier-to-read letters', 'A new choice in Settings spreads letters and lines apart.'],
+  ]],
   ['1.0.0', [
     ['✨', 'Heart, the reading voice', 'A natural voice reads the story, lessons and questions, cheers you on, and answers questions. Tap 🗣️ for her settings.'],
     ['🏆', 'Trophies, streaks and stickers', 'Three daily goals, a streak calendar, a sticker book, learning badges and jackets you unlock by learning.'],
