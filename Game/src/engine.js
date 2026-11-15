@@ -55,7 +55,7 @@ export class Engine {
   resize() {
     const w = innerWidth, h = innerHeight;
     const maxDpr = this.quality === 'high' ? 2 : this.quality === 'medium' ? 1.5 : 1.25;
-    const dpr = Math.min(devicePixelRatio || 1, maxDpr);
+    const dpr = Math.max(0.75, Math.min(devicePixelRatio || 1, maxDpr) * (this.resScale || 1));
     this.renderer.setPixelRatio(dpr);
     this.renderer.setSize(w, h);
     this.composer.setPixelRatio(dpr);
@@ -181,11 +181,16 @@ export class Engine {
     if (this._fa < 3) return null;
     const fps = this._fn / this._fa; this._fa = 0; this._fn = 0;
     if (this._grace > 0) { this._grace--; return null; }
+    // first make the picture a little less sharp (hard to notice on a small screen); only then drop effects
+    if (fps < 40 && (this.resScale || 1) > 0.7) { this.resScale = Math.max(0.7, (this.resScale || 1) - 0.15); this.resize(); this._grace = 1; return null; }
     if (fps < 26) { this.setQuality(this.quality === 'high' ? 'medium' : 'low', true); this._grace = 1; return this.quality; }
     return null;
   }
 
   render() {
+    // shadows: every frame on high; every other frame on medium (the sun barely moves, and it halves the shadow work)
+    const sm = this.renderer.shadowMap; this._sf = (this._sf || 0) + 1;
+    if (this.quality === 'medium') { sm.autoUpdate = false; if (this._sf % 2 === 0) sm.needsUpdate = true; } else sm.autoUpdate = true;
     if (this.quality === 'low' || this.postFailed) { this.renderer.render(this.scene, this.camera); return; }
     try { this.composer.render(); }
     catch (e) { console.warn('post-processing disabled', e); this.postFailed = true; this.renderer.render(this.scene, this.camera); }

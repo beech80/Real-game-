@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { Engine, makeSurfaceTextures, isMobile } from './engine.js';
 import { loadGLB, mergeStatic, Collision, districtGround, P2W } from './world.js';
-import { Character, loadSpecies, SPECIES, JACKETS, HOODIES, FUR_SHIFT } from './characters.js';
+import { Character, cullCharacters, loadSpecies, SPECIES, JACKETS, HOODIES, FUR_SHIFT } from './characters.js';
 import { Input, FollowCamera, Player } from './controls.js';
 import { Traffic, populate, StoryNPC } from './city.js';
 import { UI, Minimap, h, $, wait, setSfx, money } from './ui.js';
@@ -95,7 +95,7 @@ document.getElementById('obj-say').onclick = (e) => { e.stopPropagation(); readE
 UI.voiceHooks = { canListen: () => Voice.canListen(), speak: (t, who) => Voice.speak(t, who), stop: () => Voice.stop(), listenPick: async (q, choices) => { const said = await Voice.ask({ prompt: q }); if (!said) return null; UI.toast(`Heard “${said}” — checking…`, 'info', 1600); const i = await Brain.pick(q, choices, said); if (i == null) UI.toast(`I heard “${said}”. Which answer did you mean? Tap it, or say it again.`, 'info', 4200); return i; } };
 const textures = makeSurfaceTextures();
 const scene = engine.scene, camera = engine.camera;
-try { if (navigator.webdriver) { window.__scene = scene; window.__audio = audio; window.__player = () => player; window.__narrate = (t) => sayText(t); window.__voiceId = (k) => voiceId(k); window.__learnCount = learnCount; } } catch (e) {}   // automated tests only
+try { if (navigator.webdriver) { window.__scene = scene; window.__renderer = engine.renderer; window.__audio = audio; window.__player = () => player; window.__narrate = (t) => sayText(t); window.__voiceId = (k) => voiceId(k); window.__learnCount = learnCount; } } catch (e) {}   // automated tests only
 
 const W = { district: null, apartment: null, wild: null, club: null, data: null, lamps: [], d: {}, rooms: {} };
 let fpT = 0; let pet = null, companion = null, cart = null, myCar = null, neighbors = null, tipT = 60, mini = null, race = null, petCourse = null, arena = null, markT = 0;
@@ -1043,6 +1043,7 @@ function loop(now) {
   { const fp = (s.settings || {}).view === 'first' && mode === 'play' && fcam.mode === 'follow';   // the view from behind is the normal one; 👁 swaps to first person (through your REAL's eyes) and back
     fcam.first = fp; if (fp) { camera.layers.disable(1); if ((fpT -= dt) < 0) { fpT = 1; player.ch.root.traverse((o) => o.layers.set(1)); } } else camera.layers.enable(1); }
   fcam.update(dt, focus, playing ? input : null, IR ? 5.6 : apt || club || (inFreshMart(player.pos) ? 4.6 : false));
+  camera.updateMatrixWorld(); cullCharacters(camera, player.ch, engine.quality === 'high' ? 90 : engine.quality === 'medium' ? 60 : 45, engine.quality === 'high' ? 30 : 18);
   // nobody blocks your view: characters standing between the camera and you fade out of the way
   { const cp = camera.position, tp = fcam.target, seg = tp.clone().sub(cp), L2 = seg.lengthSq() || 1;
     const roots = [...Object.values(npcs).map((n) => n && n.ch && n.ch.root), ...peds.map((p) => p && p.ch && p.ch.root), ...members.map((m) => m && (m.root || (m.ch && m.ch.root)))];

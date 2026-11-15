@@ -44,8 +44,25 @@ export async function loadSpecies(id, onProgress) {
 
 const CLIP_SPEED = { Walk: 1.25, Run: 3.6, Sprint: 5.6 };   // m/s the clip was authored for (stride)
 
+const ALL = new Set();   // every character made, so the game can skip drawing the ones the camera cannot see
+const _fr = new THREE.Frustum(), _pm = new THREE.Matrix4(), _sp = new THREE.Sphere();
+/** Once a frame: characters that are far away or outside the view are not drawn or animated, and only nearby ones cast shadows.
+ *  This is the game's biggest saving: a street has two dozen detailed characters, and most are behind you or blocks away. */
+export function cullCharacters(camera, keep, far = 70, shadowFar = 22) {
+  _fr.setFromProjectionMatrix(_pm.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+  const cp = camera.position;
+  for (const c of ALL) {
+    const r = c.root; if (!r.parent) { if ((c.orphan = (c.orphan || 0) + 1) > 600) ALL.delete(c); continue; } c.orphan = 0;
+    if (c === keep) { c.cull(false); c.shadows(true); c.outline(true); continue; }
+    const e = r.matrixWorld.elements; _sp.center.set(e[12], e[13] + 0.8, e[14]); _sp.radius = 1.6;
+    const d = Math.hypot(e[12] - cp.x, e[13] - cp.y, e[14] - cp.z);
+    c.cull(d > far || !_fr.intersectsSphere(_sp)); c.shadows(d < shadowFar); c.outline(d < 14);
+  }
+}
+
 export class Character {
   constructor(gltf, opts = {}) {
+    ALL.add(this);
     this.root = SkeletonUtils.clone(gltf.scene);
     this.root.traverse((o) => {
       if (o.isMesh) {
@@ -75,6 +92,11 @@ export class Character {
     if (sit) for (const t of sit.tracks) { const [bone, prop] = t.name.split('.'); if (/^(pelvis|thigh|calf|foot|ball)/.test(bone) && this.bones[bone] && (prop === 'quaternion' || prop === 'position')) this.seat.push([this.bones[bone], prop, Array.from(t.values.slice(0, prop === 'position' ? 3 : 4))]); }
     if (opts.aid) this.setAid(opts.aid);
   }
+
+  /** not drawn and not animated while the camera cannot see it (the root's own `visible` stays free for game logic) */
+  cull(on) { if (on === !!this.culled) return; this.culled = on; for (const k of this.root.children) k.visible = !on; }
+  outline(on) { if (on === (this.outlineOn !== false)) return; this.outlineOn = on; this.root.traverse((o) => { if (o.isSkinnedMesh && o.userData.lkOutline) o.visible = on; }); }   // the ink outline is a second copy of the body: only worth drawing up close
+  shadows(on) { if (on === (this.shadowOn !== false)) return; this.shadowOn = on; this.root.traverse((o) => { if (o.isMesh && !o.userData.lkOutline && !o.userData.lkInk) o.castShadow = on; }); }
 
   /** A mobility aid the player can choose: 'chair' (wheelchair), 'crutches', or none. */
   setAid(kind) {
@@ -170,6 +192,7 @@ export class Character {
   }
 
   update(dt) {
+    if (this.culled) return;   // out of sight: no animation work
     this.mixer.update(dt);
     if (this.aid === 'chair') {   // seated: hips and legs stay in the chair; the wheels turn with the ground speed
       this._applySeat();
