@@ -52,7 +52,14 @@ const walkGz = (d) => { for (const f of fs.readdirSync(d)) { const p = path.join
 walkGz(path.join(dist, 'assets'));
 fs.copyFileSync(path.join(dist, 'artifact.html'), path.join(hostedDir, 'index.html'));
 for (const f of ['world.json', 'learn.json']) fs.copyFileSync(path.join(dist, 'assets', f), path.join(hostedDir, 'assets', f));
-if (fs.existsSync(path.join(dist, 'voice'))) fs.cpSync(path.join(dist, 'voice'), path.join(hostedDir, 'voice'), { recursive: true });   // recorded narrator packs
+if (fs.existsSync(path.join(dist, 'voice'))) {   // recorded narrator packs
+  // The hosted page has a total size limit that both sets of packs together would pass, so once the clearer Opus packs exist it carries only those.
+  const vd = path.join(dist, 'voice'), hv = path.join(hostedDir, 'voice'), man = JSON.parse(fs.readFileSync(path.join(vd, 'manifest.json'), 'utf8'));
+  const opusOnly = man.o && Object.keys(man.c).every((id) => man.o[id]);
+  fs.mkdirSync(hv, { recursive: true });
+  for (const f of fs.readdirSync(vd)) if (!(opusOnly && (/^p\d+\.mp3$/.test(f) || f === 'manifest.json'))) fs.cpSync(path.join(vd, f), path.join(hv, f), { recursive: true });
+  if (opusOnly) fs.writeFileSync(path.join(hv, 'manifest.json'), JSON.stringify({ ...man, c: {} }));
+}
 for (const f of ['about.html', 'privacy.html', 'terms.html', 'about', 'icons', 'manifest.webmanifest']) if (fs.existsSync(path.join(dist, f))) fs.cpSync(path.join(dist, f), path.join(hostedDir, f), { recursive: true });   // product pages, icons
 // one-file offline copy: the whole game and every asset in a single page you can save and open with no internet
 {

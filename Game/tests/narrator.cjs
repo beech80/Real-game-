@@ -9,7 +9,7 @@ let bytesSent = 0;
 const srv = http.createServer((q, r) => { const f = path.join(DIST, decodeURIComponent(q.url.split('?')[0])); fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); }
   const m = /bytes=(\d+)-(\d+)/.exec(q.headers.range || '');   // like real web hosts: send just the requested bytes
   if (m) { const part = b.subarray(+m[1], +m[2] + 1); bytesSent += part.length; r.writeHead(206, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream', 'Content-Range': `bytes ${m[1]}-${m[2]}/${b.length}` }); return r.end(part); }
-  if (f.endsWith('.mp3')) bytesSent += b.length;
+  if (/\.(mp3|ogg)$/.test(f)) bytesSent += b.length;
   r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(wrap(f, b)); }); }).listen(0);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 (async () => {

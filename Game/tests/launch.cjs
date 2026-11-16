@@ -7,7 +7,7 @@ const DIST = path.join(__dirname, '..', 'dist-hosted');
 const types = { '.html': 'text/html; charset=utf-8', '.json': 'application/json', '.mp3': 'audio/mpeg' };
 const wrap = (f, b) => (f.endsWith('index.html') ? Buffer.concat([Buffer.from('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>'), b, Buffer.from('</body></html>')]) : b);
 let voiceHits = 0;
-const srv = http.createServer((q, r) => { const f = path.join(DIST, decodeURIComponent(q.url.split('?')[0])); if (/\/voice\/p\d+\.mp3/.test(q.url)) voiceHits++; fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); }
+const srv = http.createServer((q, r) => { const f = path.join(DIST, decodeURIComponent(q.url.split('?')[0])); if (/\/voice\/[ph]\d+\.(mp3|ogg)/.test(q.url)) voiceHits++; fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); }
   const m = /bytes=(\d+)-(\d+)/.exec(q.headers.range || '');
   if (m) { r.writeHead(206, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream', 'Content-Range': `bytes ${m[1]}-${m[2]}/${b.length}` }); return r.end(b.subarray(+m[1], +m[2] + 1)); }
   r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(wrap(f, b)); }); }).listen(0);
