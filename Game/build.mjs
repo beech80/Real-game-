@@ -55,7 +55,7 @@ for (const f of ['world.json', 'learn.json']) fs.copyFileSync(path.join(dist, 'a
 if (fs.existsSync(path.join(dist, 'voice'))) {   // recorded narrator packs
   // The hosted page has a total size limit that both sets of packs together would pass, so once the clearer Opus packs exist it carries only those.
   const vd = path.join(dist, 'voice'), hv = path.join(hostedDir, 'voice'), man = JSON.parse(fs.readFileSync(path.join(vd, 'manifest.json'), 'utf8'));
-  const opusOnly = man.o && Object.keys(man.c).every((id) => man.o[id]);
+  const opusOnly = man.o && Object.keys(man.o).length >= 0.9 * Object.keys(man.c).length;   // a few old lines exist only as MP3; the hosted page reads those with the device voice
   fs.mkdirSync(hv, { recursive: true });
   for (const f of fs.readdirSync(vd)) if (!(opusOnly && (/^p\d+\.mp3$/.test(f) || f === 'manifest.json'))) fs.cpSync(path.join(vd, f), path.join(hv, f), { recursive: true });
   if (opusOnly) fs.writeFileSync(path.join(hv, 'manifest.json'), JSON.stringify({ ...man, c: {} }));

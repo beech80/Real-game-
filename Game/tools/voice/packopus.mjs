@@ -9,7 +9,7 @@ const DIR = new URL('./', import.meta.url).pathname, GAME = process.env.GAME || 
 const OUT = GAME + 'public/voice/';
 const { voiceId } = await import(GAME + 'src/readalong.js');
 const KBPS = process.env.KBPS || '20', N = +(process.env.PACKS || 44);
-const LISTS = (process.env.LISTS || 'sentences.json few_en.json new_en.json r2_en.json words.json new_w.json r2_w.json sentences_es.json few_es.json new_es.json r2_es.json words_es.json words_es_tpl.json').split(' ').filter((f) => fs.existsSync(DIR + f));
+const LISTS = (process.env.LISTS || 'sentences.json few_en.json new_en.json r2_en.json words.json new_w.json r2_w.json r3_en.json sentences_es.json few_es.json new_es.json r2_es.json r3_es.json words_es.json words_es_tpl.json').split(' ').filter((f) => fs.existsSync(DIR + f));
 const sha = (k) => crypto.createHash('sha1').update(k).digest('hex').slice(0, 14);
 fs.mkdirSync(DIR + 'opus', { recursive: true });
 const TRIM = 'silenceremove=start_periods=1:start_threshold=-42dB:start_silence=0.02,areverse,silenceremove=start_periods=1:start_threshold=-42dB:start_silence=0.03,areverse';
