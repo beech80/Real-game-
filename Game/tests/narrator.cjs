@@ -42,7 +42,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const before = bytesSent; await ev(() => window.__narrate('You have 7319 apples and 4271 pears.')); await sleep(4000);
   console.log('word-by-word downloaded', Math.round((bytesSent - before) / 1024), 'KB'); if (bytesSent - before > 400 * 1024) fail('word-by-word reading downloaded too much');
   const st2 = await ev(() => ({ played: window.__played.length, synth: window.__synth.length }));
-  console.log('unrecorded sentence →', JSON.stringify(st2));
+  console.log('unrecorded sentence →', JSON.stringify(st2), 'joined smoothly:', await ev(() => window.__played.filter((x) => /^joined:/.test(x)).join(' ') || 'no'));
   if (!st2.played || st2.synth) fail('a sentence without a whole recording should still be Heart, word by word (never the device voice)');
   // Spanish: Heart's Spanish voice, not the device voice
   const es = JSON.parse(fs.readFileSync(SENT.replace('sentences.json', 'sentences_es.json')))[5][1];

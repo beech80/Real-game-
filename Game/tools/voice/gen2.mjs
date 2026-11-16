@@ -12,13 +12,14 @@ const LISTS = (process.env.LISTS || 'sentences.json few_en.json new_en.json r2_e
 const id = (k) => crypto.createHash('sha1').update(k).digest('hex').slice(0, 14);
 const seen = new Set(), all = [];
 for (const f of LISTS) for (const [k, text] of JSON.parse(fs.readFileSync(DIR + f))) { if (/^esw?:/.test(k) || seen.has(k)) continue; seen.add(k); all.push([k, text]); }
-const mine = all.filter((_, i) => i % N === W).filter(([k]) => !fs.existsSync(`${DIR}hq/${id(k)}.flac`));
+const FORCE = !!process.env.FORCE;   // record again over an existing master (a new speed)
+const mine = all.filter((_, i) => i % N === W).filter(([k]) => FORCE || !fs.existsSync(`${DIR}hq/${id(k)}.flac`));
 if (process.env.REV) mine.reverse();   // a second recorder can work from the other end of the list
 console.log(`worker ${W}/${N}: ${mine.length} of ${all.length} to make`);
 const tts = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', { dtype: 'fp32', device: 'cpu' });
 let n = 0, secs = 0; const t0 = Date.now();
 for (const [k, text] of mine) {
-  if (fs.existsSync(`${DIR}hq/${id(k)}.flac`)) continue;   // another recorder got there first
+  if (!FORCE && fs.existsSync(`${DIR}hq/${id(k)}.flac`)) continue;   // another recorder got there first
   try {
     const a = await tts.generate(text, { voice: VOICE, speed: SPEED });
     const wav = `${DIR}hq/${id(k)}.${W}${process.env.REV ? 'r' : ''}.wav`; await a.save(wav);

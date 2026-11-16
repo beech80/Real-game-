@@ -99,8 +99,12 @@ export const naturalOn = () => true;   // Heart is the game's one voice
 export function loadNatural() {
   if (NAT || natLoading || window.__REAL_OFFLINE) return natLoading;
   natLoading = fetch('voice/manifest.json').then((r) => (r.ok ? r : savedFile('voice/manifest.json'))).catch(() => savedFile('voice/manifest.json')).then((r) => (r && r.ok ? r.json() : null)).then((m) => { NAT = m && m.c ? m : null; if (NAT && !NAT.c) NAT.c = {}; return NAT; }).catch(() => null);
+  natLoading.then((m) => { if (m && m.t) loadTimes(); });
   return natLoading;
 }
+// when Heart starts each word of a recorded sentence (hundredths of a second), so the highlight follows her voice
+let TIMES = null, timesLoading = null;
+function loadTimes() { if (!timesLoading) timesLoading = fetch('voice/times.json').then((r) => (r.ok ? r : savedFile('voice/times.json'))).catch(() => savedFile('voice/times.json')).then((r) => (r && r.ok ? r.json() : null)).then((t) => { TIMES = t; }).catch(() => {}); return timesLoading; }
 export const naturalReady = () => !!NAT;
 // Heart's voice saved on this device (Settings › Reading voice › Save): the packs live in Cache Storage and are
 // read from there first, so she keeps reading with no internet.
@@ -118,6 +122,7 @@ export async function saveVoice(onProgress) {
   const files = packFiles(m), total = files.length, c = await caches.open(VC);
   try { if (navigator.storage && navigator.storage.persist) await navigator.storage.persist(); } catch (e) {}
   const mr = await fetch('voice/manifest.json'); if (mr.ok) await c.put('voice/manifest.json', mr);
+  if (m.t) { try { const tr = await fetch('voice/times.json'); if (tr.ok) await c.put('voice/times.json', tr); } catch (e) {} }
   for (let i = 0; i < total; i++) {
     const url = files[i];
     if (!(await c.match(url))) { const r = await fetch(url); if (!r.ok) throw new Error('pack ' + i); await c.put(url, r); }
@@ -143,7 +148,7 @@ function clip(e) {
 }
 const pack = (n) => { if (!PACKS.has(n)) PACKS.set(n, savedFile(n).then((s) => s || fetch(n)).then((r) => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }).catch((e) => { PACKS.delete(n); throw e; })); return PACKS.get(n); };
 let natAudio = null, natTimers = [];
-function stopNatural() { natTimers.forEach(clearTimeout); natTimers = []; if (natAudio) { try { natAudio.pause(); } catch (e) {} natAudio = null; } }
+function stopNatural() { natTimers.forEach(clearTimeout); natTimers = []; if (natAudio) { try { natAudio.pause(); } catch (e) {} natAudio = null; } for (const s of natSources) { try { s.stop(); } catch (e) {} } natSources = []; }
 // ---- Heart, word by word: for English lines with no whole-sentence recording (random numbers, a player's writing)
 const ONEW = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
 const TENW = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
@@ -179,6 +184,28 @@ function heartWords(spoken, es = false) {
   }
   return out;
 }
+// Word by word, joined smoothly: the clips are decoded and scheduled back to back on one audio clock (no gap while the next
+// one loads), each word slightly overlapping the last, with a breath at commas and a longer one at full stops.
+let AC = null, natSources = []; const DECODED = new Map();
+const actx = () => { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); return AC; } catch (e) { return null; } };
+const decoded = (e) => { const key = `${fileOf(e)}:${e[1]}`; if (!DECODED.has(key)) { DECODED.set(key, clip(e).then((b) => actx().decodeAudioData(b.slice(0))).catch((err) => { DECODED.delete(key); throw err; })); if (DECODED.size > 500) DECODED.delete(DECODED.keys().next().value); } return DECODED.get(key); };
+async function playJoined(items, speed, onWord, done, alive) {
+  const ac = actx(); if (!ac) return false;
+  if (ac.state !== 'running') { try { await Promise.race([ac.resume(), new Promise((r) => setTimeout(r, 400))]); } catch (e) {} if (ac.state !== 'running') return false; }
+  let bufs; try { bufs = await Promise.all(items.map((x) => decoded(x.clip))); } catch (e) { return false; }
+  if (!alive()) return true;
+  const out = ac.createGain(); out.gain.value = voiceVol(); out.connect(ac.destination);
+  const slow = 1 / speed; let t = ac.currentTime + 0.05; const t0 = t;
+  items.forEach((x, i) => {
+    const src = ac.createBufferSource(); src.buffer = bufs[i]; src.connect(out); src.start(t); natSources.push(src);
+    if (onWord && (i === 0 || items[i - 1].at !== x.at)) natTimers.push(setTimeout(() => { if (alive()) onWord(x.at); }, (t - t0) * 1000 + 40));
+    const gap = x.pause >= 300 ? 0.34 : x.pause >= 150 ? 0.15 : -0.03;   // a full stop, a comma, or the next word running on
+    t += Math.max(0.08, bufs[i].duration + gap * slow + (slow - 1) * 0.12);
+  });
+  natTimers.push(setTimeout(done, (t - t0) * 1000 + 80));
+  if (window.__played) window.__played.push('joined:' + items.length);
+  return true;
+}
 function playWords(spoken, { onWord, onEnd, rate, es = false }) {
   if (!NAT) return false;
   const items = heartWords(spoken, es).map((x) => ({ ...x, clip: entry(voiceId(es ? 'esw:' + fold(x.w) : 'w:' + x.w)) })).filter((x) => x.clip);
@@ -186,7 +213,8 @@ function playWords(spoken, { onWord, onEnd, rate, es = false }) {
   let fin = false; const done = () => { if (fin) return; fin = true; stopNatural(); if (onEnd) onEnd(); };
   current = { done };
   const speed = Math.max(0.55, Math.min(1.35, (rate || 0.92) / 0.92 * speedMul()));
-  Promise.all(items.map((x) => clip(x.clip))).then(() => {
+  Promise.all(items.map((x) => clip(x.clip))).then(async () => {
+    if (speed <= 1.03 && !window.__noJoin && await playJoined(items, speed, onWord, done, () => !fin)) return;   // faster reading keeps Heart's pitch with the older, one-clip-at-a-time way
     const step = async (i) => {
       if (fin) return; if (i >= items.length) return done();
       const { at, pause } = items[i]; const bytes = await clip(items[i].clip); if (fin) return;
@@ -204,7 +232,7 @@ function playWords(spoken, { onWord, onEnd, rate, es = false }) {
 /** play recorded clips for every sentence; resolves false if any is missing (caller falls back to Heart word by word) */
 function playNatural(spoken, { onWord, onEnd, rate, fallback, es = false }) {
   if (!NAT) return false;
-  const sents = speechSentences(spoken), clips = sents.map((s) => entry(voiceId(sentKey(s, es))));
+  const sents = speechSentences(spoken), ids = sents.map((s) => voiceId(sentKey(s, es))), clips = ids.map((id) => entry(id));
   if (!sents.length || clips.some((c) => !c)) return false;
   let fin = false; const done = () => { if (fin) return; fin = true; stopNatural(); if (onEnd) onEnd(); };
   current = { done };
@@ -219,9 +247,11 @@ function playNatural(spoken, { onWord, onEnd, rate, fallback, es = false }) {
     const url = URL.createObjectURL(new Blob([bytes], { type: mimeOf(clips[i]) }));
     const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol();
     a.onended = () => { URL.revokeObjectURL(url); playAt(i + 1); }; a.onerror = () => { URL.revokeObjectURL(url); playAt(i + 1); };
-    if (onWord) {   // light each word in turn, spread over the clip by length
-      const words = [...sents[i].matchAll(/\S+/g)], total = sents[i].length || 1, dur = (ms || 1500) / speed;
-      words.forEach((w) => natTimers.push(setTimeout(() => { if (!fin) onWord(offs[i] + w.index); }, dur * w.index / total)));
+    if (onWord) {   // light each word as Heart says it: from the measured word times when we have them, else spread over the clip by length
+      const words = [...sents[i].matchAll(/\S+/g)], total = sents[i].length || 1, dur = (ms || 1500) / 1000;
+      const tm = TIMES && TIMES[ids[i]], at = tm && tm.length === words.length ? tm.map((x) => x / 100) : words.map((w) => dur * w.index / total);
+      let next = 0; const tick = () => { if (fin || natAudio !== a) return; const t = a.currentTime + 0.03; while (next < words.length && at[next] <= t) onWord(offs[i] + words[next++].index); if (next < words.length) natTimers.push(setTimeout(tick, 30)); };
+      a.addEventListener('playing', tick, { once: true });
     }
     a.play().catch(() => { if (i === 0 && fallback && !fin) { fin = true; stopNatural(); fallback(); } else done(); });   // audio blocked (no tap yet): use the device voice
   };
