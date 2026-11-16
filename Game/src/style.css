@@ -749,3 +749,9 @@ body.a11y-spaced p, body.a11y-spaced .d-text, body.a11y-spaced .opt, body.a11y-s
 .aid-chips { gap: 6px; flex-wrap: nowrap; }
 .aid-btn { flex: 1 1 0; min-width: 0; padding: 7px 4px; border-radius: 12px; background: rgba(255, 255, 255, .08); border: 2px solid rgba(255, 255, 255, .2); color: inherit; font: inherit; font-size: 12px; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; text-align: center; }
 .aid-btn.on { border-color: var(--gold-2); box-shadow: 0 0 0 3px rgba(233, 169, 58, .35); }
+
+/* every button answers the finger: a quick press-in, then a springy release */
+.interact-btn, .phone-btn, .sprint-btn, .opt, .chip-btn, .aid-btn, .round, .ghost, .primary, .d-choice, .key, .skillrow, .card { transition: transform .09s ease-out, filter .09s ease-out; }
+.interact-btn:active, .phone-btn:active, .sprint-btn:active, .round:active, .chip-btn:active, .aid-btn:active, .key:active { transform: scale(.93); filter: brightness(1.12); }
+.opt:active, .ghost:active, .d-choice:active, .skillrow:active, button.card:active { transform: scale(.975); filter: brightness(1.1); }
+@media (prefers-reduced-motion: reduce) { .interact-btn, .phone-btn, .sprint-btn, .opt, .chip-btn, .aid-btn, .round, .ghost, .primary, .d-choice, .key, .skillrow, .card { transition: none; } }

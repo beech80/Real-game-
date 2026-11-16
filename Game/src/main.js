@@ -27,7 +27,7 @@ import { voicePanel, bindVoicePanel } from './game.js';
 import { tutorialTick } from './tutorial.js';
 import { VERSION, whatsNew } from './version.js';
 import { checkDaily, unlockOutfits, celebrate, addUnlockJackets, arrivalCard, breakCard } from './rewards.js';
-import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine, voiceId, loadNatural } from './readalong.js';
+import { initReadAlong, readEls, readToMe, setReadToMe, say as sayText, logLine, voiceId, loadNatural, stopReading } from './readalong.js';
 import { installAdventures, installAdventureHelpers, ADVENTURES } from './adventures.js';
 import { Race } from './race.js';
 import { PetCourse, RobotArena } from './arenas.js';
@@ -60,7 +60,7 @@ const audio = new Audio();
 setSfx((n) => audio.play(n));
 UI.init();
 const saveNow = () => { try { if (game && mode === 'play' && player && !game.state.ending) { if (!game.busy) { game.state.pos = { ...player.pos }; game.state.heading = player.heading; } game.save(); } } catch (e) {} };
-document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); try { const c = audio && audio.ctx; if (c) { if (document.hidden) { stopReading(); c.suspend(); } else c.resume(); } } catch (e) {} });   // switch apps or tabs: the game saves and goes quiet; come back and the sound returns
 window.addEventListener('pagehide', saveNow);
 initReadAlong(() => game && game.state);
 initLang();
@@ -313,7 +313,7 @@ async function startGameInner(state, isNew) {
   window.__playerName = state.name;
   applyA11y(state.settings || {});
   game = new Game(state, {
-    sfx: (n) => audio.play(n),
+    sfx: (n) => { audio.play(n); buzz(n === 'bad' ? [18, 50, 18] : n === 'good' ? 12 : 0); },
     enterApartment: (silent) => enterApartment(silent), exitApartment: () => exitApartment(),
     playerAnim: (n, secs) => playerAnim(n, secs), setAid: (a) => { player.ch.setAid(a); fpT = 0; }, setOutfit: (o) => player.ch.setOutfit(o),
     npcExpr: (n, e) => npcs[n] && npcs[n].ch.expression(e, 3),
@@ -880,7 +880,9 @@ function faceNPC(n) {
   player.heading = Math.atan2(dx, dy); player.apply();
   fcam.yaw = -player.heading + 0.45; fcam.pitch = 0.18; fcam.dist = Math.min(fcam.dist, 4.2);
 }
+const buzz = (p) => { try { if (p && navigator.vibrate && !((game && game.state.settings) || {}).calm) navigator.vibrate(p); } catch (e) {} };   // a tiny tap you can feel (phones that support it)
 async function doInteract() {
+  buzz(8);
   if (mode !== 'play' || busy() || !nearest) return;
   audio.play('click');
   if (nearest.npc) faceNPC(nearest.npc);
@@ -990,7 +992,7 @@ function storyTriggers() {
 let saveT = 0, last = performance.now(), lastObjective = null;
 function loop(now) {
   requestAnimationFrame(loop);
-  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  const dt = Math.min(0.1, (now - last) / 1000); last = now;   // on a slow device the game keeps its real speed down to 10 frames a second (it used to go into slow motion below 20)
   const t = now / 1000;
   if (mode === 'title' || mode === 'loading' || mode === 'creator') {
     titleT += dt;
@@ -1027,7 +1029,7 @@ function loop(now) {
       const d = sock(k); const P = player.pos;
       if (d && Math.abs(P.y - d.y) < 1.4 && Math.abs(P.x - d.x) < 1.0 && Math.hypot(input.move.x, input.move.y) > 0.2) P.x += (d.x - P.x) * Math.min(1, dt * 5);
     }   // the countryside walk into the city goes by twice as fast
-    if (!busy()) player.update(dt, input, fcam, IR ? IR.coll : apt ? aptColl : club ? clubColl : DD ? DD.coll : coll, gfn, IR ? IR.bounds : apt ? W.data.apartment.bounds : club ? W.club.bounds : DD ? (p) => clampToWalk(p, DD.walk) : boundsFn);
+    if (!busy()) for (let left = dt; left > 1e-4; left -= 0.034) player.update(Math.min(left, 0.034), input, fcam, IR ? IR.coll : apt ? aptColl : club ? clubColl : DD ? DD.coll : coll, gfn, IR ? IR.bounds : apt ? W.data.apartment.bounds : club ? W.club.bounds : DD ? (p) => clampToWalk(p, DD.walk) : boundsFn);
     else player.ch.locomote(0, dt);
     if (apt) player.ch.root.position.y = -500 + player.h;
   }
@@ -1043,6 +1045,8 @@ function loop(now) {
   { const fp = (s.settings || {}).view === 'first' && mode === 'play' && fcam.mode === 'follow';   // the view from behind is the normal one; 👁 swaps to first person (through your REAL's eyes) and back
     fcam.first = fp; if (fp) { camera.layers.disable(1); if ((fpT -= dt) < 0) { fpT = 1; player.ch.root.traverse((o) => o.layers.set(1)); } } else camera.layers.enable(1); }
   fcam.update(dt, focus, playing ? input : null, IR ? 5.6 : apt || club || (inFreshMart(player.pos) ? 4.6 : false));
+  { const base = camera.aspect < 1 ? 68 : 55, calm = (s.settings || {}).calm, fast = playing && input.sprint && player.vel.length() > 4 && !fcam.first;   // running widens the view a touch: you feel the speed
+    const want = base + (fast && !calm ? 5 : 0); if (Math.abs(camera.fov - want) > 0.05) { camera.fov += (want - camera.fov) * Math.min(1, dt * 5); camera.updateProjectionMatrix(); } }
   camera.updateMatrixWorld(); cullCharacters(camera, player.ch, engine.quality === 'high' ? 90 : engine.quality === 'medium' ? 60 : 45, engine.quality === 'high' ? 30 : 18);
   // nobody blocks your view: characters standing between the camera and you fade out of the way
   { const cp = camera.position, tp = fcam.target, seg = tp.clone().sub(cp), L2 = seg.lengthSq() || 1;

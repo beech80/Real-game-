@@ -13,7 +13,7 @@ export class Input {
     this.enabled = true;
     this.joy = { id: null, ox: 0, oy: 0, x: 0, y: 0 };
     this.cam = { id: null, x: 0, y: 0 };
-    this.zoom = 0;
+    this.zoom = 0; this.pad = { on: false, x: 0, y: 0 };
     const base = document.getElementById('joy-base'), knob = document.getElementById('joy-knob');
     this.base = base; this.knob = knob;
     el.addEventListener('pointerdown', (e) => this._down(e));
@@ -45,7 +45,8 @@ export class Input {
       this.joy.x = dx / R; this.joy.y = -dy / R;
       this.knob.style.transform = `translate(${dx}px, ${dy}px)`;
     } else if (e.pointerId === this.cam.id) {
-      this.look.x += e.clientX - this.cam.x; this.look.y += e.clientY - this.cam.y;
+      const k = e.pointerType === 'mouse' ? 1 : Math.max(0.6, Math.min(1.25, 430 / Math.min(innerWidth, innerHeight)));   // a swipe across a tablet turns you as far as the same swipe across a phone
+      this.look.x += (e.clientX - this.cam.x) * k; this.look.y += (e.clientY - this.cam.y) * k;
       this.cam.x = e.clientX; this.cam.y = e.clientY;
     }
   }
@@ -53,14 +54,35 @@ export class Input {
     if (e.pointerId === this.joy.id) { this.joy = { id: null, x: 0, y: 0 }; this.knob.style.transform = ''; this.base.classList.remove('on'); this.base.style.left = ''; this.base.style.top = ''; }
     if (e.pointerId === this.cam.id) this.cam = { id: null };
   }
+  /** game controller (Xbox / PlayStation / Switch layouts): left stick moves, right stick looks, A talks or uses, B or a trigger runs, Start opens the phone */
+  _pad() {
+    const P = this.pad; P.on = false;
+    let g = null; try { for (const x of navigator.getGamepads ? navigator.getGamepads() : []) if (x && x.connected && x.axes.length >= 2) { g = x; break; } } catch (e) {}
+    if (!g || !this.enabled) { P.x = P.y = 0; P.sprint = false; return; }
+    const now = performance.now(), dt = Math.min(0.05, (now - (P.t || now)) / 1000); P.t = now;
+    const dead = (v) => (Math.abs(v) < 0.18 ? 0 : (v - Math.sign(v) * 0.18) / 0.82), b = (i) => !!(g.buttons[i] && g.buttons[i].pressed);
+    P.on = true; P.x = dead(g.axes[0]); P.y = -dead(g.axes[1]);
+    if (b(12)) P.y = 1; if (b(13)) P.y = -1; if (b(14)) P.x = -1; if (b(15)) P.x = 1;   // d-pad
+    if (g.axes.length >= 4) { const lx = dead(g.axes[2]), ly = dead(g.axes[3]); this.look.x += lx * Math.abs(lx) * 420 * dt; this.look.y += ly * Math.abs(ly) * 300 * dt; }
+    P.sprint = b(1) || b(7) || b(10);
+    const a = b(0), st = b(9) || b(3);
+    if (a && !P.a && !screenOpen()) this.onInteract && this.onInteract();
+    if (st && !P.st && !screenOpen()) this.onPhone && this.onPhone();
+    P.a = a; P.st = st;
+  }
   read() {
     const k = this.keys;
     let x = (k.has('KeyD') || k.has('ArrowRight') ? 1 : 0) - (k.has('KeyA') || k.has('ArrowLeft') ? 1 : 0);
     let y = (k.has('KeyW') || k.has('ArrowUp') ? 1 : 0) - (k.has('KeyS') || k.has('ArrowDown') ? 1 : 0);
-    if (this.joy.id !== null) { x = this.joy.x; y = this.joy.y; }
+    if (this.joy.id !== null) {   // thumb stick: a small dead zone so a resting thumb does not drift, then a smooth ramp to full speed
+      const m = Math.hypot(this.joy.x, this.joy.y), dz = 0.14, k = m <= dz ? 0 : Math.min(1, (m - dz) / (0.94 - dz)) / m;
+      x = this.joy.x * k; y = this.joy.y * k;
+    }
+    this._pad();
+    if (this.pad.on) { if (Math.hypot(this.pad.x, this.pad.y) > Math.hypot(x, y)) { x = this.pad.x; y = this.pad.y; } }
     this.move.set(x, y);
     if (this.move.length() > 1) this.move.normalize();
-    this.sprint = k.has('ShiftLeft') || k.has('ShiftRight') || (this.joy.id !== null && Math.hypot(this.joy.x, this.joy.y) > 0.98 && this.sprintLatch);
+    this.sprint = k.has('ShiftLeft') || k.has('ShiftRight') || (this.joy.id !== null && Math.hypot(this.joy.x, this.joy.y) > 0.7 && this.sprintLatch) || (this.pad.on && this.pad.sprint);
     if (!this.enabled) this.move.set(0, 0);
     return this.move;
   }
@@ -110,7 +132,10 @@ export class FollowCamera {
     // some spaces need a higher view (over shelves): ease toward it without overwriting the player's own tilt
     this.pitchNow = this.pitchNow == null ? this.pitch : this.pitchNow + (Math.max(this.pitch, this.minPitch || 0) - this.pitchNow) * Math.min(1, dt * 6);
     const pitch = this.pitchNow;
-    const off = new THREE.Vector3(Math.sin(this.yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(this.yaw) * Math.cos(pitch)).multiplyScalar(d);
+    // the view glides to where you turned it (a very short ease), so small thumb movements do not jitter the picture
+    if (this.yawNow == null || this.snap || Math.abs(this.yaw - this.yawNow) > 1.2) this.yawNow = this.yaw; else this.yawNow += (this.yaw - this.yawNow) * (1 - Math.exp(-dt * 28));
+    const yw = this.yawNow;
+    const off = new THREE.Vector3(Math.sin(yw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yw) * Math.cos(pitch)).multiplyScalar(d);
     const want = this.target.clone().add(off);
     if (this.clamp) this.clamp(want, this.target);
     const reach = want.distanceTo(this.target);
@@ -150,7 +175,7 @@ export class Player {
     const { f, r } = cam.basis();
     const dir = new THREE.Vector3().addScaledVector(f, m.y).addScaledVector(r, m.x);
     const mag = Math.min(1, dir.length());
-    const top = (input.sprint ? 5.4 : mag > 0.85 ? 3.3 : 1.6 * mag / 0.85 + 0.4) * this.speedMul;
+    const top = (input.sprint ? 5.4 : 0.6 + 2.7 * mag * mag * (3 - 2 * mag)) * this.speedMul;   // a gentle push walks, a full push jogs: one smooth ramp, no sudden jump
     const want = new THREE.Vector2(dir.x, -dir.z);   // plan space
     if (want.lengthSq() > 1e-4) want.normalize().multiplyScalar(mag < 0.05 ? 0 : top);
     else want.set(0, 0);
