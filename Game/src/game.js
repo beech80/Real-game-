@@ -1,5 +1,6 @@
 // REAL — game director: chapters, needs, time, Jax, careers, Life Level, phone, save/load.
 import { UI, h, money, clock, wait } from './ui.js';
+import { askGrade, gradeName } from './grade.js';
 import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
@@ -44,6 +45,7 @@ export class Game {
   constructor(state, hooks) {
     this.state = state; this.hooks = hooks;
     this.edu = new Edu(state.edu, { day: () => this.state.day, onState: (sk, st) => this.onSkill(sk, st) });
+    if (state.pendingStart) { this.edu.setStart(state.pendingStart); state.wordLevel = this.edu.floor('reading'); delete state.pendingStart; }   // the grade chosen in the creator
     this.busy = false;
   }
   sfx(n) { this.hooks.sfx(n); }
@@ -56,7 +58,7 @@ export class Game {
    *  reading level where they can do at least two skills on their own. It is saved and never goes back down. */
   wordLevel() {
     const s = this.state, bands = Object.values(SKILLS).filter((k) => k.subj === 'reading' && this.edu.state(k.id) >= 3).map((k) => k.band).sort((a, b) => b - a);
-    const lv = bands.length >= 2 ? Math.min(6, bands[1] + 1) : 1;
+    const lv = Math.max(bands.length >= 2 ? Math.min(6, bands[1] + 1) : 1, this.edu.start ? this.edu.floor('reading') : 1);   // a learner who started at a higher grade reads richer words from the start
     if (lv > (s.wordLevel || 1)) s.wordLevel = lv;
     return s.wordLevel || 1;
   }
@@ -714,6 +716,7 @@ export function openPhone(G) {
           voiceBox(),
           h('div', { class: 'row' }, h('span', {}, `REAL v${VERSION}`), h('button', { class: 'ghost sm', onclick: () => { close(); whatsNew(true); } }, '🆕 What’s new')),
           h('div', { class: 'row' }, h('span', {}, '💡 Tips for new players'), h('button', { class: tipsOff() ? 'ghost sm' : 'primary sm', onclick: () => { setTips(true); UI.toast('Tips are on. They will show up as you play.', 'good'); open('Settings'); } }, tipsOff() ? 'Show tips again' : 'On')),
+          h('div', { class: 'row' }, h('span', {}, '🎒 My grade (where lessons start)'), h('button', { class: 'primary sm', id: 'set-grade', onclick: async () => { const n = await askGrade(G.edu.start); if (n) { G.edu.setStart(n); s.wordLevel = G.edu.floor('reading'); G.save(); UI.toast('Your lessons now start at this level.', 'good'); } open('Settings'); } }, G.edu.start ? gradeName(G.edu.start) : 'Choose')),
           h('div', { class: 'tier-h' }, 'Accessibility'),
           h('div', { class: 'row' }, h('span', {}, 'How my REAL gets around'), h('button', { class: 'primary sm', onclick: () => { const order = ['', 'chair', 'crutches']; s.aid = order[(order.indexOf(s.aid || '') + 1) % 3]; if (!s.aid) delete s.aid; G.hooks.setAid(s.aid); G.save(); open('Settings'); } }, s.aid === 'chair' ? '♿ Wheelchair' : s.aid === 'crutches' ? '🩼 Crutches' : '🚶 Walking')),
           ...[['smart', 'Smart character replies', true]].map(([k, n]) => { s.settings = s.settings || {}; const on = s.settings[k] !== false; return h('div', { class: 'row' }, h('span', {}, n), isSchool(s) ? h('button', { class: 'ghost sm', disabled: true }, 'Off (school)') : h('button', { class: on ? 'primary sm' : 'ghost sm', onclick: () => { s.settings[k] = !on; G.hooks.applyA11y(s.settings); G.save(); open('Settings'); } }, on ? 'On' : 'Off')); }),

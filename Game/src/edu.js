@@ -171,7 +171,7 @@ export class Edu {
     k.n++; k.lastSeenDay = day; k.lastSeenAt = now; k.last5 = [...(k.last5 || []), correct && !hinted ? 1 : 0].slice(-5);
     const before = k.st;
     if (correct) {
-      k.ok++;
+      k.ok++; delete k.park;
       if (hinted) { k.hints++; if (k.st < 2) k.st = 2; }   // helped answers count as practice, not toward Proficient
       else {
         k.streak++;
@@ -197,6 +197,7 @@ export class Edu {
       const ks = Object.keys(D); if (ks.length > 60) ks.sort().slice(0, ks.length - 60).forEach((x) => { delete D[x]; }); }
     if (wasDue) { if (correct && !hinted) { k.reviews = (k.reviews || 0) + 1; k.reviewedAt = now; } else if (!correct) k.reviews = Math.max(0, (k.reviews || 0) - 1); }
     this.s.skills[id] = k;
+    this._fit(id, correct && !hinted);
     if (k.st !== before) { this._log(id, STATES[k.st]); this.hooks.onState && this.hooks.onState(SKILLS[id], k.st); }
     return k.st;
   }
@@ -222,11 +223,32 @@ export class Edu {
    *  something they've met; if nothing is in progress, one band above their highest proficient skill.
    *  Advanced players are never sent back through foundations they've never needed. */
   band(subj) {
-    const list = Object.values(SKILLS).filter((s) => s.subj === subj);
-    const developing = list.filter((s) => { const st = this.state(s.id); return st >= 1 && st < 3; }).map((s) => s.band);
+    const f = this.floor(subj), list = Object.values(SKILLS).filter((s) => s.subj === subj && s.band >= f);   // easier skills met in the story don't pull a placed learner back down
+    const developing = list.filter((s) => { const k = this.get(s.id); return k.st >= 1 && k.st < 3 && !k.park; }).map((s) => s.band);   // parked: met, but it was too hard for now
     if (developing.length) return Math.min(...developing);
     const prof = list.filter((s) => this.state(s.id) >= 3).map((s) => s.band);
-    return prof.length ? Math.min(6, Math.max(...prof) + 1) : 1;
+    return prof.length ? Math.min(6, Math.max(...prof) + 1) : f;
+  }
+  /** Where this learner starts (their grade, chosen when they made their REAL): 1–6, or 0 if never set. */
+  get start() { return this.s.start || 0; }
+  /** The starting level of a subject. It begins at the grade level and steps down by itself when the work is too hard. */
+  floor(subj) { return Math.max(1, Math.min(6, (this.s.floor && this.s.floor[subj]) || 1)); }
+  /** Set the starting level for every subject (cursive always starts at the beginning: it is new at any age). */
+  setStart(n) {
+    n = Math.max(1, Math.min(6, Math.floor(n) || 1));
+    this.s.start = n; this.s.floor = {}; this.s.recent = {};
+    for (const subj of Object.keys(SUBJECTS)) this.s.floor[subj] = subj === 'cursive' ? 1 : Math.min(n, Math.max(1, ...Object.values(SKILLS).filter((k) => k.subj === subj).map((k) => k.band)));
+    this._log('start', 'Starting level ' + n);
+  }
+  /** Too hard? Two or fewer right out of the last six answers at the starting level moves that subject down one level. */
+  _fit(id, good) {
+    const sk = SKILLS[id]; if (!sk || !this.s.floor) return;
+    const f = this.floor(sk.subj); if (f <= 1 || sk.band < f) return;
+    const R = this.s.recent || (this.s.recent = {}), r = R[sk.subj] = [...(R[sk.subj] || []), good ? 1 : 0].slice(-6);
+    if (r.length >= 6 && r.reduce((a, v) => a + v, 0) <= 2) {
+      this.s.floor[sk.subj] = f - 1; R[sk.subj] = []; this._log(id, 'Starting level moved down to ' + (f - 1));
+      for (const o of Object.values(SKILLS)) if (o.subj === sk.subj && o.band >= f) { const k = this.s.skills[o.id]; if (k && k.st >= 1 && k.st < 3) k.park = 1; }   // set the too-hard skills aside until they come back
+    }
   }
   /** After repeated misses, point back to an unmastered prerequisite (review prerequisites when struggling). */
   struggling(id) {

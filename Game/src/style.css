@@ -755,3 +755,10 @@ body.a11y-spaced p, body.a11y-spaced .d-text, body.a11y-spaced .opt, body.a11y-s
 .interact-btn:active, .phone-btn:active, .sprint-btn:active, .round:active, .chip-btn:active, .aid-btn:active, .key:active { transform: scale(.93); filter: brightness(1.12); }
 .opt:active, .ghost:active, .d-choice:active, .skillrow:active, button.card:active { transform: scale(.975); filter: brightness(1.1); }
 @media (prefers-reduced-motion: reduce) { .interact-btn, .phone-btn, .sprint-btn, .opt, .chip-btn, .aid-btn, .round, .ghost, .primary, .d-choice, .key, .skillrow, .card { transition: none; } }
+
+/* grade picker: where lessons start */
+.grade-list { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+.grade-btn { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; text-align: left; padding: 13px 14px; border-radius: 14px; background: rgba(255, 255, 255, .07); border: 2px solid rgba(255, 255, 255, .18); color: inherit; font: inherit; font-size: 1.02rem; }
+.grade-btn small { opacity: .75; white-space: nowrap; }
+.grade-btn.on { border-color: var(--gold-2); box-shadow: 0 0 0 3px rgba(233, 169, 58, .35); }
+.grade-btn:active { transform: scale(.98); }

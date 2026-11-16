@@ -3,8 +3,11 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.5.0';
+export const VERSION = '1.6.0';
 export const NOTES = [
+  ['1.6.0', [
+    ['🎒', 'Start at your grade', 'Tell the game your grade when you make your REAL, and lessons start at your level. Change it any time in Settings.'],
+  ]],
   ['1.5.0', [
     ['💗', 'A clearer voice', 'Heart sounds clearer and smoother now. Every line was recorded again.'],
   ]],

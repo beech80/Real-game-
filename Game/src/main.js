@@ -6,6 +6,8 @@ import { Character, cullCharacters, loadSpecies, SPECIES, JACKETS, HOODIES, FUR_
 import { Input, FollowCamera, Player } from './controls.js';
 import { Traffic, populate, StoryNPC } from './city.js';
 import { UI, Minimap, h, $, wait, setSfx, money } from './ui.js';
+import { askGrade } from './grade.js';
+import { SKILLS } from './edu.js';
 import { Audio } from './audio.js';
 import { Game, newState, loadSave, openPhone, saveFromText } from './game.js';
 import { buildWilderness, wildHeight, WILD, buildClub, CLUB, setGate } from './scenes.js';
@@ -268,13 +270,16 @@ async function creator() {
   chips('#cr-fur', FUR_SHIFT, 'fur'); chips('#cr-jacket', JACKETS, 'jacket'); chips('#cr-hoodie', HOODIES, 'hoodie');
   $('#cr-prev').onclick = () => { creatorState.i = (creatorState.i + SPECIES.length - 1) % SPECIES.length; audio.play('click'); show(); };
   $('#cr-next').onclick = () => { creatorState.i = (creatorState.i + 1) % SPECIES.length; audio.play('click'); show(); };
-  $('#cr-go').onclick = () => {
+  $('#cr-go').onclick = async () => {
     const name = (nameEl.value || '').trim().replace(/[^\p{L}\p{N} '\-]/gu, '').slice(0, 14);
     if (!name) { nameEl.focus(); UI.toast('Give your REAL a name.', 'warn'); return; }
+    // where lessons start: the player's grade (test bots skip the question unless they ask for it)
+    let grade = 0; if (!navigator.webdriver || window.__gradeAsk) { grade = await askGrade(0); if (!grade) return; }
     C.hidden = true; camera.clearViewOffset(); audio.play('good');
     const st = newState({ name, species: SPECIES[creatorState.i].id, outfit: { jacket: JACKETS[creatorState.jacket].color, hoodie: HOODIES[creatorState.hoodie].color, fur: FUR_SHIFT[creatorState.fur].mul } });
     st.wardrobe = [...new Set(['black', 'navy', JACKETS[creatorState.jacket].id])];
     if (creatorState.aid) st.aid = creatorState.aid;
+    if (grade) st.pendingStart = grade;
     if (preview) { scene.remove(preview.root); preview = null; }
     try { localStorage.setItem('real.save.v2', JSON.stringify(st)); } catch (e) {}
     startGame(st, true);
@@ -1152,7 +1157,7 @@ window.REAL = {
     const d = sock('Spawn_StoreEntry'); player.pos = { x: d.x, y: d.y + 2 }; player.apply();
   },
   sheets: () => [...document.querySelectorAll('#modal .sh-title')].map((e) => e.textContent),
-  game: () => game, setTime: (h) => { game.state.time = h; },
+  game: () => game, skillList: () => Object.values(SKILLS), setTime: (h) => { game.state.time = h; },
   quality: (q) => engine.setQuality(q),
   life: () => game.life(),
   practice: (sk) => runActivity(game, () => ({ skill: sk, ...PRACTICE[sk]() }), 'learn', 'Practice', '📚'),
