@@ -3,8 +3,11 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.4.0';
+export const VERSION = '1.5.0';
 export const NOTES = [
+  ['1.5.0', [
+    ['💗', 'A clearer voice', 'Heart sounds clearer and smoother now. Every line was recorded again.'],
+  ]],
   ['1.4.0', [
     ['🎮', 'Better controls', 'Moving and looking feel smoother. Buttons press in when you tap them. You can play with a game controller too.'],
     ['⚡', 'Runs smoother', 'The game is faster now, most of all on phones and older computers.'],
