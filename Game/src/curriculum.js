@@ -16,6 +16,7 @@ import { BANKS_A } from './curriculum9.js';
 import { BANKS_B } from './curriculum10.js';
 import { BANKS_C } from './curriculum11.js';
 import { BANKS_D } from './curriculum12.js';
+import { BANKS_E } from './curriculum13.js';
 
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -287,7 +288,7 @@ export const GEN = {
 NEW_SKILLS.push(...MORE_SKILLS);
 for (const [k, g] of Object.entries(MORE_GEN)) GEN[k] = (GEN[k] || []).concat(g);
 // parts 3 and 4: many more questions for every skill
-for (const extra of [EXTRA_GEN, EXTRA_GEN2, TOPUP_GEN, MORE_TOPICS, BANKS_A, BANKS_B, BANKS_C, BANKS_D]) for (const [k, g] of Object.entries(extra)) GEN[k] = (GEN[k] || []).concat(g);
+for (const extra of [EXTRA_GEN, EXTRA_GEN2, TOPUP_GEN, MORE_TOPICS, BANKS_A, BANKS_B, BANKS_C, BANKS_D, BANKS_E]) for (const [k, g] of Object.entries(extra)) GEN[k] = (GEN[k] || []).concat(g);
 // K–2 foundations (teacher-reviewed) replace the older early items for those skills
 NEW_SKILLS.push(...K2_SKILLS);
 for (const [k, g] of Object.entries(K2_REPLACE)) GEN[k] = g.slice();
