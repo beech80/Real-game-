@@ -94,7 +94,7 @@ const entry = (id) => { const o = OPUS && NAT.o && NAT.o[id]; if (o) { if (o.len
 const fileOf = (e) => (e[4] === 'o' ? `voice/h${e[0]}.ogg` : `voice/p${e[0]}.mp3`);
 const mimeOf = (e) => (e[4] === 'o' ? 'audio/ogg; codecs=opus' : 'audio/mpeg');
 /** every pack file this device uses */
-const packFiles = (m) => { const set = new Set(); for (const id in m.c) if (!(OPUS && m.o && m.o[id])) set.add(`voice/p${m.c[id][0]}.mp3`); if (OPUS && m.o) for (const id in m.o) set.add(`voice/h${m.o[id][0]}.ogg`); return [...set].sort(); };
+const packFiles = (m) => { const set = new Set(); if (OPUS && m.o) for (const id in m.o) set.add(`voice/h${m.o[id][0]}.ogg`); else for (const id in m.c) set.add(`voice/p${m.c[id][0]}.mp3`); return [...set].sort(); };   // the few old lines that exist only as MP3 are not worth saving every MP3 pack for
 export const naturalOn = () => true;   // Heart is the game's one voice
 export function loadNatural() {
   if (NAT || natLoading || window.__REAL_OFFLINE) return natLoading;
@@ -123,6 +123,7 @@ export async function saveVoice(onProgress) {
     if (!(await c.match(url))) { const r = await fetch(url); if (!r.ok) throw new Error('pack ' + i); await c.put(url, r); }
     if (onProgress) onProgress(i + 1, total);
   }
+  try { for (const r of await c.keys()) { const f = (/voice\/[ph]\d+\.(?:mp3|ogg)/.exec(r.url) || [])[0]; if (f && !files.includes(f)) await c.delete(r); } } catch (e) {}   // packs this device no longer uses (the older recording)
   SAVED = null; return total;
 }
 export async function forgetVoice() { try { await caches.delete(VC); } catch (e) {} SAVED = null; }

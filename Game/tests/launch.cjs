@@ -48,7 +48,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const t0 = Date.now(); await p.click('.voicesave button');
     await p.waitForFunction(() => /✓/.test((document.querySelector('.voicesave') || {}).textContent || ''), null, { timeout: 600000 }).catch(() => fail('saving the voice did not finish'));
     const st = await ev(async () => { const c = await caches.open('real-voice'); return (await c.keys()).length; }); console.log('saved files:', st, 'in', Math.round((Date.now() - t0) / 1000), 's');
-    if (st < 49) fail('not every voice pack was saved');
+    if (st < 45) fail('not every voice pack was saved');
     // now Heart reads from the device: no voice downloads
     await ev(() => { const P = HTMLMediaElement.prototype.play; window.__played = []; HTMLMediaElement.prototype.play = function () { window.__played.push(this.src); return P.call(this); }; });
     voiceHits = 0; await ev(() => window.__narrate('Tienes 7319 manzanas y 4271 peras.')); await sleep(3000);
