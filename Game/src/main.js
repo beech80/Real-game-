@@ -8,6 +8,7 @@ import { Traffic, populate, StoryNPC } from './city.js';
 import { UI, Minimap, h, $, wait, setSfx, money } from './ui.js';
 import { askGrade } from './grade.js';
 import { SKILLS } from './edu.js';
+import { CURSIVE_LESSONS } from './cursive.js';
 import { Audio } from './audio.js';
 import { Game, newState, loadSave, openPhone, saveFromText } from './game.js';
 import { buildWilderness, wildHeight, WILD, buildClub, CLUB, setGate } from './scenes.js';
@@ -1157,7 +1158,7 @@ window.REAL = {
     const d = sock('Spawn_StoreEntry'); player.pos = { x: d.x, y: d.y + 2 }; player.apply();
   },
   sheets: () => [...document.querySelectorAll('#modal .sh-title')].map((e) => e.textContent),
-  game: () => game, skillList: () => Object.values(SKILLS), setTime: (h) => { game.state.time = h; },
+  game: () => game, skillList: () => Object.values(SKILLS), cursiveLessons: () => CURSIVE_LESSONS, setTime: (h) => { game.state.time = h; },
   quality: (q) => engine.setQuality(q),
   life: () => game.life(),
   practice: (sk) => runActivity(game, () => ({ skill: sk, ...PRACTICE[sk]() }), 'learn', 'Practice', '📚'),

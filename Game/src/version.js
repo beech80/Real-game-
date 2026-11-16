@@ -6,6 +6,7 @@ import { lang } from './i18n.js';
 export const VERSION = '1.6.0';
 export const NOTES = [
   ['1.6.0', [
+    ['✍️', 'Cursive Class', 'Learn every cursive letter, small and capital. Then write words and sign your name. Open ✍️ Cursive on your phone.'],
     ['🎒', 'Start at your grade', 'Tell the game your grade when you make your REAL, and lessons start at your level. Change it any time in Settings.'],
   ]],
   ['1.5.0', [

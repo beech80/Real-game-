@@ -13,7 +13,8 @@ await build({
   outfile: path.join(dist, 'game.js'), legalComments: 'none', logLevel: 'warning',
 });
 
-const css = fs.readFileSync(path.join(root, 'src/style.css'), 'utf8');
+const cursiveFont = `@font-face { font-family: 'Playwrite US Trad'; font-style: normal; font-weight: 400; font-display: swap; src: url(data:font/woff2;base64,${fs.readFileSync(path.join(root, 'src/fonts/playwrite-us-trad-latin-400-normal.woff2')).toString('base64')}) format('woff2'); }`;
+const css = fs.readFileSync(path.join(root, 'src/style.css'), 'utf8').replace('/*__CURSIVE_FONT__*/', cursiveFont);
 const frag = fs.readFileSync(path.join(root, 'src/index.html'), 'utf8').replace('/*__CSS__*/', css);
 // Hosted artifact page: fragment only (the host adds doctype/head/body).
 const bundle = fs.readFileSync(path.join(dist, 'game.js'), 'utf8').replace(/<\/script/gi, '<\\/script');

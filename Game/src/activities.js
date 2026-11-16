@@ -216,12 +216,15 @@ export function cursivePad(G, text, skill, prompt, done, opts = {}) {
     const gg = guide.getContext('2d');
     const fit = t.length === 1 ? 150 : Math.min(110, 560 / Math.max(3, t.length * 0.55));
     cv.dataset.fit = String(fit);
-    const font = PRINT ? `${fit}px "Andika", "Comic Sans MS", sans-serif` : `${fit}px "Dancing Script", "Segoe Script", cursive`;
+    const face = PRINT ? '"Andika", "Comic Sans MS", sans-serif' : '"Playwrite US Trad", "Dancing Script", "Segoe Script", cursive';   // Playwrite US Trad: a school cursive model, shipped with the game
+    let font = `${fit}px ${face}`;
+    const refit = () => { gg.font = `${fit}px ${face}`; const w = gg.measureText(t).width; font = `${w > 560 ? Math.floor(fit * 560 / w) : fit}px ${face}`; cv.dataset.font = font; };   // wide words shrink to stay on the pad
+    refit();
     const drawTarget = () => { gg.clearRect(0, 0, 640, 220); gg.font = font; gg.textAlign = 'center'; gg.textBaseline = 'middle'; gg.lineWidth = 26; gg.lineJoin = 'round'; gg.strokeStyle = '#000'; gg.strokeText(t, 320, 115); gg.fillText(t, 320, 115); };
     drawTarget();
     const g = cv.getContext('2d');
     // the cursive font may still be loading: redraw the gold letters in cursive as soon as it arrives
-    if (document.fonts && document.fonts.load) document.fonts.load(PRINT ? `${fit}px "Andika"` : `${fit}px "Dancing Script"`).then(() => { if (!cv.isConnected && !holder.isConnected) return; drawTarget(); if (!inked) drawGuide(); }).catch(() => {});
+    if (document.fonts && document.fonts.load) document.fonts.load(PRINT ? `${fit}px "Andika"` : `${fit}px "Playwrite US Trad"`).then(() => { if (!cv.isConnected && !holder.isConnected) return; refit(); drawTarget(); if (!inked) drawGuide(); }).catch(() => {});
     let inked = false;
     const drawGuide = () => { g.clearRect(0, 0, 640, 220); if (PRINT && t.length === 1) { const w = g.measureText ? (g.font = font, g.measureText(t).width) : fit * 0.5, x0 = 320 - w / 2, top = 115 - fit * 0.42, mid = 115 - fit * 0.05; const tall = /[bdfhklt]|[A-Z]/.test(t), magic = /[cadgqoes]|[CGOQ]/.test(t), sx = magic ? x0 + w * 0.8 : /[f]/.test(t) ? x0 + w * 0.75 : x0 + w * 0.2, sy = tall && !/[d]/.test(t) ? top : mid; g.save(); g.fillStyle = '#2fbf71'; g.beginPath(); g.arc(sx, sy, 9, 0, Math.PI * 2); g.fill(); g.font = '600 16px sans-serif'; g.fillText('start', sx + 14, sy - 10); g.restore(); }
       if (PRINT) { g.save(); g.strokeStyle = 'rgba(120,160,255,.45)'; g.lineWidth = 2; for (const [y, dash] of [[115 - fit * 0.42, []], [115 - fit * 0.05, [10, 10]], [115 + fit * 0.3, []]]) { g.setLineDash(dash); g.beginPath(); g.moveTo(16, y); g.lineTo(624, y); g.stroke(); } g.restore(); } g.font = gg.font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(233,169,58,.32)'; g.fillText(t, 320, 115); g.strokeStyle = 'rgba(233,169,58,.15)'; g.lineWidth = 1; g.beginPath(); g.moveTo(40, 160); g.lineTo(600, 160); g.stroke(); };

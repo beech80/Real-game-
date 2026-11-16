@@ -291,7 +291,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--gold-2); ou
 .cangrid { display: grid; gap: 4px; font-size: 26px; justify-content: start; }
 .case.wide { width: auto; padding: 0 12px; }
 .recipe { background: #f6f1e6; color: #3a2a1a; border-radius: 10px; padding: 10px 14px; }
-.recipe .cursive { font-family: 'Dancing Script', cursive; font-size: 26px; margin: 4px 0 0; }
+.recipe .cursive { font-family: 'Playwrite US Trad', 'Dancing Script', cursive; font-size: 26px; margin: 4px 0 0; }
 .tier { display: grid; gap: 6px; } .tier-h { font-family: var(--f-head); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); font-size: 13px; margin-top: 6px; }
 .lifering { display: grid; gap: 6px; text-align: center; } .lifering b { font-family: var(--f-head); font-size: 28px; color: var(--gold-2); } .lifering small { color: var(--muted); }
 .lifering .bar { height: 8px; border-radius: 8px; background: rgba(255,255,255,.1); overflow: hidden; } .lifering .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-2)); }
@@ -348,7 +348,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--gold-2); ou
 .writebox { width: 100%; box-sizing: border-box; border-radius: 12px; border: 1px solid rgba(255,255,255,.2); background: #0f1424; color: #fff; padding: 10px; font: 16px system-ui, sans-serif; margin: 6px 0; }
 .rubric { list-style: none; padding: 0; margin: 6px 0; } .rubric li { padding: 3px 0; } .rubric .ok { color: #7fd69a; } .rubric .todo { color: #f0c27a; }
 .budgetrows .brow { display: grid; grid-template-columns: 1fr auto auto auto; gap: 8px; align-items: center; padding: 6px 0; }
-.cursive-note { font-family: 'Dancing Script', 'Segoe Script', cursive; font-size: 26px; background: #fbf7ee; color: #1b2236; border-radius: 10px; padding: 10px 14px; margin: 6px 0 10px; line-height: 1.25; transform: rotate(-1deg); }
+.cursive-note { font-family: 'Playwrite US Trad', 'Dancing Script', 'Segoe Script', cursive; font-size: 26px; background: #fbf7ee; color: #1b2236; border-radius: 10px; padding: 10px 14px; margin: 6px 0 10px; line-height: 1.25; transform: rotate(-1deg); }
 .skillrow.later { opacity: .72; } .skillrow.now { border-left: 3px solid #e9a93a; }
 /* accessibility settings */
 body.a11y-large .sheet, body.a11y-large #hud { font-size: 118%; } body.a11y-large .opt { font-size: 18px; padding: 14px; }
@@ -395,7 +395,7 @@ body.a11y-calm * { animation-duration: 0.01ms !important; transition-duration: 0
 .dictate-card .row { flex-wrap: wrap; align-items: center; }
 .dictate-card .row .primary { min-width: 110px; }
 /* cursive: letter-by-letter progress, then the whole word */
-.cursive-steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; font-family: 'Dancing Script', 'Segoe Script', cursive; font-size: 34px; line-height: 1.2; margin: 2px 0; }
+.cursive-steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; font-family: 'Playwrite US Trad', 'Dancing Script', 'Segoe Script', cursive; font-size: 34px; line-height: 1.2; margin: 2px 0; }
 .cursive-steps.sentence { gap: 12px; font-size: 28px; }
 .cursive-steps span { padding: 0 4px; border-radius: 8px; color: rgba(244, 234, 215, .45); }
 .cursive-steps span.done { color: #7fd99a; }
@@ -762,3 +762,21 @@ body.a11y-spaced p, body.a11y-spaced .d-text, body.a11y-spaced .opt, body.a11y-s
 .grade-btn small { opacity: .75; white-space: nowrap; }
 .grade-btn.on { border-color: var(--gold-2); box-shadow: 0 0 0 3px rgba(233, 169, 58, .35); }
 .grade-btn:active { transform: scale(.98); }
+
+/* school cursive model (Playwrite US Trad, SIL Open Font License), shipped with the game so it also works with no internet */
+/*__CURSIVE_FONT__*/
+/* Cursive Class */
+.curs-count { display: block; text-align: center; opacity: .75; margin: 2px 0 6px; }
+.curs-abc { display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; margin: 8px 0 12px; font-family: 'Playwrite US Trad', 'Dancing Script', cursive; font-size: 15px; }
+.curs-abc span { text-align: center; padding: 6px 0 9px; border-radius: 8px; background: rgba(255, 255, 255, .05); color: rgba(244, 234, 215, .35); white-space: nowrap; overflow: hidden; }
+.curs-abc span.low, .curs-abc span.up { color: #ffd27a; background: rgba(233, 169, 58, .14); }
+.curs-abc span.low.up { color: #7fd99a; background: rgba(127, 217, 154, .14); }
+.curs-list { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.curs-list .skillrow { justify-content: space-between; color: inherit; font: inherit; }
+.curs-list .skillrow small { display: block; opacity: .75; }
+.curs-list .skillrow.done span { color: #7fd99a; }
+.curs-watch { align-items: center; gap: 10px; margin: 4px 0 8px; }
+.curs-demo { flex: 1; min-width: 0; background: #fbf7ee; color: #1b2236; border-radius: 12px; padding: 6px 12px 12px; text-align: center; font-family: 'Playwrite US Trad', 'Dancing Script', cursive; font-size: 34px; line-height: 1.7; overflow: hidden; white-space: nowrap; }
+.curs-demo span { display: inline-block; animation: curs-write 1.8s linear both; }
+@keyframes curs-write { from { clip-path: inset(-20% 100% -20% 0); } to { clip-path: inset(-20% 0 -20% 0); } }
+body.a11y-calm .curs-demo span { animation: none; }
