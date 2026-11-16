@@ -41,7 +41,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const wide = await ev(() => { const s = document.querySelector('.sheet').getBoundingClientRect(); return [...document.querySelectorAll('.cursive-class *')].filter((e) => { const r = e.getBoundingClientRect(); return r.width && (r.right > s.right + 1 || r.left < s.left - 1); }).length; });
   if (wide) fail(wide + ' parts of Cursive Class stick out past the phone screen');
   await p.click('#curs-next'); await p.waitForSelector('canvas.sig', { timeout: 60000 }); await sleep(2200); await shot('2_letter');
-  const seen = await traceSteps(p, '.cursive-class');
+  const seen = [];   // each letter and word is its own pad: trace until the lesson list comes back
+  for (let n = 0; n < 12 && await p.$('.cursive-class canvas.sig'); n++) { seen.push(...await traceSteps(p, '.cursive-class')); await sleep(900); }
   console.log('traced:', seen.join(' | '));
   await sleep(1500); await shot('3_after_lesson');
   const st = await ev(() => { const g = window.REAL.game(); return { done: (g.state.cursive || {}).done || {}, skill: g.edu.state('curs.strokes') }; });
