@@ -3,9 +3,10 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.3.1';
+export const VERSION = '1.4.0';
 export const NOTES = [
-  ['1.3.1', [
+  ['1.4.0', [
+    ['🎮', 'Better controls', 'Moving and looking feel smoother. Buttons press in when you tap them. You can play with a game controller too.'],
     ['⚡', 'Runs smoother', 'The game is faster now, most of all on phones and older computers.'],
     ['♿', 'Wheelchair and crutches', 'Your REAL can use a wheelchair or crutches. Pick it when you make your REAL, or in Settings.'],
     ['👁️', 'See through your eyes', 'Tap 👁️ to see the world the way your REAL sees it. Tap it again to see your REAL from behind.'],
