@@ -20,7 +20,7 @@ export function lifeScores(s, edu) {
   const friends = Object.values(s.friends || {}).reduce((a, v) => a + v, 0);
   return {
     // tuned with a full natural playthrough (tests/playthrough.cjs): each area should grow over one to two weeks of play
-    education: cap(edu.proficientCount() * 0.35 + edu.masteredCount() * 0.5 + Object.values(s.courses || {}).filter((c) => c.done).length * 1.2 + (st.challenges || 0) * 0.5),
+    education: cap(edu.proficientCount() * 0.35 + edu.masteredCount() * 0.5 + ((s.classes && s.classes.n) || 0) * 0.25 + Object.values(s.courses || {}).filter((c) => c.done).length * 1.2 + (st.challenges || 0) * 0.5),
     career: cap(st.shifts * 0.8 + (s.jobs || []).length * 1 + (st.promotions || 0) * 2 + Math.max(0, ...(s.jobs || []).map((j) => (CAREERS.find((c) => c.id === j) || { tier: 0 }).tier)) * 1.5),
     financial: cap(paidOnTime * 0.8 + (savings >= 100 ? 1 : 0) + (savings >= 300 ? 1.5 : 0) + (savings >= 500 ? 1.5 : 0) - (st.lateFees || 0) + (st.budgetsPlanned || 0) * 0.3),
     health: cap((st.mealsCooked || 0) * 0.5 + (st.workouts || 0) * 0.5 + (st.goodNights || 0) * 0.4 + (st.mealsEaten || 0) * 0.15),

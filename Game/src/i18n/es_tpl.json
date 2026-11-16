@@ -386,5 +386,7 @@
   "{0}'s game is kept under 👥 Players.": "El juego de {0} está guardado en 👥 Jugadores.",
   "There is no room to keep {0}'s game. Replace it with a new game?": "No hay espacio para guardar el juego de {0}. ¿Cambiarlo por un juego nuevo?",
   "Delete {0}'s game (Day {1}) for good?": "¿Borrar para siempre el juego de {0} (día {1})?",
-  "Day {0} · {1}": "Día {0} · {1}"
+  "Day {0} · {1}": "Día {0} · {1}",
+  "Pass {0} more classes at City School (on your phone) to ride here.": "Aprueba {0} clases más en la Escuela de la ciudad (en tu teléfono) para ir aquí.",
+  "Pass {0} more class at City School (on your phone) to ride here.": "Aprueba {0} clase más en la Escuela de la ciudad (en tu teléfono) para ir aquí."
 }

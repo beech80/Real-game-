@@ -10,6 +10,7 @@ import { askNPC } from './voice.js';
 import { runActivity } from './learnkit.js';
 import { GEN } from './curriculum.js';
 import { SKILLS } from './edu.js';
+import { CLASS_GATES, classesDone, gateOpen } from './cityschool.js';
 
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
@@ -125,8 +126,8 @@ export function installExpansion(Game) {
     const go = await UI.sheet('Route 1 · Bus schedule', (close) => h('div', { class: 'act' },
       h('p', { class: 'lead' }, 'Starting District ⇄ Midtown ⇄ Opportunity District ⇄ The Heights ⇄ The Club'),
       h('div', { class: 'bill-list' }, stops.map(([id, n, lv, tag]) => h('div', { class: 'bill' + (id === here ? ' paid' : '') },
-        h('div', {}, h('b', {}, n), h('small', {}, id === here ? 'You are here.' : ll >= lv ? tag : `Grow to Life Level ${lv} to find opportunities here.`)),
-        id === here ? h('span', { class: 'ok' }, '●') : ll >= lv ? h('button', { class: 'primary sm', onclick: () => close(id) }, v ? `${v.icon} Go` : '$2.00') : h('span', { class: 'amt' }, `LL ${lv}`))),
+        h('div', {}, h('b', {}, n), h('small', {}, id === here ? 'You are here.' : ll < lv ? `Grow to Life Level ${lv} to find opportunities here.` : !gateOpen(s, id) ? `Pass ${CLASS_GATES[id] - classesDone(s)} more ${CLASS_GATES[id] - classesDone(s) === 1 ? 'class' : 'classes'} at City School (on your phone) to ride here.` : tag)),
+        id === here ? h('span', { class: 'ok' }, '●') : ll >= lv && gateOpen(s, id) ? h('button', { class: 'primary sm', onclick: () => close(id) }, v ? `${v.icon} Go` : '$2.00') : h('span', { class: 'amt' }, ll < lv ? `LL ${lv}` : `⭐ ${classesDone(s)}/${CLASS_GATES[id]}`))),
         h('div', { class: 'bill' }, h('div', {}, h('b', {}, '♛ The Club'), h('small', {}, s.flags.invited && !s.ending ? 'You have been invited.' : s.ending ? 'You’ve made your decision. The city is your home.' : 'Members and invited guests only.')),
           s.flags.invited && !s.ending ? h('button', { class: 'primary sm', onclick: () => close('club') }, 'Ride') : h('span', { class: 'amt' }, '—'))),
       h('p', { class: 'tip' }, v ? `You own a ${v.name.toLowerCase()}: no bus fare.` : 'Buses run every 20 minutes from 6:00 AM to 11:40 PM. A bus pass costs less than a car, but a car can save time.')), { icon: '🚌' });

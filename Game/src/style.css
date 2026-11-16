@@ -780,3 +780,11 @@ body.a11y-spaced p, body.a11y-spaced .d-text, body.a11y-spaced .opt, body.a11y-s
 .curs-demo span { display: inline-block; animation: curs-write 1.8s linear both; }
 @keyframes curs-write { from { clip-path: inset(-20% 100% -20% 0); } to { clip-path: inset(-20% 0 -20% 0); } }
 body.a11y-calm .curs-demo span { animation: none; }
+
+/* City School */
+.school-stars { display: flex; align-items: baseline; gap: 8px; justify-content: center; margin: 6px 0; }
+.school-stars b { font-size: 1.6rem; color: #ffd27a; }
+.school-next { margin: 6px 0 10px; } .school-next small { display: block; margin-bottom: 4px; opacity: .85; }
+.school-list { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+.school-list .skillrow { justify-content: space-between; color: inherit; font: inherit; }
+.school-list .skillrow small { display: block; opacity: .75; }

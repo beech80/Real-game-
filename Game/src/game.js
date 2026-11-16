@@ -2,6 +2,7 @@
 import { UI, h, money, clock, wait } from './ui.js';
 import { askGrade, gradeName } from './grade.js';
 import { cursiveClass } from './cursive.js';
+import { citySchool } from './cityschool.js';
 import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
@@ -608,11 +609,12 @@ export function openPhone(G) {
   const s = G.state;
   if (s.chapter === 'prologue') { UI.toast('Your Club phone buzzes: “Council Room. Now.”', 'gold', 3200); return Promise.resolve(); }
   if (!s.flags.phone) { UI.toast('Your old Club phone does not work. All you had from The Club was cut off.', 'warn', 3600); return Promise.resolve(); }
+  if (!s.flags.schoolMsg) { s.flags.schoolMsg = 1; G.message('City School', '🏫 Classes are open on your phone. Pass classes to grow, and to ride the bus to new parts of the city.'); }
   if (!s.flags.cursiveMsg && s.day >= 2) { s.flags.cursiveMsg = 1; G.message('City Library', '✍️ Cursive Class is open on your phone. Learn every letter, then sign your name.'); }
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Cursive', '✍️', '#7a4fd2'], ['Talks', '🗨️', '#7a4fd2'], ['Toolbox', '🧰', '#d2552f'], ['Trophies', '🏆', '#c9a227'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
+      ['Learn', '📚', '#5a3fd2'], ['School', '🏫', '#2f8f5a'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Cursive', '✍️', '#7a4fd2'], ['Talks', '🗨️', '#7a4fd2'], ['Toolbox', '🧰', '#d2552f'], ['Trophies', '🏆', '#c9a227'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -701,6 +703,7 @@ export function openPhone(G) {
         },
         Words: () => A.myWords(G),
         Cursive: () => cursiveClass(G, A),
+        School: () => citySchool(G, close),
         Talks: () => talkLog(),
         Toolbox: () => toolbox(G, A.PRACTICE, close),
         Trophies: () => trophiesApp(G),
