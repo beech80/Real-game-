@@ -25,11 +25,11 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await p.waitForFunction(() => window.REAL && window.REAL.mode === 'title', null, { timeout: 240000 });
   // find recorded sentences using the page's own id function
   const list = JSON.parse(fs.readFileSync(SENT)).slice(0, 4000);
-  const rec = await ev(({ list, ids }) => list.filter(([k]) => ids.includes(window.__voiceId ? window.__voiceId(k) : '')).slice(0, 3), { list, ids: Object.keys(man.c) }).catch(() => []);
+  const rec = await ev(({ list, ids }) => list.filter(([k]) => ids.includes(window.__voiceId ? window.__voiceId(k) : '')).slice(0, 3), { list, ids: Object.keys({ ...man.c, ...(man.o || {}) }) }).catch(() => []);
   await ev(() => { const P = HTMLMediaElement.prototype.play; window.__played = []; HTMLMediaElement.prototype.play = function () { window.__played.push(this.src); return P.call(this); };
     window.__synth = []; const S = speechSynthesis.speak.bind(speechSynthesis); speechSynthesis.speak = (u) => { window.__synth.push(u.text); try { S(u); } catch (e) {} }; });
   const target = rec[0] && rec[0][1];
-  console.log('recorded sentences in packs:', Object.keys(man.c).length, '· testing with:', target);
+  console.log('recorded sentences in packs:', Object.keys({ ...man.c, ...(man.o || {}) }).length, '· testing with:', target);
   if (!target) fail('no recorded sentence found to test');
   else {
     await ev((t) => window.__narrate(t), target); await sleep(2500);
