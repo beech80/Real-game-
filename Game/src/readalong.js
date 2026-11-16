@@ -87,31 +87,39 @@ export function voiceId(str) {
 // download only when needed. If any sentence of a text has no recording (random numbers, a player's own writing),
 // the whole text uses the device voice instead, so one passage never switches voices halfway.
 let NAT = null, natLoading = null; const PACKS = new Map();
+// Two recordings of the same clips: Opus (clean at a small size; every current browser) and the older MP3 for
+// devices that cannot play Opus. A manifest entry is [pack, byteOffset, byteLength, ms]; Opus entries get an 'o' tag.
+const OPUS = (() => { try { return !window.__noOpus && !!new Audio().canPlayType('audio/ogg; codecs="opus"'); } catch (e) { return false; } })();
+const entry = (id) => { const o = OPUS && NAT.o && NAT.o[id]; if (o) { if (o.length < 5) o[4] = 'o'; return o; } return NAT.c[id]; };
+const fileOf = (e) => (e[4] === 'o' ? `voice/h${e[0]}.ogg` : `voice/p${e[0]}.mp3`);
+const mimeOf = (e) => (e[4] === 'o' ? 'audio/ogg; codecs=opus' : 'audio/mpeg');
+/** every pack file this device uses */
+const packFiles = (m) => { const set = new Set(); for (const id in m.c) if (!(OPUS && m.o && m.o[id])) set.add(`voice/p${m.c[id][0]}.mp3`); if (OPUS && m.o) for (const id in m.o) set.add(`voice/h${m.o[id][0]}.ogg`); return [...set].sort(); };
 export const naturalOn = () => true;   // Heart is the game's one voice
 export function loadNatural() {
   if (NAT || natLoading || window.__REAL_OFFLINE) return natLoading;
-  natLoading = fetch('voice/manifest.json').then((r) => (r.ok ? r : savedFile('voice/manifest.json'))).catch(() => savedFile('voice/manifest.json')).then((r) => (r && r.ok ? r.json() : null)).then((m) => { NAT = m && m.c ? m : null; return NAT; }).catch(() => null);
+  natLoading = fetch('voice/manifest.json').then((r) => (r.ok ? r : savedFile('voice/manifest.json'))).catch(() => savedFile('voice/manifest.json')).then((r) => (r && r.ok ? r.json() : null)).then((m) => { NAT = m && m.c ? m : null; if (NAT && !NAT.c) NAT.c = {}; return NAT; }).catch(() => null);
   return natLoading;
 }
 export const naturalReady = () => !!NAT;
 // Heart's voice saved on this device (Settings › Reading voice › Save): the packs live in Cache Storage and are
 // read from there first, so she keeps reading with no internet.
 const VC = 'real-voice'; let SAVED = null;
-const savedPacks = () => SAVED || (SAVED = (async () => { try { if (!(await caches.has(VC))) return new Set(); const ks = await (await caches.open(VC)).keys(); return new Set(ks.map((r) => +((/p(\d+)\.mp3/.exec(r.url) || [])[1])).filter((n) => n >= 0)); } catch (e) { return new Set(); } })());
+const savedPacks = () => SAVED || (SAVED = (async () => { try { if (!(await caches.has(VC))) return new Set(); const ks = await (await caches.open(VC)).keys(); return new Set(ks.map((r) => (/voice\/[ph]\d+\.(?:mp3|ogg)/.exec(r.url) || [])[0]).filter(Boolean)); } catch (e) { return new Set(); } })());
 async function savedFile(url) { try { if (!(await caches.has(VC))) return null; return (await (await caches.open(VC)).match(url)) || null; } catch (e) { return null; } }
 /** how much of Heart's voice is on this device: { have, total } packs */
 export async function voiceSaved() {
-  const m = await loadNatural(); const total = m ? 1 + Math.max(...Object.values(m.c).map((v) => v[0])) : 0;
-  return { have: Math.min(total, (await savedPacks()).size), total };
+  const m = await loadNatural(); const files = m ? packFiles(m) : [], saved = await savedPacks();
+  return { have: files.filter((f) => saved.has(f)).length, total: files.length };
 }
 /** download every voice pack into this device's storage; onProgress(done, total) */
 export async function saveVoice(onProgress) {
   const m = await loadNatural(); if (!m) throw new Error('no voice list');
-  const total = 1 + Math.max(...Object.values(m.c).map((v) => v[0])), c = await caches.open(VC);
+  const files = packFiles(m), total = files.length, c = await caches.open(VC);
   try { if (navigator.storage && navigator.storage.persist) await navigator.storage.persist(); } catch (e) {}
   const mr = await fetch('voice/manifest.json'); if (mr.ok) await c.put('voice/manifest.json', mr);
   for (let i = 0; i < total; i++) {
-    const url = `voice/p${i}.mp3`;
+    const url = files[i];
     if (!(await c.match(url))) { const r = await fetch(url); if (!r.ok) throw new Error('pack ' + i); await c.put(url, r); }
     if (onProgress) onProgress(i + 1, total);
   }
@@ -119,20 +127,20 @@ export async function saveVoice(onProgress) {
 }
 export async function forgetVoice() { try { await caches.delete(VC); } catch (e) {} SAVED = null; }
 const CLIPS = new Map(); let noRanges = false;
-function clip([p, off, len]) {
-  const key = `${p}:${off}`;
+function clip(e) {
+  const [p, off, len] = e, file = fileOf(e), key = `${file}:${off}`;
   if (CLIPS.has(key)) return CLIPS.get(key);
-  const whole = () => pack(p).then((buf) => buf.slice(off, off + len));
-  const pr = savedPacks().then((saved) => (noRanges || PACKS.has(p) || saved.has(p) ? whole() : fetch(`voice/p${p}.mp3`, { headers: { Range: `bytes=${off}-${off + len - 1}` } }).then((r) => {
+  const whole = () => pack(file).then((buf) => buf.slice(off, off + len));
+  const pr = savedPacks().then((saved) => (noRanges || PACKS.has(file) || saved.has(file) ? whole() : fetch(file, { headers: { Range: `bytes=${off}-${off + len - 1}` } }).then((r) => {
     if (r.status === 206) return r.arrayBuffer();
     noRanges = true;                                   // this server sends whole files: keep the pack we just got
-    if (r.ok) { const ab = r.arrayBuffer(); PACKS.set(p, ab); return ab.then((buf) => buf.slice(off, off + len)); }
+    if (r.ok) { const ab = r.arrayBuffer(); PACKS.set(file, ab); return ab.then((buf) => buf.slice(off, off + len)); }
     return whole();
   }))).catch((e) => { CLIPS.delete(key); throw e; });
   CLIPS.set(key, pr); if (CLIPS.size > 600) CLIPS.delete(CLIPS.keys().next().value);
   return pr;
 }
-const pack = (n) => { if (!PACKS.has(n)) PACKS.set(n, savedFile(`voice/p${n}.mp3`).then((s) => s || fetch(`voice/p${n}.mp3`)).then((r) => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }).catch((e) => { PACKS.delete(n); throw e; })); return PACKS.get(n); };
+const pack = (n) => { if (!PACKS.has(n)) PACKS.set(n, savedFile(n).then((s) => s || fetch(n)).then((r) => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }).catch((e) => { PACKS.delete(n); throw e; })); return PACKS.get(n); };
 let natAudio = null, natTimers = [];
 function stopNatural() { natTimers.forEach(clearTimeout); natTimers = []; if (natAudio) { try { natAudio.pause(); } catch (e) {} natAudio = null; } }
 // ---- Heart, word by word: for English lines with no whole-sentence recording (random numbers, a player's writing)
@@ -172,7 +180,7 @@ function heartWords(spoken, es = false) {
 }
 function playWords(spoken, { onWord, onEnd, rate, es = false }) {
   if (!NAT) return false;
-  const items = heartWords(spoken, es).map((x) => ({ ...x, clip: NAT.c[voiceId(es ? 'esw:' + fold(x.w) : 'w:' + x.w)] })).filter((x) => x.clip);
+  const items = heartWords(spoken, es).map((x) => ({ ...x, clip: entry(voiceId(es ? 'esw:' + fold(x.w) : 'w:' + x.w)) })).filter((x) => x.clip);
   if (!items.length) return false;
   let fin = false; const done = () => { if (fin) return; fin = true; stopNatural(); if (onEnd) onEnd(); };
   current = { done };
@@ -181,7 +189,7 @@ function playWords(spoken, { onWord, onEnd, rate, es = false }) {
     const step = async (i) => {
       if (fin) return; if (i >= items.length) return done();
       const { at, pause } = items[i]; const bytes = await clip(items[i].clip); if (fin) return;
-      const url = URL.createObjectURL(new Blob([bytes], { type: 'audio/mpeg' }));
+      const url = URL.createObjectURL(new Blob([bytes], { type: mimeOf(items[i].clip) }));
       const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol();
       const next = () => { URL.revokeObjectURL(url); natTimers.push(setTimeout(() => step(i + 1), pause / speed)); };
       a.onended = next; a.onerror = next;
@@ -195,7 +203,7 @@ function playWords(spoken, { onWord, onEnd, rate, es = false }) {
 /** play recorded clips for every sentence; resolves false if any is missing (caller falls back to Heart word by word) */
 function playNatural(spoken, { onWord, onEnd, rate, fallback, es = false }) {
   if (!NAT) return false;
-  const sents = speechSentences(spoken), clips = sents.map((s) => NAT.c[voiceId(sentKey(s, es))]);
+  const sents = speechSentences(spoken), clips = sents.map((s) => entry(voiceId(sentKey(s, es))));
   if (!sents.length || clips.some((c) => !c)) return false;
   let fin = false; const done = () => { if (fin) return; fin = true; stopNatural(); if (onEnd) onEnd(); };
   current = { done };
@@ -207,7 +215,7 @@ function playNatural(spoken, { onWord, onEnd, rate, fallback, es = false }) {
     let bytes; try { bytes = await clip(clips[i]); } catch (e) { return done(); }
     if (fin) return;
     if (i + 1 < clips.length) clip(clips[i + 1]).catch(() => {});   // fetch the next sentence while this one plays
-    const url = URL.createObjectURL(new Blob([bytes], { type: 'audio/mpeg' }));
+    const url = URL.createObjectURL(new Blob([bytes], { type: mimeOf(clips[i]) }));
     const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol();
     a.onended = () => { URL.revokeObjectURL(url); playAt(i + 1); }; a.onerror = () => { URL.revokeObjectURL(url); playAt(i + 1); };
     if (onWord) {   // light each word in turn, spread over the clip by length
