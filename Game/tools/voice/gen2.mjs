@@ -8,7 +8,7 @@ env.allowRemoteModels = false; env.localModelPath = new URL('./models/', import.
 const DIR = new URL('./', import.meta.url).pathname, W = +process.argv[2] || 0, N = +process.argv[3] || 1;
 const VOICE = process.env.VOICE || 'af_heart', SPEED = +(process.env.SPEED || 0.95);
 fs.mkdirSync(DIR + 'hq', { recursive: true });
-const LISTS = (process.env.LISTS || 'sentences.json few_en.json new_en.json r2_en.json words.json new_w.json r2_w.json r3_en.json').split(' ').filter((f) => fs.existsSync(DIR + f));
+const LISTS = (process.env.LISTS || 'sentences.json few_en.json new_en.json r2_en.json words.json new_w.json r2_w.json r3_en.json r4_en.json').split(' ').filter((f) => fs.existsSync(DIR + f));
 const id = (k) => crypto.createHash('sha1').update(k).digest('hex').slice(0, 14);
 const seen = new Set(), all = [];
 for (const f of LISTS) for (const [k, text] of JSON.parse(fs.readFileSync(DIR + f))) { if (/^esw?:/.test(k) || seen.has(k)) continue; seen.add(k); all.push([k, text]); }

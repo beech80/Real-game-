@@ -625,6 +625,7 @@ async function ensureRoom(key, name) {
 function hideRooms() { for (const R of Object.values(W.rooms)) { R.group.visible = false; if (R.npc) R.npc.ch.root.visible = false; } }
 async function enterBuilding(loc, pt) {
   const s = game.state, name = (pt.sign || pt.label || '').replace(/\b(\w)(\w*)/g, (m, a, b) => a + b.toUpperCase() === m ? a + b.toLowerCase() : m);
+  await headsUp(`${tr('Next')}: ${tr('inside')} ${name || tr('the building')}. ${tr('The screen will go dark for a moment, then you will be there.')}`);   // calm & clear: no surprise scene changes
   audio.play('door'); await UI.fade(1, 300);
   const key = pt.room || pt.key;
   let R;

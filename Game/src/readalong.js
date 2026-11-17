@@ -60,8 +60,15 @@ export function speakable(t, es = false) {
     s = s.replace(/-?\$(\d[\d,]*)\.(\d\d)\b/g, (m, d, c) => `${m.startsWith('-') ? 'menos ' : ''}${d} dólares con ${+c} centavos`).replace(/-?\$(\d[\d,]*)\b/g, (m, d) => `${m.startsWith('-') ? 'menos ' : ''}${d} ${d === '1' ? 'dólar' : 'dólares'}`).replace(/(\d+)¢/g, '$1 centavos');
     s = s.replace(/\b(\d+)\s+(\d+)\/(\d+)\b/g, (m, w, n, d) => `${w} y ${n} ${(DEN_ES[d] || [`sobre ${d}`, `sobre ${d}`])[+n === 1 ? 0 : 1]}`).replace(/\b(\d+)\/(\d+)\b/g, (m, n, d) => DEN_ES[d] ? `${n} ${DEN_ES[d][+n === 1 ? 0 : 1]}` : m);
     s = s.replace(/\s×\s|\s[x*]\s(?=\d)/g, ' por ').replace(/÷/g, ' entre ').replace(/\s\+\s/g, ' más ').replace(/\s=\s/g, ' es igual a ').replace(/(\d)\s?%/g, '$1 por ciento').replace(/°\s?F\b/g, ' grados').replace(/°/g, ' grados').replace(/\s-\s?(?=\d)/g, ' menos ').replace(/(^|\s)-(?=\d)/g, '$1menos ').replace(/→/g, ', luego ').replace(/&/g, ' y ');
+    s = s.replace(/(\p{L})\/(semana|mes|hora|día|año)\b/gu, (m, a, u) => `${a} ${u === 'mes' || u === 'día' || u === 'año' ? 'al' : 'por'} ${u}`);   // 50 dólares/semana → por semana
   } else {
     s = s.replace(/-?\$(\d[\d,]*)\.(\d\d)\b/g, (m, d, c) => `${m.startsWith('-') ? 'minus ' : ''}${d} dollar${d === '1' ? '' : 's'}${+c ? ` and ${+c} cent${+c === 1 ? '' : 's'}` : ''}`).replace(/-?\$(\d[\d,]*)\b/g, (m, d) => `${m.startsWith('-') ? 'minus ' : ''}${d} dollar${d === '1' ? '' : 's'}`).replace(/(\d+)¢/g, '$1 cents');
+    // things Heart used to misread (found by listening to every recording): rates, short day names, units and letters
+    s = s.replace(/\s?\/\s?sq\.?\s?ft\b/g, ' a square foot').replace(/\s?\/\s?m²/g, ' a square meter')
+      .replace(/([A-Za-z\d])\s?\/\s?(month|mo|week|wk|year|yr|day|hour|hr|h)\b/g, (m, a, u) => `${a} ${/^h/.test(u) ? 'an hour' : 'a ' + ({ mo: 'month', wk: 'week', yr: 'year' }[u] || u)}`)
+      .replace(/\b(Mon|Tue|Tues|Wed|Thu|Thur|Thurs|Fri)\b/g, (m, d) => ({ Mon: 'Monday', Tue: 'Tuesday', Tues: 'Tuesday', Wed: 'Wednesday', Thu: 'Thursday', Thur: 'Thursday', Thurs: 'Thursday', Fri: 'Friday' })[d])
+      .replace(/(\d)\s?sq\.?\s?ft\b/g, '$1 square feet').replace(/(\d)\s?m²/g, '$1 square meters').replace(/(\d)\s?m\b(?![²'’])/g, '$1 meters').replace(/\b1 meters\b/g, '1 meter').replace(/(\d)\s?M\b/g, '$1 million')
+      .replace(/\bAPR\b/g, 'A P R');
     s = s.replace(/\b(\d+)\s+(\d+)\/(\d+)\b/g, (m, w, n, d) => `${w} and ${frac(n, d)}`).replace(/(^|[^\d/:])(\d{1,2})\/(\d{1,2})(?![\d/])/g, (m, pre, n, d) => DEN[d] ? pre + frac(n, d) : m);   // 3/15 is a date: leave it
     s = s.replace(/\s×\s|\s[x*]\s(?=\d)/g, ' times ').replace(/÷/g, ' divided by ').replace(/\s\+\s/g, ' plus ').replace(/\s=\s\?/g, ' equals what').replace(/\s=\s/g, ' equals ').replace(/(\d)\s?%/g, '$1 percent').replace(/°\s?F\b/g, ' degrees').replace(/°\s?C\b/g, ' degrees Celsius').replace(/°/g, ' degrees')
       .replace(/\s-\s?(?=\d)/g, ' minus ').replace(/(^|\s)-(?=\d)/g, '$1minus ').replace(/→/g, ', then ').replace(/&/g, ' and ').replace(/\be\.g\./gi, 'for example').replace(/\bi\.e\./gi, 'that is').replace(/\bvs\.?\b/gi, 'versus').replace(/#(\d)/g, 'number $1')
