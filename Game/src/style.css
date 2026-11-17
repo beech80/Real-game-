@@ -788,3 +788,18 @@ body.a11y-calm .curs-demo span { animation: none; }
 .school-list { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
 .school-list .skillrow { justify-content: space-between; color: inherit; font: inherit; }
 .school-list .skillrow small { display: block; opacity: .75; }
+
+/* Calm & clear mode */
+.calm-btn { font-size: 24px; }
+body.calm-clear .confetti { display: none; }
+body.calm-clear .opt.wrong, body.calm-clear .card.wrong { border-color: #6f9fd8; animation: none; }
+body.calm-clear .toast.warn { border-left-color: #6f9fd8; }
+body.calm-clear .toast.gold { color: inherit; }
+body.calm-clear .celebrate .cel-card { box-shadow: none; }
+.calm-pick { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; margin-top: 10px; padding: 12px 14px; border-radius: 14px; background: rgba(255, 255, 255, .06); border: 2px solid rgba(255, 255, 255, .16); color: inherit; font: inherit; text-align: left; }
+.calm-pick.on { border-color: #7fd99a; } .calm-pick b { white-space: nowrap; }
+.calm-room { text-align: center; }
+.calm-circle { width: 150px; height: 150px; margin: 18px auto 10px; border-radius: 50%; background: radial-gradient(circle, rgba(127, 217, 154, .55), rgba(111, 159, 216, .25)); animation: calm-breathe 8s ease-in-out infinite; }
+body.a11y-calm .calm-circle { animation-duration: 8s !important; }
+.calm-say { font-size: 1.25rem; margin: 6px 0 12px; }
+@keyframes calm-breathe { 0%, 100% { transform: scale(.62); } 50% { transform: scale(1); } }

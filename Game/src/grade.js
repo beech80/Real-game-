@@ -2,6 +2,8 @@
 // every subject begin at that level instead of at the very beginning. It is only a starting point: the game still moves
 // each subject up as skills are learned, and down if the work turns out to be too hard. Saved on the device only.
 import { h, UI } from './ui.js';
+import { tr } from './i18n.js';
+import { isCalm, setCalm } from './calm.js';
 
 // [starting level 1–6, label, ages]
 export const GRADES = [
@@ -19,5 +21,6 @@ export function askGrade(current) {
   return UI.sheet('What grade are you in?', (close) => h('div', {},
     h('p', { class: 'lead' }, 'This picks where your lessons start. The game still changes to fit you as you play.'),
     h('div', { class: 'grade-list' }, ...GRADES.map(([n, label, ages]) => h('button', { class: 'grade-btn' + (current === n ? ' on' : ''), 'data-grade': n, onclick: () => close(n) }, h('b', {}, label), h('small', {}, ages)))),
-    h('p', { class: 'tip' }, 'Not sure? Pick the one closest to your age. You can change it later in Settings.')), { icon: '🎒' });
+    h('p', { class: 'tip' }, 'Not sure? Pick the one closest to your age. You can change it later in Settings.'),
+    (() => { const b = h('button', { class: 'calm-pick' + (isCalm() ? ' on' : ''), id: 'calm-pick', 'aria-pressed': String(isCalm()), onclick: () => { setCalm(!isCalm()); b.classList.toggle('on', isCalm()); b.setAttribute('aria-pressed', String(isCalm())); b.lastChild.textContent = tr(isCalm() ? 'On' : 'Off'); } }, h('span', {}, '🌿 ' + tr('Calm & clear: softer sounds, no surprises, a calm space')), h('b', {}, tr(isCalm() ? 'On' : 'Off'))); return b; })()), { icon: '🎒' });
 }

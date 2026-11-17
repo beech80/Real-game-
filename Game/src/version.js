@@ -6,6 +6,7 @@ import { lang } from './i18n.js';
 export const VERSION = '1.6.0';
 export const NOTES = [
   ['1.6.0', [
+    ['🌿', 'Calm & clear', 'Softer sounds, no surprises, gentle feedback and a calm space for breaks. Made with autistic players in mind. Turn it on in Settings.'],
     ['🏫', 'City School', 'Take classes on your phone. Each class teaches two skills at your level. Passing classes opens new parts of the city.'],
     ['✍️', 'Cursive Class', 'Learn every cursive letter, small and capital. Then write words and sign your name. Open ✍️ Cursive on your phone.'],
     ['🎒', 'Start at your grade', 'Tell the game your grade when you make your REAL, and lessons start at your level. Change it any time in Settings.'],

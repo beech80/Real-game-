@@ -3,6 +3,7 @@ import { UI, h, money, clock, wait } from './ui.js';
 import { askGrade, gradeName } from './grade.js';
 import { cursiveClass } from './cursive.js';
 import { citySchool } from './cityschool.js';
+import { isCalm, setCalm } from './calm.js';
 import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
@@ -724,6 +725,7 @@ export function openPhone(G) {
           h('div', { class: 'row' }, h('span', {}, '💡 Tips for new players'), h('button', { class: tipsOff() ? 'ghost sm' : 'primary sm', onclick: () => { setTips(true); UI.toast('Tips are on. They will show up as you play.', 'good'); open('Settings'); } }, tipsOff() ? 'Show tips again' : 'On')),
           h('div', { class: 'row' }, h('span', {}, '🎒 My grade (where lessons start)'), h('button', { class: 'primary sm', id: 'set-grade', onclick: async () => { const n = await askGrade(G.edu.start); if (n) { G.edu.setStart(n); s.wordLevel = G.edu.floor('reading'); G.save(); UI.toast('Your lessons now start at this level.', 'good'); } open('Settings'); } }, G.edu.start ? gradeName(G.edu.start) : 'Choose')),
           h('div', { class: 'tier-h' }, 'Accessibility'),
+          h('div', { class: 'row' }, h('span', {}, '🌿 Calm & clear: softer sounds, no surprises, a calm space'), h('button', { class: isCalm() ? 'primary sm' : 'ghost sm', id: 'set-calm', onclick: () => { setCalm(!isCalm()); UI.toast(isCalm() ? 'Calm & clear is on. Tap 🌿 any time to take a break.' : 'Calm & clear is off.', 'good'); open('Settings'); } }, isCalm() ? 'On' : 'Off')),
           h('div', { class: 'row' }, h('span', {}, 'How my REAL gets around'), h('button', { class: 'primary sm', onclick: () => { const order = ['', 'chair', 'crutches']; s.aid = order[(order.indexOf(s.aid || '') + 1) % 3]; if (!s.aid) delete s.aid; G.hooks.setAid(s.aid); G.save(); open('Settings'); } }, s.aid === 'chair' ? '♿ Wheelchair' : s.aid === 'crutches' ? '🩼 Crutches' : '🚶 Walking')),
           ...[['smart', 'Smart character replies', true]].map(([k, n]) => { s.settings = s.settings || {}; const on = s.settings[k] !== false; return h('div', { class: 'row' }, h('span', {}, n), isSchool(s) ? h('button', { class: 'ghost sm', disabled: true }, 'Off (school)') : h('button', { class: on ? 'primary sm' : 'ghost sm', onclick: () => { s.settings[k] = !on; G.hooks.applyA11y(s.settings); G.save(); open('Settings'); } }, on ? 'On' : 'Off')); }),
           ...[['large', 'Bigger text'], ['contrast', 'High contrast'], ['readAloud', 'Read to me (all text)'], ['calm', 'Reduce motion'], ['spaced', 'Easier-to-read letters']].map(([k, n]) => { s.settings = s.settings || {}; return h('div', { class: 'row' }, h('span', {}, n), h('button', { class: s.settings[k] ? 'primary sm' : 'ghost sm', onclick: () => { s.settings[k] = !s.settings[k]; G.hooks.applyA11y(s.settings); G.save(); open('Settings'); } }, s.settings[k] ? 'On' : 'Off')); }),

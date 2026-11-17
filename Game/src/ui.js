@@ -1,6 +1,7 @@
 import { speakerBtn, autoRead, readEls, stopReading, readToMe, markWords } from './readalong.js';
 // REAL — UI: tiny DOM helper, HUD, dialogue, modal sheets, toasts, minimap, captions.
 import { tr } from './i18n.js';
+import { holdMs } from './calm.js';
 export function h(tag, attrs = {}, ...kids) {
   const el = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs || {})) {
@@ -80,7 +81,7 @@ export const UI = {
     if (label) E.interactLabel.textContent = label;
   },
   toast(text, kind = 'info', ms = 2600) {
-    text = tr(text);
+    text = tr(text); ms = holdMs(ms);
     const t = h('div', { class: 'toast ' + kind }, text);
     this.els.toasts.append(t);
     setTimeout(() => t.classList.add('out'), ms);

@@ -1,5 +1,6 @@
 // REAL — rewards and progress, all earned by learning and living (never bought): daily goals, a streak calendar,
 // a sticker book, trophies (achievements + learning badges), outfits you unlock, and celebrations when you grow.
+import { isCalm } from './calm.js';
 import { h, UI } from './ui.js';
 import { SKILLS, SUBJECTS } from './edu.js';
 import { ACHIEVEMENTS } from './life.js';
@@ -15,7 +16,7 @@ const es = () => lang() === 'es';
 /** confetti, a banner, a sound, and Heart cheering */
 export function celebrate(G, title, sub = '', { big = false, heart = true, art = null } = {}) {
   const old = document.querySelector('.celebrate'); if (old) old.remove();
-  const conf = h('div', { class: 'confetti', 'aria-hidden': 'true' }, ...[...Array(big ? 60 : 34)].map((_, i) => h('i', { style: { left: Math.random() * 100 + '%', background: ['#e9a93a', '#3fbf7a', '#4f8cff', '#e96fa0', '#8f7bff', '#ffd27a'][i % 6], animationDelay: Math.random() * 0.6 + 's', animationDuration: 1.6 + Math.random() * 1.2 + 's', transform: `rotate(${Math.random() * 360}deg)` } })));
+  const conf = isCalm() ? null : h('div', { class: 'confetti', 'aria-hidden': 'true' }, ...[...Array(big ? 60 : 34)].map((_, i) => h('i', { style: { left: Math.random() * 100 + '%', background: ['#e9a93a', '#3fbf7a', '#4f8cff', '#e96fa0', '#8f7bff', '#ffd27a'][i % 6], animationDelay: Math.random() * 0.6 + 's', animationDuration: 1.6 + Math.random() * 1.2 + 's', transform: `rotate(${Math.random() * 360}deg)` } })));
   const card = h('div', { class: 'celebrate' + (big ? ' big' : ''), role: 'status', 'aria-live': 'polite' }, conf, h('div', { class: 'cel-card' }, h('div', { class: 'cel-burst' }, art || heartEl('cheer')), h('b', {}, title), sub ? h('small', {}, sub) : null));
   document.body.append(card);
   G.sfx && G.sfx('reward');

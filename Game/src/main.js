@@ -10,6 +10,7 @@ import { askGrade } from './grade.js';
 import { SKILLS } from './edu.js';
 import { CURSIVE_LESSONS } from './cursive.js';
 import { takeClass } from './cityschool.js';
+import { isCalm, setCalm, applyCalm, headsUp, calmSpace } from './calm.js';
 import { Audio } from './audio.js';
 import { Game, newState, loadSave, openPhone, saveFromText } from './game.js';
 import { buildWilderness, wildHeight, WILD, buildClub, CLUB, setGate } from './scenes.js';
@@ -207,6 +208,7 @@ let titleT = 0;
 function title() {
   mode = 'title';
   setReadLevel(1);   // the first screen is always in the simplest words
+  applyCalm();
   const save = loadSave();
   const T = $('#title');
   T.hidden = false;
@@ -290,7 +292,7 @@ async function creator() {
 }
 
 // ------------------------------------------------------------------------------------------ game start
-function applyA11y(st) { if (game) window.__playerName = game.state.name; window.__voiceOff = st.voices === false; window.__smartOff = st.smart === false; window.__micOff = st.mic === false; if (window.__voiceOff) Voice.stop(); document.body.classList.toggle('a11y-large', !!st.large); document.body.classList.toggle('a11y-contrast', !!st.contrast); document.body.classList.toggle('a11y-calm', !!st.calm); document.body.classList.toggle('a11y-spaced', !!st.spaced); }
+function applyA11y(st) { applyCalm(); if (game) window.__playerName = game.state.name; window.__voiceOff = st.voices === false; window.__smartOff = st.smart === false; window.__micOff = st.mic === false; if (window.__voiceOff) Voice.stop(); document.body.classList.toggle('a11y-large', !!st.large); document.body.classList.toggle('a11y-contrast', !!st.contrast); document.body.classList.toggle('a11y-calm', !!st.calm || isCalm()); document.body.classList.toggle('a11y-spaced', !!st.spaced); }
 function startLoader(on, p, label) {
   const L = $('#loading'); if (!L) return;
   L.hidden = !on; if (on) progress(p, label);
@@ -338,6 +340,7 @@ async function startGameInner(state, isNew) {
   neighbors = new Neighbors(scene); if (!(state.settings && state.settings.noNeighbors)) neighbors.connect();
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
+  $('#btn-calm').onclick = () => { if (mode !== 'play' || busy()) return; game.busy = true; input.enabled = false; Promise.resolve(calmSpace()).finally(() => { game.busy = false; input.enabled = true; }); };
   const swapView = () => { if (!game || mode !== 'play') return; const st = game.state.settings = game.state.settings || {}; st.view = fcam.first ? 'third' : 'first'; UI.toast(st.view === 'third' ? 'Now you see your REAL from behind.' : 'Now you see through your REAL’s eyes.', 'info', 2200); game.save(); };
   $('#btn-view').onclick = swapView; addEventListener('keydown', (e) => { if (e.code === 'KeyV' && !e.repeat && !/INPUT|TEXTAREA/.test((e.target || {}).tagName || '')) swapView(); });
   bindVoicePanel(() => game);
@@ -651,6 +654,7 @@ async function leaveBuilding() {
 const curRoom = () => game.state.location === 'interior' && game.state.room ? W.rooms[game.state.room.key] : null;
 
 async function travelTo(loc, silent) {
+  if (!silent) await headsUp(`${tr('Next')}: ${tr(loc === 'district' ? 'Starting District' : (DISTRICTS[loc] || {}).name || loc)}. ${tr('The screen will go dark for a moment, then you will be there.')}`);   // calm & clear: no surprise scene changes
   if (!silent) { audio.play('door'); await UI.fade(1, 400); }
   if (W.apartment) W.apartment.visible = false;
   hideRooms();
@@ -887,7 +891,7 @@ function faceNPC(n) {
   player.heading = Math.atan2(dx, dy); player.apply();
   fcam.yaw = -player.heading + 0.45; fcam.pitch = 0.18; fcam.dist = Math.min(fcam.dist, 4.2);
 }
-const buzz = (p) => { try { if (p && navigator.vibrate && !((game && game.state.settings) || {}).calm) navigator.vibrate(p); } catch (e) {} };   // a tiny tap you can feel (phones that support it)
+const buzz = (p) => { try { if (p && navigator.vibrate && !((game && game.state.settings) || {}).calm && !isCalm()) navigator.vibrate(p); } catch (e) {} };   // a tiny tap you can feel (phones that support it)
 async function doInteract() {
   buzz(8);
   if (mode !== 'play' || busy() || !nearest) return;
@@ -1159,7 +1163,7 @@ window.REAL = {
     const d = sock('Spawn_StoreEntry'); player.pos = { x: d.x, y: d.y + 2 }; player.apply();
   },
   sheets: () => [...document.querySelectorAll('#modal .sh-title')].map((e) => e.textContent),
-  game: () => game, skillList: () => Object.values(SKILLS), cursiveLessons: () => CURSIVE_LESSONS, takeClass: (subj) => takeClass(game, subj), setTime: (h) => { game.state.time = h; },
+  game: () => game, skillList: () => Object.values(SKILLS), setCalm: (on) => setCalm(on), cursiveLessons: () => CURSIVE_LESSONS, takeClass: (subj) => takeClass(game, subj), setTime: (h) => { game.state.time = h; },
   quality: (q) => engine.setQuality(q),
   life: () => game.life(),
   practice: (sk) => runActivity(game, () => ({ skill: sk, ...PRACTICE[sk]() }), 'learn', 'Practice', '📚'),

@@ -1,4 +1,6 @@
 // REAL — audio: synthesized SFX + generative lo-fi soundtrack (no files to download).
+const calmOn = () => { try { return localStorage.getItem('real.calmClear') === '1'; } catch (e) { return false; } };
+const SOFTER = { bad: null, reward: 'good', level: 'good', cash: 'coin', whoosh: null, register: 'click', scan: 'click' };   // calm & clear mode
 export class Audio {
   constructor() { this.ctx = null; this.on = true; try { this.on = localStorage.getItem('real.sound') !== 'off'; } catch (e) {} }
   start() {
@@ -7,7 +9,7 @@ export class Audio {
     if (!AC) return;
     this.ctx = new AC();
     this.master = this.ctx.createGain(); this.master.gain.value = this.on ? 0.8 : 0; this.master.connect(this.ctx.destination);
-    this.musicBus = this.ctx.createGain(); this.musicBus.gain.value = 0.22;
+    this.musicBus = this.ctx.createGain(); this.musicBus.gain.value = this.musicLevel();
     this.sfxBus = this.ctx.createGain(); this.sfxBus.gain.value = 0.9; this.sfxBus.connect(this.master);
     const lp = this.ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1600;
     this.musicBus.connect(lp); lp.connect(this.master);
@@ -15,6 +17,7 @@ export class Audio {
   }
   toggle() { this.on = !this.on; try { localStorage.setItem('real.sound', this.on ? 'on' : 'off'); } catch (e) {} if (this.master) this.master.gain.value = this.on ? 0.8 : 0; return this.on; }
   tone(f, t0, dur, type = 'sine', vol = 0.2, bus) {
+    if (!bus && calmOn()) vol *= 0.55;   // calm & clear: every sound effect quieter
     const c = this.ctx, o = c.createOscillator(), g = c.createGain();
     o.type = type; o.frequency.value = f;
     g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol, t0 + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
@@ -33,10 +36,12 @@ export class Audio {
       src.connect(bp); bp.connect(this.windGain); this.windGain.connect(this.master); src.start(); this.windNode = src;
     }
     const g = this.windGain.gain; g.value += ((level ? 0.5 : 0) - g.value) * 0.02;
-    if (this.musicBus) this.musicBus.gain.value += ((level ? 0.06 : 0.22) - this.musicBus.gain.value) * 0.02;
+    if (this.musicBus) this.musicBus.gain.value += ((level ? 0.06 : this.musicLevel()) - this.musicBus.gain.value) * 0.02;
   }
+  musicLevel() { return calmOn() ? 0.08 : 0.22; }
   play(name) {
     if (!this.ctx || !this.on) return;
+    if (calmOn()) { if (name in SOFTER) name = SOFTER[name]; if (!name) return; }
     const t = this.ctx.currentTime;
     const S = {
       click: () => this.tone(880, t, 0.06, 'triangle', 0.08),
