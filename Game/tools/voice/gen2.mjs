@@ -12,6 +12,9 @@ const LISTS = (process.env.LISTS || 'sentences.json few_en.json new_en.json r2_e
 const id = (k) => crypto.createHash('sha1').update(k).digest('hex').slice(0, 14);
 const seen = new Set(), all = [];
 for (const f of LISTS) for (const [k, text] of JSON.parse(fs.readFileSync(DIR + f))) { if (/^esw?:/.test(k) || seen.has(k)) continue; seen.add(k); all.push([k, text]); }
+// names the voice model says wrong: spelled the way they sound (the game's text and keys stay the same)
+const RESPELL = [[/\bOkafor\b/g, 'O-kah-for'], [/\bokafor\b/g, 'o-kah-for']];
+const respell = (t) => RESPELL.reduce((x, [re, to]) => x.replace(re, to), t);
 const FORCE = !!process.env.FORCE;   // record again over an existing master (a new speed)
 const mine = all.filter((_, i) => i % N === W).filter(([k]) => FORCE || !fs.existsSync(`${DIR}hq/${id(k)}.flac`));
 if (process.env.REV) mine.reverse();   // a second recorder can work from the other end of the list
@@ -21,7 +24,7 @@ let n = 0, secs = 0; const t0 = Date.now();
 for (const [k, text] of mine) {
   if (!FORCE && fs.existsSync(`${DIR}hq/${id(k)}.flac`)) continue;   // another recorder got there first
   try {
-    const a = await tts.generate(text, { voice: VOICE, speed: SPEED });
+    const a = await tts.generate(respell(text), { voice: VOICE, speed: SPEED });
     const wav = `${DIR}hq/${id(k)}.${W}${process.env.REV ? 'r' : ''}.wav`; await a.save(wav);
     execFileSync('ffmpeg', ['-loglevel', 'error', '-y', '-i', wav, '-ac', '1', '-c:a', 'flac', '-sample_fmt', 's16', `${DIR}hq/${id(k)}.tmp${W}${process.env.REV ? 'r' : ''}.flac`]);
     fs.renameSync(`${DIR}hq/${id(k)}.tmp${W}${process.env.REV ? 'r' : ''}.flac`, `${DIR}hq/${id(k)}.flac`); fs.unlinkSync(wav); secs += a.audio.length / a.sampling_rate; n++;
