@@ -3,8 +3,14 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.6.0';
+export const VERSION = '1.7.0';
 export const NOTES = [
+  ['1.7.0', [
+    ['💗', 'Heart sounds better', 'Every line is evened out and warmer. She sounds happier when you get it right and gentler when you miss.'],
+    ['🔤', 'Words light up as she says them', 'The highlight follows Heart’s voice, word by word.'],
+    ['🗣️', 'Smoother reading', 'When Heart reads word by word, the words flow together.'],
+    ['✅', 'Fewer mistakes', 'Heart now says dates, prices per hour, sizes and names the right way.'],
+  ]],
   ['1.6.0', [
     ['🌿', 'Calm & clear', 'Softer sounds, no surprises, gentle feedback and a calm space for breaks. Made with autistic players in mind. Turn it on in Settings.'],
     ['🏫', 'City School', 'Take classes on your phone. Each class teaches two skills at your level. Passing classes opens new parts of the city.'],
