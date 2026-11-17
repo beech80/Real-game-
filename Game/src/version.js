@@ -3,8 +3,11 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.7.0';
+export const VERSION = '1.7.1';
 export const NOTES = [
+  ['1.7.1', [
+    ['💗', 'Heart’s voice is back', 'Heart sounds the way she did before. We are working on making her clearer.'],
+  ]],
   ['1.7.0', [
     ['💗', 'Heart sounds better', 'Every line is evened out and warmer. She sounds happier when you get it right and gentler when you miss.'],
     ['🔤', 'Words light up as she says them', 'The highlight follows Heart’s voice, word by word.'],

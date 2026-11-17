@@ -221,7 +221,7 @@ function playWords(spoken, { onWord, onEnd, rate, es = false }) {
   current = { done };
   const speed = Math.max(0.55, Math.min(1.35, (rate || 0.92) / 0.92 * speedMul()));
   Promise.all(items.map((x) => clip(x.clip))).then(async () => {
-    if (speed <= 1.03 && !window.__noJoin && await playJoined(items, speed, onWord, done, () => !fin)) return;   // faster reading keeps Heart's pitch with the older, one-clip-at-a-time way
+    if (speed <= 1.03 && window.__join && await playJoined(items, speed, onWord, done, () => !fin)) return;   // faster reading keeps Heart's pitch with the older, one-clip-at-a-time way
     const step = async (i) => {
       if (fin) return; if (i >= items.length) return done();
       const { at, pause } = items[i]; const bytes = await clip(items[i].clip); if (fin) return;

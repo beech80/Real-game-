@@ -11,12 +11,13 @@ const { voiceId } = await import(GAME + 'src/readalong.js');
 const KBPS = process.env.KBPS || '20', N = +(process.env.PACKS || 44);
 const LISTS = (process.env.LISTS || 'sentences.json few_en.json new_en.json r2_en.json words.json new_w.json r2_w.json r3_en.json r4_en.json sentences_es.json few_es.json new_es.json r2_es.json r3_es.json r4_es.json words_es.json words_es_tpl.json').split(' ').filter((f) => fs.existsSync(DIR + f));
 const sha = (k) => crypto.createHash('sha1').update(k).digest('hex').slice(0, 14);
-fs.mkdirSync(DIR + 'opusm', { recursive: true });
+const MASTER = process.env.MASTER !== '0', ODIR = process.env.ODIR || (MASTER ? 'opusm' : 'opus');
+fs.mkdirSync(DIR + ODIR, { recursive: true });
 const TRIM = 'silenceremove=start_periods=1:start_threshold=-42dB:start_silence=0.02,areverse,silenceremove=start_periods=1:start_threshold=-42dB:start_silence=0.03,areverse';
 const seen = new Set(), jobs = [];
 for (const f of LISTS) for (const [k] of JSON.parse(fs.readFileSync(DIR + f))) {
   const id = voiceId(k); if (seen.has(id)) continue; const src = `${DIR}hq/${sha(k)}.flac`; if (!fs.existsSync(src)) continue;
-  seen.add(id); jobs.push({ id, k, src, out: `${DIR}opusm/${sha(k)}.ogg` });
+  seen.add(id); jobs.push({ id, k, src, out: `${DIR}${ODIR}/${sha(k)}.ogg` });
 }
 // encode (resumable), a few at a time; single words lose the silence before and after so Heart can read word by word
 const todo = jobs.filter((j) => !fs.existsSync(j.out)); let done = 0;
@@ -39,6 +40,7 @@ const master = (raw) => {
 };
 const enc = async (j) => {
   try {
+    if (!MASTER) { await run(['-loglevel', 'error', '-y', '-i', j.src, ...(/^w:/.test(j.k) ? ['-af', TRIM] : []), '-ac', '1', '-c:a', 'libopus', '-b:a', KBPS + 'k', '-application', 'voip', '-frame_duration', '20', '-map_metadata', '-1', '-f', 'ogg', j.out + '.tmp']); fs.renameSync(j.out + '.tmp', j.out); if (++done % 2000 === 0) console.log(`encoded ${done}/${todo.length}`); return; }   // MASTER=0: exactly as 1.5.0 encoded it
     const raw = await run(['-loglevel', 'error', '-i', j.src, '-af', CHAIN + (/^(w|esw):/.test(j.k) ? ',' + TRIM : ''), '-ac', '1', '-ar', String(SR), '-f', 'f32le', '-']);
     if (raw.length < 4 * 240) throw new Error('empty');
     await run(['-loglevel', 'error', '-y', '-f', 'f32le', '-ar', String(SR), '-ac', '1', '-i', '-', '-c:a', 'libopus', '-b:a', KBPS + 'k', '-application', 'voip', '-frame_duration', '20', '-map_metadata', '-1', '-f', 'ogg', j.out + '.tmp'], master(raw));
