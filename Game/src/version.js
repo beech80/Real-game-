@@ -3,8 +3,11 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.8.0';
+export const VERSION = '1.8.1';
 export const NOTES = [
+  ['1.8.1', [
+    ['🗺️', 'Questions at your level', 'People in the city now ask questions that fit your level. Younger players tap a number instead of typing it.'],
+  ]],
   ['1.8.0', [
     ['⏩', 'Shorter days', 'A day now takes about 10 minutes to play, not 20.'],
     ['🧭', 'Easier to play', 'Tap 🧭 Go next to your goal and your REAL walks there by itself. The game also runs smoother on phones.'],
