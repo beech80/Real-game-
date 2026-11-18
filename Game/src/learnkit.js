@@ -235,14 +235,23 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       body = h('div', {}, disp, h('div', { class: 'keypad' }, ['1', '2', '3', '4', '5', '6', '7', '8', '9', Q.decimals ? '⌫' : '.', '0', Q.decimals ? '' : '⌫'].filter(Boolean).map(key),
         h('button', { class: 'key ok', onclick: () => { if (!done.hidden) return; const v = value(); const ok = Math.abs(v - Q.a) < 0.005; if (!attempt(ok, ok ? null : (v === 0 ? 'blank' : Math.abs(v - Q.a) / Math.max(1, Math.abs(Q.a)) < 0.15 ? 'close' : 'far'))) { if (!CHECK && val) explainWrong(reasonFor({ ...Q, a: Q.a }, fmt(Q, v), sk)); val = ''; show(); } } }, '✓')));
     } else if (Q.type === 'order') {
-      const pool = shuffle(Q.items.map((t, i) => ({ t, i }))), chosen = [];
+      // simpler for side quests and younger learners: three steps (first, middle, last), and each tap is checked right away:
+      // a step that isn't next just wiggles and stays, so the order is built one right step at a time
+      const lvl = G.edu.band(sk.subj || 'reading'), guided = GENTLE || lvl <= 3;
+      let items = Q.items;
+      if ((GENTLE || lvl <= 2) && items.length > 3) { items = [items[0], items[Math.floor((items.length - 1) / 2)], items[items.length - 1]]; Q.items = items; }
+      const pool = shuffle(items.map((t, i) => ({ t, i }))), chosen = []; let misses = 0;
       const list = h('ol', { class: 'orderlist' }), bank = h('div', { class: 'opts' });
       const render = () => {
         list.replaceChildren(...chosen.map((c) => h('li', {}, c.t)));
-        bank.replaceChildren(...pool.filter((p) => !chosen.includes(p)).map((p) => h('button', { class: 'opt', onclick: () => { chosen.push(p); render(); if (chosen.length === Q.items.length) { const ok = chosen.every((c, k) => c.i === k); if (!attempt(ok, ok ? null : 'order')) { chosen.length = 0; setTimeout(render, 500); } } } }, p.t)));
+        bank.replaceChildren(...pool.filter((p) => !chosen.includes(p)).map((p) => h('button', { class: 'opt', onclick: (e) => {
+          if (guided && p.i !== chosen.length) { misses++; const b = e.currentTarget; b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); G.sfx('click'); if (misses >= 2) { const nxt = [...bank.children].find((x) => x.textContent === items[chosen.length]); if (nxt) nxt.classList.add('next-hint'); } return; }
+          chosen.push(p); render();
+          if (chosen.length === items.length) { const ok = chosen.every((c, k) => c.i === k); if (guided) { if (misses) usedExample = true; attempt(true, null); return; } if (!attempt(ok, ok ? null : 'order')) { chosen.length = 0; setTimeout(render, 500); } }
+        } }, p.t)));
       };
       render();
-      body = h('div', {}, h('p', { class: 'tip' }, 'Tap the steps in order.'), list, bank, h('button', { class: 'ghost sm', onclick: () => { chosen.length = 0; render(); } }, 'Start over'));
+      body = h('div', { class: 'orderbox' }, h('p', { class: 'tip' }, guided ? 'Tap the first step. Then the next one.' : 'Tap the steps in order.'), list, bank, guided ? null : h('div', { class: 'row order-reset' }, h('button', { class: 'ghost sm', onclick: () => { chosen.length = 0; render(); } }, 'Start over')));
     } else if (Q.type === 'sort') {
       let sel = null; const placed = new Map();
       const items = shuffle(Q.items);

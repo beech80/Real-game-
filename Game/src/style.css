@@ -819,3 +819,11 @@ body.a11y-calm .calm-circle { animation-duration: 8s !important; }
 
 /* messages never cover the buttons of an open lesson: they sit at the top while a sheet is open */
 body:has(#modal .modal) .toasts { top: max(12px, env(safe-area-inset-top, 0px)) !important; bottom: auto !important; }
+
+/* step-ordering questions */
+.orderbox { display: flex; flex-direction: column; gap: 10px; }
+.order-reset { justify-content: flex-start; margin-top: 4px; }
+.opt.nope { animation: nope .35s; border-color: #6f9fd8; }
+.opt.next-hint { border-color: var(--gold-2); box-shadow: 0 0 0 3px rgba(233, 169, 58, .35); }
+@keyframes nope { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.activity > .row:last-child { margin-top: 12px; }
