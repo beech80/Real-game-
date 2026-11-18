@@ -1017,7 +1017,7 @@ function inFreshMart(p) { const fm = W.data.district.freshmart; return p.x > fm.
 let storyT = 0;
 function storyTriggers() {
   const s = game.state, P = player.pos;
-  if (mode === 'play' && !busy() && (storyT = (storyT + 1) % 90) === 0) storyCheck(game);   // chapters of the story path (see story.js)
+  if (mode === 'play' && !busy() && (storyT = (storyT + 1) % 90) === 0 && $('#dialog').hidden && !UI.anySheet() && !game.state.mission && !game.inAdventure) storyCheck(game);   // never in the middle of a conversation or someone's story   // chapters of the story path (see story.js)
   if (s.location === 'club' && s.quest === 'prologue_walk' && near(CLUB.councilDoor, 2.8) && !busy()) { councilScene(); return; }
   if (s.chapter === 'nowhere') {
     if (!s.flags.path && P.y > WILD.fork.y + 22 && P.y < WILD.join.y) {

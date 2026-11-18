@@ -52,7 +52,8 @@ export function installAdventures(Game) {
   P.advOffer = function (id) { const s = this.state, A = adv(s, id); return !A.met || (this.advNext(id) && !s.mission); };
   P.advNext = function (id) { const A = adv(this.state, id); return EPISODES[id][Math.min(A.stage, EPISODES[id].length - 1)]; };
   /** Talking to an adventure character: offer, continue, repeat, work, or walk away. */
-  P.advTalk = async function (id) {
+  P.advTalk = async function (id) { this.inAdventure = true; try { return await this._advTalk(id); } finally { this.inAdventure = false; } };
+  P._advTalk = async function (id) {
     const s = this.state, D = ADVENTURES[id], A = adv(s, id), who = `${D.npc.name} · ${D.npc.role}`;
     if (!s.flags.housed) { await UI.say(who, 'Find the Community Center first, then come back. I’ll still be here.'); return; }
     if (s.mission && s.mission.adv === id) { await UI.say(who, s.mission.text); return; }
