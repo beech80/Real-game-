@@ -3,8 +3,11 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.8.1';
+export const VERSION = '1.9.0';
 export const NOTES = [
+  ['1.9.0', [
+    ['📖', 'A story to follow', 'After your first paycheck, the story goes on in chapters. Each one has a few goals. Finish them to start the next chapter. See 📖 Story on your phone.'],
+  ]],
   ['1.8.1', [
     ['🗺️', 'Questions at your level', 'People in the city now ask questions that fit your level. Younger players tap a number instead of typing it.'],
   ]],

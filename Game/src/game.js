@@ -5,6 +5,7 @@ import { cursiveClass } from './cursive.js';
 import { citySchool } from './cityschool.js';
 import { isCalm, setCalm } from './calm.js';
 import { parkJog } from './jog.js';
+import { storyGoal, storyApp } from './story.js';
 import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
@@ -159,6 +160,7 @@ export class Game {
         if (unpaid) return T(`Pay your bill: ${unpaid.name} (${money(unpaid.amount)}) — Bills app`, null);
         if (s.flags.baristaTip && !(s.jobs || []).includes('barista')) return T('Ask Dee about the coffee job at Daily Grind', 'Door_CoffeeShop');
         if (s.event && s.location === 'district' && this.constructor.EVENTS && this.constructor.EVENTS[s.event.id]) { const E = this.constructor.EVENTS[s.event.id]; return T(`${E.icon} ${E.title} (optional)`, s.location === 'district' ? s.event.at : null); }
+        { const sg = storyGoal(this); if (sg) return T(sg.text, sg.target && (sg.target === 'Door_ApartmentLobby' || sg.target === 'Interact_TimeClock' || s.location === 'district') ? sg.target : null); }
         const ll = this.life();
         const next = [['midtown', 3, 'Midtown'], ['opportunity', 5, 'the Opportunity District'], ['heights', 8, 'The Heights']].find(([k, lv]) => ll.level >= lv && !(s.visited || {})[k]);
         if (next) return T(`New district open: take the bus to ${next[2]}`, s.location === 'district' ? 'Interact_BusStop' : 'D:bus');
@@ -625,7 +627,7 @@ export function openPhone(G) {
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['School', '🏫', '#2f8f5a'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Cursive', '✍️', '#7a4fd2'], ['Talks', '🗨️', '#7a4fd2'], ['Toolbox', '🧰', '#d2552f'], ['Trophies', '🏆', '#c9a227'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
+      ['Learn', '📚', '#5a3fd2'], ['School', '🏫', '#2f8f5a'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Cursive', '✍️', '#7a4fd2'], ['Talks', '🗨️', '#7a4fd2'], ['Toolbox', '🧰', '#d2552f'], ['Story', '📖', '#8b2f3c'], ['Trophies', '🏆', '#c9a227'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -717,6 +719,7 @@ export function openPhone(G) {
         School: () => citySchool(G, close),
         Talks: () => talkLog(),
         Toolbox: () => toolbox(G, A.PRACTICE, close),
+        Story: () => storyApp(G),
         Trophies: () => trophiesApp(G),
         Assignment: () => assignmentView(G, async (what, id) => {
           const As = s.assign; close();

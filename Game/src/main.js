@@ -11,6 +11,7 @@ import { SKILLS } from './edu.js';
 import { CURSIVE_LESSONS } from './cursive.js';
 import { takeClass } from './cityschool.js';
 import { parkJog } from './jog.js';
+import { storyCheck } from './story.js';
 import { isCalm, setCalm, applyCalm, headsUp, calmSpace } from './calm.js';
 import { Audio } from './audio.js';
 import { Game, newState, loadSave, openPhone, saveFromText } from './game.js';
@@ -322,6 +323,7 @@ async function startGameInner(state, isNew) {
   fcam = new FollowCamera(camera);
   window.__playerName = state.name;
   applyA11y(state.settings || {});
+  setTimeout(() => { if (game) storyCheck(game, { quiet: true }); }, 0);   // chapters an older save already finished
   game = new Game(state, {
     sfx: (n) => { audio.play(n); buzz(n === 'bad' ? [18, 50, 18] : n === 'good' ? 12 : 0); },
     enterApartment: (silent) => enterApartment(silent), exitApartment: () => exitApartment(),
@@ -999,8 +1001,10 @@ function clampCameraBounds(want, target) {
 function inFreshMart(p) { const fm = W.data.district.freshmart; return p.x > fm.x - fm.w / 2 && p.x < fm.x + fm.w / 2 && p.y > fm.y + 0.3 && p.y < fm.y + fm.d; }
 
 // ------------------------------------------------------------------------------------------ story triggers (per frame)
+let storyT = 0;
 function storyTriggers() {
   const s = game.state, P = player.pos;
+  if (mode === 'play' && !busy() && (storyT = (storyT + 1) % 90) === 0) storyCheck(game);   // chapters of the story path (see story.js)
   if (s.location === 'club' && s.quest === 'prologue_walk' && near(CLUB.councilDoor, 2.8) && !busy()) { councilScene(); return; }
   if (s.chapter === 'nowhere') {
     if (!s.flags.path && P.y > WILD.fork.y + 22 && P.y < WILD.join.y) {
@@ -1188,7 +1192,7 @@ window.REAL = {
     const d = sock('Spawn_StoreEntry'); player.pos = { x: d.x, y: d.y + 2 }; player.apply();
   },
   sheets: () => [...document.querySelectorAll('#modal .sh-title')].map((e) => e.textContent),
-  game: () => game, skillList: () => Object.values(SKILLS), setCalm: (on) => setCalm(on), cursiveLessons: () => CURSIVE_LESSONS, parkJog: () => parkJog(game), takeClass: (subj) => takeClass(game, subj), setTime: (h) => { game.state.time = h; },
+  game: () => game, skillList: () => Object.values(SKILLS), setCalm: (on) => setCalm(on), cursiveLessons: () => CURSIVE_LESSONS, parkJog: () => parkJog(game), storyCheck: () => storyCheck(game), takeClass: (subj) => takeClass(game, subj), setTime: (h) => { game.state.time = h; },
   quality: (q) => engine.setQuality(q),
   life: () => game.life(),
   practice: (sk) => runActivity(game, () => ({ skill: sk, ...PRACTICE[sk]() }), 'learn', 'Practice', '📚'),

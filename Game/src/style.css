@@ -832,3 +832,11 @@ body:has(#modal .modal) .toasts { top: max(12px, env(safe-area-inset-top, 0px)) 
 .go-btn { pointer-events: auto; flex: none; height: 34px; padding: 0 12px; border-radius: 999px; border: 0; background: var(--gold-2); color: #1a1420; font: 700 15px/1 var(--f-head); letter-spacing: .04em; display: inline-flex; align-items: center; gap: 4px; }
 .go-btn.on { background: #7fd99a; }
 .go-btn:active { transform: scale(.95); }
+
+/* Story app */
+.story-app { display: flex; flex-direction: column; gap: 10px; }
+.story-ch { padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .1); }
+.story-ch.now { border-color: var(--gold-2); }
+.story-ch.later { opacity: .6; }
+.story-ch ul { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.story-ch li.ok { color: #7fd99a; }

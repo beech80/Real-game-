@@ -1,54 +1,50 @@
-// Community Center playtest (landscape phone): the menu, the career board and asking Mr. Okafor a question.
+// The story path: after the first paycheck the game goes on in chapters with clear goals. Checks the main goal shows the
+// chapter's next goal, finishing every goal ends the chapter (reward, scene) and starts the next, and the 📖 Story app lists them.
 const { chromium, devices } = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
-const DIST = process.env.DIST || path.join(__dirname, '..', 'dist'), OUT = path.join(__dirname, 'shots');
-fs.mkdirSync(OUT, { recursive: true });
-const types = { '.txt': 'text/plain', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png' };
-const wrap = (f, b) => (f.endsWith('index.html') && !b.slice(0, 200).toString().includes('<!doctype') ? Buffer.concat([Buffer.from('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>'), b, Buffer.from('</body></html>')]) : b);
-const srv = http.createServer((q, r) => { let f = path.join(DIST, decodeURIComponent(q.url.split('?')[0])); if (f.endsWith('/')) f += 'index.html';
-  fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(wrap(f, b)); }); }).listen(0);
+const DIST = path.join(__dirname, '..', 'dist-hosted');
+const OUT = process.env.SHOTS || path.join(__dirname, 'shots');
+const types = { '.txt': 'text/plain', '.html': 'text/html; charset=utf-8', '.json': 'application/json' };
+const wrap = (f, b) => (f.endsWith('index.html') ? Buffer.concat([Buffer.from('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>'), b, Buffer.from('</body></html>')]) : b);
+const srv = http.createServer((q, r) => { const f = path.join(DIST, decodeURIComponent(q.url.split('?')[0])); fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(wrap(f, b)); }); }).listen(0);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-let step = 0;
-
 (async () => {
-  const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
-  const ctx = await b.newContext({ ...devices[process.env.DEVICE || 'iPhone 13 landscape'] });
-  const p = await ctx.newPage(); global.__p = p;
-  const errors = [];
-  p.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
-  p.on('pageerror', (e) => errors.push('[pageerror] ' + e.message));
-  const shot = async (n) => { step++; await p.screenshot({ path: path.join(OUT, `${process.env.DEVICE ? 'p' : ''}story_${String(step).padStart(2, '0')}_${n}.png`), timeout: 120000 }); console.log('✓', n); };
+  fs.mkdirSync(OUT, { recursive: true });
+  const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const ctx = await b.newContext({ ...devices['iPhone 13'] });
+  const p = await ctx.newPage(); const errors = []; p.on('pageerror', (e) => errors.push(e.message));
   const ev = (f, a) => p.evaluate(f, a);
-  const interact = async (key, where) => { await ev(([k, w]) => window.REAL.teleport(k, w), [key, where || 'district']); await sleep(700); await p.click('#btn-interact', { timeout: 45000 }); await sleep(500); };
-  const nextDialog = async (choice) => { for (let i = 0; i < 8; i++) { if (await p.isHidden('#dialog')) return; const c = await p.$$('#dialog .d-choice'); if (c.length) { await c[choice ?? 0].click(); } else { await p.$eval('#dialog .d-text', (e) => e.click()); await p.click('#dialog .d-next'); } await sleep(400); } };
-
-  await p.goto(`http://localhost:${srv.address().port}/index.html`);
-  await p.evaluate(() => { try { localStorage.clear(); } catch (e) {} });
+  const bad = []; const fail = (m) => { bad.push(m); console.log('FAIL', m); };
+  const shot = (n) => p.screenshot({ path: path.join(OUT, `story_${n}.png`), timeout: 240000 });
+  await p.goto(`http://localhost:${srv.address().port}/index.html`, { timeout: 240000, waitUntil: 'domcontentloaded' });
+  await ev(() => { try { localStorage.clear(); } catch (e) {} });
   await p.waitForFunction(() => window.REAL && window.REAL.mode === 'title', null, { timeout: 180000 });
   await ev(() => window.REAL.quality('low'));
-  await p.click('#btn-new'); await p.waitForSelector('#cr-loading', { state: 'hidden' });
-  await p.fill('#cr-name', 'Nova'); await p.click('#cr-go');
-  await sleep(1500); await ev(() => window.REAL.skip());
-  await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 60000 }); await sleep(1500);
-  try {
-    // The Community Center (Mr. Okafor): menu → career board (every tier listed) → ask a question and get an answer.
-    // (Applying for the first job now happens at Fresh Mart with Rosa; tests/saga.cjs plays that whole story.)
-    await interact('Door_CareerCenter');
-    await p.waitForSelector('.sh-title:text-is("Community Center")', { timeout: 15000 }); await shot('community_center');
-    await p.click('.sheet .opt:has-text("Career board")');
-    await p.waitForSelector('.sh-title:text-is("Career board")', { timeout: 15000 });
-    const tiers = await p.$$eval('.tier-h', (e) => e.map((x) => x.textContent));
-    console.log('career tiers:', tiers.join(' | ')); await shot('career_board');
-    await p.click('.sheet .sh-x'); await sleep(600);
-    await interact('Door_CareerCenter');
-    await p.click('.sheet .opt:has-text("Ask Mr. Okafor")');
-    await p.waitForSelector('.chatlog'); await p.fill('.microw input', 'How do I get my first job?'); await p.click('button:text-is("Ask")');
-    await p.waitForFunction(() => document.querySelectorAll('.bubble.npc').length >= 2 && !/^…$/.test([...document.querySelectorAll('.bubble.npc')].pop().textContent.split(': ').pop()), null, { timeout: 30000 });
-    const answer = await p.$$eval('.bubble.npc', (e) => e.pop().textContent); console.log('Okafor:', answer); await shot('okafor_answer');
-    await p.click('button:text-is("Thanks, bye!")'); await sleep(500);
-    const ok = tiers.length >= 4 && answer.length > 12 && !errors.filter((e) => !/favicon|Failed to load resource/.test(e)).length;
-    console.log('errors', errors.length, errors.slice(0, 3));
-    console.log(ok ? 'STORY PASSED' : 'STORY FAILED');
-    await b.close(); srv.close(); process.exit(ok ? 0 : 1);
-  } catch (e) { console.log('FAILED at step', step, e.message); try { await shot('FAIL'); } catch (x) {} await b.close(); srv.close(); process.exit(1); }
-})();
+  await p.click('#btn-new'); await p.waitForSelector('#cr-loading', { state: 'hidden', timeout: 120000 });
+  await p.fill('#cr-name', 'Kai'); await p.click('#cr-go');
+  await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 180000 });
+  await ev(() => window.REAL.devJump('hired')); await sleep(1500);
+  const clear = () => ev(() => { for (let i = 0; i < 30 && !document.querySelector('#dialog').hidden; i++) { const x = document.querySelector('#dialog .d-next, #dialog .d-choice'); if (x) x.click(); } });
+  await clear();
+  await ev(() => { const s = window.REAL.state; s.quest = 'free'; s.flags.hired = true; s.chapter = 'city'; s.flags[`worked${s.day}`] = true; s.time = 12; s.hunger = 90; s.bills.forEach((b) => { b.paid = true; }); s.money = 40; });
+  await sleep(2500); await clear(); await sleep(1500);
+  let obj = await ev(() => document.getElementById('obj-text').textContent); console.log('goal →', obj);
+  if (!/Chapter 1/.test(obj)) fail('the main goal should show Chapter 1');
+  await shot('1_goal');
+  const m0 = await ev(() => window.REAL.state.money);
+  await ev(() => { const s = window.REAL.state; s.stats.billsOnTime = 1; s.stats.mealsCooked = 1; s.money = 200; });
+  ev(() => window.REAL.storyCheck()).catch(() => {}); await sleep(4500); await shot('2_chapter_done'); await clear(); await sleep(2500); await clear();
+  const st = await ev(() => ({ ch: window.REAL.state.story.ch, money: window.REAL.state.money }));
+  console.log('after chapter 1 →', JSON.stringify(st));
+  if (st.ch !== 1) fail('finishing every goal did not move to Chapter 2'); if (!(st.money >= 230)) fail('the chapter reward was not paid');
+  await sleep(2000); await clear(); await sleep(1500);
+  obj = await ev(() => document.getElementById('obj-text').textContent); console.log('goal →', obj);
+  if (!/Chapter 2/.test(obj)) fail('the main goal should now show Chapter 2');
+  await ev(() => document.getElementById('btn-phone').click()); await p.waitForSelector('#modal .app', { timeout: 60000 }); await sleep(600);
+  await p.$$eval('#modal .app', (els) => { const x = els.find((e) => /Story/.test(e.textContent)); if (x) x.click(); }); await p.waitForSelector('.story-app', { timeout: 30000 }).catch(() => fail('no 📖 Story app'));
+  await sleep(800); await shot('3_story_app');
+  const n = await p.$$eval('.story-ch', (x) => x.length).catch(() => 0); console.log('chapters listed:', n); if (n !== 6) fail('the Story app should list 6 chapters');
+  console.log('page errors', errors.length, errors.slice(0, 3)); if (errors.length) fail('page errors');
+  console.log(bad.length ? 'STORY FAILED' : 'STORY PASSED');
+  await b.close(); srv.close(); process.exit(bad.length ? 1 : 0);
+})().catch((e) => { console.error('FAIL', e.message.split('\n')[0]); srv.close(); process.exit(2); });
