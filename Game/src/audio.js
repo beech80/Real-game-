@@ -83,6 +83,8 @@ export class Audio {
   _kick(t) { const c = this.ctx, o = c.createOscillator(), g = c.createGain(); o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.18); g.gain.setValueAtTime(0.22, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22); o.connect(g); g.connect(this.musicBus); o.start(t); o.stop(t + 0.25); }
   _hat(t, v) { const c = this.ctx, s = c.createBufferSource(); s.buffer = this.noise; const g = c.createGain(); g.gain.value = v; const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 6500; s.connect(hp); hp.connect(g); g.connect(this.musicBus); s.start(t); }
   _pad(f, t, dur, v) { const c = this.ctx; for (const det of [-6, 6]) { const o = c.createOscillator(), g = c.createGain(), lp = c.createBiquadFilter(); o.type = 'sawtooth'; o.frequency.value = f; o.detune.value = det; lp.type = 'lowpass'; lp.frequency.value = 900; g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + dur * 0.35); g.gain.linearRampToValueAtTime(0.0001, t + dur); o.connect(lp); lp.connect(g); g.connect(this.musicBus); o.start(t); o.stop(t + dur + 0.1); } }
+  /** a soft note that fades in and out (no click, no strike) */
+  _soft(f, t, dur, v) { const c = this.ctx, o = c.createOscillator(), g = c.createGain(); o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + Math.min(0.5, dur * 0.3)); g.gain.linearRampToValueAtTime(0.0001, t + dur); o.connect(g); g.connect(this.musicBus); o.start(t); o.stop(t + dur + 0.05); }
   _music() {
     const c = this.ctx, mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
     this.noise = c.createBuffer(1, c.sampleRate * 0.05, c.sampleRate); const d = this.noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
@@ -95,19 +97,17 @@ export class Audio {
           this.mood = this.wantMood; const V = this.vol(); this.musicBus.gain.setTargetAtTime(0.26 * V.music * (Audio.MOODS[this.mood].vol || 1), t0 + 0.1, 0.6); bar = 0;
         }
         const M = Audio.MOODS[this.mood], beat = 60 / M.bpm, ch = M.chords[bar % M.chords.length];
-        if (M.pad) ch.forEach((m) => this._pad(mtof(m), next, beat * 4.2, 0.018));
-        else ch.forEach((m, i) => this.tone(mtof(m + 12), next + i * (M.swing ? 0.03 : 0.015), beat * 3.6, M.keys, M.keys === 'square' ? 0.018 : 0.045, this.musicBus));
-        this._pad(mtof(ch[0] - 12), next, beat * 4.2, 0.05);   // a soft, slow bass under the chords: no drum, no thump
-        
-        if (M.kick) for (const k of [0, 2]) this._kick(next + k * beat);
-        if (M.hats) for (let k = 0; k < 8; k++) this._hat(next + k * beat / 2 + (k % 2 ? (M.swing ? beat * 0.16 : 0.03) : 0), k % 2 ? 0.014 : 0.026);
-        // a gentle melody that wanders over the chord (pentatonic, mostly steps)
+        // Calm, smooth music with no beat at all: soft chords that swell in and fade (nothing plucked or struck), a slow
+        // bass under them, and now and then a few gentle melody notes that fade in. Each chord lasts two bars.
+        const span = beat * 8;
+        ch.forEach((m) => this._pad(mtof(m), next, span * 1.08, 0.016));
+        this._pad(mtof(ch[0] - 12), next, span * 1.08, 0.04);
         const scale = [0, 2, 4, 7, 9].map((x) => ch[0] + 24 + x);
-        for (let k = 0; k < 4; k++) if (Math.random() < M.lead) {
+        for (let k = 0; k < 4; k++) if (Math.random() < M.lead * 0.55) {   // a few notes, on no fixed beat
           const near = scale.concat(scale.map((x) => x + 12)).sort((a, b) => Math.abs(a - lastNote) - Math.abs(b - lastNote)).slice(0, 4); lastNote = near[Math.floor(Math.random() * near.length)];
-          this.tone(mtof(lastNote), next + k * beat + (Math.random() < 0.3 ? beat / 2 : 0), beat * 0.9, 'sine', 0.035, this.musicBus);
+          this._soft(mtof(lastNote), next + k * beat * 2 + Math.random() * beat * 0.6, beat * 2.6, 0.026);
         }
-        next += beat * 4; bar++;
+        next += span; bar++;
       }
       setTimeout(sched, 400);
     };
