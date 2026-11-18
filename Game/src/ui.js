@@ -1,4 +1,4 @@
-import { speakerBtn, autoRead, readEls, stopReading, readToMe, markWords } from './readalong.js';
+import { speakerBtn, autoRead, readEls, stopReading, readToMe, markWords, prefetch } from './readalong.js';
 // REAL — UI: tiny DOM helper, HUD, dialogue, modal sheets, toasts, minimap, captions.
 import { tr } from './i18n.js';
 import { holdMs } from './calm.js';
@@ -82,6 +82,7 @@ export const UI = {
   },
   toast(text, kind = 'info', ms = 2600) {
     text = tr(text); ms = holdMs(ms);
+    if (kind === 'info' && /^Drag the left side|^Arrastra/.test(text) && this.anySheet()) return;   // a how-to-move tip is no use over a lesson, and it covered an answer
     const t = h('div', { class: 'toast ' + kind }, text);
     this.els.toasts.append(t);
     setTimeout(() => t.classList.add('out'), ms);
@@ -89,7 +90,7 @@ export const UI = {
   },
   /** Dialogue with optional choices. Resolves with the choice index (or undefined). */
   say(speaker, text, choices, opts = {}) {
-    speaker = tr(speaker); text = tr(text); if (choices) choices = choices.map((c) => tr(c));
+    speaker = tr(speaker); text = tr(text); if (choices) choices = choices.map((c) => tr(c)); prefetch(text);
     return new Promise((res) => {
       const D = this.els.dialog;
       D.hidden = false;
@@ -132,6 +133,7 @@ export const UI = {
       const card = h('div', { class: 'sheet ' + (opts.cls || '') }, head, body);
       layer.append(card);
       body.append(build(close, body));
+      setTimeout(() => { for (const e of [...body.querySelectorAll('.lead, .readable, .activity p, .opt')].slice(0, 10)) prefetch(e.textContent || ''); }, 0);   // Heart's clips for this screen, ready before anyone taps 🔊
     });
   },
   anySheet() { return !!this.els.modal.querySelector('.modal'); },

@@ -282,6 +282,14 @@ let current = null, keep = null;
 export function stopReading() { try { speechSynthesis.cancel(); } catch (e) {} stopNatural(); clearInterval(keep); if (current) { current.done(); current = null; } }
 /** Say text, sentence by sentence, in the best voice. onWord(charIndex) is called as each word starts (charIndex in
  *  the text as given when raw, else in its spoken form). en: always English (sounding out English words). */
+/** fetch the recordings for text that is about to be read, so Heart starts at once when it is */
+export function prefetch(text, es = false) {
+  try {
+    if (!NAT || window.__deviceOnly) return;
+    const sp = speakable(text, es); let n = 0;
+    for (const s of speechSentences(sp)) { const e = entry(voiceId(sentKey(s, es))); if (e && n++ < 8) clip(e).catch(() => {}); }
+  } catch (e) {}
+}
 export function say(text, { rate = 0.92, onWord, onEnd, en = false, raw = false } = {}) {
   if (!canSpeak()) { if (onEnd) onEnd(); return false; }
   stopReading();

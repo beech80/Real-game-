@@ -150,7 +150,8 @@ export function sibling(gen, Q) {
 }
 
 /** Run one activity. Resolves { ok: correct on the first try }. */
-export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩') {
+export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩', opts = {}) {
+  const GENTLE = !!opts.gentle;
   let Q;
   try {
     Q = typeof gen === 'function' ? gen() : gen;
@@ -168,13 +169,15 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       if (fits.length) pool = fits; else for (let k = 0; k < 10 && pool.every((p) => p.band && Math.abs(p.band - lb) > 1); k++) { const n = gen(); if (n && n.skill === Q.skill && (!n.band || Math.abs(n.band - lb) <= 1)) pool = [n]; }
       if (pool.length > 1) {
         pool.sort((a, b) => difficulty(a) - difficulty(b));
-        const at = ctx === 'check' ? 0.5 : st <= 1 ? 0 : st === 2 ? 0.5 : 1;   // new → easiest, practising → middle, proficient+ → hardest; checks always middle
+        const at = GENTLE ? 0 : ctx === 'check' ? 0.5 : st <= 1 ? 0 : st === 2 ? 0.5 : 1;   // new → easiest, practising → middle, proficient+ → hardest; checks always middle
         Q = pool[Math.round(at * (pool.length - 1))];
       }
       seen.push(key(Q)); if (seen.length > 6) seen.shift();
     }
   } catch (e) { console.warn('activity', e); return Promise.resolve({ ok: true }); }
-  Q.type = Q.type || 'choice'; window.__lastQ = Q;
+  Q.type = Q.type || 'choice';
+  if (GENTLE && Q.type === 'choice' && Array.isArray(Q.o) && Q.o.length > 3) { const wrong = Q.o.filter((o) => o !== Q.a); Q = { ...Q, o: [Q.a, ...wrong.slice(0, 2)] }; }   // side quests: three choices, not four
+  window.__lastQ = Q;
   const id = Q.skill, sk = SKILLS[id] || { name: '', subj: 'thinking' };
   if (!Q.why && sk.explain) Q.why = sk.explain;   // every item ends with a worked explanation
   G.edu.discover(id);
@@ -198,7 +201,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
         hint2.replaceChildren(`This builds on “${SKILLS[pre].name}”. `, g ? h('button', { class: 'ghost sm stepback', onclick: async (e) => { e.currentTarget.disabled = true; for (let i = 0; i < 2; i++) await runActivity(G, () => ({ skill: pre, ...g[Math.floor(Math.random() * g.length)]() }), ctx, SKILLS[pre].name, '🪜'); } }, `🪜 Practise “${SKILLS[pre].name}” first`) : 'You can practise it in 📚 Learn.');
         hint2.hidden = false;
       }
-      if (tries >= 3 && Q.why) finish(false);   // after a few tries, show the worked solution and move on; mistakes teach
+      if (tries >= (GENTLE ? 2 : 3) && Q.why) finish(false);   // after a few tries, show the worked solution and move on; mistakes teach
       return false;
     };
     const hint2 = h('p', { class: 'tip', hidden: true }), wwBox = h('p', { class: 'tip readable wwbox', hidden: true });

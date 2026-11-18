@@ -3,8 +3,13 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.7.1';
+export const VERSION = '1.8.0';
 export const NOTES = [
+  ['1.8.0', [
+    ['🏃', 'Park Jog game', 'Jogging in Brighter Park is a running game now. Grab water, fruit and stars, and step around cones.'],
+    ['🗺️', 'Easier side quests', 'Helping people around the city is easier and more fun: fewer choices, quicker help, and a cheer when you finish.'],
+    ['💗', 'Heart answers faster', 'Heart starts talking sooner, with shorter pauses between sentences.'],
+  ]],
   ['1.7.1', [
     ['💗', 'Heart’s voice is back', 'Heart sounds the way she did before. We are working on making her clearer.'],
   ]],

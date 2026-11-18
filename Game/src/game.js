@@ -4,6 +4,7 @@ import { askGrade, gradeName } from './grade.js';
 import { cursiveClass } from './cursive.js';
 import { citySchool } from './cityschool.js';
 import { isCalm, setCalm } from './calm.js';
+import { parkJog } from './jog.js';
 import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
@@ -15,7 +16,7 @@ import { heartEl } from './art.js';
 import { tipsOff, setTips } from './tutorial.js';
 import { VERSION, whatsNew } from './version.js';
 import { heartOn, setHeart, askHeart } from './heart.js';
-import { LANGS, lang, setLang } from './i18n.js';
+import { LANGS, lang, setLang, tr } from './i18n.js';
 import { Edu, newEdu, SKILLS, SUBJECTS, STATES } from './edu.js';
 import { lifeLevel, LIFE_CATS, CAREERS, TIER_NAMES, careerStatus, setSkillNames, ACHIEVEMENTS, INVITE_LEVEL, INVITE_MIN_DAY } from './life.js';
 setSkillNames(SKILLS);
@@ -219,7 +220,16 @@ export class Game {
       Door_Gym: () => ({ label: 'Grow Gym', run: () => A.menuBuy(G, 'Grow Gym', '🏋️', [
         { name: 'Day pass workout', price: 5, icon: '🏋️', note: '+15 mood, −10 energy. A fit body pays off later.', apply: () => { s.mood = Math.min(100, s.mood + 15); s.energy = Math.max(0, s.energy - 10); s.stats.workouts = (s.stats.workouts || 0) + 1; this.advance(1); } }]) }),
       Interact_BusStop: () => ({ label: s.quest === 'invite' ? 'Take the bus to The Club' : 'Bus schedule', run: () => this.bus() }),
-      Interact_ParkJog: () => ({ label: 'Go for a jog', run: () => { s.mood = Math.min(100, s.mood + 12); s.energy = Math.max(0, s.energy - 8); s.stats.workouts = (s.stats.workouts || 0) + 0.5; this.advance(0.5); UI.toast('A free workout. +Mood', 'good'); } }),
+      Interact_ParkJog: () => ({ label: 'Go for a jog', run: async () => {
+        let r;
+        do {
+          r = await parkJog(this); if (!r) return;
+          const bonus = Math.min(8, Math.floor(r.score / 6));
+          s.mood = Math.min(100, s.mood + 12 + bonus); s.energy = Math.max(0, s.energy - 8); s.stats.workouts = (s.stats.workouts || 0) + 0.5 + Math.min(1, r.score / 40);
+          s.stats.jogBest = Math.max(s.stats.jogBest || 0, r.score); s.stats.jogs = (s.stats.jogs || 0) + 1; this.advance(0.5); this.save();
+          UI.toast(`🏃 ${r.score} ${tr('points')} · +${tr('Mood')}`, 'good');
+        } while (r.again && s.energy > 10);
+      } }),
     };
     if (s.event && s.event.at === k && s.location === 'district' && this.constructor.EVENTS && this.constructor.EVENTS[s.event.id]) { const E = this.constructor.EVENTS[s.event.id]; return { label: `${E.icon} ${E.title.replace(/ (in|at) .*$/, '')}`, run: () => this.runEvent() }; }
     if (/^Interact_ParkBench/.test(k)) return { label: 'Sit and relax', run: () => { this.hooks.playerAnim('Sit', 4); s.mood = Math.min(100, s.mood + 10); this.advance(0.5); } };

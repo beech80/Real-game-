@@ -803,3 +803,19 @@ body.calm-clear .celebrate .cel-card { box-shadow: none; }
 body.a11y-calm .calm-circle { animation-duration: 8s !important; }
 .calm-say { font-size: 1.25rem; margin: 6px 0 12px; }
 @keyframes calm-breathe { 0%, 100% { transform: scale(.62); } 50% { transform: scale(1); } }
+
+/* the 🎤 Say it button in an activity is a labelled pill, not a round icon: it used to be squeezed to a 42px circle and its
+   label spilled over ✨ Ask Heart on phones */
+.activity .row { flex-wrap: wrap; row-gap: 8px; }
+.activity .row .mic { width: auto; height: 42px; min-width: 42px; padding: 0 14px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 16px; font-weight: 600; white-space: nowrap; }
+
+/* Park Jog */
+.jog { display: flex; flex-direction: column; gap: 8px; }
+.jog-cv { width: 100%; max-width: 360px; height: auto; aspect-ratio: 360 / 520; margin: 0 auto; border-radius: 16px; touch-action: none; display: block; }
+.jog-hud { display: flex; justify-content: space-between; align-items: baseline; max-width: 360px; width: 100%; margin: 0 auto; font-variant-numeric: tabular-nums; }
+.jog-hud b { font-size: 1.5rem; color: var(--gold-2); }
+.jog-sum { display: flex; gap: 14px; justify-content: center; font-size: 1.2rem; }
+.jog-best { margin-right: auto; opacity: .8; }
+
+/* messages never cover the buttons of an open lesson: they sit at the top while a sheet is open */
+body:has(#modal .modal) .toasts { top: max(12px, env(safe-area-inset-top, 0px)) !important; bottom: auto !important; }

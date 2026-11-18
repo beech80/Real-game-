@@ -1,6 +1,7 @@
 // REAL — the open-world adventure system. Ten adventures, each started by talking to a character in the city.
 // Short adventures can be tried once and dropped; long-term paths lead to careers. Interest is learned only from
 // what the player chooses to do (and optional chats), never from test scores, and the player can clear it any time.
+import { celebrate } from './rewards.js';
 import { UI, h, money, wait } from './ui.js';
 import { runActivity } from './learnkit.js';
 import { GEN } from './curriculum.js';
@@ -13,7 +14,7 @@ import { askNPC } from './voice.js';
 
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const gen = (id) => (GEN[id] ? pick(GEN[id]) : T[id]);
-const act = (G, id, ctx, title, icon) => runActivity(G, typeof id === 'string' ? gen(id) : id, ctx, title, icon);
+const act = (G, id, ctx, title, icon) => runActivity(G, typeof id === 'string' ? gen(id) : id, ctx, title, icon, { gentle: true });   // side quests are for fun: the easier version, fewer choices, the answer shown sooner
 
 // ------------------------------------------------------------------------------------------------ registry
 // npc.loc: 'district' (Starting District) or a district id; x/y in that space's plan coordinates (districts add ox).
@@ -85,6 +86,7 @@ export function installAdventures(Game) {
     if (flag) s.flags[flag] = true;
     s.flags[`adv_${id}_${A.stage}`] = true;
     this.sfx('level');
+    celebrate(this, `${ADVENTURES[id].icon} ${EPISODES[id][A.stage - 1] ? EPISODES[id][A.stage - 1].title : ADVENTURES[id].title}`, `${who} says thanks!${reward ? ' +' + money(reward) : ''}`, { heart: false });
     if (msg) await UI.say(who, msg);
     // optional, friendly interest chat (only once per adventure)
     if (!A.asked && QUESTIONS[id]) {

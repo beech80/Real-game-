@@ -10,6 +10,7 @@ import { askGrade } from './grade.js';
 import { SKILLS } from './edu.js';
 import { CURSIVE_LESSONS } from './cursive.js';
 import { takeClass } from './cityschool.js';
+import { parkJog } from './jog.js';
 import { isCalm, setCalm, applyCalm, headsUp, calmSpace } from './calm.js';
 import { Audio } from './audio.js';
 import { Game, newState, loadSave, openPhone, saveFromText } from './game.js';
@@ -1164,7 +1165,7 @@ window.REAL = {
     const d = sock('Spawn_StoreEntry'); player.pos = { x: d.x, y: d.y + 2 }; player.apply();
   },
   sheets: () => [...document.querySelectorAll('#modal .sh-title')].map((e) => e.textContent),
-  game: () => game, skillList: () => Object.values(SKILLS), setCalm: (on) => setCalm(on), cursiveLessons: () => CURSIVE_LESSONS, takeClass: (subj) => takeClass(game, subj), setTime: (h) => { game.state.time = h; },
+  game: () => game, skillList: () => Object.values(SKILLS), setCalm: (on) => setCalm(on), cursiveLessons: () => CURSIVE_LESSONS, parkJog: () => parkJog(game), takeClass: (subj) => takeClass(game, subj), setTime: (h) => { game.state.time = h; },
   quality: (q) => engine.setQuality(q),
   life: () => game.life(),
   practice: (sk) => runActivity(game, () => ({ skill: sk, ...PRACTICE[sk]() }), 'learn', 'Practice', '📚'),
