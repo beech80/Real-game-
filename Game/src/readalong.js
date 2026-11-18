@@ -155,7 +155,8 @@ function clip(e) {
 }
 const pack = (n) => { if (!PACKS.has(n)) PACKS.set(n, savedFile(n).then((s) => s || fetch(n)).then((r) => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }).catch((e) => { PACKS.delete(n); throw e; })); return PACKS.get(n); };
 let natAudio = null, natTimers = [];
-function stopNatural() { natTimers.forEach(clearTimeout); natTimers = []; if (natAudio) { try { natAudio.pause(); } catch (e) {} natAudio = null; } for (const s of natSources) { try { s.stop(); } catch (e) {} } natSources = []; }
+const duck = (on) => { try { window.__duck && window.__duck(on); } catch (e) {} };
+function stopNatural() { duck(false); natTimers.forEach(clearTimeout); natTimers = []; if (natAudio) { try { natAudio.pause(); } catch (e) {} natAudio = null; } for (const s of natSources) { try { s.stop(); } catch (e) {} } natSources = []; }
 // ---- Heart, word by word: for English lines with no whole-sentence recording (random numbers, a player's writing)
 const ONEW = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
 const TENW = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
@@ -226,7 +227,7 @@ function playWords(spoken, { onWord, onEnd, rate, es = false }) {
       if (fin) return; if (i >= items.length) return done();
       const { at, pause } = items[i]; const bytes = await clip(items[i].clip); if (fin) return;
       const url = URL.createObjectURL(new Blob([bytes], { type: mimeOf(items[i].clip) }));
-      const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol();
+      const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol(); duck(true);
       const next = () => { URL.revokeObjectURL(url); natTimers.push(setTimeout(() => step(i + 1), pause / speed)); };
       a.onended = next; a.onerror = next;
       if (onWord && (i === 0 || items[i - 1].at !== at)) onWord(at);
@@ -243,7 +244,7 @@ function playNatural(spoken, { onWord, onEnd, rate, fallback, es = false }) {
   if (!sents.length || clips.some((c) => !c)) return false;
   let fin = false; const done = () => { if (fin) return; fin = true; stopNatural(); if (onEnd) onEnd(); };
   current = { done };
-  const speed = Math.max(0.75, Math.min(1.35, (rate || 0.92) / 0.92 * speedMul()));
+  const speed = Math.max(0.75, Math.min(1.35, speedMul()));   // recorded sentences: natural speed unless the player chose Slower/Faster (stretching a recording makes it warble)
   let cursor = 0; const offs = sents.map((s) => { const i = spoken.indexOf(s, cursor); const o = i < 0 ? cursor : i; cursor = o + s.length; return o; });
   const playAt = async (i) => {
     if (fin) return; if (i >= clips.length) return done();
@@ -252,7 +253,7 @@ function playNatural(spoken, { onWord, onEnd, rate, fallback, es = false }) {
     if (fin) return;
     if (i + 1 < clips.length) clip(clips[i + 1]).catch(() => {});   // fetch the next sentence while this one plays
     const url = URL.createObjectURL(new Blob([bytes], { type: mimeOf(clips[i]) }));
-    const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol();
+    const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol(); duck(true);
     a.onended = () => { URL.revokeObjectURL(url); playAt(i + 1); }; a.onerror = () => { URL.revokeObjectURL(url); playAt(i + 1); };
     if (onWord) {   // light each word as Heart says it: from the measured word times when we have them, else spread over the clip by length
       const words = [...sents[i].matchAll(/\S+/g)], total = sents[i].length || 1, dur = (ms || 1500) / 1000;

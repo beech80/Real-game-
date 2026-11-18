@@ -3,8 +3,11 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.9.0';
+export const VERSION = '1.9.1';
 export const NOTES = [
+  ['1.9.1', [
+    ['💗', 'Clearer Heart', 'The music gets quieter while Heart talks, and her sentences play at their natural speed.'],
+  ]],
   ['1.9.0', [
     ['📖', 'A story to follow', 'After your first paycheck, the story goes on in chapters. Each one has a few goals. Finish them to start the next chapter. See 📖 Story on your phone.'],
   ]],

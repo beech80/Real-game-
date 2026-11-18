@@ -38,7 +38,9 @@ export class Audio {
     const g = this.windGain.gain; g.value += ((level ? 0.5 : 0) - g.value) * 0.02;
     if (this.musicBus) this.musicBus.gain.value += ((level ? 0.06 : this.musicLevel()) - this.musicBus.gain.value) * 0.02;
   }
-  musicLevel() { return calmOn() ? 0.08 : 0.22; }
+  musicLevel() { return (calmOn() ? 0.08 : 0.22) * (this.ducked ? 0.35 : 1); }
+  /** turn the music down while Heart speaks, so every word is clear */
+  duck(on) { this.ducked = !!on; if (this.musicBus && this.ctx) { const g = this.musicBus.gain, t = this.ctx.currentTime; g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(this.musicLevel(), t + (on ? 0.15 : 0.6)); } }
   play(name) {
     if (!this.ctx || !this.on) return;
     if (calmOn()) { if (name in SOFTER) name = SOFTER[name]; if (!name) return; }

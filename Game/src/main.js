@@ -343,6 +343,7 @@ async function startGameInner(state, isNew) {
   neighbors = new Neighbors(scene); if (!(state.settings && state.settings.noNeighbors)) neighbors.connect();
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
+  window.__duck = (on) => audio.duck(on);
   $('#obj-go').onclick = (e) => { e.stopPropagation(); if (auto) stopAutoWalk(); else startAutoWalk(); };
   $('#btn-calm').onclick = () => { if (mode !== 'play' || busy()) return; game.busy = true; input.enabled = false; Promise.resolve(calmSpace()).finally(() => { game.busy = false; input.enabled = true; }); };
   const swapView = () => { if (!game || mode !== 'play') return; const st = game.state.settings = game.state.settings || {}; st.view = fcam.first ? 'third' : 'first'; UI.toast(st.view === 'third' ? 'Now you see your REAL from behind.' : 'Now you see through your REAL’s eyes.', 'info', 2200); game.save(); };
