@@ -25,6 +25,13 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await p.waitForFunction(() => window.REAL.mode === 'play', null, { timeout: 180000 });
   await ev(() => window.REAL.devJump('hired')); await sleep(1500);
   await ev(() => { for (let i = 0; i < 20 && !document.querySelector('#dialog').hidden; i++) { const x = document.querySelector('#dialog .d-next, #dialog .d-choice'); if (x) x.click(); } window.REAL.state.quest = 'free'; });
+  // 0) 🧭 Go: the REAL walks to the goal by itself
+  await p.waitForSelector('#obj-go:not([hidden])', { timeout: 60000 }).catch(() => fail('no 🧭 Go button next to the goal'));
+  const g0 = await ev(() => ({ p: window.REAL.playerPos(), d: parseFloat(document.getElementById('obj-dist').textContent) }));
+  await p.click('#obj-go'); await sleep(8000); await shot('0_go');
+  const g1 = await ev(() => ({ p: window.REAL.playerPos(), d: parseFloat(document.getElementById('obj-dist').textContent) || 0 }));
+  console.log('🧭 go →', JSON.stringify({ before: g0.d, after: g1.d }));
+  if (!(g1.d < g0.d - 1)) fail('🧭 Go did not bring the REAL closer to the goal');
   // 1) the 🎤 Say it and ✨ Ask Heart buttons on a question
   ev(() => window.REAL.takeClass('science')).catch(() => {}); await p.waitForSelector('.activity .mic', { timeout: 60000 }); await sleep(1200); await shot('1_question_buttons');
   const ov = await ev(() => { const a = document.querySelector('.activity .mic').getBoundingClientRect(), b = document.querySelector('.activity .ask').getBoundingClientRect(), m = document.querySelector('.activity .mic');

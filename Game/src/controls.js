@@ -173,7 +173,8 @@ export class Player {
   update(dt, input, cam, collision, groundFn, bounds) {
     const m = input.read();
     const { f, r } = cam.basis();
-    const dir = new THREE.Vector3().addScaledVector(f, m.y).addScaledVector(r, m.x);
+    let dir = new THREE.Vector3().addScaledVector(f, m.y).addScaledVector(r, m.x);
+    if (input.autoDir && dir.lengthSq() < 0.02) dir = new THREE.Vector3(input.autoDir.x, 0, -input.autoDir.y).normalize().multiplyScalar(0.92);   // 🧭 walking to the goal by itself
     const mag = Math.min(1, dir.length());
     const top = (input.sprint ? 5.4 : 0.6 + 2.7 * mag * mag * (3 - 2 * mag)) * this.speedMul;   // a gentle push walks, a full push jogs: one smooth ramp, no sudden jump
     const want = new THREE.Vector2(dir.x, -dir.z);   // plan space

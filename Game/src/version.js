@@ -6,6 +6,7 @@ import { lang } from './i18n.js';
 export const VERSION = '1.8.0';
 export const NOTES = [
   ['1.8.0', [
+    ['🧭', 'Easier to play', 'Tap 🧭 Go next to your goal and your REAL walks there by itself. The game also runs smoother on phones.'],
     ['🏃', 'Park Jog game', 'Jogging in Brighter Park is a running game now. Grab water, fruit and stars, and step around cones.'],
     ['🗺️', 'Easier side quests', 'Helping people around the city is easier and more fun: fewer choices, quicker help, and a cheer when you finish.'],
     ['💗', 'Heart answers faster', 'Heart starts talking sooner, with shorter pauses between sentences.'],

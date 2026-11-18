@@ -827,3 +827,8 @@ body:has(#modal .modal) .toasts { top: max(12px, env(safe-area-inset-top, 0px)) 
 .opt.next-hint { border-color: var(--gold-2); box-shadow: 0 0 0 3px rgba(233, 169, 58, .35); }
 @keyframes nope { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 .activity > .row:last-child { margin-top: 12px; }
+
+/* 🧭 Take me there */
+.go-btn { pointer-events: auto; flex: none; height: 34px; padding: 0 12px; border-radius: 999px; border: 0; background: var(--gold-2); color: #1a1420; font: 700 15px/1 var(--f-head); letter-spacing: .04em; display: inline-flex; align-items: center; gap: 4px; }
+.go-btn.on { background: #7fd99a; }
+.go-btn:active { transform: scale(.95); }

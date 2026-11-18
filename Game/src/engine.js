@@ -48,13 +48,14 @@ export class Engine {
     const s = q === 'high' ? 2048 : 1024;
     this.sun.shadow.mapSize.set(s, s);
     if (this.sun.shadow.map) { this.sun.shadow.map.dispose(); this.sun.shadow.map = null; }
-    this.bloom.enabled = q !== 'low' && this.halfOK;
+    this.bloom.enabled = q === 'high' && this.halfOK || (q === 'medium' && this.halfOK && !matchMedia('(pointer: coarse)').matches);   // the glow costs a lot on phones
     this.resize();
   }
 
   resize() {
     const w = innerWidth, h = innerHeight;
-    const maxDpr = this.quality === 'high' ? 2 : this.quality === 'medium' ? 1.5 : 1.25;
+    const phone = matchMedia('(pointer: coarse)').matches;
+    const maxDpr = this.quality === 'high' ? 2 : this.quality === 'medium' ? (phone ? 1.3 : 1.5) : 1.1;   // phones: fewer pixels for a steady frame rate (text is drawn by the page, so it stays sharp)
     const dpr = Math.max(0.75, Math.min(devicePixelRatio || 1, maxDpr) * (this.resScale || 1));
     this.renderer.setPixelRatio(dpr);
     this.renderer.setSize(w, h);

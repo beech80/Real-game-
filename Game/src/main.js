@@ -341,6 +341,7 @@ async function startGameInner(state, isNew) {
   neighbors = new Neighbors(scene); if (!(state.settings && state.settings.noNeighbors)) neighbors.connect();
   input.onInteract = () => doInteract(); input.onPhone = () => phone();
   $('#btn-interact').onclick = () => doInteract(); $('#btn-phone').onclick = () => phone();
+  $('#obj-go').onclick = (e) => { e.stopPropagation(); if (auto) stopAutoWalk(); else startAutoWalk(); };
   $('#btn-calm').onclick = () => { if (mode !== 'play' || busy()) return; game.busy = true; input.enabled = false; Promise.resolve(calmSpace()).finally(() => { game.busy = false; input.enabled = true; }); };
   const swapView = () => { if (!game || mode !== 'play') return; const st = game.state.settings = game.state.settings || {}; st.view = fcam.first ? 'third' : 'first'; UI.toast(st.view === 'third' ? 'Now you see your REAL from behind.' : 'Now you see through your REAL’s eyes.', 'info', 2200); game.save(); };
   $('#btn-view').onclick = swapView; addEventListener('keydown', (e) => { if (e.code === 'KeyV' && !e.repeat && !/INPUT|TEXTAREA/.test((e.target || {}).tagName || '')) swapView(); });
@@ -655,6 +656,26 @@ async function leaveBuilding() {
 }
 const curRoom = () => game.state.location === 'interior' && game.state.room ? W.rooms[game.state.room.key] : null;
 
+// 🧭 Take me there: your REAL walks to the goal by itself. Moving the stick takes over; if a wall is in the way for a
+// moment, the screen fades and you arrive. Easy for young players and anyone who finds steering hard.
+let auto = null;
+function startAutoWalk() { if (mode !== 'play' || busy() || !lastTarget) return; auto = { t: 0, last: { ...player.pos }, check: 0 }; UI.toast('🧭 Walking to your goal. Move to take over.', 'info', 2200); }
+function stopAutoWalk(msg) { auto = null; input.autoDir = null; if (msg) UI.toast(msg, 'good', 1800); }
+function autoWalk(dt) {
+  if (!auto) return;
+  const T = lastTarget, m = input.read();
+  if (!T || busy() || mode !== 'play') return stopAutoWalk();
+  if (Math.hypot(m.x, m.y) > 0.25) return stopAutoWalk();   // the player moved the stick: they are driving again
+  const dx = T.x - player.pos.x, dy = T.y - player.pos.y, d = Math.hypot(dx, dy);
+  if (d < 1.9) return stopAutoWalk('🧭 You are here!');
+  input.autoDir = { x: dx / d, y: dy / d };
+  auto.t += dt; auto.check += dt;
+  if (auto.check > 1.6) {   // stuck on something: hop the rest of the way
+    const moved = Math.hypot(player.pos.x - auto.last.x, player.pos.y - auto.last.y); auto.check = 0; auto.last = { ...player.pos };
+    if (moved < 0.6) { const a = auto; auto = null; input.autoDir = null; UI.fade(1, 250).then(() => { player.pos = { x: T.x - dx / d * 1.4, y: T.y - dy / d * 1.4 }; player.heading = Math.atan2(dx, dy); player.apply && player.apply(); return UI.fade(0, 300); }).then(() => UI.toast('🧭 You are here!', 'good', 1800)); }
+  }
+  if (auto && auto.t > 90) stopAutoWalk();
+}
 async function travelTo(loc, silent) {
   if (!silent) await headsUp(`${tr('Next')}: ${tr(loc === 'district' ? 'Starting District' : (DISTRICTS[loc] || {}).name || loc)}. ${tr('The screen will go dark for a moment, then you will be there.')}`);   // calm & clear: no surprise scene changes
   if (!silent) { audio.play('door'); await UI.fade(1, 400); }
@@ -1042,6 +1063,7 @@ function loop(now) {
       const d = sock(k); const P = player.pos;
       if (d && Math.abs(P.y - d.y) < 1.4 && Math.abs(P.x - d.x) < 1.0 && Math.hypot(input.move.x, input.move.y) > 0.2) P.x += (d.x - P.x) * Math.min(1, dt * 5);
     }   // the countryside walk into the city goes by twice as fast
+    autoWalk(dt);
     if (!busy()) for (let left = dt; left > 1e-4; left -= 0.034) player.update(Math.min(left, 0.034), input, fcam, IR ? IR.coll : apt ? aptColl : club ? clubColl : DD ? DD.coll : coll, gfn, IR ? IR.bounds : apt ? W.data.apartment.bounds : club ? W.club.bounds : DD ? (p) => clampToWalk(p, DD.walk) : boundsFn);
     else player.ch.locomote(0, dt);
     if (apt) player.ch.root.position.y = -500 + player.h;
@@ -1115,6 +1137,7 @@ function loop(now) {
     lastObjective = { ...obj, pos: target ? { x: target.x, y: target.y } : null, inDistrict: !!DD, inRoom: !!IR };
     const dist = target ? Math.hypot(target.x - player.pos.x, target.y - player.pos.y) : null;
     UI.objective(fcam.mode === 'follow' ? obj.text : null, dist);
+    { const go = $('#obj-go'); if (go) { const show = !!target && dist > 4 && !busy(); if (go.hidden === show) go.hidden = !show; go.classList.toggle('on', !!auto); } }
     if (target) { beacon.visible = dist > 2.2; beacon.position.copy(P2W(target.x, target.y, apt ? -500 : target.y < WILD.edge ? wildHeight(target.x, target.y) : 0.14)); beacon.userData.ring.scale.setScalar(1 + Math.sin(t * 3) * 0.12); }
     else beacon.visible = false;
     UI.taskPanel(s.quest === 'shift' ? 'Today’s jobs' : null, s.quest === 'shift' ? game.taskRows() : null, s.quest === 'shift' ? (s.job ? s.job.rate * s.job.hours : 60) : undefined);
