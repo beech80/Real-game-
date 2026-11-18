@@ -85,5 +85,5 @@ export function storyApp(G) {
     h('p', { class: 'lead' }, cur >= CHAPTERS.length ? 'You finished every chapter. The Club is waiting for you.' : 'Your story, one chapter at a time. Finish every goal to start the next chapter.'),
     ...CHAPTERS.map((C, i) => h('div', { class: 'story-ch' + (i < cur ? ' done' : i === cur ? ' now' : ' later') },
       h('b', {}, `${i < cur ? '✓' : i === cur ? '▶' : '🔒'} ${tr('Chapter')} ${i + 1}: ${tr(C.title)}`),
-      i <= cur ? h('ul', {}, ...C.goals.map(([t, done]) => h('li', { class: i < cur || done(s, G) ? 'ok' : '' }, `${i < cur || done(s, G) ? '✓' : '○'} ${tr(t)}`))) : h('small', {}, tr('Finish the chapter before to open this one.')))));
+      i <= cur ? h('ul', {}, ...C.goals.map(([t, done]) => h('li', { class: i < cur || done(s, G) ? 'ok' : '' }, `${i < cur || done(s, G) ? '✓' : '○'} ${tr(t)}`))) : h('small', {}, tr('Finish the chapter before this one to open it.')))));
 }
