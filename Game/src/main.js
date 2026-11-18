@@ -748,8 +748,20 @@ function miniHud(kind) {
   const cue = el.querySelector('.mh-cue'); if (cue) cue.onclick = () => { if (petCourse.cue()) audio.play('good'); };
   return el;
 }
+const HOWTO = {
+  race: ['🏎️ How to drive', [['🟢', 'Hold GAS to go.'], ['🕹️', 'Steer with the stick on the left (or the arrow keys).'], ['🔴', 'Tap BRAKE before sharp turns.'], ['🛣️', 'Don’t worry: your car helps you stay on the road.']]],
+  pet: ['🐾 How to race your pet', [['🏃', 'Your pet runs by itself.'], ['⭐', 'When the Cue button turns gold, tap it!'], ['🎯', 'A good cue gives your pet a speed boost.']]],
+  robot: ['🤖 Watch your robot', [['📋', 'Your robot follows the steps you planned.'], ['⚡', 'Each step uses energy.'], ['👀', 'Just watch! You can change the plan after.']]],
+};
+function howTo(kind) {
+  const H = HOWTO[kind]; if (!H || (navigator.webdriver && !window.__howTo)) return Promise.resolve();
+  return UI.sheet(H[0], (close) => h('div', { class: 'act howto' },
+    h('ul', { class: 'howto-list' }, ...H[1].map(([ic, t]) => h('li', {}, h('span', { class: 'howto-ic' }, ic), h('span', { class: 'readable' }, t)))),
+    h('button', { class: 'primary', id: 'howto-go', onclick: () => close(true) }, '▶ ' + tr('Ready!'))), { noClose: true });
+}
 async function runMini(kind, a, b, c) {
   const s = game.state;
+  await howTo(kind);
   await UI.fade(1, 350);
   hideForMini(true); UI.showHUD(false); mode = 'mini'; input.enabled = true;
   const el = miniHud(kind), q = (k) => el.querySelector(k);

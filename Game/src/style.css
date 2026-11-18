@@ -842,3 +842,9 @@ body:has(#modal .modal) .toasts { top: max(12px, env(safe-area-inset-top, 0px)) 
 .story-ch li.ok { color: #7fd99a; }
 .story-ch b { display: block; }
 .story-ch > small { display: block; margin-top: 4px; opacity: .8; }
+
+/* how-to-play card before a mini-game */
+.howto-list { list-style: none; margin: 4px 0 14px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.howto-list li { display: flex; align-items: center; gap: 12px; font-size: 1.1rem; }
+.howto-ic { font-size: 1.8rem; width: 44px; text-align: center; flex: none; }
+.minihud .mh-gas::after { content: ''; }

@@ -3,8 +3,11 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.9.2';
+export const VERSION = '1.9.3';
 export const NOTES = [
+  ['1.9.3', [
+    ['🎮', 'Easier mini-games', 'Each race and contest starts with a short how-to card. In a car race, your car helps you stay on the road.'],
+  ]],
   ['1.9.2', [
     ['🎵', 'Smoother music', 'The music has no beat at all now: soft chords that rise and fade, and a few gentle notes.'],
   ]],

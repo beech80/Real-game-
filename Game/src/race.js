@@ -110,11 +110,16 @@ export class Race {
     // ---- player car
     const c = this.player, st = c.stats, mv = this.input.read();
     let steer = THREE.MathUtils.clamp(mv.x, -1, 1), gas = Math.max(this.gas, mv.y > 0.2 ? mv.y : 0), brk = Math.max(this.brake, mv.y < -0.3 ? -mv.y : 0);
+    { // driving help: unless the player steers firmly, the car leans gently toward the road ahead (no one gets lost off the track)
+      const tgt = S.s[(c.idx + 10) % S.N]; let dh = Math.atan2(tgt.x - c.x, tgt.y - c.y) - c.h; dh = Math.atan2(Math.sin(dh), Math.cos(dh));
+      const help = THREE.MathUtils.clamp(dh * 1.6, -0.8, 0.8);
+      if (Math.abs(steer) < 0.35) steer = steer + help * (1 - Math.abs(steer) / 0.35);
+    }
     if (window.__autoDrive) {   // automated-test autopilot only
       const tgt = S.s[(c.idx + 12) % S.N]; let dh = Math.atan2(tgt.x - c.x, tgt.y - c.y) - c.h; dh = Math.atan2(Math.sin(dh), Math.cos(dh));
       steer = THREE.MathUtils.clamp(dh * 2.5, -1, 1); gas = Math.abs(dh) > 0.5 && c.v > 14 ? 0 : 1;
     }
-    const near = this._nearest(c), off = Math.abs(near.off) > w / 2 + 0.6, dirt = T.dirt.some(([u0, u1]) => near.p.u >= u0 && near.p.u <= u1);
+    const near = this._nearest(c), off = Math.abs(near.off) > w / 2 + 0.6; this.offT = (this.offT || 0) + (off && racing ? dt : 0); window.__race = this; const dirt = T.dirt.some(([u0, u1]) => near.p.u >= u0 && near.p.u <= u1);
     let top = st.top, grip = st.grip;
     if (dirt) { grip *= 0.55 + 0.45 * st.off; top *= 0.6 + 0.4 * st.off; }
     if (off) { top *= st.off; grip *= 0.8; }
