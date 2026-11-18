@@ -13,7 +13,7 @@ import { BUSINESSES } from './expansion.js';
 import { askNPC } from './voice.js';
 
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
-const gen = (id) => (GEN[id] ? pick(GEN[id]) : T[id]);
+const gen = (id) => (GEN[id] ? () => pick(GEN[id])() : T[id]);   // a fresh question each call, so the easiest one that fits the player can be chosen
 const act = (G, id, ctx, title, icon) => runActivity(G, typeof id === 'string' ? gen(id) : id, ctx, title, icon, { gentle: true });   // side quests are for fun: the easier version, fewer choices, the answer shown sooner
 
 // ------------------------------------------------------------------------------------------------ registry

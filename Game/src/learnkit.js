@@ -150,11 +150,22 @@ export function sibling(gen, Q) {
 }
 
 /** Run one activity. Resolves { ok: correct on the first try }. */
+/** a skill at (or below) the player's own level in the same subject: the skill's own building blocks first, then the nearest easier skill */
+export function skillAtLevel(G, id) {
+  const sk = SKILLS[id]; if (!sk) return id;
+  const lv = G.edu.band(sk.subj); if ((sk.band || 1) <= lv) return id;
+  const seen = new Set(), queue = [...(sk.prereq || [])];
+  while (queue.length) { const p = queue.shift(); if (seen.has(p) || !SKILLS[p]) continue; seen.add(p); if (SKILLS[p].band <= lv && SKILLS[p].subj === sk.subj && GEN[p]) return p; queue.push(...(SKILLS[p].prereq || [])); }
+  const near = Object.values(SKILLS).filter((k) => k.subj === sk.subj && k.band <= lv && GEN[k.id]).sort((a, b) => b.band - a.band || G.edu.state(a.id) - G.edu.state(b.id));
+  return near.length ? near[Math.floor(Math.random() * Math.min(3, near.length))].id : id;
+}
 export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩', opts = {}) {
   const GENTLE = !!opts.gentle;
   let Q;
   try {
     Q = typeof gen === 'function' ? gen() : gen;
+    // NPC side quests ask at the player's own level: a question from a skill above it is swapped for an easier one in the same subject
+    if (GENTLE && Q && Q.skill && GEN[Q.skill]) { const easier = skillAtLevel(G, Q.skill); if (easier !== Q.skill) { const gs = GEN[easier]; gen = () => gs[Math.floor(Math.random() * gs.length)](); Q = gen(); } }
     // practise the idea, not one memorised answer: avoid the last few questions this skill asked
     if (typeof gen === 'function' && Q && Q.skill) {
       const key = (q) => JSON.stringify([q.q, q.a, q.word, q.items]);
@@ -167,6 +178,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
       // items written for a specific band (reading passages…) only go to learners within one band of it
       const lb = G.edu.band((SKILLS[Q.skill] || {}).subj || 'reading'), fits = pool.filter((p) => !p.band || Math.abs(p.band - lb) <= 1);
       if (fits.length) pool = fits; else for (let k = 0; k < 10 && pool.every((p) => p.band && Math.abs(p.band - lb) > 1); k++) { const n = gen(); if (n && n.skill === Q.skill && (!n.band || Math.abs(n.band - lb) <= 1)) pool = [n]; }
+      if (GENTLE) { for (let k = 0; k < 8; k++) { const n = gen(); if (n && n.skill === Q.skill && !pool.some((p) => key(p) === key(n))) pool.push(n); } const easy = pool.filter((p) => !p.dok || p.dok <= 1); const ok2 = pool.filter((p) => !p.dok || p.dok <= 2); pool = easy.length ? easy : ok2.length ? ok2 : pool; }   // side quests: the simplest kind of question (recall, one step)
       if (pool.length > 1) {
         pool.sort((a, b) => difficulty(a) - difficulty(b));
         const at = GENTLE ? 0 : ctx === 'check' ? 0.5 : st <= 1 ? 0 : st === 2 ? 0.5 : 1;   // new → easiest, practising → middle, proficient+ → hardest; checks always middle
@@ -176,6 +188,11 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     }
   } catch (e) { console.warn('activity', e); return Promise.resolve({ ok: true }); }
   Q.type = Q.type || 'choice';
+  if (GENTLE && Q.type === 'number' && typeof Q.a === 'number' && G.edu.band((SKILLS[Q.skill] || {}).subj || 'math') <= 3) {   // young players: pick the number instead of typing it
+    const a0 = Q.a, step = Math.max(1, Math.round(Math.abs(a0) * 0.2)), f = (v) => (Q.prefix === '$' ? '$' + (Q.decimals ? v.toFixed(2) : v) : String(v) + (Q.suffix ? ' ' + Q.suffix : ''));
+    const wrong = [...new Set([a0 + step, a0 - step, a0 + 2 * step].filter((v) => v >= 0 && v !== a0))].slice(0, 2);
+    Q = { ...Q, type: 'choice', a: f(a0), o: [f(a0), ...wrong.map(f)], why: Q.why };
+  }
   if (GENTLE && Q.type === 'choice' && Array.isArray(Q.o) && Q.o.length > 3) { const wrong = Q.o.filter((o) => o !== Q.a); Q = { ...Q, o: [Q.a, ...wrong.slice(0, 2)] }; }   // side quests: three choices, not four
   window.__lastQ = Q;
   const id = Q.skill, sk = SKILLS[id] || { name: '', subj: 'thinking' };
