@@ -81,7 +81,7 @@ export class Game {
   feed(n) { this.state.hunger = Math.min(100, this.state.hunger + n); if (n > 0) this.state.flags.ate = true; }
   message(from, text) { this.state.messages.unshift({ from, text, day: this.state.day, read: false }); this.sfx('msg'); if (this.state.flags.phone) UI.toast(`New message · ${from}`, 'info'); }
 
-  // ------------------------------------------------------------------ time & needs (1 real minute ≈ 10 game minutes)
+  // ------------------------------------------------------------------ time & needs (1 real minute ≈ 80 game minutes)
   tick(dtHours) {
     const s = this.state;
     s.time += dtHours;

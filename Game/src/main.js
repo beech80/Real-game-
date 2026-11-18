@@ -1052,7 +1052,7 @@ function loop(now) {
   const s = game.state;
   const playing = mode === 'play' && !busy();
   if (mode === 'play') s.stats.playSecs = (s.stats.playSecs || 0) + Math.min(dt, 1);
-  if (playing) game.tick(dt / 90);   // the game's one speed: 1 real minute ≈ 40 game minutes, so morning to bedtime is about 20 minutes of play (no setting; old saved speeds are ignored)
+  if (playing) game.tick(dt / 45);   // the game's one speed: 1 real minute ≈ 80 game minutes, so morning to bedtime is about 10 minutes of play (no setting; old saved speeds are ignored)
   const apt = s.location === 'apartment', club = s.location === 'club' && !!W.club, DD = W.d[s.location], IR = curRoom();
   const gfn = DD ? (x, y) => districtHeight(x, y, DD.def) : apt || club || IR ? () => 0 : groundAt;
   if (mode === 'play' && fcam.mode === 'follow') {
