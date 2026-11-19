@@ -124,7 +124,7 @@ export class Game {
     const T = (text, target) => ({ text, target });
     switch (q) {
       case 'prologue_walk': return T('The Council wants to see you. Walk to the Council Room.', 'CLUB_COUNCIL');
-      case 'find_way': return T(s.flags.readFirstSign ? 'Follow the road to the city' : 'FIND YOUR WAY', s.flags.readFirstSign ? null : 'WILD_SIGN');
+      case 'find_way': return T(s.flags.readFirstSign ? 'Follow the road to the city' : 'Find your way', s.flags.readFirstSign ? null : 'WILD_SIGN');
       case 'find_help': return T('Go to the Community Center on Main St. They can help you.', 'NPC_Counselor');
       case 'job': return T('Fresh Mart needs a worker. Talk to Rosa, the boss.', 'NPC_Manager_Idle');
       case 'clockin': return T('Start your shift: tap the time clock in the back room', 'Interact_TimeClock');

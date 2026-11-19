@@ -256,7 +256,7 @@ async function creator() {
   const nameEl = $('#cr-name');
   const show = async () => {
     const sp = SPECIES[creatorState.i];
-    $('#cr-species').textContent = sp.name.toUpperCase(); $('#cr-quote').textContent = `“${sp.quote}”`; $('#cr-traits').textContent = sp.traits;
+    $('#cr-species').textContent = sp.name; $('#cr-quote').textContent = `“${sp.quote}”`; $('#cr-traits').textContent = sp.traits;
     $('#cr-loading').hidden = false;
     const g = await loadSpecies(sp.id);
     if (SPECIES[creatorState.i] !== sp) return;
@@ -742,14 +742,14 @@ function miniHud(kind) {
   if (!el) { el = document.createElement('div'); el.id = 'minihud'; document.body.appendChild(el); }
   el.className = 'minihud ' + kind; el.hidden = false;
   el.innerHTML = '<div class="mh-top"><b class="mh-a"></b><b class="mh-b"></b><b class="mh-c"></b></div><div class="mh-count"></div><div class="mh-tip"></div>' +
-    (kind === 'race' ? '<button class="mh-brake">BRAKE</button><button class="mh-gas">GAS</button>' : '') + (kind === 'pet' ? '<button class="mh-cue">Cue!</button>' : '');
+    (kind === 'race' ? '<button class="mh-brake">Brake</button><button class="mh-gas">Gas</button>' : '') + (kind === 'pet' ? '<button class="mh-cue">Cue!</button>' : '');
   const hold = (sel, key) => { const b = el.querySelector(sel); if (!b) return; const on = (e) => { e.preventDefault(); race[key] = 1; }, off = () => { race[key] = 0; }; b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('pointerleave', off); };
   hold('.mh-gas', 'gas'); hold('.mh-brake', 'brake');
   const cue = el.querySelector('.mh-cue'); if (cue) cue.onclick = () => { if (petCourse.cue()) audio.play('good'); };
   return el;
 }
 const HOWTO = {
-  race: ['🏎️ How to drive', [['🟢', 'Hold GAS to go.'], ['🕹️', 'Steer with the stick on the left (or the arrow keys).'], ['🔴', 'Tap BRAKE before sharp turns.'], ['🛣️', 'Don’t worry: your car helps you stay on the road.']]],
+  race: ['🏎️ How to drive', [['🟢', 'Hold Gas to go.'], ['🕹️', 'Steer with the stick on the left (or the arrow keys).'], ['🔴', 'Tap Brake before sharp turns.'], ['🛣️', 'Don’t worry: your car helps you stay on the road.']]],
   pet: ['🐾 How to race your pet', [['🏃', 'Your pet runs by itself.'], ['⭐', 'When the Cue button turns gold, tap it!'], ['🎯', 'A good cue gives your pet a speed boost.']]],
   robot: ['🤖 Watch your robot', [['📋', 'Your robot follows the steps you planned.'], ['⚡', 'Each step uses energy.'], ['👀', 'Just watch! You can change the plan after.']]],
 };
@@ -769,19 +769,19 @@ async function runMini(kind, a, b, c) {
   const start = () => {
     if (kind === 'race') {
       race = race || new Race(scene, textures);
-      const hud = (d) => { q('.mh-a').textContent = `LAP ${d.lap}/${d.laps}`; q('.mh-b').textContent = `POS ${d.pos}/${d.of}`; q('.mh-c').textContent = `${d.kmh} km/h`; q('.mh-count').textContent = d.count; q('.mh-tip').textContent = d.slide ? 'Sliding! Ease off the steering' : d.off ? 'Off the track!' : d.dirt ? 'Dirt section' : ''; };
+      const hud = (d) => { q('.mh-a').textContent = `${tr('Lap')} ${d.lap}/${d.laps}`; q('.mh-b').textContent = `${tr('Place')} ${d.pos}/${d.of}`; q('.mh-c').textContent = `${d.kmh} km/h`; q('.mh-count').textContent = d.count; q('.mh-tip').textContent = d.slide ? 'Sliding! Ease off the steering' : d.off ? 'Off the track!' : d.dirt ? 'Dirt section' : ''; };
       const p = race.start(a, b, input, camera, hud, c && c.laps);
       mini = race; return p;
     }
     if (kind === 'pet') {
       petCourse = petCourse || new PetCourse(scene);
       const tier = c || 0, rivals = [['Dash', 'puppy', 0xc98a4a], ['Mochi', 'kitten', 0x8a8d96], ['Bun', 'bunny', 0xf1ece4]].map(([n, t, col], i) => ({ name: n, type: t, color: col, speed: 6.4 + tier * 0.6 + i * 0.25 }));
-      const hud = (d) => { q('.mh-a').textContent = `${b >= 1 ? 'Happy & healthy' : 'Needs care'}`; q('.mh-b').textContent = `POS ${d.pos}/${d.of}`; q('.mh-c').textContent = ''; q('.mh-count').textContent = d.count; const cb = q('.mh-cue'); cb.textContent = d.cue || 'Cue!'; cb.classList.toggle('ready', !!d.cue); q('.mh-tip').textContent = d.cue ? `Tap “${d.cue}” now!` : ''; };
+      const hud = (d) => { q('.mh-a').textContent = `${b >= 1 ? 'Happy & healthy' : 'Needs care'}`; q('.mh-b').textContent = `${tr('Place')} ${d.pos}/${d.of}`; q('.mh-c').textContent = ''; q('.mh-count').textContent = d.count; const cb = q('.mh-cue'); cb.textContent = d.cue || 'Cue!'; cb.classList.toggle('ready', !!d.cue); q('.mh-tip').textContent = d.cue ? `Tap “${d.cue}” now!` : ''; };
       const p = petCourse.start(a, b, rivals, camera, hud); mini = petCourse; return p;
     }
     if (kind === 'robot') {
       arena = arena || new RobotArena(scene);
-      const hud = (d) => { q('.mh-a').textContent = `STEP ${Math.min(d.step + 1, d.prog.length)}/${d.prog.length}`; q('.mh-b').textContent = `⚡ ${Math.max(0, d.energy).toFixed(1)}/${d.energy0}`; q('.mh-c').textContent = ''; };
+      const hud = (d) => { q('.mh-a').textContent = `${tr('Step')} ${Math.min(d.step + 1, d.prog.length)}/${d.prog.length}`; q('.mh-b').textContent = `⚡ ${Math.max(0, d.energy).toFixed(1)}/${d.energy0}`; q('.mh-c').textContent = ''; };
       mini = { update: () => arena.g ? P2W(-10000 + 4.4, 4.4, 0) : null }; return arena.run(a, b, c, camera, hud);
     }
   };

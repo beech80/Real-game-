@@ -74,6 +74,8 @@ export function speakable(t, es = false) {
       .replace(/\s-\s?(?=\d)/g, ' minus ').replace(/(^|\s)-(?=\d)/g, '$1minus ').replace(/→/g, ', then ').replace(/&/g, ' and ').replace(/\be\.g\./gi, 'for example').replace(/\bi\.e\./gi, 'that is').replace(/\bvs\.?\b/gi, 'versus').replace(/#(\d)/g, 'number $1')
       .replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(ft)\b/g, '$1 feet').replace(/\b1 feet\b/g, '1 foot').replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(lb|lbs)\b/g, '$1 pounds').replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(oz)\b/g, '$1 ounces').replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(mL|ml)\b/g, '$1 milliliters').replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(km)\b/g, '$1 kilometers').replace(/(\d|half|halves|thirds?|fourths?|eighths?|tenths?)\s?(mph)\b/g, '$1 miles per hour');
   }
+  { const SPELL = /^(ATM|DNA|URL|IRA|LCM|GCF|ABC|AI|ID|TV|PM|AM|US|USA|UK|CEO|GPA|SAT|ACT|PE|CPR|HVAC|DIY|PDF|ATV|GPS|RV|APR|FBI|ER|IV|EMT|OK|MS|MM|DD|YYYY|JSON|WW|IQ|SUV|LED|CD|DVD|PTO|IRS|BMI|HTML|CSS|NBA|NFL|II|III|IV|VI|XL|XS)$/;
+    s = s.replace(/\b[A-Z][A-Z’']{2,}\b/g, (w) => (SPELL.test(w) || !/[AEIOUY]/.test(w) ? w : w.toLowerCase())); }   // RUN, STOP, EXIT are words to say, not letters
   s = s.replace(/___+/g, ' blank ').replace(/…/g, '... ').replace(/\s*\n+\s*/g, '. ').replace(/["“”]/g, '').replace(/\s+/g, ' ').trim();
   return s;
 }
