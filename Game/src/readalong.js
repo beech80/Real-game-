@@ -157,6 +157,19 @@ function clip(e) {
 }
 const pack = (n) => { if (!PACKS.has(n)) PACKS.set(n, savedFile(n).then((s) => s || fetch(n)).then((r) => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }).catch((e) => { PACKS.delete(n); throw e; })); return PACKS.get(n); };
 let natAudio = null, natTimers = [];
+// One audio player for Heart, unlocked by the player's first tap. iPhones and iPads only let a page play sound that a tap
+// started; a player unlocked once may play again later (when a screen opens and reads itself). With a fresh player each
+// time, those later reads were blocked and the game fell back to the device's own, robotic voice.
+let HEART = null;
+const SILENT = 'data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQxAADB8AhSmxhIIEVCSiJrDCQBTcu3UrAIwUdkRgQbFAZC1CQEwTJ9mjRvBA4UOLD8nKVOWfh+UlK3z/177OXrfOdKl7pyn3Xf//WreyTRUoAWgBgkOAGbZHBgG1OF6zM82DWbZaUmMBptgQhGjsyYqc9ae9XFz280948NMBWInljyzsNRFLPWdnZGWrddDsjK1unuSrVN9jJsK8KuQtQCtMBjCEtImISdNKJOopIpBFpNSMbIHCSRpRR5iakjTiyzLhchUUBwCgyKiweBv/7UsQbg8isVNoMPMjAAAA0gAAABEVFGmgqK////9bP/6XCykxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq';
+function heartAudio(url) {
+  if (!HEART) HEART = new Audio();
+  const a = HEART; a.onended = null; a.onerror = null; try { a.pause(); } catch (e) {} a.src = url; return a;
+}
+if (typeof window !== 'undefined' && window.addEventListener) {
+  const unlock = () => { if (!HEART) HEART = new Audio(); if (HEART.dataset && HEART.dataset.ok) return; try { HEART.src = SILENT; HEART.volume = 0; const p = HEART.play(); if (p && p.then) p.then(() => { HEART.pause(); HEART.volume = 1; if (HEART.dataset) HEART.dataset.ok = '1'; }).catch(() => {}); } catch (e) {} };
+  for (const ev of ['pointerdown', 'touchend', 'keydown']) window.addEventListener(ev, unlock, { capture: true, passive: true });
+}
 const duck = (on) => { try { window.__duck && window.__duck(on); } catch (e) {} };
 function stopNatural() { duck(false); natTimers.forEach(clearTimeout); natTimers = []; if (natAudio) { try { natAudio.pause(); } catch (e) {} natAudio = null; } for (const s of natSources) { try { s.stop(); } catch (e) {} } natSources = []; }
 // ---- Heart, word by word: for English lines with no whole-sentence recording (random numbers, a player's writing)
@@ -229,7 +242,7 @@ function playWords(spoken, { onWord, onEnd, rate, es = false }) {
       if (fin) return; if (i >= items.length) return done();
       const { at, pause } = items[i]; const bytes = await clip(items[i].clip); if (fin) return;
       const url = URL.createObjectURL(new Blob([bytes], { type: mimeOf(items[i].clip) }));
-      const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol(); duck(true);
+      const a = heartAudio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol(); duck(true);
       const next = () => { URL.revokeObjectURL(url); natTimers.push(setTimeout(() => step(i + 1), pause / speed)); };
       a.onended = next; a.onerror = next;
       if (onWord && (i === 0 || items[i - 1].at !== at)) onWord(at);
@@ -255,7 +268,7 @@ function playNatural(spoken, { onWord, onEnd, rate, fallback, es = false }) {
     if (fin) return;
     if (i + 1 < clips.length) clip(clips[i + 1]).catch(() => {});   // fetch the next sentence while this one plays
     const url = URL.createObjectURL(new Blob([bytes], { type: mimeOf(clips[i]) }));
-    const a = new Audio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol(); duck(true);
+    const a = heartAudio(url); natAudio = a; a.playbackRate = speed; a.preservesPitch = true; a.volume = voiceVol(); duck(true);
     a.onended = () => { URL.revokeObjectURL(url); playAt(i + 1); }; a.onerror = () => { URL.revokeObjectURL(url); playAt(i + 1); };
     if (onWord) {   // light each word as Heart says it: from the measured word times when we have them, else spread over the clip by length
       const words = [...sents[i].matchAll(/\S+/g)], total = sents[i].length || 1, dur = (ms || 1500) / 1000;

@@ -91,6 +91,7 @@ export const UI = {
   /** Dialogue with optional choices. Resolves with the choice index (or undefined). */
   say(speaker, text, choices, opts = {}) {
     speaker = tr(speaker); text = tr(text); if (choices) choices = choices.map((c) => tr(c)); prefetch(text);
+    if (!choices && speaker && !/^Heart$/i.test(speaker) && !/^[♛📖]/.test(speaker)) this.lastSay = { speaker, text, t: Date.now() };   // a question that follows can show what this person just said
     return new Promise((res) => {
       const D = this.els.dialog;
       D.hidden = false;

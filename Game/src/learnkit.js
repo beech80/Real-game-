@@ -224,7 +224,10 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
     const hint2 = h('p', { class: 'tip', hidden: true }), wwBox = h('p', { class: 'tip readable wwbox', hidden: true });
     const coach = coachName(G);
     const explainWrong = (text) => { wwBox.hidden = false; wwBox.replaceChildren(h('b', { class: 'ww-who' }, coach ? `🗨️ ${coach}: ` : '💡 '), h('span', { class: 'ww-say' }, text)); if (heartOn(G)) heartAnswer(G, false, { reason: text }); else if (settings.readAloud) speak(text); };
-    const head = [h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj] ? SUBJECTS[sk.subj].icon + ' ' + SUBJECTS[sk.subj].name : ''} · ${sk.name || ''}`),
+    // the person who asked: what they just said stays on screen above their question (so the question makes sense without remembering the conversation)
+    const said = UI.lastSay && Date.now() - UI.lastSay.t < 90000 && !['school', 'check', 'assignment', 'practice', 'library'].includes(ctx) ? UI.lastSay : null;
+    const saidBox = said ? h('div', { class: 'npc-said' }, h('b', {}, '💬 ' + said.speaker), h('p', { class: 'readable' }, said.text)) : null;
+    const head = [saidBox, h('div', { class: 'lc-subj' }, `${SUBJECTS[sk.subj] ? SUBJECTS[sk.subj].icon + ' ' + SUBJECTS[sk.subj].name : ''} · ${sk.name || ''}`),
       visual(Q.v), Q.cursive ? h('div', { class: 'cursive-note' }, ...Q.cursive.map((l) => h('div', {}, l))) : null,
       h('div', { class: 'qrow' }, h('p', { class: 'lead', 'data-en': '1' }, ...wordful(G, Q.q, sk.band || 1, hp.card)), h('button', { class: 'ghost sm say', 'aria-label': 'Read aloud', onclick: () => speak(Q.decode ? Q.q.replace(/[:“].*$/, '') + (Q.say ? '. ' + Q.say : '') : (Q.say ? Q.say + '. ' : '') + Q.q + (Q.o ? '. ' + Q.o.join('. ') : '')) }, '🔊'))];
     let body, speakRow = null;

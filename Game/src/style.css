@@ -852,3 +852,8 @@ body:has(#modal .modal) .toasts { top: max(12px, env(safe-area-inset-top, 0px)) 
 /* no shouting: buttons, titles and labels in normal sentence case, with normal letter spacing (easier to read, and
    nothing looks like separate letters “R U N”) */
 .primary, .ghost, .danger, .sh-title, .d-next, .tier-h, .lc-subj, .chipst, .cr-label, .load-label, .hud-when, .mv-title, .interact-btn, .skip, .d-name, .sprint-btn, .minihud, .minihud *, .cr-eyebrow, .cr-species, .go-btn, .mic, .phone-btn, .app, .eyebrow { letter-spacing: .01em !important; text-transform: none !important; }
+
+/* what the person just said, above their question */
+.npc-said { background: rgba(255, 255, 255, .06); border-left: 3px solid var(--gold-2); border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; }
+.npc-said b { display: block; font-size: .85rem; color: var(--gold-2); margin-bottom: 2px; }
+.npc-said p { margin: 0; font-size: .98rem; line-height: 1.4; }
