@@ -3,8 +3,12 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.9.5';
+export const VERSION = '1.9.6';
 export const NOTES = [
+  ['1.9.6', [
+    ['💗', 'Heart on iPhone', 'On iPhones and iPads, Heart now uses her clear recordings, not the phone’s robot voice.'],
+    ['💬', 'Who asked?', 'When someone asks you a question, what they just said stays above it.'],
+  ]],
   ['1.9.5', [
     ['🔤', 'No more capital letters', 'Buttons and titles use normal letters now, and Heart says words like “stop” and “run” as words.'],
   ]],
