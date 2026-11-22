@@ -165,7 +165,7 @@ export function runActivity(G, gen, ctx = 'world', title = 'Task', icon = '🧩'
   try {
     Q = typeof gen === 'function' ? gen() : gen;
     // NPC side quests ask at the player's own level: a question from a skill above it is swapped for an easier one in the same subject
-    if (GENTLE && Q && Q.skill && GEN[Q.skill]) { const easier = skillAtLevel(G, Q.skill); if (easier !== Q.skill) { const gs = GEN[easier]; gen = () => gs[Math.floor(Math.random() * gs.length)](); Q = gen(); } }
+    if (GENTLE && gen && gen.fromBank && Q && Q.skill && GEN[Q.skill]) { const easier = skillAtLevel(G, Q.skill); if (easier !== Q.skill) { const gs = GEN[easier]; gen = () => gs[Math.floor(Math.random() * gs.length)](); Q = gen(); } }
     // practise the idea, not one memorised answer: avoid the last few questions this skill asked
     if (typeof gen === 'function' && Q && Q.skill) {
       const key = (q) => JSON.stringify([q.q, q.a, q.word, q.items]);

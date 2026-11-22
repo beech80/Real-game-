@@ -13,7 +13,7 @@ import { BUSINESSES } from './expansion.js';
 import { askNPC } from './voice.js';
 
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
-const gen = (id) => (GEN[id] ? () => pick(GEN[id])() : T[id]);   // a fresh question each call, so the easiest one that fits the player can be chosen
+const gen = (id) => (GEN[id] ? Object.assign(() => pick(GEN[id])(), { fromBank: true }) : T[id]);   // a fresh question each call, so the easiest one that fits the player can be chosen
 const act = (G, id, ctx, title, icon) => runActivity(G, typeof id === 'string' ? gen(id) : id, ctx, title, icon, { gentle: true });   // side quests are for fun: the easier version, fewer choices, the answer shown sooner
 
 // ------------------------------------------------------------------------------------------------ registry
@@ -185,7 +185,7 @@ const EPISODES = {
       await UI.say(who, 'Every part is a trade-off. Power is fun, but grip keeps you on the road. Test, then improve.');
       await act(G, 'sci.method#0', 'race', 'Think like an engineer', '🧪');
       const r = await G.garage(500); if (!r) return;
-      await act(G, { type: 'number', skill: 'fin.budget', q: `You had $500 of credit and spent ${money(r.cost)}. How much is left?`, a: 500 - r.cost, prefix: '$', why: `500 − ${r.cost} = ${500 - r.cost}.` }, 'race', 'Budget check', '🧮');
+      await act(G, { type: 'number', skill: 'fin.budget', q: `You had $500 to spend on car parts. You spent ${money(r.cost)}. How much is left?`, a: 500 - r.cost, prefix: '$', why: `500 − ${r.cost} = ${500 - r.cost}.` }, 'race', 'Budget check', '🧮');
       await UI.say(who, 'Now a practice lap. No pressure, just feel how it handles.');
       const res = await G.hooks.race('loop', G.state.builds.car, { laps: 1 });
       await G.raceDebrief(res, who);
@@ -629,7 +629,8 @@ export function installAdventureHelpers(Game) {
     await act(this, 'sci.design#0', 'inventor', 'The design cycle', '🔁');
     for (let tries = 0; tries < 4; tries++) {
       const chosen = {};
-      for (const [slot, opts] of Object.entries(I.parts)) chosen[slot] = await UI.sheet(`Choose: ${slot}`, (close) => h('div', { class: 'opts' }, opts.map(([n, ok]) => h('button', { class: 'opt', onclick: () => close([n, ok]) }, n))), { icon: '💡', noClose: true });
+      const ASK = { sensor: ['How will it notice?', 'A sensor is like the invention’s eyes or ears. It notices something.'], power: ['What gives it energy?', 'Power makes the invention work, like a battery in a toy.'], action: ['What should it do?', 'The action is what the invention does when it notices.'] };
+      for (const [slot, opts] of Object.entries(I.parts)) chosen[slot] = await UI.sheet(ASK[slot] ? ASK[slot][0] : `Choose: ${slot}`, (close) => h('div', { class: 'act' }, h('div', { class: 'npc-said' }, h('b', {}, '💡 ' + I.name), h('p', { class: 'readable' }, `${I.need}. ${ASK[slot] ? ASK[slot][1] : ''}`)), h('div', { class: 'opts' }, opts.map(([n, ok]) => h('button', { class: 'opt', onclick: () => close([n, ok]) }, n)))), { icon: '💡', noClose: true });
       const fails = Object.entries(chosen).filter(([, v]) => !v[1]);
       this.edu.record('sci.design', !fails.length, { ctx: 'inventor' });
       if (!fails.length) { this.state.inventions = (this.state.inventions || []).concat(I.name); this.achieve('inventor'); await this.advFinishEpisode('inventor', A, who, { reward: 60, msg: `Test passed! ${I.why.join(', ')}. You invented a ${I.name}!` }); return; }
