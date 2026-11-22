@@ -3,8 +3,12 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.9.7';
+export const VERSION = '1.9.8';
 export const NOTES = [
+  ['1.9.8', [
+    ['📖', 'Story scenes', 'Each chapter opens like a TV episode, with a title and the people in it talking, and ends with a scene. After a break, Heart reminds you where you are in the story.'],
+    ['🧭', 'Clearer next step', 'Daily jobs like opening your business or feeding your pet now come before the next story goal.'],
+  ]],
   ['1.9.7', [
     ['🔧', 'Clearer side quests', 'Questions from people in the city stay on their story and use plain words, with a short note on what things mean.'],
   ]],

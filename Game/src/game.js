@@ -160,12 +160,12 @@ export class Game {
         if (unpaid) return T(`Pay your bill: ${unpaid.name} (${money(unpaid.amount)}) — Bills app`, null);
         if (s.flags.baristaTip && !(s.jobs || []).includes('barista')) return T('Ask Dee about the coffee job at Daily Grind', 'Door_CoffeeShop');
         if (s.event && s.location === 'district' && this.constructor.EVENTS && this.constructor.EVENTS[s.event.id]) { const E = this.constructor.EVENTS[s.event.id]; return T(`${E.icon} ${E.title} (optional)`, s.location === 'district' ? s.event.at : null); }
+        if (s.biz && s.biz.last !== s.day && !s.biz.staff.length && s.time < 18) return T(`Open your ${s.biz.name} for the day (Brighter Park)`, s.location === 'district' ? 'CART' : null);
+        if (s.pet && s.pet.fed !== s.day && s.time > 17) return T(`Go home and feed ${s.pet.name}`, null);
         { const sg = storyGoal(this); if (sg) return T(sg.text, sg.target && (sg.target === 'Door_ApartmentLobby' || sg.target === 'Interact_TimeClock' || s.location === 'district') ? sg.target : null); }
         const ll = this.life();
         const next = [['midtown', 3, 'Midtown'], ['opportunity', 5, 'the Opportunity District'], ['heights', 8, 'The Heights']].find(([k, lv]) => ll.level >= lv && !(s.visited || {})[k]);
         if (next) return T(`New district open: take the bus to ${next[2]}`, s.location === 'district' ? 'Interact_BusStop' : 'D:bus');
-        if (s.biz && s.biz.last !== s.day && !s.biz.staff.length && s.time < 18) return T(`Open your ${s.biz.name} for the day (Brighter Park)`, s.location === 'district' ? 'CART' : null);
-        if (s.pet && s.pet.fed !== s.day && s.time > 17) return T(`Go home and feed ${s.pet.name}`, null);
         // free time: suggest one concrete step in the area that is furthest behind, so there's always a clear next thing to do
         const home = s.location === 'district';
         const tips = {

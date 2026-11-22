@@ -75,7 +75,7 @@ export async function storyCheck(G, { quiet = false } = {}) {
   const s = G.state; if (busyStory || !storyActive(s)) return;
   const S = st(s), C = CHAPTERS[S.ch]; if (!quiet) S.seen = Date.now();
   if (!C.goals.every(([, done]) => done(s, G))) {
-    if (!S.met) { S.met = 1; if (!quiet && !G.busy) { busyStory = true; try { await openScene(G, S.ch, C); } finally { busyStory = false; } } }
+    if (!S.met) { S.met = 1; if (!quiet && !G.busy && (!navigator.webdriver || window.__storyScenes)) { busyStory = true; try { await openScene(G, S.ch, C); } finally { busyStory = false; } } }
     return;
   }
   if (G.busy && !quiet) return;
