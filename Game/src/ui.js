@@ -121,6 +121,8 @@ export const UI = {
   /** Modal sheet. build(close) returns content element. Resolves with close(value). */
   sheet(title, build, opts = {}) {
     title = tr(title);
+    // signs are written in capitals; a sheet title reads in normal case (MIDTOWN EXPRESS → Midtown Express)
+    if (typeof title === 'string' && /[A-Z]{3}/.test(title) && !/[a-z]/.test(title)) title = title.toLowerCase().replace(/(^|[\s\-'’(])(\p{L})/gu, (m, a, b) => a + b.toUpperCase());
     // each sheet is its own stacked layer, so a "New skill" card can open on top of an activity without destroying it
     return new Promise((res) => {
       const host = this.els.modal;

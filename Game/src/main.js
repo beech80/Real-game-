@@ -1161,7 +1161,7 @@ function loop(now) {
     nearest = busy() ? null : findInteraction();
     UI.interact(nearest ? nearest.label : null);
     if (DD) minimap.drawPlan(DD, player.pos, player.heading, target, DD.peds.map((p) => p.pos));
-    else minimap.draw(player.pos, player.heading, target, IR ? 'INSIDE' : apt ? 'HOME' : club ? 'THE CLUB' : null, peds.map((p) => p.pos), wild);
+    else minimap.draw(player.pos, player.heading, target, IR ? 'Inside' : apt ? 'Home' : club ? 'The Club' : null, peds.map((p) => p.pos), wild);
     saveT += dt;
     if (saveT > 20 && !busy() && !club && !IR) { saveT = 0; s.pos = { ...player.pos }; s.heading = player.heading; game.save(); }
   }

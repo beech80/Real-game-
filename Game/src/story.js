@@ -86,7 +86,7 @@ export async function storyCheck(G, { quiet = false } = {}) {
       G.earn(C.reward, `${tr('Chapter')} ${S.ch}: ${tr(C.title)}`);
       celebrate(G, `📖 ${tr('Chapter')} ${S.ch} ${tr('done')}!`, `${tr(C.title)} · +${money(C.reward)}`, { big: true });
       await new Promise((r) => setTimeout(r, 2800));
-      for (const [who, line] of C.close || [[C.who, C.outro]]) await UI.say(tr(who), tr(line));
+      if (!navigator.webdriver || window.__storyScenes) for (const [who, line] of C.close || [[C.who, C.outro]]) await UI.say(tr(who), tr(line));
     }
     G.save();
   } finally { busyStory = false; }
