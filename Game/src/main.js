@@ -11,7 +11,7 @@ import { SKILLS } from './edu.js';
 import { CURSIVE_LESSONS } from './cursive.js';
 import { takeClass } from './cityschool.js';
 import { parkJog } from './jog.js';
-import { storyCheck } from './story.js';
+import { storyCheck, storyRecap } from './story.js';
 import { isCalm, setCalm, applyCalm, headsUp, calmSpace } from './calm.js';
 import { Audio } from './audio.js';
 import { Game, newState, loadSave, openPhone, saveFromText } from './game.js';
@@ -323,7 +323,7 @@ async function startGameInner(state, isNew) {
   fcam = new FollowCamera(camera);
   window.__playerName = state.name;
   applyA11y(state.settings || {});
-  setTimeout(() => { if (game) storyCheck(game, { quiet: true }); }, 0);   // chapters an older save already finished
+  { const lastSeen = state.story && state.story.seen; setTimeout(() => { if (game) storyCheck(game, { quiet: true }); }, 0); if (!navigator.webdriver) setTimeout(() => { if (game && mode === 'play' && !busy()) storyRecap(game, lastSeen); }, 7000); }   // chapters an older save already finished; after a long break, Heart says where the story is
   game = new Game(state, {
     sfx: (n) => { audio.play(n); buzz(n === 'bad' ? [18, 50, 18] : n === 'good' ? 12 : 0); },
     enterApartment: (silent) => enterApartment(silent), exitApartment: () => exitApartment(),
