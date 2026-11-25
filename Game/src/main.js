@@ -742,15 +742,15 @@ function miniHud(kind) {
   if (!el) { el = document.createElement('div'); el.id = 'minihud'; document.body.appendChild(el); }
   el.className = 'minihud ' + kind; el.hidden = false;
   el.innerHTML = '<div class="mh-top"><b class="mh-a"></b><b class="mh-b"></b><b class="mh-c"></b></div><div class="mh-count"></div><div class="mh-tip"></div>' +
-    (kind === 'race' ? '<button class="mh-brake">Brake</button><button class="mh-gas">Gas</button>' : '') + (kind === 'pet' ? '<button class="mh-cue">Cue!</button>' : '');
+    (kind === 'race' ? `<div class="mh-steer" aria-hidden="true"><span>◀</span><small>${tr('Steer')}</small><span>▶</span></div>` + '<button class="mh-brake">Brake</button><button class="mh-gas">Gas</button>' : '') + (kind === 'pet' ? '<button class="mh-cue">Cue!</button>' : '');
   const hold = (sel, key) => { const b = el.querySelector(sel); if (!b) return; const on = (e) => { e.preventDefault(); race[key] = 1; }, off = () => { race[key] = 0; }; b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('pointerleave', off); };
   hold('.mh-gas', 'gas'); hold('.mh-brake', 'brake');
   const cue = el.querySelector('.mh-cue'); if (cue) cue.onclick = () => { if (petCourse.cue()) audio.play('good'); };
   return el;
 }
 const HOWTO = {
-  race: ['🏎️ How to drive', [['🟢', 'Hold Gas to go.'], ['🕹️', 'Steer with the stick on the left (or the arrow keys).'], ['🔴', 'Tap Brake before sharp turns.'], ['🛣️', 'Don’t worry: your car helps you stay on the road.']]],
-  pet: ['🐾 How to race your pet', [['🏃', 'Your pet runs by itself.'], ['⭐', 'When the Cue button turns gold, tap it!'], ['🎯', 'A good cue gives your pet a speed boost.']]],
+  race: ['🏎️ How to drive', [['🟢', 'Hold Gas to go (or the up arrow, Space, or a controller trigger).'], ['🕹️', 'Steer with the stick on the left (or the arrow keys).'], ['🔴', 'Tap Brake before sharp turns.'], ['🛣️', 'Don’t worry: your car helps you stay on the road.']]],
+  pet: ['🐾 How to race your pet', [['🏃', 'Your pet runs by itself.'], ['⭐', 'When the Cue button turns gold, tap it! (or press Space)'], ['🎯', 'A good cue gives your pet a speed boost.']]],
   robot: ['🤖 Watch your robot', [['📋', 'Your robot follows the steps you planned.'], ['⚡', 'Each step uses energy.'], ['👀', 'Just watch! You can change the plan after.']]],
 };
 function howTo(kind) {
@@ -932,6 +932,7 @@ function faceNPC(n) {
 const buzz = (p) => { try { if (p && navigator.vibrate && !((game && game.state.settings) || {}).calm && !isCalm()) navigator.vibrate(p); } catch (e) {} };   // a tiny tap you can feel (phones that support it)
 async function doInteract() {
   buzz(8);
+  if (mode === 'mini' && petCourse && document.querySelector('#minihud.pet:not([hidden])')) { if (petCourse.cue()) audio.play('good'); return; }   // Space / E / controller A cue your pet too
   if (mode !== 'play' || busy() || !nearest) return;
   audio.play('click');
   if (nearest.npc) faceNPC(nearest.npc);

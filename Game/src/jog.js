@@ -20,7 +20,9 @@ export function parkJog(G) {
     const hud = h('div', { class: 'jog-hud' }, h('b', { id: 'jog-score' }, '0'), h('span', { id: 'jog-time' }, `${RUN_S}s`));
     const startBtn = h('button', { class: 'primary', id: 'jog-start' }, '▶ ' + tr('Start running'));
     const intro = h('p', { class: 'lead' }, 'Grab 💧 🍎 🍌 and ⭐. Step around 🚧 and 💦. Swipe or tap left and right.');
-    const wrap = h('div', { class: 'act jog' }, intro, hud, cv, h('div', { class: 'row' }, h('small', { class: 'jog-best' }, best ? `${tr('Best')}: ${best}` : ''), startBtn));
+    const lr = (d, lbl, id) => h('button', { class: 'ghost jog-lr', id, 'aria-label': tr(lbl), onpointerdown: (e) => { e.preventDefault(); move(d); } }, d < 0 ? '◀' : '▶');
+    const pads = h('div', { class: 'jog-pads' }, lr(-1, 'Move left', 'jog-left'), lr(1, 'Move right', 'jog-right'));
+    const wrap = h('div', { class: 'act jog' }, intro, hud, cv, pads, h('div', { class: 'row' }, h('small', { class: 'jog-best' }, best ? `${tr('Best')}: ${best}` : ''), startBtn));
     const g = cv.getContext('2d'), W = 360, H = 520, laneX = (l) => W * (l + 0.5) / LANES;
     const S = { lane: 1, x: laneX(1), items: [], t: 0, score: 0, stars: 0, bumps: 0, slow: 0, combo: 0, spawn: 0.6, running: false, over: false, pop: [] };
     const calm = isCalm();
@@ -61,8 +63,8 @@ export function parkJog(G) {
         for (const it of S.items) it.y += v * dt;
         for (const it of S.items) if (!it.hit && it.lane === S.lane && Math.abs(it.y - (H - 70)) < 30) {
           it.hit = true;
-          if (it.k.good) { S.combo++; const pts = it.k.pts * (S.combo >= 5 ? 2 : 1); S.score += pts; if (it.k.e === '⭐') S.stars++; S.pop.push({ s: '+' + pts, x: laneX(it.lane), y: H - 110, t: 0, c: '#1b5e2a' }); G.sfx('coin'); }
-          else { S.combo = 0; S.bumps++; S.slow = it.k.puddle ? 0.8 : 1.1; S.pop.push({ s: tr(it.k.puddle ? 'Splash!' : 'Oops!'), x: laneX(it.lane), y: H - 110, t: 0, c: '#7a3b1b' }); G.sfx('click'); }
+          if (it.k.good) { S.combo++; const pts = it.k.pts * (S.combo >= 5 ? 2 : 1); S.score += pts; if (it.k.e === '⭐') S.stars++; S.pop.push({ s: '+' + pts, x: laneX(it.lane), y: H - 110 - S.pop.length * 26, t: 0, c: '#1b5e2a' }); G.sfx('coin'); }
+          else { S.combo = 0; S.bumps++; S.slow = it.k.puddle ? 0.8 : 1.1; S.pop.push({ s: tr(it.k.puddle ? 'Splash!' : 'Oops!'), x: laneX(it.lane), y: H - 110 - S.pop.length * 26, t: 0, c: '#7a3b1b' }); G.sfx('click'); }
         }
         S.items = S.items.filter((i) => !i.hit && i.y < H + 40);
         for (const p of S.pop) p.t += dt; S.pop = S.pop.filter((p) => p.t < 0.7);

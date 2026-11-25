@@ -110,6 +110,12 @@ export class Race {
     // ---- player car
     const c = this.player, st = c.stats, mv = this.input.read();
     let steer = THREE.MathUtils.clamp(mv.x, -1, 1), gas = Math.max(this.gas, mv.y > 0.2 ? mv.y : 0), brk = Math.max(this.brake, mv.y < -0.3 ? -mv.y : 0);
+    { // game controller: right trigger or A is gas, left trigger or B is brake (like most racing games); Space is gas on a keyboard too
+      let g = null; try { for (const x of navigator.getGamepads ? navigator.getGamepads() : []) if (x && x.connected) { g = x; break; } } catch (e) {}
+      const val = (i) => (g && g.buttons[i] ? (g.buttons[i].value || (g.buttons[i].pressed ? 1 : 0)) : 0);
+      if (g) { gas = Math.max(gas, val(7), val(0)); brk = Math.max(brk, val(6), val(1)); }
+      if (this.input.keys && this.input.keys.has('Space')) gas = 1;
+    }
     { // driving help: unless the player steers firmly, the car leans gently toward the road ahead (no one gets lost off the track)
       const tgt = S.s[(c.idx + 10) % S.N]; let dh = Math.atan2(tgt.x - c.x, tgt.y - c.y) - c.h; dh = Math.atan2(Math.sin(dh), Math.cos(dh));
       const help = THREE.MathUtils.clamp(dh * 1.6, -0.8, 0.8);

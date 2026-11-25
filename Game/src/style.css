@@ -868,3 +868,11 @@ body:has(#modal .modal) .toasts { top: max(12px, env(safe-area-inset-top, 0px)) 
   .hud-left { flex-direction: row; align-items: flex-start; max-width: calc(100vw - 2 * max(10px, env(safe-area-inset-left)) - 140px); }
   .hud-left .objective { flex: 1 1 auto; min-width: 0; }
 }
+/* mini-game controls: show where to steer, and give the jog big left/right buttons */
+.minihud .mh-steer { position: absolute; left: max(22px, env(safe-area-inset-left)); bottom: max(34px, env(safe-area-inset-bottom)); width: 150px; height: 84px; border-radius: 42px; border: 2px dashed rgba(255,255,255,.45); background: rgba(14,19,34,.35); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; font-size: 26px; pointer-events: none; }
+.minihud .mh-steer small { font-size: 17px; opacity: .9; }
+.jog-pads { display: flex; gap: 12px; margin-top: 8px; }
+.jog-pads .jog-lr { flex: 1; min-height: 64px; font-size: 30px; touch-action: none; }
+.jog .jog-cv { touch-action: none; }
+.jog .jog-cv { width: auto; max-width: 100%; height: min(520px, calc(100dvh - 270px)); min-height: 260px; }
+@media (orientation: portrait) and (max-width: 520px) { .minihud .mh-brake { right: 28px; bottom: calc(max(24px, env(safe-area-inset-bottom)) + 118px); } }

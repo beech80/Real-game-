@@ -3,8 +3,11 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.9.9';
+export const VERSION = '1.10.0';
 export const NOTES = [
+  ['1.10.0', [
+    ['🏎️', 'Better game controls', 'The race shows where to steer, Brake sits above Gas on phones, and controller triggers work as gas and brake. Park Jog has big left and right buttons. Space cues your pet in the pet race.'],
+  ]],
   ['1.9.9', [
     ['🎮', 'Tidier controls', 'Your goal reads on full lines with the Go button under it, and when the phone is sideways the goal sits at the top so it never covers your REAL.'],
   ]],
