@@ -3,8 +3,11 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.9.8';
+export const VERSION = '1.9.9';
 export const NOTES = [
+  ['1.9.9', [
+    ['🎮', 'Tidier controls', 'Your goal reads on full lines with the Go button under it, and when the phone is sideways the goal sits at the top so it never covers your REAL.'],
+  ]],
   ['1.9.8', [
     ['📖', 'Story scenes', 'Each chapter opens like a TV episode, with a title and the people in it talking, and ends with a scene. After a break, Heart reminds you where you are in the story.'],
     ['🧭', 'Clearer next step', 'Daily jobs like opening your business or feeding your pet now come before the next story goal.'],

@@ -857,3 +857,14 @@ body:has(#modal .modal) .toasts { top: max(12px, env(safe-area-inset-top, 0px)) 
 .npc-said { background: rgba(255, 255, 255, .06); border-left: 3px solid var(--gold-2); border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; }
 .npc-said b { display: block; font-size: .85rem; color: var(--gold-2); margin-bottom: 2px; }
 .npc-said p { margin: 0; font-size: .98rem; line-height: 1.4; }
+
+/* controls layout pass: the goal card never squeezes its words or covers your REAL */
+@media (max-width: 720px) and (orientation: portrait) {
+  .hud-left .objective { flex-wrap: wrap; width: calc(100vw - 2 * max(10px, env(safe-area-inset-left)) - 70px); row-gap: 4px; }
+  .hud-left .objective #obj-text { flex: 1 1 calc(100% - 44px); }
+  .hud-left .objective #obj-dist { margin-left: auto; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .hud-left { flex-direction: row; align-items: flex-start; max-width: calc(100vw - 2 * max(10px, env(safe-area-inset-left)) - 140px); }
+  .hud-left .objective { flex: 1 1 auto; min-width: 0; }
+}
