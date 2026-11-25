@@ -742,7 +742,7 @@ function miniHud(kind) {
   if (!el) { el = document.createElement('div'); el.id = 'minihud'; document.body.appendChild(el); }
   el.className = 'minihud ' + kind; el.hidden = false;
   el.innerHTML = '<div class="mh-top"><b class="mh-a"></b><b class="mh-b"></b><b class="mh-c"></b></div><div class="mh-count"></div><div class="mh-tip"></div>' +
-    (kind === 'race' ? `<div class="mh-steer" aria-hidden="true"><span>◀</span><small>${tr('Steer')}</small><span>▶</span></div>` + '<button class="mh-brake">Brake</button><button class="mh-gas">Gas</button>' : '') + (kind === 'pet' ? '<button class="mh-cue">Cue!</button>' : '');
+    (kind === 'race' ? `<div class="mh-steer" aria-hidden="true"><span>◀</span><small>${tr('Steer')}</small><span>▶</span></div>` + '<button class="mh-brake">Brake</button><button class="mh-gas">Gas</button>' : '') + (kind === 'pet' ? `<button class="mh-cue">${tr('Boost!')}</button>` : '');
   const hold = (sel, key) => { const b = el.querySelector(sel); if (!b) return; const on = (e) => { e.preventDefault(); race[key] = 1; }, off = () => { race[key] = 0; }; b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('pointerleave', off); };
   hold('.mh-gas', 'gas'); hold('.mh-brake', 'brake');
   const cue = el.querySelector('.mh-cue'); if (cue) cue.onclick = () => { if (petCourse.cue()) audio.play('good'); };
@@ -750,7 +750,7 @@ function miniHud(kind) {
 }
 const HOWTO = {
   race: ['🏎️ How to drive', [['🟢', 'Hold Gas to go (or the up arrow, Space, or a controller trigger).'], ['🕹️', 'Steer with the stick on the left (or the arrow keys).'], ['🔴', 'Tap Brake before sharp turns.'], ['🛣️', 'Don’t worry: your car helps you stay on the road.']]],
-  pet: ['🐾 How to race your pet', [['🏃', 'Your pet runs by itself.'], ['⭐', 'When the Cue button turns gold, tap it! (or press Space)'], ['🎯', 'A good cue gives your pet a speed boost.']]],
+  pet: ['🐾 How to race your pet', [['🏃', 'Your pet runs by itself.'], ['⭐', 'When the Boost button turns gold, tap it! (or press Space)'], ['🎯', 'A Boost at the right time makes your pet run faster.']]],
   robot: ['🤖 Watch your robot', [['📋', 'Your robot follows the steps you planned.'], ['⚡', 'Each step uses energy.'], ['👀', 'Just watch! You can change the plan after.']]],
 };
 function howTo(kind) {

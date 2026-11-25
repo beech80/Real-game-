@@ -356,5 +356,9 @@
   "Move left": "Mover a la izquierda",
   "Move right": "Mover a la derecha",
   "Better game controls": "Mejores controles en los juegos",
-  "The race shows where to steer, Brake sits above Gas on phones, and controller triggers work as gas and brake. Park Jog has big left and right buttons. Space cues your pet in the pet race.": "La carrera muestra dónde girar, Frenar está encima de Acelerar en el teléfono, y los gatillos del control sirven para acelerar y frenar. La carrera en el parque tiene botones grandes de izquierda y derecha. Espacio le da la señal a tu mascota en su carrera."
+  "The race shows where to steer, Brake sits above Gas on phones, and controller triggers work as gas and brake. Park Jog has big left and right buttons. Space gives your pet a Boost in the pet race.": "La carrera muestra dónde girar, Frenar está encima de Acelerar en el teléfono, y los gatillos del control sirven para acelerar y frenar. La carrera en el parque tiene botones grandes de izquierda y derecha. Espacio le da un Impulso a tu mascota en su carrera.",
+  "Boost!": "¡Impulso!",
+  "When the Boost button turns gold, tap it! (or press Space)": "¡Cuando el botón Impulso se ponga dorado, tócalo! (o pulsa Espacio)",
+  "A Boost at the right time makes your pet run faster.": "Un Impulso a tiempo hace que tu mascota corra más rápido.",
+  "In the pet race, the button is now called Boost! Tap it when it turns gold to make your pet run faster.": "En la carrera de mascotas, el botón ahora se llama ¡Impulso! Tócalo cuando se ponga dorado para que tu mascota corra más rápido."
 }
