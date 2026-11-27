@@ -45,7 +45,15 @@ export const CHAPTERS = [
       ['Pass 14 classes at City School', (s) => ((s.classes && s.classes.n) || 0) >= 14, null],
       ['Take the bus to The Heights', (s) => !!(s.visited && s.visited.heights), 'Interact_BusStop'],
     ], reward: 100, outro: 'From the old road to The Heights. Someone is watching how far you have come…' },
+  // the last chapter: The Club calls, and you decide. It ends with the REAL decision, the epilogue and the credits.
+  { title: 'The Invitation', final: true, open: [['Heart', 'Do you remember why we started? The Club closed its gates and sent you out with nothing.'], ['Heart', 'Now they are watching. Keep growing, and they will call.'], ['Jax', 'They will call you. They never call me. …Just saying.']], who: 'Heart', intro: 'The Club is watching. Keep growing, answer their call, and make your REAL decision.',
+    goals: [
+      ['Reach Life Level 10', (s, G) => G.life().level >= 10 || !!s.flags.invited, null],
+      ['Answer The Club’s call: take the bus to The Club', (s) => !!s.ending, 'Interact_BusStop'],
+    ], reward: 0, outro: '' },
 ];
+/** the whole story, start to end, for the Story app (the prologue and the road come before the city chapters) */
+export const PROLOGUE = [['Prologue', 'The Club', 'You grew up behind the gates. Then the Council sent you out to make a life on your own.'], ['The road', 'Nowhere', 'No house, no car, no job. You walked to the city with nothing but yourself.'], ['Arrival', 'A new city', 'You found help, a place to live, and your first job.']];
 const st = (s) => (s.story = s.story || { ch: 0 });
 export const storyActive = (s) => s.chapter === 'city' && s.flags && s.flags.hired && s.quest === 'free' && st(s).ch < CHAPTERS.length;
 /** the next goal in the story, or null */
@@ -82,6 +90,7 @@ export async function storyCheck(G, { quiet = false } = {}) {
   busyStory = true;
   try {
     S.ch++; S.met = 0;
+    if (C.final) { G.save(); return; }   // the ending already played: the REAL decision, the epilogue and the credits
     if (!quiet) {
       G.earn(C.reward, `${tr('Chapter')} ${S.ch}: ${tr(C.title)}`);
       celebrate(G, `📖 ${tr('Chapter')} ${S.ch} ${tr('done')}!`, `${tr(C.title)} · +${money(C.reward)}`, { big: true });
@@ -95,9 +104,13 @@ export async function storyCheck(G, { quiet = false } = {}) {
 /** the Story app: every chapter, its goals and what is done */
 export function storyApp(G) {
   const s = G.state, cur = st(s).ch;
+  const ENDS = { return: 'You went back to The Club, on your own terms.', reject: 'You said no, and kept the life you built.', rebuild: 'You opened a door for the next person who starts with nothing.' };
   return h('div', { class: 'act story-app' },
-    h('p', { class: 'lead' }, cur >= CHAPTERS.length ? 'You finished every chapter. The Club is waiting for you.' : 'Your story, one chapter at a time. Finish every goal to start the next chapter.'),
-    ...CHAPTERS.map((C, i) => h('div', { class: 'story-ch' + (i < cur ? ' done' : i === cur ? ' now' : ' later') },
-      h('b', {}, `${i < cur ? '✓' : i === cur ? '▶' : '🔒'} ${tr('Chapter')} ${i + 1}: ${tr(C.title)}`),
-      i <= cur ? h('ul', {}, ...C.goals.map(([t, done]) => h('li', { class: i < cur || done(s, G) ? 'ok' : '' }, `${i < cur || done(s, G) ? '✓' : '○'} ${tr(t)}`))) : h('small', {}, tr('Finish the chapter before this one to open it.')))));
+    h('p', { class: 'lead' }, s.ending ? 'You finished the story. The city is still yours to keep building.' : 'Your story, one chapter at a time. Finish every goal to start the next chapter.'),
+    ...PROLOGUE.map(([k, t, line]) => h('div', { class: 'story-ch done' }, h('b', {}, `✓ ${tr(k)}: ${tr(t)}`), h('small', {}, tr(line)))),
+    ...CHAPTERS.map((C, i) => h('div', { class: 'story-ch' + (i < cur || s.ending ? ' done' : i === cur ? ' now' : ' later') },
+      h('b', {}, `${i < cur || s.ending ? '✓' : i === cur ? '▶' : '🔒'} ${tr('Chapter')} ${i + 1}: ${tr(C.title)}`),
+      i <= cur || s.ending ? h('ul', {}, ...C.goals.map(([t, done]) => h('li', { class: i < cur || s.ending || done(s, G) ? 'ok' : '' }, `${i < cur || s.ending || done(s, G) ? '✓' : '○'} ${tr(t)}`))) : h('small', {}, tr('Finish the chapter before this one to open it.')))),
+    s.ending ? h('div', { class: 'story-ch done the-end' }, h('b', {}, `🏁 ${tr('The End')}`), h('small', {}, tr(ENDS[s.ending] || '')),
+      window.__replayEnding ? h('button', { class: 'ghost sm', id: 'story-replay', onclick: () => window.__replayEnding() }, '🎬 ' + tr('Watch the ending again')) : null) : null);
 }

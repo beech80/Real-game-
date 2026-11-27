@@ -110,7 +110,7 @@ export class Game {
       s.flags.jaxChallengeDone = 'won'; this.befriend('Jax', 2); s.stats.wiseChoices = (s.stats.wiseChoices || 0) + 1;
       this.message('Jax', 'Okay. $300. You’re for real. Coffee’s on me… this time.');
     }
-    if (ll >= INVITE_LEVEL && s.day >= INVITE_MIN_DAY && s.flags.hired && !s.flags.invited && s.chapter !== 'prologue') {
+    if (ll >= INVITE_LEVEL && s.day >= INVITE_MIN_DAY && s.flags.hired && !s.flags.invited && s.chapter !== 'prologue' && (!s.story || s.story.ch >= 6)) {   // The Club calls in the last chapter of the story
       s.flags.invited = s.day; s.quest = 'invite'; this.achieve('invited');
       this.message('The Club', `${s.name}, the Council has watched you grow. You showed independence, responsibility, knowledge and achievement. The Club wants to talk about letting you back in. Take the bus to The Club when you are ready.`);
       setTimeout(() => this.message('Jax', 'Heard The Club’s calling you back. Funny. I never left… and I’m still not sure I belong there.'), 4000);

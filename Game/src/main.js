@@ -11,7 +11,7 @@ import { SKILLS } from './edu.js';
 import { CURSIVE_LESSONS } from './cursive.js';
 import { takeClass } from './cityschool.js';
 import { parkJog } from './jog.js';
-import { storyCheck, storyRecap } from './story.js';
+import { storyCheck, storyRecap, CHAPTERS } from './story.js';
 import { isCalm, setCalm, applyCalm, headsUp, calmSpace } from './calm.js';
 import { Audio } from './audio.js';
 import { Game, newState, loadSave, openPhone, saveFromText } from './game.js';
@@ -573,20 +573,45 @@ async function invitation() {
     rebuild: (game.state.friends.Rosa + game.state.friends.Okafor + game.state.friends.Jax) >= 4 ? 'Rosa, Mr. Okafor, even Jax spoke for you. The Council will fund your mentorship network. Let’s change who gets a chance.' : 'Bold. The Council will listen. Build your network of mentors, and we will help it grow.',
   }[kind]);
   s.ending = kind; game.achieve('ending');
+  await endingReel(kind, false);
+}
+/** the end of the story: what your choice means, the empty road again, "The End", and a look back at your whole journey.
+ *  replay = watched again from the Story app (you stay where you are) */
+async function endingReel(kind, replay) {
+  const s = game.state;
+  game.busy = true; input.enabled = false;
   await UI.fade(1, 900);
-  for (const l of [game.endingText(kind)]) await UI.caption(l, 2600);
-  // EPILOGUE — the empty road
-  leaveClubSpace();
-  s.quest = 'free'; s.time = 18.6;
-  player.pos = { x: WILD.start.x, y: WILD.start.y + 4 }; player.heading = 0; player.h = wildHeight(player.pos.x, player.pos.y); player.apply();
-  fcam.mode = 'follow'; fcam.yaw = 0; fcam.pitch = 0.12; fcam.dist = 6; fcam.cur.set(0, 1e4, 0);
+  await UI.caption(game.endingText(kind), 2600);
+  if (!replay) {   // EPILOGUE: back on the empty road where it all started
+    leaveClubSpace();
+    s.quest = 'free'; s.time = 18.6;
+    player.pos = { x: WILD.start.x, y: WILD.start.y + 4 }; player.heading = 0; player.h = wildHeight(player.pos.x, player.pos.y); player.apply();
+    fcam.mode = 'follow'; fcam.yaw = 0; fcam.pitch = 0.12; fcam.dist = 6; fcam.cur.set(0, 1e4, 0);
+  }
   await UI.fade(0, 2000);
   await UI.caption(['The same empty landscape. The same road. The same skyline.', 'But you see it in a new way now.'], 2800);
   await UI.caption(['You started with nothing.', 'But you were never nothing.', 'Look at what you’ve built.'], 2600);
-  await UI.caption(['REAL', 'LEARN • LIVE • GROW', 'YOUR STORY. YOUR FUTURE. REAL.'], 2600);
+  await UI.caption(['The End', 'REAL: learn, live, grow.', 'Your story. Your future.'], 3000);
+  await journeyCard(kind);
   game.busy = false; input.enabled = true; game.save();
-  UI.toast('Your story goes on. The city is yours to keep building.', 'gold', 5000);
+  s.story = Object.assign(s.story || {}, { ch: CHAPTERS.length, met: 0 });   // the ending closes the whole story, even for an older save that was invited early
+  if (!replay) UI.toast('Your story goes on. The city is yours to keep building.', 'gold', 5000);
 }
+/** the look back: your own numbers from the whole story, the people who helped, and the credits */
+function journeyCard(kind) {
+  const s = game.state, st = s.stats || {}, fr = s.friends || {};
+  const friends = Object.keys(fr).filter((k) => fr[k] >= 0.8);
+  const helped = Object.values(s.adv || {}).reduce((a, x) => a + (x.stage || 0), 0);
+  const rows = [['📅', 'Days on your own', s.day], ['💵', 'Money you earned', money(st.earned || 0)], ['🧠', 'Skills you mastered', game.edu.masteredCount()], ['🏫', 'City School classes', (s.classes && s.classes.n) || 0], ['🤝', 'Parts of people’s stories you helped with', helped], ['⭐', 'Life Level', game.life().level]];
+  const title = { return: 'Member of The Club, on your own terms', reject: 'Your own life, your own way', rebuild: 'Founder of the Open Door Network' }[kind] || '';
+  return UI.sheet('Your story', (close) => h('div', { class: 'act journey' },
+    h('p', { class: 'lead' }, `${s.name}: ${tr(title)}`),
+    h('ul', { class: 'journey-list' }, ...rows.map(([ic, t, v]) => h('li', {}, h('span', {}, ic), h('span', { class: 'readable' }, tr(t)), h('b', {}, String(v))))),
+    friends.length ? h('p', { class: 'tip' }, `${tr('People who believed in you')}: ${friends.join(', ')}`) : null,
+    h('div', { class: 'credits' }, h('b', {}, tr('Thank you for playing REAL.')), h('small', {}, tr('Heart, Mr. Okafor, Rosa, Dee and Jax were with you from the empty road to the end.'))),
+    h('button', { class: 'primary', id: 'journey-go', onclick: () => close(true) }, '▶ ' + tr('Keep playing'))), { icon: '🏁', noClose: true });
+}
+window.__replayEnding = () => { if (!game || !game.state.ending || game.busy) return; document.querySelectorAll('#modal .modal .sh-x').forEach((x) => x.click()); setTimeout(() => endingReel(game.state.ending, true), 450); };
 
 // ------------------------------------------------------------------------------------------ apartment
 // ------------------------------------------------------------------------------------------ Chapter 7: the bigger world

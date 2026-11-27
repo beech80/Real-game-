@@ -3,8 +3,12 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.10.1';
+export const VERSION = '1.11.0';
 export const NOTES = [
+  ['1.11.0', [
+    ['📖', 'The whole story', 'The story now runs from beginning to end: the Prologue, the road, the city chapters, and a last chapter, The Invitation. The Club calls when Chapter 6 is done.'],
+    ['🏁', 'A real ending', 'After your REAL decision you see “The End”, then a look back at your whole journey with your own numbers. You can keep playing, and watch the ending again from the Story app.'],
+  ]],
   ['1.10.1', [
     ['🐾', 'Boost!', 'In the pet race, the button is now called Boost! Tap it when it turns gold to make your pet run faster.'],
   ]],

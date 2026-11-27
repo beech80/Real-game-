@@ -43,7 +43,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await ev(() => document.getElementById('btn-phone').click()); await p.waitForSelector('#modal .app', { timeout: 60000 }); await sleep(600);
   await p.$$eval('#modal .app', (els) => { const x = els.find((e) => /Story/.test(e.textContent)); if (x) x.click(); }); await p.waitForSelector('.story-app', { timeout: 30000 }).catch(() => fail('no 📖 Story app'));
   await sleep(800); await shot('3_story_app');
-  const n = await p.$$eval('.story-ch', (x) => x.length).catch(() => 0); console.log('chapters listed:', n); if (n !== 6) fail('the Story app should list 6 chapters');
+  const n = await p.$$eval('.story-ch', (x) => x.length).catch(() => 0); console.log('chapters listed:', n); if (n !== 10) fail('the Story app should list the whole story: prologue, road, arrival and 7 chapters');
   console.log('page errors', errors.length, errors.slice(0, 3)); if (errors.length) fail('page errors');
   console.log(bad.length ? 'STORY FAILED' : 'STORY PASSED');
   await b.close(); srv.close(); process.exit(bad.length ? 1 : 0);
