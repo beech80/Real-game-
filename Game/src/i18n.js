@@ -8,11 +8,12 @@ import es3 from './i18n/es_3.json' with { type: 'json' };
 import es4 from './i18n/es_4.json' with { type: 'json' };
 import es5 from './i18n/es_5.json' with { type: 'json' };
 import es6 from './i18n/es_6.json' with { type: 'json' };
+import esWlab from './i18n/es_wlab.json' with { type: 'json' };
 import esSkills from './i18n/es_skills.json' with { type: 'json' };
 import esTpl from './i18n/es_tpl.json' with { type: 'json' };
 import GROW from './i18n/grow.json' with { type: 'json' };
 
-const ES = Object.assign({}, es6, es5, es1, es2, es3, es4);
+const ES = Object.assign({}, esWlab, es6, es5, es1, es2, es3, es4);
 const VALUES = new Set(Object.values(ES));
 let LANG = (() => { try { return localStorage.getItem('real.lang') || 'en'; } catch (e) { return 'en'; } })();
 export const lang = () => LANG;

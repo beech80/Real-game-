@@ -6,6 +6,7 @@ import { citySchool } from './cityschool.js';
 import { isCalm, setCalm } from './calm.js';
 import { parkJog } from './jog.js';
 import { storyGoal, storyApp } from './story.js';
+import { writingLab } from './writelab.js';
 import * as A from './activities.js';
 import { schoolSettings, isSchool, reportView, assignmentView } from './school.js';
 import { runActivity } from './learnkit.js';
@@ -117,6 +118,7 @@ export class Game {
     }
     if ((s.jobs || []).length >= 2) this.achieve('two_jobs');
     this.townTell && this.townTell();
+    if (!s.flags.wlabMsg && s.flags.hired && s.day >= 2) { s.flags.wlabMsg = 1; this.message('City Library', '✏️ The Writing Lab is open on your phone: write strong sentences, build paragraphs, and learn to think like a detective.'); }
   }
 
   // ------------------------------------------------------------------ objectives
@@ -628,7 +630,7 @@ export function openPhone(G) {
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['School', '🏫', '#2f8f5a'], ['Business', '🚀', '#b2632a'], ['Builder', '🏗️', '#c98a1a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Cursive', '✍️', '#7a4fd2'], ['Talks', '🗨️', '#7a4fd2'], ['Toolbox', '🧰', '#d2552f'], ['Story', '📖', '#8b2f3c'], ['Trophies', '🏆', '#c9a227'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
+      ['Learn', '📚', '#5a3fd2'], ['School', '🏫', '#2f8f5a'], ['Business', '🚀', '#b2632a'], ['Builder', '🏗️', '#c98a1a'], ['Writing Lab', '✏️', '#7a4fd2'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Cursive', '✍️', '#7a4fd2'], ['Talks', '🗨️', '#7a4fd2'], ['Toolbox', '🧰', '#d2552f'], ['Story', '📖', '#8b2f3c'], ['Trophies', '🏆', '#c9a227'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -722,6 +724,7 @@ export function openPhone(G) {
         Toolbox: () => toolbox(G, A.PRACTICE, close),
         Story: () => storyApp(G),
         Builder: () => G.townApp(close),
+        'Writing Lab': () => writingLab(G, close),
         Trophies: () => trophiesApp(G),
         Assignment: () => assignmentView(G, async (what, id) => {
           const As = s.assign; close();

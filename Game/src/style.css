@@ -895,3 +895,15 @@ body:has(#modal .modal) .toasts { top: max(12px, env(safe-area-inset-top, 0px)) 
 .town-nums .tot { grid-column: 1 / -1; background: rgba(127,217,154,.14); }
 .town-nums b { font-size: 20px; font-variant-numeric: tabular-nums; }
 .town-staff { list-style: none; padding: 0; margin: 6px 0; display: grid; gap: 4px; font-size: 16px; }
+/* ✏️ Writing Lab */
+.wlab-track h3 { margin: 12px 0 6px; }
+.wlab-list { display: grid; gap: 6px; }
+.wlab-item { text-align: left; }
+.wlab-item.done { border-color: #7fd99a; }
+.wlab-item.locked { opacity: .5; }
+.wlab-teach p { font-size: 18px; line-height: 1.5; margin: 6px 0; }
+.wlab-ex { display: grid; gap: 6px; margin: 10px 0; }
+.wlab-ex > div { display: grid; grid-template-columns: 110px 1fr; gap: 8px; background: rgba(255,255,255,.05); border-radius: 12px; padding: 8px 12px; align-items: baseline; }
+.wlab-ex b { color: var(--gold-2); }
+.wlab-lbl { display: block; font-weight: 700; margin: 10px 0 4px; }
+.wlab-preview { background: rgba(255,255,255,.06); border-radius: 12px; padding: 10px 12px; font-size: 17px; line-height: 1.6; min-height: 3em; }

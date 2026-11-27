@@ -3,8 +3,11 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.12.1';
+export const VERSION = '1.13.0';
 export const NOTES = [
+  ['1.13.0', [
+    ['✏️', 'Writing and thinking', 'The ✏️ Writing Lab on your phone: 18 lessons on sentences (simple to hard), paragraphs, and critical thinking. Each lesson teaches, lets you practice, then you write your own.'],
+  ]],
   ['1.12.1', [
     ['📖', 'Newtown in the story', 'Chapter 5 asks you to build your first building in Newtown, and Chapter 6 to grow it to a Growing town. The ending looks back at the town you built.'],
   ]],
