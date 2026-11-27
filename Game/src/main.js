@@ -16,7 +16,7 @@ import { isCalm, setCalm, applyCalm, headsUp, calmSpace } from './calm.js';
 import { Audio } from './audio.js';
 import { Game, newState, loadSave, openPhone, saveFromText } from './game.js';
 import { buildWilderness, wildHeight, WILD, buildClub, CLUB, setGate, textTexture } from './scenes.js';
-import { installNewtown, syncTown, LOTS, doorOf, BUILDS } from './newtown.js';
+import { installNewtown, syncTown, LOTS, doorOf, BUILDS, population } from './newtown.js';
 import { DISTRICTS, buildDistrict, clampToWalk, districtHeight } from './districts.js';
 import { installExpansion, HOMES, VEHICLES, PET_TYPES, FRIENDS } from './expansion.js';
 import { WORK, COURSES } from './careers.js';
@@ -591,6 +591,7 @@ async function endingReel(kind, replay) {
   }
   await UI.fade(0, 2000);
   await UI.caption(['The same empty landscape. The same road. The same skyline.', 'But you see it in a new way now.'], 2800);
+  if (Object.keys((s.town && s.town.lots) || {}).length) await UI.caption(['Where there were only empty lots, there is a town.', `Newtown: ${population(s)} people working and living where you once walked alone.`], 2800);
   await UI.caption(['You started with nothing.', 'But you were never nothing.', 'Look at what you’ve built.'], 2600);
   await UI.caption(['The End', 'REAL: learn, live, grow.', 'Your story. Your future.'], 3000);
   await journeyCard(kind);
@@ -604,6 +605,7 @@ function journeyCard(kind) {
   const friends = Object.keys(fr).filter((k) => fr[k] >= 0.8);
   const helped = Object.values(s.adv || {}).reduce((a, x) => a + (x.stage || 0), 0);
   const rows = [['📅', 'Days on your own', s.day], ['💵', 'Money you earned', money(st.earned || 0)], ['🧠', 'Skills you mastered', game.edu.masteredCount()], ['🏫', 'City School classes', (s.classes && s.classes.n) || 0], ['🤝', 'Parts of people’s stories you helped with', helped], ['⭐', 'Life Level', game.life().level]];
+  const nb = Object.keys((s.town && s.town.lots) || {}).length; if (nb) rows.push(['🏗️', 'Buildings you built in Newtown', nb], ['🏘️', 'People in Newtown', population(s)]);
   const title = { return: 'Member of The Club, on your own terms', reject: 'Your own life, your own way', rebuild: 'Founder of the Open Door Network' }[kind] || '';
   return UI.sheet('Your story', (close) => h('div', { class: 'act journey' },
     h('p', { class: 'lead' }, `${s.name}: ${tr(title)}`),

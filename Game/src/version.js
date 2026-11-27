@@ -3,8 +3,11 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.12.0';
+export const VERSION = '1.12.1';
 export const NOTES = [
+  ['1.12.1', [
+    ['📖', 'Newtown in the story', 'Chapter 5 asks you to build your first building in Newtown, and Chapter 6 to grow it to a Growing town. The ending looks back at the town you built.'],
+  ]],
   ['1.12.0', [
     ['🏗️', 'Grow the city: Newtown', 'Eight empty lots wait south of the city, where the road comes in. Build a bakery, a bike or car workshop, a sewing studio, a daycare, apartments and more. Hire people, upgrade to level 3, and watch Newtown grow. Open 🏗️ Builder on your phone.'],
     ['💵', 'Money that works', 'Every night your buildings earn money, pay their team and upkeep, and the profit is yours. New workers cost less and get better every day.'],

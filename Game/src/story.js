@@ -5,6 +5,8 @@
 import { h, UI, money } from './ui.js';
 import { tr } from './i18n.js';
 import { celebrate } from './rewards.js';
+import { population } from './newtown.js';
+const townBuilt = (s) => Object.keys((s.town && s.town.lots) || {}).length;
 
 const advDone = (s) => Object.values(s.adv || {}).reduce((a, x) => a + (x.stage || 0), 0);
 const saved = (s) => s.money + (s.savings || 0);
@@ -33,17 +35,19 @@ export const CHAPTERS = [
       ['Get a promotion or a second job (Career board)', (s) => (s.stats.promotions || 0) >= 1 || (s.jobs || []).length >= 2, 'Door_CareerCenter'],
       ['Save $300', (s) => saved(s) >= 300, null],
     ], reward: 60, outro: 'A better job, and money in the bank. Look how far you have come.' },
-  { title: 'The big city', open: [['Heart', 'The Opportunity District is where careers grow: offices, workshops, big ideas.'], ['Jax', 'Everybody wants to get there. Most people never learn enough to stay.'], ['Heart', 'Then let us learn enough.']], close: [['Heart', 'Offices, workshops, people building the future. And you belong here too.'], ['Jax', '…Okay. You are doing it the real way. Maybe I should try that.']], who: 'Heart', intro: 'The Opportunity District is where careers grow. Learn enough to get there, and help more people on the way.',
+  { title: 'The big city', open: [['Heart', 'The Opportunity District is where careers grow: offices, workshops, big ideas.'], ['Jax', 'Everybody wants to get there. Most people never learn enough to stay.'], ['Heart', 'Then let us learn enough.'], ['Dee', 'And have you seen the empty lots south of town, where the old road comes in? Somebody should build there. Why not you?']], close: [['Heart', 'Offices, workshops, people building the future. And you belong here too.'], ['Jax', '…Okay. You are doing it the real way. Maybe I should try that.']], who: 'Heart', intro: 'The Opportunity District is where careers grow. Learn enough to get there, and help more people on the way.',
     goals: [
       ['Pass 8 classes at City School', (s) => ((s.classes && s.classes.n) || 0) >= 8, null],
       ['Take the bus to the Opportunity District', (s) => !!(s.visited && s.visited.opportunity), 'Interact_BusStop'],
       ['Finish 3 parts of people’s stories', (s) => advDone(s) >= 3, null],
+      ['Build your first building in Newtown (🏗️ Builder on your phone)', (s) => townBuilt(s) >= 1, null],
     ], reward: 80, outro: 'Offices, workshops, big ideas. The city is opening up to you.' },
-  { title: 'Reaching higher', open: [['Heart', 'The Heights is the top of the city. People there started somewhere too.'], ['Heart', 'Keep growing, and you will see it from the inside.']], close: [['Heart', 'From the old road to The Heights.'], ['Heart', 'Do you remember the first sign you read, alone in the fields? Look how far you have come.'], ['Heart', 'Someone is watching… and I think they are about to call.']], who: 'Heart', intro: 'The Heights is the top of the city. Keep growing, and you will see it from the inside.',
+  { title: 'Reaching higher', open: [['Heart', 'The Heights is the top of the city. People there started somewhere too.'], ['Heart', 'Keep growing, and you will see it from the inside.']], close: [['Jax', 'I walked past Newtown today. Shops, lamps, people working. You did that?'], ['Heart', 'From the old road to The Heights.'], ['Heart', 'Do you remember the first sign you read, alone in the fields? Look how far you have come.'], ['Heart', 'Someone is watching… and I think they are about to call.']], who: 'Heart', intro: 'The Heights is the top of the city. Keep growing, and you will see it from the inside.',
     goals: [
       ['Reach Life Level 8', (s, G) => G.life().level >= 8, null],
       ['Pass 14 classes at City School', (s) => ((s.classes && s.classes.n) || 0) >= 14, null],
       ['Take the bus to The Heights', (s) => !!(s.visited && s.visited.heights), 'Interact_BusStop'],
+      ['Grow Newtown to a Growing town (12 people)', (s) => population(s) >= 12, null],
     ], reward: 100, outro: 'From the old road to The Heights. Someone is watching how far you have come…' },
   // the last chapter: The Club calls, and you decide. It ends with the REAL decision, the epilogue and the credits.
   { title: 'The Invitation', final: true, open: [['Heart', 'Do you remember why we started? The Club closed its gates and sent you out with nothing.'], ['Heart', 'Now they are watching. Keep growing, and they will call.'], ['Jax', 'They will call you. They never call me. …Just saying.']], who: 'Heart', intro: 'The Club is watching. Keep growing, answer their call, and make your REAL decision.',
