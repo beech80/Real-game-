@@ -116,6 +116,7 @@ export class Game {
       setTimeout(() => this.message('Jax', 'Heard The Club’s calling you back. Funny. I never left… and I’m still not sure I belong there.'), 4000);
     }
     if ((s.jobs || []).length >= 2) this.achieve('two_jobs');
+    this.townTell && this.townTell();
   }
 
   // ------------------------------------------------------------------ objectives
@@ -627,7 +628,7 @@ export function openPhone(G) {
   G.sfx('phone');
   return UI.sheet('', (close, body) => {
     const apps = [['Bank', '🏦', '#2f5bd2'], ['Jobs', '💼', '#8b2f3c'], ['Map', '📍', '#2f8f5a'], ['Messages', '💬', '#2f8f5a'], ['Bills', '🧾', '#2a9fd6'], ['Calendar', '📅', '#d24f2f'],
-      ['Learn', '📚', '#5a3fd2'], ['School', '🏫', '#2f8f5a'], ['Business', '🚀', '#b2632a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Cursive', '✍️', '#7a4fd2'], ['Talks', '🗨️', '#7a4fd2'], ['Toolbox', '🧰', '#d2552f'], ['Story', '📖', '#8b2f3c'], ['Trophies', '🏆', '#c9a227'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
+      ['Learn', '📚', '#5a3fd2'], ['School', '🏫', '#2f8f5a'], ['Business', '🚀', '#b2632a'], ['Builder', '🏗️', '#c98a1a'], ['Goals', '🎯', '#2a9fd6'], ['Stats', '📊', '#2f5bd2'], ['Discover', '🧭', '#e8823a'], ['Home', '🏡', '#2f8f5a'], ['Pal', '🧸', '#d24f9a'], ['Neighbors', '👋', '#2a9fd6'], ['Club', '♛', '#e8a33a'], ['Words', '📖', '#b5651d'], ['Cursive', '✍️', '#7a4fd2'], ['Talks', '🗨️', '#7a4fd2'], ['Toolbox', '🧰', '#d2552f'], ['Story', '📖', '#8b2f3c'], ['Trophies', '🏆', '#c9a227'], ...(s.assign ? [['Assignment', '📋', '#2f8f5a']] : []), ['Settings', '⚙️', '#55607e'], ['Feedback', '📝', '#7a7f99']];
     const unread = s.messages.filter((m) => !m.read).length;
     const home = () => body.replaceChildren(h('div', { class: 'phone' },
       h('div', { class: 'ph-top' }, h('b', {}, clock(s.time)), h('small', {}, `Day ${s.day} · ${money(s.money)}`)),
@@ -720,6 +721,7 @@ export function openPhone(G) {
         Talks: () => talkLog(),
         Toolbox: () => toolbox(G, A.PRACTICE, close),
         Story: () => storyApp(G),
+        Builder: () => G.townApp(close),
         Trophies: () => trophiesApp(G),
         Assignment: () => assignmentView(G, async (what, id) => {
           const As = s.assign; close();

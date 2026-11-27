@@ -15,7 +15,8 @@ import { storyCheck, storyRecap, CHAPTERS } from './story.js';
 import { isCalm, setCalm, applyCalm, headsUp, calmSpace } from './calm.js';
 import { Audio } from './audio.js';
 import { Game, newState, loadSave, openPhone, saveFromText } from './game.js';
-import { buildWilderness, wildHeight, WILD, buildClub, CLUB, setGate } from './scenes.js';
+import { buildWilderness, wildHeight, WILD, buildClub, CLUB, setGate, textTexture } from './scenes.js';
+import { installNewtown, syncTown, LOTS, doorOf, BUILDS } from './newtown.js';
 import { DISTRICTS, buildDistrict, clampToWalk, districtHeight } from './districts.js';
 import { installExpansion, HOMES, VEHICLES, PET_TYPES, FRIENDS } from './expansion.js';
 import { WORK, COURSES } from './careers.js';
@@ -44,7 +45,7 @@ import { heartSVG } from './art.js';
 import { parked, parkCurrent, switchTo, removePlayer, MAX_PLAYERS } from './players.js';
 import { PRACTICE } from './activities.js';
 import { carMesh, Pedestrian } from './city.js';
-installExpansion(Game); installEvents(Game); installAdventures(Game); installAdventureHelpers(Game);
+installExpansion(Game); installNewtown(Game); installEvents(Game); installAdventures(Game); installAdventureHelpers(Game);
 
 // ---------------------------------------------------------------- crash/diagnostic panel (never a silent black screen)
 function fatal(msg) {
@@ -430,7 +431,7 @@ function placeJax(x, y, facing) {
 // ------------------------------------------------------------------------------------------ spaces
 function setCitySpace(on) {
   for (const D of Object.values(W.d)) showDistrict(D, false);
-  if (cart) cart.visible = on; for (const m of Object.values(W.built || {})) m.visible = on;
+  if (cart) cart.visible = on; for (const m of Object.values(W.built || {})) m.visible = on; if (W.town && W.town.group) W.town.group.visible = on;
   W.district.visible = on; W.wild.group.visible = on; if (W.pools) W.pools.visible = on; W.ccSign.visible = on;
   for (const c of traffic.cars) c.m.visible = on;
   for (const p of peds) p.ch.root.visible = on && p.ch.root.visible;
@@ -824,6 +825,7 @@ function refreshWorld() {
   W.built = W.built || {};
   for (const k of s.built || []) if (!W.built[k]) { const m = builtMesh(k); const [x, y] = BUILT_AT[k]; m.position.copy(P2W(x, y, 0.13)); scene.add(m); W.built[k] = m; coll.items.push({ t: 'circle', x, y, r: k === 'bench' ? 1.1 : 2.2, cos: 1, sin: 0, n: 'built' }); }
   for (const m of Object.values(W.built)) m.visible = s.location === 'district';
+  W.town = syncTown(W.town || {}, s, { THREE, scene, P2W, ground: groundAt, coll, textTexture });   // 🏗️ Newtown
   if (s.biz && !cart) {
     cart = new THREE.Group();
     const wood = new THREE.MeshStandardMaterial({ color: 0x7a5230, roughness: 0.7 }), cloth = new THREE.MeshStandardMaterial({ color: 0x2f8f5a, roughness: 0.8 }), metal = new THREE.MeshStandardMaterial({ color: 0xcfd3d8, metalness: 0.8, roughness: 0.3 });
@@ -929,6 +931,7 @@ function findInteraction() {
   }
   if (where !== 'district') return best || (pet && near(pet.pos, 1.8) ? { label: `Play with ${s.pet.name}`, run: () => game.petCare('play') } : null);
   if (cart && W.cartPos && near(W.cartPos, 2.4)) best = { label: `Run ${s.biz.name}`, run: () => game.runBusiness() };
+  LOTS.forEach((l, i) => { const L = s.town && s.town.lots[i]; if (near(doorOf(l), 3.4)) best = L ? { label: `${BUILDS[L.b].icon} ${BUILDS[L.b].name}`, run: () => game.manageLot(i) } : { label: `Build on lot ${i + 1}`, run: () => game.buildAt(i) }; });
   for (const sg of W.wild.signs) if (sg.q && near(sg, 3.2)) best = { label: 'Read the sign', run: () => game.readSign(sg) };
   if (s.quest === 'shift' && s.shift && s.shift.register >= s.shift.need.register && s.shift.stock < s.shift.need.stock) {
     for (let a = 1; a <= 5; a++) { const so = sock(`Interact_StockShelf_A${a}`); if (so && Math.abs(P.x - so.x) < 1.8 && P.y > 30 && P.y < 42) { const it = game.interaction({ key: `Interact_StockShelf_A${a}` }); if (it) best = it; } }
@@ -1207,7 +1210,7 @@ window.REAL = {
   teleport(key, where = 'district') { const so = sock(key, where); if (so) { player.pos = { x: so.x, y: so.y }; player.apply(); } return !!so; },
   cam(yaw, pitch, dist) { fcam.yaw = yaw; fcam.pitch = pitch; fcam.dist = dist; fcam.cur.set(0, 1e4, 0); },
   firstPerson: () => !!fcam.first, eyeGap: () => +Math.hypot(camera.position.x - player.ch.root.position.x, camera.position.z - player.ch.root.position.z).toFixed(2),
-  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, playerHeading: () => player.heading, speedMul: () => player.speedMul, objective: () => lastObjective, forgetRecent: () => forgetRecent(), camPlanY: () => -camera.position.z, camDebug: () => { const w = fcam.cur.clone(); const r = clampCameraBounds(w, fcam.target.clone()); return { cur: fcam.cur.toArray().map((v) => +v.toFixed(2)), target: fcam.target.toArray().map((v) => +v.toFixed(2)), pitchNow: fcam.pitchNow, minPitch: fcam.minPitch, zone: fcam.zone, mode: fcam.mode, ret: r, clamped: w.toArray().map((v) => +v.toFixed(2)), loc: game.state.location, room: !!curRoom(), pos: { ...player.pos } }; },
+  playerPos: () => ({ ...player.pos }), camYaw: () => fcam.yaw, setCamYaw: (y) => { fcam.yaw = y; fcam.lastLook = performance.now() + 60000; }, playerHeading: () => player.heading, speedMul: () => player.speedMul, objective: () => lastObjective, forgetRecent: () => forgetRecent(), camPlanY: () => -camera.position.z, camDebug: () => { const w = fcam.cur.clone(); const r = clampCameraBounds(w, fcam.target.clone()); return { cur: fcam.cur.toArray().map((v) => +v.toFixed(2)), target: fcam.target.toArray().map((v) => +v.toFixed(2)), pitchNow: fcam.pitchNow, minPitch: fcam.minPitch, zone: fcam.zone, mode: fcam.mode, ret: r, clamped: w.toArray().map((v) => +v.toFixed(2)), loc: game.state.location, room: !!curRoom(), pos: { ...player.pos } }; },
   // walk a path in small steps against the real colliders; returns how far along it got (1 = all the way)
   pathClear: (pts, r = 0.22) => { let done = 0, total = 0; for (let i = 1; i < pts.length; i++) total += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
     let p = { x: pts[0][0], y: pts[0][1] }; for (let i = 1; i < pts.length; i++) { const [tx, ty] = pts[i]; for (let k = 0; k < 4000; k++) { const dx = tx - p.x, dy = ty - p.y, d = Math.hypot(dx, dy); if (d < 0.05) break; const st = Math.min(0.05, d), q = { x: p.x + dx / d * st, y: p.y + dy / d * st }; coll.resolve(q, r); const moved = Math.hypot(q.x - p.x, q.y - p.y); done += Math.max(0, (dx * (q.x - p.x) + dy * (q.y - p.y)) / d); p = q; if (moved < 0.002) return +(done / total).toFixed(2); } } return +Math.min(1, done / total).toFixed(2); },

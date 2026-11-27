@@ -113,6 +113,7 @@ export const ACHIEVEMENTS = {
   explorer: ['Explorer', 'Visited every district.'],
   owner: ['Open for business', 'Opened your own business.'],
   boss: ['Good boss', 'Hired your first employee.'],
+  builder: ['City builder', 'Built your first building in Newtown.'],
   profit: ['In the black', 'Made $500 from your shop.'],
   wheels: ['On the move', 'Bought a vehicle.'],
   moved_up: ['New address', 'Moved into a better home.'],

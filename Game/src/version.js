@@ -3,8 +3,12 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.11.0';
+export const VERSION = '1.12.0';
 export const NOTES = [
+  ['1.12.0', [
+    ['🏗️', 'Grow the city: Newtown', 'Eight empty lots wait south of the city, where the road comes in. Build a bakery, a bike or car workshop, a sewing studio, a daycare, apartments and more. Hire people, upgrade to level 3, and watch Newtown grow. Open 🏗️ Builder on your phone.'],
+    ['💵', 'Money that works', 'Every night your buildings earn money, pay their team and upkeep, and the profit is yours. New workers cost less and get better every day.'],
+  ]],
   ['1.11.0', [
     ['📖', 'The whole story', 'The story now runs from beginning to end: the Prologue, the road, the city chapters, and a last chapter, The Invitation. The Club calls when Chapter 6 is done.'],
     ['🏁', 'A real ending', 'After your REAL decision you see “The End”, then a look back at your whole journey with your own numbers. You can keep playing, and watch the ending again from the Story app.'],

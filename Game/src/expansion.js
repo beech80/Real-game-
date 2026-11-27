@@ -454,6 +454,7 @@ export function installExpansion(Game) {
   P.nightly = function () {
     const s = this.state, notes = [];
     const bz = this.bizOvernight(); if (bz) notes.push(bz);
+    const tn = this.townNightly && this.townNightly(); if (tn) notes.push(tn);
     loanGrace(this);
     if (s.portfolio) {   // simulated markets: safe barely moves, risky can swing a lot either way
       const P = s.portfolio, before = P.safe + P.mixed + P.risky;

@@ -125,6 +125,7 @@ export function buildWilderness(tex) {
     const p = road.curve.getPoint(t), d = road.curve.getTangent(t), nx = -d.z, ny = d.x, L = Math.hypot(nx, ny);
     for (const s of [-1, 1]) {
       const x = p.x + nx / L * 5.2 * s, y = p.z + ny / L * 5.2 * s, h = wildHeight(x, y);
+      if (y > -126) continue;   // no fence along Newtown: its shops open onto the road
       const ang = Math.atan2(d.x, -d.z);
       q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), ang);
       m.compose(P2W(x, y, h + 0.55), q, sc); posts.setMatrixAt(np++, m);
@@ -137,6 +138,7 @@ export function buildWilderness(tex) {
   for (let t = 0.05; t < 0.95; t += 0.06) {
     const p = road.curve.getPoint(t), d = road.curve.getTangent(t), nx = -d.z, ny = d.x, L = Math.hypot(nx, ny);
     const x = p.x + nx / L * 8, y = p.z + ny / L * 8, h = wildHeight(x, y);
+    if (y > -126) continue;   // Newtown has its own street lamps
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.16, 8, 8), poleMat); pole.position.copy(P2W(x, y, h + 4)); pole.castShadow = true; g.add(pole);
     const bar = new THREE.Mesh(new THREE.BoxGeometry(2, 0.12, 0.12), poleMat); bar.position.copy(P2W(x, y, h + 7.6)); bar.rotation.y = Math.atan2(d.x, -d.z) + Math.PI / 2; g.add(bar);
     colliders.push({ t: 'circle', x, y, r: 0.3, n: 'pole' });
