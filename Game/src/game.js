@@ -143,7 +143,7 @@ export class Game {
         const food = Object.values(s.pantry || {}).some((n) => n > 0);
         if (!s.flags.ate && !food) return T('Your fridge is empty. Eat at the Diner, or buy food at Fresh Mart', s.location === 'apartment' ? 'Interact_ExitDoor' : 'Door_Diner');
         // sleeping only works in the evening: before then, the goal suggests what to do with free time instead
-        if (s.flags.ate && s.flags.billsSeen && s.time < 19 && s.energy > 40) return T('Free time! Learn in 📚, jog in the park, or rest. Go to bed after 7 PM', s.location === 'apartment' ? 'Interact_ExitDoor' : 'Interact_ParkJog');
+        if (s.flags.ate && s.flags.billsSeen && s.time < 19 && s.energy > 40) return T('Free time! Learn in 📚, jog in the park, or rest. Done for today? Your bed skips to night.', s.location === 'apartment' ? 'Interact_ExitDoor' : 'Interact_ParkJog');
         return s.location === 'apartment' ? T(s.flags.ate ? (s.flags.billsSeen ? 'Get some sleep' : 'Check your bills at the desk') : 'Eat something (fridge)', s.flags.ate ? (s.flags.billsSeen ? 'Interact_Sleep' : 'Interact_Bills') : 'Interact_Fridge')
         : T('Buy food if you want, then go home to your apartment', 'Door_ApartmentLobby');
       }

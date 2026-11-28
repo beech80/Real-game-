@@ -126,6 +126,7 @@ let seed = 7; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483
     if (/Stock the shelf/.test(s.obj) && s.shift) { await goSock(`Interact_StockShelf_A${s.shift.product[1]}`, 'district', s.pos0); return tapInteract(); }
     if (/Pay your bill/.test(s.obj)) { await ev(() => { const it = window.REAL.game().interaction({ key: 'Interact_Bills' }); if (it) it.run(); }); T.screens += 8; return true; }   // Bills app on the phone
     const visitKey = s.day + '|' + s.obj; visits.set(visitKey, (visits.get(visitKey) || 0) + 1);
+    if (/Free time/.test(s.obj) && visits.get(visitKey) > 6) { await ev(() => { window.__ptSleep = window.REAL.game().sleep(); }); T.screens += 4; return true; }   // done for the day: the bed skips to night, as the goal says
     if (s.pos && /Grow your Life Level/.test(s.obj) && visits.get(visitKey) > 4) s.pos = null;   // tried that suggestion a few times today: do something else
     if (s.pos) { await goTo(s.pos.x, s.pos.y - (s.inDistrict ? 0 : 0.2), s.pos0); if (!(await tapInteract())) { await goTo(s.pos.x + 0.8, s.pos.y - 0.8, s.pos); if (!(await tapInteract())) return false; } if (s.key === 'Interact_BusStop' || s.key === 'D:bus') T.bus += 25; return true; }
     if (s.quest === 'find_way') { const to = { x: 0, y: -80 }; await goTo(s.pos0.x, s.pos0.y + 60, s.pos0); return true; }   // follow the road toward the city

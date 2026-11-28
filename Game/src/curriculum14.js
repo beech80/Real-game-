@@ -36,6 +36,7 @@ const FIRST = [['ball', '⚽', 'b'], ['sun', '☀️', 's'], ['moon', '🌙', 'm
 const RHYMES = [['cat', '🐱', 'hat', '🎩'], ['bee', '🐝', 'tree', '🌳'], ['frog', '🐸', 'log', '🪵'], ['cake', '🎂', 'snake', '🐍'], ['moon', '🌙', 'spoon', '🥄'], ['star', '⭐', 'car', '🚗'], ['bear', '🐻', 'chair', '🪑'], ['goat', '🐐', 'boat', '⛵'], ['mouse', '🐭', 'house', '🏠'], ['fox', '🦊', 'box', '📦']];
 const KIDS = ['Amara', 'Leo', 'Mei', 'Diego', 'Priya', 'Kofi', 'Sofia', 'Noah', 'Aiyana', 'Yusuf', 'Hana', 'Mateo'];
 const FEEL = [['happy', '😊'], ['sad', '😢'], ['mad', '😠'], ['scared', '😨'], ['sleepy', '😴'], ['surprised', '😮']];
+const CLOSE = { happy: ['surprised'], surprised: ['happy', 'scared'], scared: ['surprised'], sad: ['mad'], mad: ['sad'], sleepy: [] };
 const SIT = [['gets a birthday hug', 'happy'], ['drops an ice cream cone', 'sad'], ['hears a loud thunder boom', 'scared'], ['has a block tower knocked down', 'mad'], ['finds a big gift box', 'surprised'], ['stays up very late', 'sleepy']];
 const OPP = [['up', '⬆️', 'down', '⬇️'], ['hot', '🔥', 'cold', '🧊'], ['big', '🐘', 'small', '🐭'], ['day', '☀️', 'night', '🌙'], ['happy', '😊', 'sad', '😢'], ['fast', '🐆', 'slow', '🐢'], ['wet', '💧', 'dry', '🏜️'], ['open', '📖', 'closed', '📕']];
 const BIG = [['🐘', 'elephant'], ['🐋', 'whale'], ['🦒', 'giraffe'], ['🌳', 'tree'], ['🏠', 'house'], ['🚌', 'bus']];
@@ -46,7 +47,7 @@ const wrongNums = (n, lo = 1, hi = 10) => { const s = new Set(); for (const d of
 
 export const PREK_GEN = {
   'prek.colors': [
-    () => { const [c, e, t] = pick(COLORS), w = pickN(COLORS.filter((x) => x[0] !== c), 2); return C('prek.colors', `${e} What color is ${t}?`, c, w.map((x) => x[0]), `Yes! ${t[0].toUpperCase() + t.slice(1)} is ${c}.`, w.map((x) => `${x[0][0].toUpperCase() + x[0].slice(1)} is a pretty color, but look again. ${x[1]} is ${x[0]}.`)); },
+    () => { const [c, e, t] = pick(COLORS), w = pickN(COLORS.filter((x) => x[0] !== c), 2); return C('prek.colors', `${e} What color ${/^an? /.test(t) ? 'is' : 'are'} ${t}?`, c, w.map((x) => x[0]), `Yes! ${t[0].toUpperCase() + t.slice(1)} ${/^an? /.test(t) ? 'is' : 'are'} ${c}.`, w.map((x) => `${x[0][0].toUpperCase() + x[0].slice(1)} is a pretty color, but look again. ${x[1]} is ${x[0]}.`)); },
     () => { const [c, , ] = pick(COLORS.filter((x) => DOTS[x[0]])), w = pickN(Object.keys(DOTS).filter((x) => x !== c), 2); return C('prek.colors', `Tap the ${c} circle.`, DOTS[c], w.map((x) => DOTS[x]), `You found ${c}! Great looking.`, w.map((x) => `That one is ${x}. Find ${c}.`)); },
     () => { const [c, e, t] = pick(COLORS), w = pickN(COLORS.filter((x) => x[0] !== c), 2); return C('prek.colors', `Which one is ${c}?`, e, w.map((x) => x[1]), `Yes! ${t[0].toUpperCase() + t.slice(1)} is ${c}.`, w.map((x) => `That is ${x[0]}. Look for ${c}.`)); },
     () => C('prek.colors', '☀️ What color is the sun in a picture?', 'yellow', ['blue', 'purple'], 'Yes! We color the sun yellow and bright.', ['The sky is blue. The sun is yellow.', 'Grapes are purple. The sun is yellow.']),
@@ -55,7 +56,7 @@ export const PREK_GEN = {
     () => C('prek.colors', '🚒 What color is a fire truck?', 'red', ['green', 'blue'], 'Yes! Most fire trucks are red.', ['A frog is green. A fire truck is red.', 'Blueberries are blue. A fire truck is red.']),
   ],
   'prek.shapes': [
-    () => { const [s, e, d] = pick(SHAPES), w = pickN(SHAPES.filter((x) => x[0] !== s), 2); return C('prek.shapes', `Which one is a ${s}?`, e, w.map((x) => x[1]), `Yes! A ${s} ${d}.`, w.map((x) => `That is a ${x[0]}. A ${s} ${d}.`)); },
+    () => { const [s, e, d] = pick(SHAPES), w = pickN(SHAPES.filter((x) => x[0] !== s && !(['square', 'rectangle'].includes(x[0]) && ['square', 'rectangle'].includes(s))), 2); return C('prek.shapes', `Which one is a ${s}?`, e, w.map((x) => x[1]), `Yes! A ${s} ${d}.`, w.map((x) => `That is a ${x[0]}. A ${s} ${d}.`)); },
     () => { const [s, e, d] = pick(SHAPES), w = pickN(SHAPES.filter((x) => x[0] !== s), 2); return C('prek.shapes', `${e} What shape is this?`, s, w.map((x) => x[0]), `Yes! It is a ${s}. It ${d}.`, w.map((x) => `Good try. A ${x[0]} ${x[2]}. Look again.`)); },
     () => C('prek.shapes', '⚽ A ball is round. What shape is it like?', 'circle', ['square', 'triangle'], 'Yes! A ball is round like a circle.', ['A square has corners. A ball is round.', 'A triangle has points. A ball is round.']),
     () => C('prek.shapes', '🍕 A slice of pizza looks like a…', 'triangle', ['circle', 'square'], 'Yes! A pizza slice has three sides, like a triangle.', ['The whole pizza is a circle. One slice is a triangle.', 'A square has four sides. Count the slice’s sides: three.']),
@@ -104,20 +105,20 @@ export const PREK_GEN = {
     () => { const n = pick(KIDS), w = pickN('ABCDEFGHJKLMNOPRSTWY'.split('').filter((x) => x !== n[0]), 2); return C('prek.letters', `${n} starts with which letter?`, n[0], w, `Yes! ${n} starts with ${n[0]}.`, w.map(() => `Say ${n} slowly. Listen to the start.`)); },
   ],
   'prek.sounds': [
-    () => { const [t, e, s] = pick(FIRST), w = pickN(FIRST.filter((x) => x[2] !== s), 2); return C('prek.sounds', `Which one starts with /${s}/?`, e, w.map((x) => x[1]), `Yes! ${t[0].toUpperCase() + t.slice(1)} starts with /${s}/.`, w.map((x) => `${x[0][0].toUpperCase() + x[0].slice(1)} starts with /${x[2]}/.`)); },
+    () => { const [t, e, s] = pick(FIRST), w = pickN(FIRST.filter((x) => x[2] !== s), 2); return C('prek.sounds', `Which one starts with /${s}/?`, `${e} ${t}`, w.map((x) => `${x[1]} ${x[0]}`), `Yes! ${t[0].toUpperCase() + t.slice(1)} starts with /${s}/.`, w.map((x) => `${x[0][0].toUpperCase() + x[0].slice(1)} starts with /${x[2]}/.`)); },
     () => { const [t, e, s] = pick(FIRST), w = pickN([...new Set(FIRST.map((x) => x[2]))].filter((x) => x !== s), 2); return C('prek.sounds', `${e} ${t}. What letter does it start with?`, s, w, `Yes! ${t} starts with ${s}.`, w.map(() => `Say ${t} slowly. What sound comes first?`)); },
-    () => C('prek.sounds', 'Sss like a snake 🐍. Which starts with /s/?', '☀️', ['🐶', '🎩'], 'Yes! Sun starts with /s/.', ['Dog starts with /d/.', 'Hat starts with /h/.']),
-    () => C('prek.sounds', 'Mmm, yummy! Which starts with /m/?', '🌙', ['🐟', '🐷'], 'Yes! Moon starts with /m/.', ['Fish starts with /f/.', 'Pig starts with /p/.']),
+    () => C('prek.sounds', 'Sss like a snake 🐍. Which starts with /s/?', '☀️ sun', ['🐶 dog', '🎩 hat'], 'Yes! Sun starts with /s/.', ['Dog starts with /d/.', 'Hat starts with /h/.']),
+    () => C('prek.sounds', 'Mmm, yummy! Which starts with /m/?', '🌙 moon', ['🐟 fish', '🐷 pig'], 'Yes! Moon starts with /m/.', ['Fish starts with /f/.', 'Pig starts with /p/.']),
     () => C('prek.sounds', 'Do ball ⚽ and bear 🐻 start the same?', 'yes', ['no'], 'Yes! Ball and bear both start with /b/.', ['Listen: b-ball, b-bear. Same start!']),
     () => C('prek.sounds', 'Do sun ☀️ and dog 🐶 start the same?', 'no', ['yes'], 'Right! Sun starts with /s/. Dog starts with /d/.', ['Listen: s-sun, d-dog. They are different.']),
   ],
   'prek.rhyme': [
-    () => { const [a, ae, b, be] = pick(RHYMES), w = pickN(RHYMES.filter((x) => x[0] !== a), 2); return C('prek.rhyme', `What rhymes with ${a} ${ae}?`, be, w.map((x) => x[1]), `Yes! ${a}, ${b}. They rhyme!`, w.map((x) => `${x[0][0].toUpperCase() + x[0].slice(1)} does not sound like ${a} at the end.`)); },
+    () => { const [a, ae, b, be] = pick(RHYMES), w = pickN(RHYMES.filter((x) => x[0] !== a), 2); return C('prek.rhyme', `What rhymes with ${a} ${ae}?`, `${be} ${b}`, w.map((x) => `${x[1]} ${x[0]}`), `Yes! ${a}, ${b}. They rhyme!`, w.map((x) => `${x[0][0].toUpperCase() + x[0].slice(1)} does not sound like ${a} at the end.`)); },
     () => { const [a, , b] = pick(RHYMES), w = pickN(RHYMES.filter((x) => x[0] !== a), 2); return C('prek.rhyme', `What rhymes with ${a}?`, b, w.map((x) => x[0]), `Yes! ${a} and ${b} rhyme.`, w.map((x) => `Say ${a}, ${x[0]}. The ends sound different.`)); },
     () => C('prek.rhyme', 'Do cat and hat rhyme?', 'yes', ['no'], 'Yes! Cat, hat. Both end with -at.', ['Listen: c-at, h-at. Same ending!']),
     () => C('prek.rhyme', 'Do dog and sun rhyme?', 'no', ['yes'], 'Right! Dog and sun do not sound the same at the end.', ['Listen: d-og, s-un. The ends are different.']),
     () => C('prek.rhyme', 'Twinkle, twinkle, little star. How I wonder what you…', 'are', ['see', 'go'], 'Yes! Star and are rhyme.', ['See does not rhyme with star.', 'Go does not rhyme with star.']),
-    () => C('prek.rhyme', 'Which two rhyme?', '🐝 🌳', ['🐝 🐶', '🌳 🍎'], 'Yes! Bee and tree rhyme.', ['Bee and dog do not rhyme.', 'Tree and apple do not rhyme.']),
+    () => C('prek.rhyme', 'Which two rhyme?', '🐝 bee + 🌳 tree', ['🐝 bee + 🐶 dog', '🌳 tree + 🍎 apple'], 'Yes! Bee and tree rhyme.', ['Bee and dog do not rhyme.', 'Tree and apple do not rhyme.']),
   ],
   'prek.name': [
     () => { const L = pick('ABCDEHILMNOPST'.split('')); return { type: 'trace', skill: 'prek.name', style: 'print', word: L, q: `Trace the big letter ${L}. Start at the top.`, why: `You made ${L}! Great work.`, dok: 1 }; },
@@ -131,7 +132,7 @@ export const PREK_GEN = {
   'prek.feelings': [
     () => { const [f, e] = pick(FEEL), w = pickN(FEEL.filter((x) => x[0] !== f), 2); return C('prek.feelings', `${e} How does this face feel?`, f, w.map((x) => x[0]), `Yes! That face looks ${f}.`, w.map((x) => `A ${x[0]} face looks like ${x[1]}. Look again.`)); },
     () => { const [f, e] = pick(FEEL), w = pickN(FEEL.filter((x) => x[0] !== f), 2); return C('prek.feelings', `Which face is ${f}?`, e, w.map((x) => x[1]), `Yes! That face is ${f}.`, w.map((x) => `That face is ${x[0]}.`)); },
-    () => { const [s, f] = pick(SIT), n = pick(KIDS), w = pickN(FEEL.map((x) => x[0]).filter((x) => x !== f), 2); return C('prek.feelings', `${n} ${s}. How might ${n} feel?`, f, w, `Yes! ${n} might feel ${f}. That makes sense.`, w.map(() => 'Hmm, think about it. How would you feel?')); },
+    () => { const [s, f] = pick(SIT), n = pick(KIDS), w = pickN(FEEL.map((x) => x[0]).filter((x) => x !== f && !(CLOSE[f] || []).includes(x)), 2); return C('prek.feelings', `${n} ${s}. How might ${n} feel?`, f, w, `Yes! ${n} might feel ${f}. That makes sense.`, w.map(() => 'Hmm, think about it. How would you feel?')); },
     () => C('prek.feelings', 'You feel mad. What can you do?', '🌬️ take slow breaths', ['👊 hit', '😱 yell at a friend'], 'Yes! Slow breaths help mad feelings get smaller.', ['Hitting hurts. Let’s breathe instead.', 'Yelling can hurt feelings. Use calm words.']),
     () => C('prek.feelings', 'Your friend is sad 😢. What can you do?', '🤗 ask if they want a hug', ['🙈 walk away', '😂 laugh'], 'Yes! That is so kind.', ['Your friend needs a kind friend right now.', 'Laughing may make them feel worse.']),
     () => C('prek.feelings', 'You feel scared. Who can help?', '🧑‍🏫 a grown-up', ['🧸 nobody', '🐶 the dog'], 'Yes! Tell a grown-up you trust.', ['Someone can always help. Tell a grown-up.', 'A dog is a nice friend, but a grown-up can help.']),
@@ -164,7 +165,7 @@ export const PREK_GEN = {
     () => C('prek.opposites', 'Is up the opposite of down?', 'yes', ['no'], 'Yes! Reach up high, then go down low.', ['Try it: up high, down low. They are opposites.']),
   ],
   'prek.safety': [
-    () => C('prek.safety', '🔥 Something is hot on the stove. What do we do?', '🙅 do not touch', ['✋ touch it', '👅 lick it'], 'Yes! Hot things can hurt. We stay away and tell a grown-up.', ['Hot things can burn your hand. Do not touch.', 'Never put hot things in your mouth. Ask a grown-up.']),
+    () => C('prek.safety', 'Someone you don’t know says, “Come with me.” What do you do?', '🙅 say no and tell a grown-up', ['🚶 go with them', '🤫 keep it a secret'], 'Yes! Say no, stay with your grown-up, and tell them right away.', ['Never go with someone you don’t know. Stay with your grown-up.', 'Never keep it a secret. Always tell a grown-up.']),
     () => C('prek.safety', '🚦 The light is red 🔴. What do we do?', '🛑 stop', ['🏃 run', '🚶 walk'], 'Yes! Red means stop.', ['Never run at a red light. Red means stop.', 'Red means stop. Green means go.']),
     () => C('prek.safety', 'Crossing the street. What do you do?', '🤝 hold a grown-up’s hand', ['🏃 run ahead', '⚽ chase your ball'], 'Yes! Hold a grown-up’s hand near cars.', ['Stay close. Cars can be fast.', 'Let the ball go. A grown-up can get it.']),
     () => C('prek.safety', 'Someone is badly hurt. A grown-up calls…', '📞 9-1-1', ['📞 a pizza place', '📺 the TV'], 'Yes! 9-1-1 sends helpers fast.', ['Pizza can’t help. 9-1-1 sends helpers.', 'The TV can’t help. 9-1-1 sends helpers.']),

@@ -68,7 +68,7 @@ const algebra = [
 ];
 const data = [
   () => { const old = ri(4, 20) * 10, p = pick([10, 20, 25, 30, 40, 50]), nw = old + old * p / 100; return num('col.data', `A price rose from $${old} to $${nw}. What is the percent increase?`, p, `(${nw} − ${old}) ÷ ${old} = ${nw - old} ÷ ${old} = ${p / 100}, so ${p}%.`, 2, { suffix: '%' }); },
-  () => { const old = ri(4, 20) * 10, p = pick([10, 20, 25, 50]), nw = old - old * p / 100;
+  () => { const old = ri(2, 10) * 20, p = pick([10, 20, 25, 50]), nw = old - old * p / 100;   // multiples of 20: whole people only
     return ch('col.data', `Attendance fell from ${old} to ${nw}. What is the percent decrease?`, `${p}%`,
       [[`${Math.round((old - nw) / nw * 1000) / 10}%`, 'This divides by the new value. Percent change uses the starting value as the base.'], [`${old - nw}%`, 'This is the raw change, not a percent of the start.'], [`${100 - p}%`, 'This is the percent that remains, not the percent lost.']],
       `(${old} − ${nw}) ÷ ${old} = ${p / 100}, a ${p}% decrease.`, 2); },
@@ -78,7 +78,7 @@ const data = [
     return num('col.data', `Test scores: ${v.join(', ')}. What is the mean?`, t / 5, `Add them: ${t}. Divide by 5: ${t / 5}.`, 2); },
   () => { const v = Array.from({ length: 5 }, () => ri(10, 60)); const s = [...v].sort((x, y) => x - y);
     return num('col.data', `Commute times in minutes: ${v.join(', ')}. What is the median?`, s[2], `Sort them: ${s.join(', ')}. The middle value is ${s[2]}.`, 2); },
-  () => { const r = ri(2, 6), b = ri(2, 6), g = ri(1, 6), t = r + b + g;
+  () => { const r = ri(2, 6), b = ri(2, 6); let g = ri(1, 6); if (3 * r === r + b + g) g++; const t = r + b + g;   // never let 1/3 also be right
     return ch('col.data', `A bag has ${r} red, ${b} blue and ${g} green marbles. What is the probability of drawing a red one?`, `${r}/${t}`,
       [[`${r}/${b + g}`, 'This compares red to non-red (odds), not red to the total.'], [`1/3`, 'Three colors does not mean each is equally likely; count the marbles.'], [`${r}/${t + 1}`, 'The total is miscounted. Add all the marbles: ' + t + '.']].filter((x, i, A) => A.findIndex((y) => y[0] === x[0]) === i && x[0] !== `${r}/${t}`).concat([[`${t}/${r}`, 'This is upside down. Probability is favorable over total and is never more than 1.']]).slice(0, 3),
       `${r} red out of ${t} marbles: ${r}/${t}.`, 2); },
