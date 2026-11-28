@@ -154,7 +154,11 @@ export class Game {
           if (s.location === 'apartment') return T(food ? 'You are very hungry. Eat some food from the fridge' : 'You are very hungry and the fridge is empty. Get a meal at the Main St Diner', food ? 'Interact_Fridge' : 'Interact_ExitDoor');
           return T('You are very hungry! Eat at the Diner or at home', 'Door_Diner');
         }
-        if (s.location === 'apartment') return T(s.time > 20 ? 'Get some sleep' : 'Head out and live your day', s.time > 20 ? 'Interact_Sleep' : 'Interact_ExitDoor');
+        if (s.location === 'apartment') {
+          // a story goal that happens at home (cook a meal) points to the fridge, instead of sending you out and back in
+          const sg = s.time <= 20 && storyGoal(this); if (sg && sg.target === 'Door_ApartmentLobby') return T(sg.text, 'Interact_Fridge');
+          return T(s.time > 20 ? 'Get some sleep' : 'Head out and live your day', s.time > 20 ? 'Interact_Sleep' : 'Interact_ExitDoor');
+        }
         if (s.mission) return T(`${s.mission.text}${s.mission.loc !== s.location ? ' (' + ({ district: 'Starting District', midtown: 'Midtown', opportunity: 'Opportunity District', heights: 'The Heights' })[s.mission.loc] + ')' : ''}`, 'MISSION');
         if (s.flags.jaxStealDue && !s.flags.jaxSteal) return T('A person waits by Thread & Co…', 'NPC_Jax');
         if (s.flags.jax3due && !s.flags.jax3) return T('Jax wants to talk at the corner of Main & Fresh', 'NPC_Jax');
@@ -165,7 +169,8 @@ export class Game {
         if (s.event && s.location === 'district' && this.constructor.EVENTS && this.constructor.EVENTS[s.event.id]) { const E = this.constructor.EVENTS[s.event.id]; return T(`${E.icon} ${E.title} (optional)`, s.location === 'district' ? s.event.at : null); }
         if (s.biz && s.biz.last !== s.day && !s.biz.staff.length && s.time < 18) return T(`Open your ${s.biz.name} for the day (Brighter Park)`, s.location === 'district' ? 'CART' : null);
         if (s.pet && s.pet.fed !== s.day && s.time > 17) return T(`Go home and feed ${s.pet.name}`, null);
-        { const sg = storyGoal(this); if (sg) return T(sg.text, sg.target && (sg.target === 'Door_ApartmentLobby' || sg.target === 'Interact_TimeClock' || s.location === 'district') ? sg.target : null); }
+        if (s.time >= 21 && s.flags.housed) return T('It’s late. Go home and get some sleep', s.location === 'district' ? 'Door_ApartmentLobby' : null);   // nothing in the story can happen at night: rest for tomorrow
+        { const sg = storyGoal(this); if (sg && !(/Save \$/.test(sg.text) && s.flags[`worked${s.day}`])) return T(sg.text, sg.target && (sg.target === 'Door_ApartmentLobby' || sg.target === 'Interact_TimeClock' || s.location === 'district') ? sg.target : null); }
         const ll = this.life();
         const next = [['midtown', 3, 'Midtown'], ['opportunity', 5, 'the Opportunity District'], ['heights', 8, 'The Heights']].find(([k, lv]) => ll.level >= lv && !(s.visited || {})[k]);
         if (next) return T(`New district open: take the bus to ${next[2]}`, s.location === 'district' ? 'Interact_BusStop' : 'D:bus');

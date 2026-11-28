@@ -8,11 +8,12 @@ const types = { '.txt': 'text/plain', '.html': 'text/html; charset=utf-8', '.jso
 const wrap = (f, b) => (f.endsWith('index.html') ? Buffer.concat([Buffer.from('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>'), b, Buffer.from('</body></html>')]) : b);
 const srv = http.createServer((q, r) => { const f = path.join(DIST, decodeURIComponent(q.url.split('?')[0])); fs.readFile(f, (e, b) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); r.end(wrap(f, b)); }); }).listen(0);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const traceSteps = require('./trace.cjs');
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const ctx = await b.newContext({ ...devices['iPhone 13'] });
-  const p = await ctx.newPage(); const errors = []; p.on('pageerror', (e) => errors.push(e.message));
+  const p = await ctx.newPage(); global.__p = p; const errors = []; p.on('pageerror', (e) => errors.push(e.message));
   const ev = (f, a) => p.evaluate(f, a);
   const bad = []; const fail = (m) => { bad.push(m); console.log('FAIL', m); };
   const shot = (n) => p.screenshot({ path: path.join(OUT, `class_${n}.png`), timeout: 240000 });
@@ -44,6 +45,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       else if (Q.type === 'number') { const v = Q.decimals ? String(Math.round(Q.a * 100)) : String(Q.a); for (const d of v) { const k = await top.$(`.key:text-is("${d}")`); if (k) await k.click(); } const ok = await top.$('.key.ok'); if (ok) await ok.click(); }
       else if (Q.type === 'order') { for (const it of Q.items) { for (const bb of await top.$$('.orderbox .opts .opt')) if ((await bb.textContent()).trim() === it) { await bb.click(); break; } await sleep(120); } }
       else if (Q.type === 'sort') { for (const [it, bin] of Q.items) { for (const bb of await top.$$('.sort-items .opt')) if ((await bb.textContent()).trim() === it) { await bb.click(); break; } await sleep(80); for (const bn of await top.$$('.sort-bins .bin')) if ((await bn.$eval('b', (e) => e.textContent)).trim() === bin) { await bn.click(); break; } await sleep(120); } }
+      else if (Q.type === 'trace') { await traceSteps(p, '#modal .modal:last-child'); await sleep(600); }
       else if (Q.type === 'write') { const ta = await top.$('textarea.writebox'); if (ta) { await ta.fill(Q.model); await (await top.$('button.primary.sm')).click(); } }
       else { const any = await top.$('button.primary'); if (any) await any.click(); }
     }
@@ -71,4 +73,4 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   console.log('page errors', errors.length, errors.slice(0, 3)); if (errors.length) fail('page errors');
   console.log(bad.length ? 'CLASSROOM FAILED' : 'CLASSROOM PASSED');
   await b.close(); srv.close(); process.exit(bad.length ? 1 : 0);
-})().catch((e) => { console.error('FAIL', e.message.split('\n')[0]); process.exit(2); });
+})().catch(async (e) => { console.error('FAIL', e.message.split('\n')[0]); try { await global.__p.screenshot({ path: path.join(OUT, 'class_FAIL.png') }); } catch (x) {} process.exit(2); });

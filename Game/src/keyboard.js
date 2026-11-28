@@ -9,6 +9,8 @@ const visible = (e) => !!(e && e.offsetParent !== null && !e.closest('[hidden]')
 const topLayer = () => {
   const card = document.querySelector('.wcard-wrap');
   if (card) return card;
+  const dict = document.querySelector('.dictate');   // the "type your answer" box sits above everything: keep the cursor in it
+  if (dict) return dict;
   const sheets = [...document.querySelectorAll('#modal .modal')];
   if (sheets.length) return sheets[sheets.length - 1];
   const d = document.getElementById('dialog'); if (d && !d.hidden) return d;

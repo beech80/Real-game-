@@ -64,6 +64,11 @@ let seed = 7; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483
     const m = await top(); if (!m) return false;
     const title = await m.$eval('.sh-title', (e) => e.textContent).catch(() => '');
     if (await vis('.dictate textarea')) { await p.fill('.dictate textarea', 'Hello! Welcome to Fresh Mart. How can I help you today?'); await p.click('.dictate button:text-is("Done ✓")').catch(() => {}); T.screens += 20; return true; }
+    if (await m.$('.checkout')) {   // groceries: put a bag of rice & beans (best value) in the cart, then pay
+      T.screens += 12;
+      for (const r of await m.$$('.shelf .food')) { if (/Rice/.test(await r.textContent())) { const plus = await r.$('button[aria-label="Add one"]'); if (plus) await plus.click(); break; } }
+      await sleep(200); const pay = await m.$('.checkout button.primary'); if (pay) await pay.click(); await sleep(500); return true;
+    }
     if (await m.$('canvas.sig')) { T.screens += 35; await traceSteps(p, '#modal .modal:last-child'); await sleep(600); return true; }
     const cont = await m.$('button.primary:text-is("Continue")');
     if (cont && await cont.isVisible()) { await cont.click(); await sleep(300); return true; }
@@ -124,9 +129,10 @@ let seed = 7; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483
   const act = async (s) => {
     // story targets first: go where the goal points and use what's there
     if (/Stock the shelf/.test(s.obj) && s.shift) { await goSock(`Interact_StockShelf_A${s.shift.product[1]}`, 'district', s.pos0); return tapInteract(); }
+    if (/classes at City School/.test(s.obj)) { await ev(() => { window.REAL.takeClass(['math', 'reading', 'science', 'finance'][Math.floor(Math.random() * 4)]); }); T.screens += 6; return true; }   // the School app on the phone
     if (/Pay your bill/.test(s.obj)) { await ev(() => { const it = window.REAL.game().interaction({ key: 'Interact_Bills' }); if (it) it.run(); }); T.screens += 8; return true; }   // Bills app on the phone
     const visitKey = s.day + '|' + s.obj; visits.set(visitKey, (visits.get(visitKey) || 0) + 1);
-    if (/Free time/.test(s.obj) && visits.get(visitKey) > 6) { await ev(() => { window.__ptSleep = window.REAL.game().sleep(); }); T.screens += 4; return true; }   // done for the day: the bed skips to night, as the goal says
+    if (/Free time/.test(s.obj) && s.time % 24 >= 12 && visits.get(visitKey) > 6) { await ev(() => { if (window.__ptSleeping) return; window.__ptSleeping = true; Promise.resolve(window.REAL.game().sleep()).finally(() => { window.__ptSleeping = false; }); }); T.screens += 4; return true; }   // done for the day: the bed skips to night, as the goal says
     if (s.pos && /Grow your Life Level/.test(s.obj) && visits.get(visitKey) > 4) s.pos = null;   // tried that suggestion a few times today: do something else
     if (s.pos) { await goTo(s.pos.x, s.pos.y - (s.inDistrict ? 0 : 0.2), s.pos0); if (!(await tapInteract())) { await goTo(s.pos.x + 0.8, s.pos.y - 0.8, s.pos); if (!(await tapInteract())) return false; } if (s.key === 'Interact_BusStop' || s.key === 'D:bus') T.bus += 25; return true; }
     if (s.quest === 'find_way') { const to = { x: 0, y: -80 }; await goTo(s.pos0.x, s.pos0.y + 60, s.pos0); return true; }   // follow the road toward the city

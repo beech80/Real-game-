@@ -65,6 +65,8 @@ export function storyGoal(G) {
   const s = G.state; if (!storyActive(s)) return null;
   const C = CHAPTERS[st(s).ch], n = st(s).ch + 1;
   const left = C.goals.find(([, done]) => !done(s, G));
+  // cooking needs rice or pasta: with none at home, the next step is buying some, not walking to an empty fridge
+  if (left && /^Cook a meal/.test(left[0]) && !((s.pantry || {}).rice > 0 || (s.pantry || {}).pasta > 0)) return { text: `📖 ${tr('Chapter')} ${n}: ${tr('Buy rice or pasta at Fresh Mart, then cook it at home')}`, target: 'Interact_BasketPickup' };
   return left ? { text: `📖 ${tr('Chapter')} ${n}: ${tr(left[0])}`, target: left[2] } : null;
 }
 /** a chapter opens like a TV episode: a title card, then the people in it talk */

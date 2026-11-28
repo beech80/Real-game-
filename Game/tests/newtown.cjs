@@ -31,7 +31,7 @@ const bad = []; const fail = (m) => { console.log('FAIL', m); bad.push(m); };
   for (let i = 0; i < 10; i++) { if (await p.isVisible('#dialog')) await p.click('#dialog .d-next').catch(() => {}); await sleep(300); }
   await ev(() => { const g = window.REAL.game(); g.state.money = 12000; g.state.quest = 'free'; });
   // walk up to lot 1 and build a bakery
-  await ev(() => window.REAL.teleportXY(-7.6, -95)); await sleep(1500);
+  await ev(() => window.REAL.teleportXY(-7.6, -95)); await p.waitForFunction(() => /Build on lot 1/.test(document.querySelector('#btn-interact').textContent) && !document.querySelector('#btn-interact').hidden, null, { timeout: 20000 }).catch(() => {});
   const lbl = await p.textContent('#btn-interact').catch(() => ''); console.log('at the lot →', lbl.trim());
   if (!/Build on lot 1/.test(lbl)) fail('no “Build on lot” button at an empty lot');
   await shot('1_empty_lot');
