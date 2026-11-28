@@ -1237,7 +1237,7 @@ window.REAL = {
     const d = sock('Spawn_StoreEntry'); player.pos = { x: d.x, y: d.y + 2 }; player.apply();
   },
   sheets: () => [...document.querySelectorAll('#modal .sh-title')].map((e) => e.textContent),
-  game: () => game, skillList: () => Object.values(SKILLS), setCalm: (on) => setCalm(on), cursiveLessons: () => CURSIVE_LESSONS, parkJog: () => parkJog(game), storyCheck: () => storyCheck(game), takeClass: (subj) => takeClass(game, subj), setTime: (h) => { game.state.time = h; },
+  schoolDay: () => import('./classroom.js').then((m) => m.schoolDay(game)), game: () => game, skillList: () => Object.values(SKILLS), setCalm: (on) => setCalm(on), cursiveLessons: () => CURSIVE_LESSONS, parkJog: () => parkJog(game), storyCheck: () => storyCheck(game), takeClass: (subj) => takeClass(game, subj), setTime: (h) => { game.state.time = h; },
   quality: (q) => engine.setQuality(q),
   life: () => game.life(),
   practice: (sk) => runActivity(game, () => ({ skill: sk, ...PRACTICE[sk]() }), 'learn', 'Practice', '📚'),

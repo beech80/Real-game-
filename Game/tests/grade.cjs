@@ -23,7 +23,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await p.click('#btn-new'); await p.waitForSelector('#cr-loading', { state: 'hidden', timeout: 120000 });
   await p.fill('#cr-name', 'Kai'); await p.click('#cr-go');
   await p.waitForSelector('.grade-btn', { timeout: 60000 }); await sleep(800); await shot('1_question');
-  const n = await p.$$eval('.grade-btn', (b) => b.length); if (n !== 6) fail('the grade question should offer 6 choices, found ' + n);
+  const n = await p.$$eval('.grade-btn', (b) => b.length); if (n !== 8) fail('the grade question should offer 8 choices (Pre-K, six grade groups, college prep), found ' + n);
   const fits = await ev(() => { const s = document.querySelector('.sheet'), r = s.getBoundingClientRect(); return [...document.querySelectorAll('.grade-btn')].every((b) => { const q = b.getBoundingClientRect(); return q.left >= r.left - 1 && q.right <= r.right + 1 && b.scrollWidth <= b.clientWidth + 2; }); });
   if (!fits) fail('a grade choice does not fit on the phone screen');
   if (await ev(() => window.REAL.mode) === 'play') fail('the game started before a grade was chosen');

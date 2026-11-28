@@ -17,6 +17,8 @@ import { BANKS_B } from './curriculum10.js';
 import { BANKS_C } from './curriculum11.js';
 import { BANKS_D } from './curriculum12.js';
 import { BANKS_E } from './curriculum13.js';
+import { PREK_SKILLS, PREK_GEN } from './curriculum14.js';
+import { PRECOL_SKILLS, PRECOL_GEN } from './curriculum15.js';
 
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -294,4 +296,7 @@ NEW_SKILLS.push(...K2_SKILLS);
 for (const [k, g] of Object.entries(K2_REPLACE)) GEN[k] = g.slice();
 // reading passages with linked questions (each tagged with its own band)
 for (const [k, g] of Object.entries(PASSAGE_GEN)) GEN[k] = (GEN[k] || []).concat(g);
+// Pre-K (getting ready for school) and college prep packs
+NEW_SKILLS.push(...PREK_SKILLS, ...PRECOL_SKILLS);
+for (const extra of [PREK_GEN, PRECOL_GEN]) for (const [k, g] of Object.entries(extra)) GEN[k] = (GEN[k] || []).concat(g);
 export { K2_REPLACE };

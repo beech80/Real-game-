@@ -7,13 +7,17 @@ import { isCalm, setCalm } from './calm.js';
 
 // [starting level 1–6, label, ages]
 export const GRADES = [
+  [0.5, 'Pre-K: getting ready for school', 'ages 3 to 5'],
   [1, 'Kindergarten or 1st grade', 'ages 5 to 7'],
   [2, '2nd or 3rd grade', 'ages 7 to 9'],
   [3, '4th or 5th grade', 'ages 9 to 11'],
   [4, '6th, 7th or 8th grade', 'ages 11 to 14'],
   [5, '9th or 10th grade', 'ages 14 to 16'],
-  [6, '11th or 12th grade, or older', 'ages 16 and up'],
+  [6, '11th or 12th grade', 'ages 16 to 18'],
+  [7, 'Getting ready for college', 'ages 16 and up'],
 ];
+/** a grade choice → the starting level (1–6) and which school day fits (Pre-K and college prep have their own) */
+export const gradeStart = (n) => ({ level: Math.max(1, Math.min(6, Math.round(n))), band: n === 0.5 ? 'prek' : n === 7 ? 'college' : n <= 3 ? 'elem' : n === 4 ? 'middle' : 'high' });
 export const gradeName = (n) => (GRADES.find((g) => g[0] === n) || [0, 'Not set'])[1];
 
 /** Ask for the grade. Resolves to 1–6, or undefined if the sheet was closed without choosing. */

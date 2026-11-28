@@ -1,6 +1,6 @@
 // REAL — game director: chapters, needs, time, Jax, careers, Life Level, phone, save/load.
 import { UI, h, money, clock, wait } from './ui.js';
-import { askGrade, gradeName } from './grade.js';
+import { askGrade, gradeName, gradeStart } from './grade.js';
 import { cursiveClass } from './cursive.js';
 import { citySchool } from './cityschool.js';
 import { isCalm, setCalm } from './calm.js';
@@ -51,7 +51,7 @@ export class Game {
   constructor(state, hooks) {
     this.state = state; this.hooks = hooks;
     this.edu = new Edu(state.edu, { day: () => this.state.day, onState: (sk, st) => this.onSkill(sk, st) });
-    if (state.pendingStart) { this.edu.setStart(state.pendingStart); state.wordLevel = this.edu.floor('reading'); delete state.pendingStart; }   // the grade chosen in the creator
+    if (state.pendingStart) { const gs = gradeStart(state.pendingStart); state.school = Object.assign(state.school || {}, { band: gs.band }); this.edu.setStart(gs.level); state.wordLevel = this.edu.floor('reading'); delete state.pendingStart; }   // the grade chosen in the creator
     this.busy = false;
   }
   sfx(n) { this.hooks.sfx(n); }
@@ -741,7 +741,7 @@ export function openPhone(G) {
           voiceBox(),
           h('div', { class: 'row' }, h('span', {}, `REAL v${VERSION}`), h('button', { class: 'ghost sm', onclick: () => { close(); whatsNew(true); } }, '🆕 What’s new')),
           h('div', { class: 'row' }, h('span', {}, '💡 Tips for new players'), h('button', { class: tipsOff() ? 'ghost sm' : 'primary sm', onclick: () => { setTips(true); UI.toast('Tips are on. They will show up as you play.', 'good'); open('Settings'); } }, tipsOff() ? 'Show tips again' : 'On')),
-          h('div', { class: 'row' }, h('span', {}, '🎒 My grade (where lessons start)'), h('button', { class: 'primary sm', id: 'set-grade', onclick: async () => { const n = await askGrade(G.edu.start); if (n) { G.edu.setStart(n); s.wordLevel = G.edu.floor('reading'); G.save(); UI.toast('Your lessons now start at this level.', 'good'); } open('Settings'); } }, G.edu.start ? gradeName(G.edu.start) : 'Choose')),
+          h('div', { class: 'row' }, h('span', {}, '🎒 My grade (where lessons start)'), h('button', { class: 'primary sm', id: 'set-grade', onclick: async () => { const n = await askGrade(G.edu.start); if (n) { const gs = gradeStart(n); s.school = Object.assign(s.school || {}, { band: gs.band, today: null }); G.edu.setStart(gs.level); s.wordLevel = G.edu.floor('reading'); G.save(); UI.toast('Your lessons now start at this level.', 'good'); } open('Settings'); } }, G.edu.start ? gradeName(G.edu.start) : 'Choose')),
           h('div', { class: 'tier-h' }, 'Accessibility'),
           h('div', { class: 'row' }, h('span', {}, '🌿 Calm & clear: softer sounds, no surprises, a calm space'), h('button', { class: isCalm() ? 'primary sm' : 'ghost sm', id: 'set-calm', onclick: () => { setCalm(!isCalm()); UI.toast(isCalm() ? 'Calm & clear is on. Tap 🌿 any time to take a break.' : 'Calm & clear is off.', 'good'); open('Settings'); } }, isCalm() ? 'On' : 'Off')),
           h('div', { class: 'row' }, h('span', {}, 'How my REAL gets around'), h('button', { class: 'primary sm', onclick: () => { const order = ['', 'chair', 'crutches']; s.aid = order[(order.indexOf(s.aid || '') + 1) % 3]; if (!s.aid) delete s.aid; G.hooks.setAid(s.aid); G.save(); open('Settings'); } }, s.aid === 'chair' ? '♿ Wheelchair' : s.aid === 'crutches' ? '🩼 Crutches' : '🚶 Walking')),

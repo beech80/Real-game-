@@ -11,6 +11,7 @@ import { runActivity } from './learnkit.js';
 import { GEN } from './curriculum.js';
 import { SKILLS } from './edu.js';
 import { CLASS_GATES, classesDone, gateOpen } from './cityschool.js';
+import { schoolDay } from './classroom.js';
 
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
@@ -67,11 +68,11 @@ export function installExpansion(Game) {
       lofts: [['🏢 Lease a loft', () => this.homeOffer('loft')], s.home === 'loft' ? ['🏠 Go home', () => this.hooks.enterApartment()] : null],
       residences: [['🏛️ Lease a residence', () => this.homeOffer('heights')], ['🔑 Buy a home', () => this.homeOffer('owned')], ['heights', 'owned'].includes(s.home) ? ['🏠 Go home', () => this.hooks.enterApartment()] : null],
       shelter: [[s.pet ? `🐾 Visit the shelter with ${s.pet.name}` : '🐾 Adopt a pet', () => this.shelter()]],
-      library: [['🧩 Learning Lab challenge zones', () => this.challengeZones('library')], ['📕 Read a book', () => this.readBook()], ['📚 Study (free practice)', () => A.learn(G)]],
+      library: [['🔔 Go to class (school day)', () => schoolDay(G)], ['🧩 Learning Lab challenge zones', () => this.challengeZones('library')], ['📕 Read a book', () => this.readBook()], ['📚 Study (free practice)', () => A.learn(G)]],
       thinktank: [['🏆 Challenge zones', () => this.challengeZones('thinktank')]],
       sbc: [['🚀 Small Business Center', () => this.sbc()], s.biz ? ['📈 Plan next week (guess sales, tell people)', () => this.bizPlanWeek()] : null],
-      bootcamp: [['🎓 Classes', () => school(G, 'bootcamp')]],
-      college: [['🎓 Classes', () => school(G, 'college')]],
+      bootcamp: [['🔔 Go to class (school day)', () => schoolDay(G)], ['🎓 Classes', () => school(G, 'bootcamp')]],
+      college: [['🔔 College prep class (school day)', () => { const S = (s.school = s.school || {}); if (S.band !== 'college') { S.band = 'college'; S.today = null; } return schoolDay(G); }], ['🎓 Classes', () => school(G, 'college')]],
       bank: [['🏦 Banks, saving & credit', () => this.bank()]],
       thread: [['🧥 Shop jackets', () => this.clothing()]],
       kitchen: [['🍳 Eat at Corner Kitchen', () => A.menuBuy(G, 'Corner Kitchen', '🍳', [

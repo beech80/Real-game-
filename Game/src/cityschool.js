@@ -4,6 +4,7 @@
 // state.classes = { n: classes passed, by: { subject: n } }
 import { h, UI } from './ui.js';
 import { tr } from './i18n.js';
+import { schoolDayCard } from './classroom.js';
 import { runActivity } from './learnkit.js';
 import { GEN } from './curriculum.js';
 import { SKILLS, SUBJECTS } from './edu.js';
@@ -44,6 +45,7 @@ export async function takeClass(G, subj) {
 export function citySchool(G, close) {
   const s = G.state, n = classesDone(s), g = nextGate(s), by = (s.classes && s.classes.by) || {};
   return h('div', { class: 'act city-school' },
+    schoolDayCard(G, close),
     h('p', { class: 'lead' }, 'Learn to grow in the city. Each class teaches two skills at your level. Classes open new parts of the city.'),
     h('div', { class: 'school-stars' }, h('b', {}, `⭐ ${n}`), h('span', {}, n === 1 ? tr('class passed') : tr('classes passed'))),
     g ? h('div', { class: 'school-next' }, h('small', {}, `🚌 ${tr(DISTRICTS[g[0]].name)}: ${Math.min(n, g[1])} / ${g[1]}`), h('div', { class: 'bar' }, h('i', { style: { width: Math.round(100 * Math.min(n, g[1]) / g[1]) + '%' } })))

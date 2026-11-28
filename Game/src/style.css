@@ -907,3 +907,31 @@ body:has(#modal .modal) .toasts { top: max(12px, env(safe-area-inset-top, 0px)) 
 .wlab-ex b { color: var(--gold-2); }
 .wlab-lbl { display: block; font-weight: 700; margin: 10px 0 4px; }
 .wlab-preview { background: rgba(255,255,255,.06); border-radius: 12px; padding: 10px 12px; font-size: 17px; line-height: 1.6; min-height: 3em; }
+/* 🔔 the Classroom: a chalkboard with today's schedule, desks, and the teacher's cards on top */
+#classroom { position: fixed; inset: 0; z-index: 25; background: linear-gradient(#f3e7cf 0 62%, #b98a5a 62% 100%); display: grid; grid-template-rows: auto 1fr; padding: max(14px, env(safe-area-inset-top)) 14px 14px; gap: 12px; pointer-events: none; }
+#classroom[hidden] { display: none; }
+body.in-class #hud, body.in-class .hud-left, body.in-class #minimap { visibility: hidden; }
+.cr-board { background: #1f4d3a; border: 10px solid #7a5230; border-radius: 10px; color: #f4f1e6; padding: 10px 14px; box-shadow: 0 8px 20px rgba(0,0,0,.25); max-width: 760px; margin: 0 auto; width: 100%; }
+.cr-board-h { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-family: "Playwrite US Trad", "Barlow", cursive; font-size: 18px; margin-bottom: 6px; }
+.cr-sched { margin: 0; padding-left: 20px; columns: 2; font-size: 15px; line-height: 1.6; }
+.cr-sched li.done { opacity: .5; text-decoration: line-through; }
+.cr-sched li.now { color: #ffd27a; font-weight: 700; }
+.cr-desks { align-self: end; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px 10px; justify-items: center; font-size: 40px; max-width: 520px; width: 100%; margin: 0 auto; }
+.cr-desk.you { filter: drop-shadow(0 0 8px #ffd27a); }
+.cr-card .cr-teacher { font-size: 18px; line-height: 1.5; background: rgba(255,255,255,.06); border-radius: 12px; padding: 10px 12px; }
+.cr-steps { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+.cr-steps span { background: rgba(255,255,255,.07); border-radius: 999px; padding: 4px 10px; font-size: 14px; }
+.cr-steps span.on { background: var(--gold-2); color: #1a1420; font-weight: 700; }
+.cr-rule { font-size: 17px; }
+.cr-agenda { padding-left: 22px; font-size: 17px; line-height: 1.7; }
+.cr-story { font-size: 19px; line-height: 1.6; }
+.cr-big { font-size: 48px; text-align: center; margin: 10px 0; }
+.cr-btns { gap: 8px; flex-wrap: wrap; }
+.cr-marks { list-style: none; padding: 0; display: grid; gap: 6px; }
+.cr-marks li { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; background: rgba(255,255,255,.05); border-radius: 12px; padding: 8px 12px; }
+.cr-marks li small { grid-column: 1 / -1; opacity: .8; }
+.cr-entry { display: grid; gap: 8px; background: rgba(232,178,58,.12); border: 1px solid var(--gold-2); border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; }
+.cr-entry > div:first-child { display: grid; gap: 2px; }
+.cr-entry .row { gap: 8px; flex-wrap: wrap; }
+.cr-band { max-width: 100%; }
+body.in-class .dialog, body.in-class .toasts { z-index: 37; }

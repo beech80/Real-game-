@@ -3,8 +3,12 @@
 import { h, UI } from './ui.js';
 import { lang } from './i18n.js';
 
-export const VERSION = '1.13.0';
+export const VERSION = '1.14.0';
 export const NOTES = [
+  ['1.14.0', [
+    ['🔔', 'School days', 'A real classroom day for every age, from Pre-K to college prep. The bell rings, you take your seat, and each class goes: the teacher shows you, you try one together, then on your own. Exit ticket and report card at the end.'],
+    ['🧸', 'Little Learners and college prep', 'New Pre-K lessons (colors, shapes, counting, letters and sounds, feelings, school routines, safety) and college prep (SAT/ACT-style math and reading, essays, applications, financial aid, study skills). Pick Pre-K or college prep when you choose your grade.'],
+  ]],
   ['1.13.0', [
     ['✏️', 'Writing and thinking', 'The ✏️ Writing Lab on your phone: 18 lessons on sentences (simple to hard), paragraphs, and critical thinking. Each lesson teaches, lets you practice, then you write your own.'],
   ]],
